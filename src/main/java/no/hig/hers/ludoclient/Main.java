@@ -87,7 +87,7 @@ public class Main extends Application {
 	private void setUpScenes() {
 		try {
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
-			loginScene = new Scene(root, 300, 200);
+			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			root = (Parent)FXMLLoader.load(getClass().getResource("ClientRegisterUI.fxml"));
@@ -136,7 +136,7 @@ public class Main extends Application {
 	
 	public static void changeScene(Scene newScene) {
 		currentStage.setScene(newScene);
-		currentStage.setFullScreen(true);
+	//	currentStage.setFullScreen(true);
 	}
 
 	public static void sendLogin(String code, String username, String password) {

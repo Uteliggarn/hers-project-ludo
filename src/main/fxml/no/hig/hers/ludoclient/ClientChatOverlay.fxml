@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <TextField BorderPane.alignment="CENTER" />
+   </bottom>
+   <right>
+      <ListView minWidth="-Infinity" prefWidth="150.0" BorderPane.alignment="CENTER" />
+   </right>
+   <center>
+      <TextArea editable="false" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

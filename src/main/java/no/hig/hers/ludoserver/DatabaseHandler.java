@@ -1,5 +1,6 @@
 package no.hig.hers.ludoserver;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -150,7 +151,7 @@ public class DatabaseHandler {
 			PreparedStatement stmt = connection.prepareStatement(query);
 			if (!checkIfUserAlreadyExists(username)) {
 				stmt.setString(1, username);
-				stmt.setString(2, password);
+				stmt.setString(2, hasher(password));
 				
 				stmt.execute();
 				connection.close();
@@ -199,7 +200,7 @@ public class DatabaseHandler {
 	 * @return Returns the user ID. If no user was found, returns 0.
 	 */
 	public static int userLogin(String username, String password) {
-		String query = "SELECT _ID FROM users WHERE username=\'" + username + "\' AND password =\'" + password +"\'";
+		String query = "SELECT _ID FROM users WHERE username=\'" + username + "\' AND password =\'" + hasher(password) +"\'";
 		Statement stmt;
 		
 		try {
@@ -217,5 +218,29 @@ public class DatabaseHandler {
 		}
 			
 		return 0;
+	}
+	/**
+	 * Method for hashing a String. Used for passwords.
+	 * This method uses SHA-256, which we consider to be good enough.
+	 * "stolen" from http://stackoverflow.com/questions/5531455/how-to-encode-some-string-with-sha256-in-java/11009612#11009612
+	 * @param base The String to hash.
+	 * @return Returns the hashed String.
+	 */
+	private static String hasher(String base) {
+	    try{
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	        byte[] hash = digest.digest(base.getBytes("UTF-8"));
+	        StringBuffer hexString = new StringBuffer();
+
+	        for (int i = 0; i < hash.length; i++) {
+	            String hex = Integer.toHexString(0xff & hash[i]);
+	            if(hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+	    } catch(Exception ex){
+	       throw new RuntimeException(ex);
+	    }
 	}
 }

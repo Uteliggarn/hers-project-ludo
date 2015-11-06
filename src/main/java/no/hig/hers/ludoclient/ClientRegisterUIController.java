@@ -1,4 +1,4 @@
-package no.hig.hers.ludoclient.UIControllers;
+package no.hig.hers.ludoclient;
 
 import java.io.IOException;
 
@@ -41,18 +41,20 @@ public class ClientRegisterUIController {
     	String password = passwordTextField.getText();
     	String confirm = confirmTextField.getText();
     	
-    	if (password.equals(confirm)) {
-			try {
-				Main.sendLogin("SENDREGISTER:", username, password);
-				if(Main.input.readLine().equals("ACCEPTED")) {
-					Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
-					Main.changeScene(Main.loginScene);
-				}	
-				else Main.showAlert("User already exists", "Sorry, that username is already taken.\nPlease select another.");
-			} catch (Exception e1) {
-				/** TODO FIX THIS! */
-			}
-    	} else Main.showAlert("Password mistyped", "The passwords do not match.\nPlease try again.");
+    	if (password.length() >= 6 && password.length() <= 10) {
+			if (password.equals(confirm)) {
+				try {
+					Main.sendLogin("SENDREGISTER:", username, password);
+					if(Main.input.readLine().equals("ACCEPTED")) {
+						Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
+						Main.changeScene(Main.loginScene);
+					}	
+					else Main.showAlert("User already exists", "Sorry, that username is already taken.\nPlease select another.");
+				} catch (Exception e1) {
+					/** TODO FIX THIS! */
+				}
+			} else Main.showAlert("Password mistyped", "The passwords do not match.\nPlease try again.");
+    	} else Main.showAlert("Too short/long passowrd", "Passwords must be between 6 and 10 characters long.");
     }
     	
 }

@@ -1,4 +1,4 @@
-package no.hig.hers.ludoclient.UIControllers;
+package no.hig.hers.ludoclient;
 
 import java.io.IOException;
 
@@ -58,6 +58,8 @@ public class ClientLoginUIController {
 			e.printStackTrace();
 		}
     }
+    
+    
     
     @FXML
     void userRegister(ActionEvent event) {
