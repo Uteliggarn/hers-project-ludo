@@ -1,4 +1,4 @@
-package globalServer;
+package no.hig.hers.ludoserver;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -104,7 +104,7 @@ public class Player {
 					output.write("ACCEPTED");	// Sends an accepted message back to client
 					output.newLine();
 					output.flush();
-					return true;
+					return false;
 				}
 				else {
 					output.write("DECLINED");	// sends an declined message back to client

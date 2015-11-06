@@ -1,4 +1,4 @@
-package globalServer;
+package no.hig.hers.ludoserver;
 
 import javax.swing.JFrame;
 
