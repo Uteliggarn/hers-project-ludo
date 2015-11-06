@@ -1,4 +1,4 @@
-package no.hig.hers.ludoclient;
+package no.hig.hers.ludoclient.UIControllers;
 
 import java.io.IOException;
 

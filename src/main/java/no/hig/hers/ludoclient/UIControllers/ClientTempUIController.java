@@ -1,8 +1,9 @@
-package no.hig.hers.ludoclient;
+package no.hig.hers.ludoclient.UIControllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import no.hig.hers.ludoclient.Main;
 
 public class ClientTempUIController {
 

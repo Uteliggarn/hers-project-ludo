@@ -18,27 +18,26 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	static Stage currentStage;
-	static Scene loginScene;
-	static Scene registerScene;
-	static Scene tempScene;
-	static Scene mainScene;
+	public static Stage currentStage;
+	public static Scene loginScene;
+	public static Scene registerScene;
+	public static Scene tempScene;
+	public static Scene mainScene;
 	
 	static boolean connected = false;
 
 	
 	static String LudoClientHost;
 	static Socket connection;
-	static BufferedWriter output;
-	static BufferedReader input;
+	public static BufferedWriter output;
+	public static BufferedReader input;
 	
-	static int playerID;
+	public static int playerID;
 	
 	@Override
 	public void start(Stage primaryStage) {
