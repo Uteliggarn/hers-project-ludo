@@ -2,9 +2,13 @@ package no.hig.hers.ludoserver;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 public class Player {
@@ -15,6 +19,7 @@ public class Player {
 	private BufferedWriter output;
 	
 	private String name;
+	private final String fileName = "ChatLog.txt";
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -43,6 +48,7 @@ public class Player {
 		output.write(text);
 		output.newLine();
 		output.flush();
+		writeToFile(fileName, text);
 	}
 	
 	public String read() throws IOException {
@@ -117,5 +123,23 @@ public class Player {
 			ioe.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * http://stackoverflow.com/questions/2885173/
+	 * http://stackoverflow.com/questions/1625234/
+	 * @param fileName The name of the file that will be written to
+	 * @param data The data that will be written
+	 */
+	public void writeToFile(String fileName, String data) {
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+			writer.println(data);
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -90,8 +90,7 @@ public class GlobalServer extends JFrame{
 								String msg = p.read();
 								
 								handleGroupChatKeywords(p, msg);
-								
-								
+								handleGameActivity(p, msg);
 								
 								if (msg != null && msg.equals(">>>LOGOUT<<<")) {
 									i.remove();
