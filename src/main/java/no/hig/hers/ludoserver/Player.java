@@ -48,7 +48,6 @@ public class Player {
 		output.write(text);
 		output.newLine();
 		output.flush();
-		writeToFile(fileName, text);
 	}
 	
 	public String read() throws IOException {
@@ -131,15 +130,18 @@ public class Player {
 	 * @param fileName The name of the file that will be written to
 	 * @param data The data that will be written
 	 */
-	public void writeToFile(String fileName, String data) {
-		PrintWriter writer;
+/*	public void writeToFile(String fileName, String data) {
+		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 			writer.println(data);
-			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
 		}
-	}
+	}*/
 }

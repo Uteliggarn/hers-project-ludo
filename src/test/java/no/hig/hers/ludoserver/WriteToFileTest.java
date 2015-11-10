@@ -16,7 +16,7 @@ public class WriteToFileTest {
 		final String fileName = "TestFile.txt";
 		final String message = "Something";
 		
-		player.writeToFile(fileName, message);
+		//player.writeToFile(fileName, message);
 		
 		
 	}
