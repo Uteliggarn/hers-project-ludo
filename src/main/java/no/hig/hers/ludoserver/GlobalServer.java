@@ -89,6 +89,7 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
+								//Sends the message to both listeners. One for game and one for chat.
 								handleGroupChatKeywords(p, msg);
 								handleGameActivity(p, msg);
 								
@@ -178,6 +179,11 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	/**
+	 * All the chat messages / commands will be handled in this method.
+	 * @param p The active player
+	 * @param msg The message that was read
+	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
 		if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
@@ -209,6 +215,11 @@ public class GlobalServer extends JFrame{
 		}
 	}
 	
+	/**
+	 * Handles all the game messages / commands.
+	 * @param p The active player
+	 * @param msg The message that was read
+	 */
 	private void handleGameActivity(Player p, String msg) {
 		try {
 			if (msg != null && msg.startsWith(throwDiceText)) {
