@@ -19,7 +19,6 @@ public class Player {
 	private BufferedWriter output;
 	
 	private String name;
-	private final String fileName = "ChatLog.txt";
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -48,7 +47,6 @@ public class Player {
 		output.write(text);
 		output.newLine();
 		output.flush();
-		writeToFile(fileName, text);
 	}
 	
 	public String read() throws IOException {
@@ -123,28 +121,5 @@ public class Player {
 			ioe.printStackTrace();
 		}
 		return false;
-	}
-	
-	/**
-	 * http://stackoverflow.com/questions/2885173/
-	 * http://stackoverflow.com/questions/1625234/
-	 * This is the logging system for the GlobalServer. Everything that the sendText sends, will be
-	 * recorded to the global chat log.
-	 * @param fileName The name of the file that will be written to
-	 * @param data The data that will be written
-	 */
-	public void writeToFile(String fileName, String data) {
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
-			writer.println(data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
 	}
 }

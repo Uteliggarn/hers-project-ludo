@@ -5,7 +5,10 @@ import java.net.Socket;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.*;
@@ -37,6 +40,8 @@ public class GlobalServer extends JFrame{
     private final String receiveDiceText;
     private final String turnOwnerText;
     private final String makeMoveText;
+    
+    private String fileName;
 	
 	public GlobalServer() {
 		
@@ -57,6 +62,8 @@ public class GlobalServer extends JFrame{
 		//The commands that will be sent to the gameClient
 		receiveDiceText = "RECEIVEDICE:"; //Return the dice value
 		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
+		
+		fileName = "ChatLog.txt";
 		
 		try {
 			server = new ServerSocket(12347); // Set up serverSocket
@@ -123,6 +130,7 @@ public class GlobalServer extends JFrame{
 							Player p = i.next();
 							try {
 								p.sendText(message);
+								writeToFile(fileName, message);
 							} catch (IOException ioe) {
 								i.remove();
 								messages.add("LOGOUT:" + p.returnName());
@@ -148,6 +156,7 @@ public class GlobalServer extends JFrame{
 						
 						for (int i=0; i<groupChatList.size(); i++) {
 							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
+							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}
 						synchronized (player) {
 							player.add(p);
@@ -157,6 +166,7 @@ public class GlobalServer extends JFrame{
 								if (p != p1)
 									for (int y=0; y<groupChatList.size(); y++) {
 										p.sendText("NEWGROUPCHAT:" + groupChatList.get(y));
+										writeToFile(fileName, "NEWGROUPCHAT:" + groupChatList.get(y));
 									}
 									/*try {
 									p.sendText("GlobalChatRoomJOIN:" + p1.returnName());
@@ -191,6 +201,7 @@ public class GlobalServer extends JFrame{
 			if(groupChatList.contains(msg.substring(13)))
 				try {
 					p.sendText("ERRORCHAT");
+					writeToFile(fileName, "ERRORCHAT");
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
@@ -269,4 +280,25 @@ public class GlobalServer extends JFrame{
 		SwingUtilities.invokeLater(() -> outputArea.append(text));
 	}
 	
+	/**
+	 * http://stackoverflow.com/questions/2885173/
+	 * http://stackoverflow.com/questions/1625234/
+	 * This is the logging system for the GlobalServer.
+	 * @param fileName The name of the file that will be written to
+	 * @param data The data that will be written
+	 */
+	private void writeToFile(String fileName, String data) {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+			writer.println(data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
+	}
 }
