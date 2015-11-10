@@ -1,4 +1,0 @@
-GlobalChatRoomJOIN:bne
-GlobalChatRoomJOIN:bne
-GlobalChatRoomJOIN:bne
-GlobalChatRoomJOIN:bne
