@@ -48,6 +48,7 @@ public class Player {
 		output.write(text);
 		output.newLine();
 		output.flush();
+		writeToFile(fileName, text);
 	}
 	
 	public String read() throws IOException {
@@ -127,10 +128,12 @@ public class Player {
 	/**
 	 * http://stackoverflow.com/questions/2885173/
 	 * http://stackoverflow.com/questions/1625234/
+	 * This is the logging system for the GlobalServer. Everything that the sendText sends, will be
+	 * recorded to the global chat log.
 	 * @param fileName The name of the file that will be written to
 	 * @param data The data that will be written
 	 */
-/*	public void writeToFile(String fileName, String data) {
+	public void writeToFile(String fileName, String data) {
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
@@ -143,5 +146,5 @@ public class Player {
 				writer.close();
 			}
 		}
-	}*/
+	}
 }
