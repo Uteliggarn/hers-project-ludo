@@ -52,6 +52,8 @@ public class GlobalServer extends JFrame{
 		
 		groupChatList.add("GlobalChatRoom");
 		
+		fileName = "GlobalChatRoom" + fileNameEnd; //Placeholder so we can write to a file.
+		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));
 		outputArea.setEditable(false);
