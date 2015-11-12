@@ -2,6 +2,7 @@ package no.hig.hers.ludoserver;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.List;
@@ -10,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
@@ -41,7 +43,8 @@ public class GlobalServer extends JFrame{
     private final String turnOwnerText;
     private final String makeMoveText;
     
-    private String fileName;
+    private final String fileNameEnd = "ChatLog.txt"; //The end of the filename
+    private String fileName; //The whole filename
 	
 	public GlobalServer() {
 		
@@ -62,9 +65,7 @@ public class GlobalServer extends JFrame{
 		//The commands that will be sent to the gameClient
 		receiveDiceText = "RECEIVEDICE:"; //Return the dice value
 		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
-		
-		fileName = "ChatLog.txt";
-		
+				
 		try {
 			server = new ServerSocket(12347); // Set up serverSocket
 			executorService = Executors.newCachedThreadPool();
@@ -281,17 +282,23 @@ public class GlobalServer extends JFrame{
 	}
 	
 	/**
+	 * Code for writing to file:
 	 * http://stackoverflow.com/questions/2885173/
 	 * http://stackoverflow.com/questions/1625234/
+	 * 
+	 * Code for the timestamp:
+	 * http://stackoverflow.com/questions/5175728/ 
+	 * 
 	 * This is the logging system for the GlobalServer.
 	 * @param fileName The name of the file that will be written to
 	 * @param data The data that will be written
 	 */
 	private void writeToFile(String fileName, String data) {
 		PrintWriter writer = null;
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
-			writer.println(data);
+			writer.println(timeStamp + " " + data);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
