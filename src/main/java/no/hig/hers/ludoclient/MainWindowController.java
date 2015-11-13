@@ -50,7 +50,7 @@ public class MainWindowController {
 			
 			//String title = tabPane.getTabs().get(1).getText();
 			
-			//gameLobbyWindowController.test(title);
+			
 			
 			sock += 1;
 			
@@ -60,7 +60,13 @@ public class MainWindowController {
 			
 			gameServerList.add(gameServer);
 			
+			String title = "hELLO";
+			
+			//gameLobbyWindowController.test(title);
+			
 			tabPane.getTabs().get(1).setText(gameServer.returnName());
+			
+			gameLobbyWindowController.test(title);
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
