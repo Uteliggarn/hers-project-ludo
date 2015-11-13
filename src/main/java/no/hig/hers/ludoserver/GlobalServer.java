@@ -60,10 +60,10 @@ public class GlobalServer extends JFrame{
 		
 		try {
 			server = new ServerSocket(12347); // Set up serverSocket
-			executorService = Executors.newCachedThreadPool();
+			//executorService = Executors.newCachedThreadPool();
+			executorService = Executors.newFixedThreadPool(3);
 			
 			startLoginMonitor();
-			//groupChatMonitor();
 			startMessageSender();
 			startMessageListener();
 			
