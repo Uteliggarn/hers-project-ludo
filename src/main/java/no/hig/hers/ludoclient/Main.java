@@ -112,6 +112,7 @@ public class Main extends Application {
 
 			Tab globalTab = new Tab("Global");
 			globalTab.setContent((Node)FXMLLoader.load(getClass().getResource("ClientChatOverlay.fxml")) );
+			globalTab.setClosable(false);
 			chatTabs.getTabs().add(globalTab);
 			
 		//	addChatTab();
