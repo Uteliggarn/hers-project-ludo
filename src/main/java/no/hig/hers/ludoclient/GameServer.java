@@ -1,6 +1,7 @@
 package no.hig.hers.ludoclient;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ public class GameServer {
 		this.name = name;
 		
 		try {
-			ServerSocket stt = new ServerSocket(socket);
 			
-			stt.setReuseAddress(true);
+			server = new ServerSocket();
+			server.setReuseAddress(true);
+			server.bind(new InetSocketAddress(socket));
 			
-			server = new ServerSocket(socket); // Set up serverSocket
 			//executorService = Executors.newCachedThreadPool();
 			executorService = Executors.newFixedThreadPool(3);
 			

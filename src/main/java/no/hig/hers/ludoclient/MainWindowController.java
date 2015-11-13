@@ -21,7 +21,7 @@ public class MainWindowController {
 	@FXML private Button newGameButton;
 	@FXML private TabPane tabPane;
 	
-	public static int sock = 20000;
+	public static int sock = 10010;
 	
 	private ArrayList<GameServer> gameServerList = new ArrayList<GameServer>();
 	
