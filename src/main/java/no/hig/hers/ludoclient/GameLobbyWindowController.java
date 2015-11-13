@@ -14,8 +14,9 @@ public class GameLobbyWindowController {
 	
 	public void initialize() {
 		
-		
 	}
+	
+	
 	
 	public void test(String name) {
 		playerOne.setText(name);
