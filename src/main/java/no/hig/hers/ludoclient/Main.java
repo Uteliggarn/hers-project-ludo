@@ -17,8 +17,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 
@@ -101,37 +106,54 @@ public class Main extends Application {
 			tempScene = new Scene(root);
 			tempScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			
-			
+			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);	
 
-			//StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			Tab globalTab = new Tab("Global");
+			globalTab.setContent((Node)FXMLLoader.load(getClass().getResource("ClientChatOverlay.fxml")) );
+			chatTabs.getTabs().add(globalTab);
 			
-			//Parent mainRoot = (Parent)FXMLLoader.load(getClass().getResource("test.fxml"));
-
-			
-			HBox mainRoot = (HBox)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
-			
-			TabPane chatTabs = ((TabPane) ((AnchorPane) ((StackPane)mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1));
-		
-			//TabPane chatTabs = ((TabPane) (((AnchorPane) (StackPane) mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1));
-			
-			Tab globalChatTab = new Tab("Global");					
-			
-			chatTabs.getTabs().add(globalChatTab);
-			globalChatTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("ClientChatOverLay.fxml")));
+		//	addChatTab();
 			
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
-			//	TabPane chatHolder = new TabPane();
-			
-			
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
+	/**
+	public void addChatTab() {
+		BorderPane chatLayout = new BorderPane();
+		TextArea chatText = new TextArea();
+		TextField chat = new TextField();
+		ListView chatList = new ListView();
+		
+		chatLayout.setBottom(chat);
+		chatLayout.setCenter(chatText);
+		chatLayout.setRight(chatList);
+		
+		Tab newTab = new Tab("test");
+		newTab.setContent(chatLayout);
+		
+		newTab.setId("testID");
+		
+		try {
+			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+			chatTabs.getTabs().add(newTab);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	*/
+	
 	
 	public static void showAlert(String title, String content) {
 	   	Alert alert = new Alert(AlertType.INFORMATION);
@@ -140,6 +162,7 @@ public class Main extends Application {
 		alert.setContentText(content);
 		alert.showAndWait();
 	}
+	
 	
 	
 	public static void changeScene(Scene newScene) {

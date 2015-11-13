@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.ClientChatOverlayController">
    <bottom>
-      <TextField BorderPane.alignment="CENTER" />
+      <TextField fx:id="chatTextField" onKeyReleased="#sendChat" BorderPane.alignment="CENTER" />
    </bottom>
    <right>
-      <ListView minWidth="-Infinity" prefWidth="150.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="playerListView" minWidth="-Infinity" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </right>
    <center>
-      <TextArea editable="false" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="chatTextArea" editable="false" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
