@@ -73,6 +73,13 @@ public class GlobalServer extends JFrame{
 			//executorService = Executors.newCachedThreadPool();
 			executorService = Executors.newFixedThreadPool(3);
 			
+			int cpus = Runtime.getRuntime().availableProcessors();
+			double maxThreads = cpus * 0.1;
+			maxThreads = (maxThreads > 0 ? maxThreads : 1);
+			
+			System.out.println("Antall cpus: " + cpus + "\nMaxThreads: " +  maxThreads);
+			//int maxThreads = cpus * scaleFactor;
+			
 			startLoginMonitor();
 			startMessageSender();
 			startMessageListener();
