@@ -92,6 +92,8 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
+			
+			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -111,20 +113,11 @@ public class Main extends Application {
 			Tab globalTab = new Tab("Global");
 			globalTab.setContent((Node)FXMLLoader.load(getClass().getResource("ClientChatOverlay.fxml")) );
 			chatTabs.getTabs().add(globalTab);
-			Node test = globalTab.getContent();		
-			
-		//	ChatHandler c = new ChatHandler(globalTab, output, input, "hash3");
-			
 			
 		//	addChatTab();
+			
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
-			
-		//	TabPane chatHolder = new TabPane();
-			
-			
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
