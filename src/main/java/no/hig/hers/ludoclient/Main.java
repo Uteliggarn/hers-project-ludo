@@ -87,6 +87,8 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
+			
+			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -101,6 +103,11 @@ public class Main extends Application {
 			
 			
 			
+
+			//StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			
+			//Parent mainRoot = (Parent)FXMLLoader.load(getClass().getResource("test.fxml"));
+
 			
 			HBox mainRoot = (HBox)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
 			
@@ -113,13 +120,10 @@ public class Main extends Application {
 			chatTabs.getTabs().add(globalChatTab);
 			globalChatTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("ClientChatOverLay.fxml")));
 			
-			
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-			
-			
-		//	TabPane chatHolder = new TabPane();
+			//	TabPane chatHolder = new TabPane();
 			
 			
 			
