@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import javafx.scene.layout.HBox;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -102,11 +103,17 @@ public class Main extends Application {
 			
 			
 			
-			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+
+			//StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
 			
 			//Parent mainRoot = (Parent)FXMLLoader.load(getClass().getResource("test.fxml"));
+
+			
+			HBox mainRoot = (HBox)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			
+			TabPane chatTabs = ((TabPane) ((AnchorPane) ((StackPane)mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1));
 		
-			TabPane chatTabs = ((TabPane) ((AnchorPane) mainRoot.getChildren().get(0)).getChildren().get(1));
+			//TabPane chatTabs = ((TabPane) (((AnchorPane) (StackPane) mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1));
 			
 			Tab globalChatTab = new Tab("Global");					
 			
