@@ -117,6 +117,14 @@ public class GlobalServer extends JFrame{
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -143,6 +151,14 @@ public class GlobalServer extends JFrame{
 					}
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -187,6 +203,14 @@ public class GlobalServer extends JFrame{
 						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
