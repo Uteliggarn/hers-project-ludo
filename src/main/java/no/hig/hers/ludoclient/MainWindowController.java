@@ -34,10 +34,11 @@ public class MainWindowController {
 		try {
 			Tab tmp = new Tab("newTab");
 			
+			
+			
 			FXMLLoader loader = new FXMLLoader();
 			
 			tmp.setContent(loader.load(getClass().getResource("GameLobbyWindow.fxml").openStream()));
-			
 			
 			GameLobbyWindowController gameLobbyWindowController = (GameLobbyWindowController) loader.getController();
 			
@@ -60,13 +61,7 @@ public class MainWindowController {
 			
 			gameServerList.add(gameServer);
 			
-			String title = "hELLO";
-			
-			//gameLobbyWindowController.test(title);
-			
 			tabPane.getTabs().get(1).setText(gameServer.returnName());
-			
-			gameLobbyWindowController.test(title);
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
