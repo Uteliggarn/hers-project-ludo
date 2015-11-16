@@ -43,7 +43,7 @@ public class GlobalServer extends JFrame{
     private final String turnOwnerText;
     private final String makeMoveText;
     
-    private final String fileNameEnd = "ChatLog.txt"; //The end of the filename
+    private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
 	
 	public GlobalServer() {
