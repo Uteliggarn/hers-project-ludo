@@ -1,3 +1,8 @@
 2015-11-13 11:05:57 GlobalChatRoomJOIN:hauken
 2015-11-13 11:12:51 GlobalChatRoomJOIN:hauken
 2015-11-13 11:12:51 NEWGROUPCHAT:GlobalChatRoom
+2015-11-16 15:50:39 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:03 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:52 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:52 NEWGROUPCHAT:GlobalChatRoom
+2015-11-17 09:49:58 GlobalChatRoomJOIN:hauken
