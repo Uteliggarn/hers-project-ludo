@@ -2,6 +2,9 @@ package no.hig.hers.ludoserver;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Formatter;
 
 public class Player {
 	
@@ -18,10 +22,15 @@ public class Player {
 	private BufferedReader input;
 	private BufferedWriter output;
 	
+	private Formatter out;
+	
 	private String name;
+	private int serverPort;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
+		
+		out = new Formatter(connection.getOutputStream());
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
@@ -49,6 +58,12 @@ public class Player {
 		output.flush();
 	}
 	
+	public void sendPort(int port) throws IOException {
+		output.write(port);
+		output.newLine();
+		output.flush();
+	}
+	
 	public String read() throws IOException {
 		if (input.ready())
 			return input.readLine();
@@ -63,6 +78,10 @@ public class Player {
 		return name;
 	}
 	
+	public int returnServerPort() {
+		return serverPort;
+	}
+	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
 	 * to check what the message contains. If the message contains the correct keyword
@@ -72,7 +91,7 @@ public class Player {
 	 *
 	 * @return true or false
 	 */
-	public boolean loginChecker() {
+	public boolean loginChecker(int serverPort) {
 		try {
 			String tempName = input.readLine();	//reades the input
 			String tempPass = input.readLine();
@@ -87,7 +106,16 @@ public class Player {
 							
 				login = DatabaseHandler.userLogin(name, tempPass.substring(10));
 				if(login > 0) {		// checks the value given by the database
+					
+					this.serverPort = serverPort;
+					
+					System.out.println("Hva er login: " + login);
+					System.out.println("\nHva er serverPort: " + serverPort);
+					
 					output.write(login);	//Sends message back to client
+					//output.newLine();
+					output.flush();
+					output.write(serverPort);	//Sends message back to client
 					output.newLine();
 					output.flush();
 					return true;

@@ -38,14 +38,22 @@ public class ClientLoginUIController {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
     	int ID;
-
+    	int port;
+ 
     	Main.sendLogin("SENDLOGIN:", username, password);
     	
     	try {
     		ID = Main.input.read();
+    		port = Main.input.read();
     		
+    		
+    		System.out.println("Fikk jeg det jeg ville?" + ID + "\nEN til verdi: " + port);
     		
 			if (ID > 0) {
+				
+				Main.serverPort += port;
+				
+				Main.userName = username;
 				Main.playerID = ID;
 				Main.changeScene(Main.mainScene);
 			}

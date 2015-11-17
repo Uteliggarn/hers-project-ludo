@@ -31,6 +31,7 @@
                         </Tab>
                      </tabs>
                   </TabPane>
+                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" AnchorPane.rightAnchor="100.0" />
                   <Button fx:id="buttonTest" mnemonicParsing="false" onAction="#testCode" text="Button" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>

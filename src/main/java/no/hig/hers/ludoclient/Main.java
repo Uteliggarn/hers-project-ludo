@@ -2,11 +2,16 @@ package no.hig.hers.ludoclient;
 	
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import javax.swing.JOptionPane;
+
 import javafx.scene.layout.HBox;
 
 import javafx.application.Application;
@@ -44,6 +49,8 @@ public class Main extends Application {
 	public static BufferedReader input;
 	
 	public static int playerID;
+	public static String userName;
+	public static int serverPort = 10000;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -77,10 +84,12 @@ public class Main extends Application {
 	public static void connect() {
 		try {
 			connection = new Socket("127.0.0.1", 12347);
+			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -182,5 +191,39 @@ public class Main extends Application {
 	    } catch (IOException ioe) {
 	    	showAlert("Error sending message", ioe.toString());		
 		}
+	}
+	
+	 /**
+     * Method used to send a message to the server. Handled in a separate method
+     * to ensure that all messages are ended with a newline character and are
+     * flushed (ensure they are sent.)
+     * 
+     * @param textToSend
+     *            the message to send to the server
+     */
+    public static void sendText(String textToSend) {
+        try {
+            Main.output.write(textToSend);
+            Main.output.newLine();
+            Main.output.flush();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+	
+	@Override
+	public void stop() {
+		sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
+		close();
+	}
+	
+	public void close() {
+		try {
+			Main.output.close();
+			Main.input.close();
+			Main.connection.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} 
 	}
 }
