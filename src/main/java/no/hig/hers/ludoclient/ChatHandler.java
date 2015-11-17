@@ -35,7 +35,7 @@ public class ChatHandler {
 				
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-	//	executorService.shutdown();	// Dreper tråden når klassen dør
+		executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 	
 	/**
@@ -66,10 +66,9 @@ public class ChatHandler {
 	private void processConnection() {
 		executorService.execute(() -> {
 			while (true) {
-
 				try {
 	                message = Main.input.readLine();
-	                
+	                              
 	                if (message.startsWith("NEWGROUPCHAT:")) { //Legger til ny chatTab
 	                	addNewChat(message.substring(13));
 	                	
@@ -78,29 +77,37 @@ public class ChatHandler {
 	                else if (message.equals("ERRORCHAT")) {	// Forteller at chaten finnes allerede
 	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
 	                }
-	                            
-	                for (int i = 1; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i lsiten
+	                           
+	                for (int i = 1; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
 	                	FXMLLoader loader = new FXMLLoader();
 	                	Tab tab = chats.get(i);
+	                			// Denne får en error
 	                	tab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
 	                	ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
 	                	
 		                if (message.startsWith(chats.get(i).getId() + "JOIN:")){	// Sjekker om noen har lyst å joine		                	
 		                	String username = message.substring(tab.getId().length() + 5);
 		                	c.addUserToList(username);
-		                	Main.sendText(tab.getId() + "JOIN:" + username); // Sender klient som lyst å joine til chaten
-		                }
-		                else if (message.startsWith(tab.getId()+ "OUT:")) { // Mottar melding om at noen har logget ut
+		                	//Main.sendText(tab.getId() + "JOIN:" + username); // Sender klient som lyst å joine til chaten
+		                }/*
+		                else if (message.startsWith(chats.get(i).tab.getId()+ "OUT:")) { // Mottar melding om at noen har logget ut
 		                	String username = message.substring(tab.getId().length() + 4);
 		                	c.removeUserFromList(username);
 		                } 
-		                else if (message.startsWith(tab.getId() + ":")) { // Tar alle andre meldinger
+		                else if (message.startsWith(chats.get(i).tab.getId() + ":")) { // Tar alle andre meldinger
 		                	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
-		                }
+		                }*/
 	                }
 	            } catch (Exception e) {
 	             //   Main.showAlert("Error", "Error receiving message from server");
 	            }
+				
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}

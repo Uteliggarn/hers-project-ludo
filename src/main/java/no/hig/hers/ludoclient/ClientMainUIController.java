@@ -39,6 +39,10 @@ public class ClientMainUIController {
     }
     
     @FXML
-    void newGameButtonPressedNotTooHardAndNotTooLight(ActionEvent event) {
+    void newGameButtonPressed(ActionEvent event) {
+    	System.out.println("Skjer det noe?\n");
+    	Main.sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
     }
+    
+    
 }

@@ -36,6 +36,8 @@ public class GlobalServer extends JFrame{
 	
 	private ArrayList<String> groupChatList = new ArrayList<String>();
 	
+	private ArrayList<String> que = new ArrayList<String>();
+	
 	private boolean shutdown = false;
 	
 	private final String throwDiceText;
@@ -45,14 +47,18 @@ public class GlobalServer extends JFrame{
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
+    
+    private int serverPorts = 0;
+    
+    private int tmpPort;
 	
 	public GlobalServer() {
 		
 		super("GlobalServer");
 		
-		groupChatList.add("GlobalChatRoom");
+		groupChatList.add("Global");
 		
-		fileName = "GlobalChatRoom" + fileNameEnd; //Placeholder so we can write to a file.
+		fileName = "Global" + fileNameEnd; //Placeholder so we can write to a file.
 		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));
@@ -69,9 +75,9 @@ public class GlobalServer extends JFrame{
 		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
 				
 		try {
-			server = new ServerSocket(12347); // Set up serverSocket
-			//executorService = Executors.newCachedThreadPool();
-			executorService = Executors.newFixedThreadPool(3);
+			server = new ServerSocket(12348); // Set up serverSocket
+			executorService = Executors.newCachedThreadPool();
+			//executorService = Executors.newFixedThreadPool(3);
 			
 			startLoginMonitor();
 			startMessageSender();
@@ -99,11 +105,29 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
+								System.out.println("\nHva er msg: " + msg);
 								//Sends the message to both listeners. One for game and one for chat.
 								handleGroupChatKeywords(p, msg);
-								handleGameActivity(p, msg);
+								//handleGameActivity(p, msg);
 								
-								if (msg != null && msg.equals(">>>LOGOUT<<<")) {
+								if (msg != null && msg.equals("queue")){
+									que.add(p.returnName());
+									if(que.size() == 4) {
+										for (int t=0; t<4; t++) {
+											Player tmp = player.get(player.indexOf(que.get(t)));
+											if (t == 0) {
+												
+												tmp.sendText("HOST");
+												tmpPort = tmp.returnServerPort();
+											}
+											else {
+												tmp.sendText("JOIN");
+												tmp.sendPort(tmpPort);
+											}	
+										}
+									}
+								}
+								else if (msg != null && msg.equals(">>>LOGOUT<<<")) {
 									i.remove();
 									messages.put("LOGOUT:" + p.returnName());
 								}
@@ -170,15 +194,25 @@ public class GlobalServer extends JFrame{
 				try {
 					Socket s = server.accept();
 					Player p = new Player(s);
-					if (p.loginChecker()) {
-						displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+					if (p.loginChecker(++serverPorts)) {
+						displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
+						try {
+							displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+							messages.put("GlobalJOIN:" + p.returnName());
+							for (int t=0; t<player.size(); t++) {
+								p.sendText("GlobalChatRoomJOIN:" + player.get(t).returnName());
+							}
+						} catch (InterruptedException ie) {
+							ie.printStackTrace();
+						}
 						
 						for (int i=0; i<groupChatList.size(); i++) {
 							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}
+						
 						synchronized (player) {
-							player.add(p);
+							player.add(p);/*
 							Iterator<Player> i = player.iterator();
 							while (i.hasNext()) {
 								Player p1 = i.next();
@@ -187,12 +221,12 @@ public class GlobalServer extends JFrame{
 										p.sendText("NEWGROUPCHAT:" + groupChatList.get(y));
 										writeToFile(fileName, "NEWGROUPCHAT:" + groupChatList.get(y));
 									}
-									/*try {
+									try {
 									p.sendText("GlobalChatRoomJOIN:" + p1.returnName());
 									} catch (IOException ioe) {
 										ioe.printStackTrace();
-									}*/
-							}
+									}
+							}*/
 						}
 						/*try {
 							messages.put("GlobalChatRoomJOIN:" + p.returnName());
@@ -200,6 +234,8 @@ public class GlobalServer extends JFrame{
 							ie.printStackTrace();
 						}*/
 					}
+					else
+						--serverPorts;
 						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
@@ -223,31 +259,31 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
-		if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
-			displayMessage("New message: " + msg + "\n");
-			if(groupChatList.contains(msg.substring(13)))
-				try {
-					p.sendText("ERRORCHAT");
-					writeToFile(fileName, "ERRORCHAT");
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
+			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
+				displayMessage("New message: " + msg + "\n");
+				if(groupChatList.contains(msg.substring(13)))
+					try {
+						p.sendText("ERRORCHAT");
+						writeToFile(fileName, "ERRORCHAT");
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+				else {
+					groupChatList.add(msg.substring(13));
+					messages.put("NEWGROUPCHAT:" + msg.substring(13));
+					displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
 				}
-			else {
-				groupChatList.add(msg.substring(13));
-				messages.put("NEWGROUPCHAT:" + msg.substring(13));
-				displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
 			}
-		}
-		for (int i=0; i<groupChatList.size(); i++) {
-			if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
-				messages.put(msg); 
+			for (int i=0; i<groupChatList.size(); i++) {
+				
+				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
+					messages.put(msg); 
+				}
+				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
+					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
+					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
+				}	
 			}
-			else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
-				displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
-				messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
-			}
-			
-		}
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
