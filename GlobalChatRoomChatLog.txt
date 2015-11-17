@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2015-11-13 10:41:07 GlobalChatRoomJOIN:ert
 2015-11-13 11:15:09 GlobalChatRoomJOIN:ert
 2015-11-16 19:49:24 GlobalChatRoomJOIN:ert
@@ -45,3 +46,19 @@
 2015-11-16 23:38:13 GlobalChatRoomJOIN:ert
 2015-11-16 23:45:59 GlobalChatRoomJOIN:ert
 2015-11-16 23:47:00 GlobalChatRoomJOIN:ert
+=======
+<<<<<<< HEAD
+2015-11-13 11:05:57 GlobalChatRoomJOIN:hauken
+2015-11-13 11:12:51 GlobalChatRoomJOIN:hauken
+2015-11-13 11:12:51 NEWGROUPCHAT:GlobalChatRoom
+2015-11-16 15:50:39 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:03 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:52 GlobalChatRoomJOIN:hauken
+2015-11-16 16:10:52 NEWGROUPCHAT:GlobalChatRoom
+2015-11-17 09:49:58 GlobalChatRoomJOIN:hauken
+=======
+2015-11-13 10:44:52 GlobalChatRoomJOIN:hauken
+2015-11-13 10:47:14 GlobalChatRoomJOIN:hauken
+2015-11-13 10:47:14 NEWGROUPCHAT:GlobalChatRoom
+>>>>>>> refs/remotes/origin/master
+>>>>>>> refs/remotes/origin/master

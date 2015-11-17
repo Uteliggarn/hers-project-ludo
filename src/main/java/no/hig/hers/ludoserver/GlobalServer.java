@@ -146,7 +146,7 @@ public class GlobalServer extends JFrame{
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
 				}
 			}
@@ -181,7 +181,7 @@ public class GlobalServer extends JFrame{
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
 				}
 			}
@@ -245,7 +245,7 @@ public class GlobalServer extends JFrame{
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
 				}
 			}
