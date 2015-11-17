@@ -43,7 +43,7 @@ public class GlobalServer extends JFrame{
     private final String turnOwnerText;
     private final String makeMoveText;
     
-    private final String fileNameEnd = "ChatLog.txt"; //The end of the filename
+    private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
 	
 	public GlobalServer() {
@@ -117,6 +117,14 @@ public class GlobalServer extends JFrame{
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -143,6 +151,14 @@ public class GlobalServer extends JFrame{
 					}
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
 				}
 			}
 		});
@@ -187,6 +203,14 @@ public class GlobalServer extends JFrame{
 						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
 				}
 			}
 		});

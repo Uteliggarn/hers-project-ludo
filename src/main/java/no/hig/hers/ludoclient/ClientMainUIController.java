@@ -24,12 +24,21 @@ public class ClientMainUIController {
     private Button buttonTest;
     
     @FXML
+    private Button newGameButton;
+    
+    @FXML
     private TabPane chatTabPane;
+    
+    
 
 
     @FXML
     void testCode(ActionEvent event) {
     	Tab newTab = new Tab("random");	
     	chatTabPane.getTabs().add(newTab);
+    }
+    
+    @FXML
+    void newGameButtonPressedNotTooHardAndNotTooLight(ActionEvent event) {
     }
 }
