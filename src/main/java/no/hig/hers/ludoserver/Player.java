@@ -26,6 +26,8 @@ public class Player {
 	
 	private String name;
 	private int serverPort;
+	
+	private boolean host = false;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -82,6 +84,10 @@ public class Player {
 		return serverPort;
 	}
 	
+	public void setHost(boolean host) {
+		this.host = host;
+	}
+	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
 	 * to check what the message contains. If the message contains the correct keyword
@@ -116,6 +122,7 @@ public class Player {
 					//output.newLine();
 					output.flush();
 					output.write(serverPort);	//Sends message back to client
+					output.newLine();
 					output.newLine();
 					output.flush();
 					return true;

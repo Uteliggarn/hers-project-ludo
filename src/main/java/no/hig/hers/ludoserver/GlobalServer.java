@@ -45,7 +45,7 @@ public class GlobalServer extends JFrame{
     private final String turnOwnerText;
     private final String makeMoveText;
     
-    private final String fileNameEnd = "ChatLog.txt"; //The end of the filename
+    private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
     
     private int serverPorts = 0;
@@ -56,9 +56,9 @@ public class GlobalServer extends JFrame{
 		
 		super("GlobalServer");
 		
-		groupChatList.add("GlobalChatRoom");
+		groupChatList.add("Global");
 		
-		fileName = "GlobalChatRoom" + fileNameEnd; //Placeholder so we can write to a file.
+		fileName = "Global" + fileNameEnd; //Placeholder so we can write to a file.
 		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));
@@ -112,6 +112,7 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
+								System.out.println("\nHva er msg: " + msg);
 								//Sends the message to both listeners. One for game and one for chat.
 								handleGroupChatKeywords(p, msg);
 								//handleGameActivity(p, msg);
@@ -122,14 +123,14 @@ public class GlobalServer extends JFrame{
 										for (int t=0; t<4; t++) {
 											Player tmp = player.get(player.indexOf(que.get(t)));
 											if (t == 0) {
+												
 												tmp.sendText("HOST");
 												tmpPort = tmp.returnServerPort();
 											}
 											else {
 												tmp.sendText("JOIN");
 												tmp.sendPort(tmpPort);
-											}
-											
+											}	
 										}
 									}
 								}
@@ -147,6 +148,14 @@ public class GlobalServer extends JFrame{
 					}
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -175,6 +184,14 @@ public class GlobalServer extends JFrame{
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 	}
@@ -187,6 +204,14 @@ public class GlobalServer extends JFrame{
 					Player p = new Player(s);
 					if (p.loginChecker(++serverPorts)) {
 						displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
+						try {
+							messages.put("GlobalJOIN:" + p.returnName());
+							for (int t=0; t<player.size(); t++) {
+								p.sendText("GlobalChatRoomJOIN:" + player.get(t).returnName());
+							}
+						} catch (InterruptedException ie) {
+							ie.printStackTrace();
+						}
 						
 						for (int i=0; i<groupChatList.size(); i++) {
 							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
@@ -194,7 +219,7 @@ public class GlobalServer extends JFrame{
 						}
 						
 						synchronized (player) {
-							player.add(p);
+							player.add(p);/*
 							Iterator<Player> i = player.iterator();
 							while (i.hasNext()) {
 								Player p1 = i.next();
@@ -202,13 +227,13 @@ public class GlobalServer extends JFrame{
 									for (int y=0; y<groupChatList.size(); y++) {
 										p.sendText("NEWGROUPCHAT:" + groupChatList.get(y));
 										writeToFile(fileName, "NEWGROUPCHAT:" + groupChatList.get(y));
-									}/*
+									}
 									try {
 									p.sendText("GlobalChatRoomJOIN:" + p1.returnName());
 									} catch (IOException ioe) {
 										ioe.printStackTrace();
-									}*/
-							}
+									}
+							}*/
 						}
 						/*try {
 							messages.put("GlobalChatRoomJOIN:" + p.returnName());
@@ -221,6 +246,14 @@ public class GlobalServer extends JFrame{
 						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
+				}
+				
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -249,6 +282,7 @@ public class GlobalServer extends JFrame{
 				}
 			}
 			for (int i=0; i<groupChatList.size(); i++) {
+				System.out.println("Kom vi in i groupchat loop\n");
 				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
 					messages.put(msg); 
 				}

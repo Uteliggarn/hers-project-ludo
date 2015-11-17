@@ -46,8 +46,7 @@ public class ClientLoginUIController {
     		ID = Main.input.read();
     		port = Main.input.read();
     		
-    		
-    		System.out.println("Fikk jeg det jeg ville?" + ID + "\nEN til verdi: " + port);
+    		System.out.println("\nHva er ID: " + ID + "\nHva er port: " + port);
     		
 			if (ID > 0) {
 				

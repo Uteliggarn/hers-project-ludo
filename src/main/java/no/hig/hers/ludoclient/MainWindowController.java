@@ -34,8 +34,6 @@ public class MainWindowController {
 		try {
 			Tab tmp = new Tab("newTab");
 			
-			
-			
 			FXMLLoader loader = new FXMLLoader();
 			
 			tmp.setContent(loader.load(getClass().getResource("GameLobbyWindow.fxml").openStream()));
@@ -50,8 +48,6 @@ public class MainWindowController {
 			tabPane.getSelectionModel().select(tmp);;
 			
 			//String title = tabPane.getTabs().get(1).getText();
-			
-			
 			
 			sock += 1;
 			
