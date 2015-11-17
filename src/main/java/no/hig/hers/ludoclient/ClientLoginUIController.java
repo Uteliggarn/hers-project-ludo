@@ -44,7 +44,6 @@ public class ClientLoginUIController {
     	try {
     		ID = Main.input.read();
     		
-    		
 			if (ID > 0) {
 				Main.playerID = ID;
 				Main.changeScene(Main.mainScene);

@@ -36,12 +36,14 @@ public class Main extends Application {
 	public static Scene mainScene;
 	
 	static boolean connected = false;
-
+	
+	private ChatHandler cHandler; 
 	
 	static String LudoClientHost;
 	static Socket connection;
 	public static BufferedWriter output;
 	public static BufferedReader input;
+	
 	
 	public static int playerID;
 	
@@ -107,54 +109,20 @@ public class Main extends Application {
 			tempScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
 			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
-			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);	
-
-			Tab globalTab = new Tab("Global");
-			globalTab.setContent((Node)FXMLLoader.load(getClass().getResource("ClientChatOverlay.fxml")) );
-			globalTab.setClosable(false);
-			chatTabs.getTabs().add(globalTab);
-			
-		//	addChatTab();
-			
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
+			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+			
+			// Making a new chathandler, which should handle the chats.
+			cHandler = new ChatHandler(chatTabs);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-	/**
-	public void addChatTab() {
-		BorderPane chatLayout = new BorderPane();
-		TextArea chatText = new TextArea();
-		TextField chat = new TextField();
-		ListView chatList = new ListView();
-		
-		chatLayout.setBottom(chat);
-		chatLayout.setCenter(chatText);
-		chatLayout.setRight(chatList);
-		
-		Tab newTab = new Tab("test");
-		newTab.setContent(chatLayout);
-		
-		newTab.setId("testID");
-		
-		try {
-			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
-			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-			chatTabs.getTabs().add(newTab);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-	}
-	*/
-	
+
 	
 	public static void showAlert(String title, String content) {
 	   	Alert alert = new Alert(AlertType.INFORMATION);
@@ -183,4 +151,13 @@ public class Main extends Application {
 	    	showAlert("Error sending message", ioe.toString());		
 		}
 	}
+	public static void sendText(String textToSend) {
+        try {
+            output.write(textToSend);
+            output.newLine();
+            output.flush();
+        } catch (IOException ioe) {
+        	Main.showAlert("Error", "Unable to send message to server");
+        }
+ }
 }
