@@ -75,16 +75,9 @@ public class GlobalServer extends JFrame{
 		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
 				
 		try {
-			server = new ServerSocket(12347); // Set up serverSocket
+			server = new ServerSocket(12348); // Set up serverSocket
 			executorService = Executors.newCachedThreadPool();
 			//executorService = Executors.newFixedThreadPool(3);
-			
-			int cpus = Runtime.getRuntime().availableProcessors();
-			double maxThreads = cpus * 0.1;
-			maxThreads = (maxThreads > 0 ? maxThreads : 1);
-			
-			System.out.println("Antall cpus: " + cpus + "\nMaxThreads: " +  maxThreads);
-			//int maxThreads = cpus * scaleFactor;
 			
 			startLoginMonitor();
 			startMessageSender();
@@ -135,7 +128,6 @@ public class GlobalServer extends JFrame{
 									}
 								}
 								else if (msg != null && msg.equals(">>>LOGOUT<<<")) {
-									System.out.println("Kom jeg in her?\n");
 									i.remove();
 									messages.put("LOGOUT:" + p.returnName());
 								}
@@ -205,6 +197,7 @@ public class GlobalServer extends JFrame{
 					if (p.loginChecker(++serverPorts)) {
 						displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
 						try {
+							displayMessage("GlobalJOIN:" + p.returnName() + "\n");
 							messages.put("GlobalJOIN:" + p.returnName());
 							for (int t=0; t<player.size(); t++) {
 								p.sendText("GlobalChatRoomJOIN:" + player.get(t).returnName());
@@ -282,7 +275,7 @@ public class GlobalServer extends JFrame{
 				}
 			}
 			for (int i=0; i<groupChatList.size(); i++) {
-				System.out.println("Kom vi in i groupchat loop\n");
+				
 				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
 					messages.put(msg); 
 				}

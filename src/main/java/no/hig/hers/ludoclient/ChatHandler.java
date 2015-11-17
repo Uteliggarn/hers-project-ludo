@@ -68,9 +68,7 @@ public class ChatHandler {
 			while (true) {
 				try {
 	                message = Main.input.readLine();
-	                
-	                System.out.println("Hei\n");
-	                
+	                              
 	                if (message.startsWith("NEWGROUPCHAT:")) { //Legger til ny chatTab
 	                	addNewChat(message.substring(13));
 	                	
@@ -79,11 +77,11 @@ public class ChatHandler {
 	                else if (message.equals("ERRORCHAT")) {	// Forteller at chaten finnes allerede
 	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
 	                }
-	              
 	                           
 	                for (int i = 1; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
 	                	FXMLLoader loader = new FXMLLoader();
 	                	Tab tab = chats.get(i);
+	                			// Denne får en error
 	                	tab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
 	                	ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
 	                	

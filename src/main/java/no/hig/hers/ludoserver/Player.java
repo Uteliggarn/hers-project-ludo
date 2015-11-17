@@ -22,8 +22,6 @@ public class Player {
 	private BufferedReader input;
 	private BufferedWriter output;
 	
-	private Formatter out;
-	
 	private String name;
 	private int serverPort;
 	
@@ -31,8 +29,6 @@ public class Player {
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
-		
-		out = new Formatter(connection.getOutputStream());
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
@@ -100,7 +96,9 @@ public class Player {
 	public boolean loginChecker(int serverPort) {
 		try {
 			String tempName = input.readLine();	//reades the input
+
 			String tempPass = input.readLine();
+			
 			
 			if (!tempName.startsWith("SENDLOGIN:") && !tempName.startsWith("SENDREGISTER:"))
 				return false;
@@ -114,15 +112,9 @@ public class Player {
 				if(login > 0) {		// checks the value given by the database
 					
 					this.serverPort = serverPort;
-					
-					System.out.println("Hva er login: " + login);
-					System.out.println("\nHva er serverPort: " + serverPort);
-					
+								
 					output.write(login);	//Sends message back to client
-					//output.newLine();
-					output.flush();
 					output.write(serverPort);	//Sends message back to client
-					output.newLine();
 					output.newLine();
 					output.flush();
 					return true;
