@@ -105,7 +105,7 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
-								System.out.println("\nHva er msg: " + msg);
+							//	System.out.println("\nHva er msg: " + msg);
 								//Sends the message to both listeners. One for game and one for chat.
 								handleGroupChatKeywords(p, msg);
 								//handleGameActivity(p, msg);

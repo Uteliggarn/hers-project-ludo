@@ -42,6 +42,7 @@ public class Main extends Application {
 	static Socket connection;
 	public static BufferedWriter output;
 	public static BufferedReader input;
+
 	
 	
 	public static int playerID;
