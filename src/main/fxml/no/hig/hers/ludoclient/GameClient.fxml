@@ -9,70 +9,86 @@
 <?import java.lang.*?>
 <?import javafx.scene.shape.*?>
 
-<BorderPane prefHeight="972.0" prefWidth="1065.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.GameClientUIController">
+<BorderPane fx:id="gameClientPane" prefHeight="972.0" prefWidth="1065.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.GameClientUIController">
    <left>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="Red Player: Your turn" />
-                  <Label text="Blue Player:" />
-                  <Label text="Yellow Player:" />
-                  <Label text="Blue Player:" />
+                  <Label fx:id="redPlayer" alignment="CENTER" contentDisplay="CENTER" text="Red player: Your turn">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font></Label>
+                  <Label fx:id="yellowPlayer" text="Yellow player:">
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial Italic" size="20.0" />
+                     </font></Label>
+                  <Label fx:id="bluePlayer" text="Blue player:">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="Arial Italic" size="20.0" />
+                     </font></Label>
+                  <Label fx:id="greenPlayer" text="Green player:">
+                     <font>
+                        <Font name="Arial Italic" size="20.0" />
+                     </font></Label>
                </children></VBox>
          </top>
-         <bottom>
-            <Button mnemonicParsing="false" prefHeight="68.0" prefWidth="118.0" text="Roll dice" textAlignment="CENTER" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Arial Italic" size="18.0" />
-               </font></Button>
-         </bottom>
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="273.0" text="Pawn 1" />
-                  <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="257.0" text="Pawn 2">
+                  <Button fx:id="pawn1" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Pawn 1" />
+                  <Button fx:id="pawn2" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Pawn 2">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="282.0" text="Pawn 3">
+                  <Button fx:id="pawn3" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Pawn 3">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="217.0" text="Pawn 4">
+                  <Button fx:id="pawn4" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Pawn 4">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="39.0" prefWidth="206.0" text="Pass">
+                  <Button fx:id="pass" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Pass">
                      <VBox.margin>
                         <Insets bottom="20.0" top="30.0" />
                      </VBox.margin>
                   </Button>
-                  <Label text="Dice Value:">
-                     <padding>
-                        <Insets left="50.0" />
-                     </padding>
+                  <Label fx:id="dieTextLabel" alignment="CENTER" contentDisplay="CENTER" text="Dice Value:" translateX="60.0">
+                     <font>
+                        <Font name="Arial Italic" size="15.0" />
+                     </font>
                   </Label>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="dieLabel" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" translateX="47.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin></ImageView>
+                  <Button fx:id="dieRoller" mnemonicParsing="false" prefHeight="68.0" prefWidth="118.0" text="Roll dice" textAlignment="CENTER" translateX="37.0">
+                     <font>
+                        <Font name="Arial Italic" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </center>
       </BorderPane>
    </left>
    <right>
-      <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="chatArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </right>
    <bottom>
-      <TextField BorderPane.alignment="CENTER" />
+      <TextField fx:id="typeArea" prefWidth="1065.0" BorderPane.alignment="CENTER" />
    </bottom>
-   <center>
-      <ImageView fitHeight="800.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@ludo_board.png" />
-         </image>
-      </ImageView>
-   </center>
 </BorderPane>

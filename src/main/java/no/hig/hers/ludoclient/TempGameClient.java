@@ -6,15 +6,19 @@ import javax.swing.SwingUtilities;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.*;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
 
 public class TempGameClient extends Application {
 
-	LudoBoard board; 
+	
+	LudoBoardFX board; 
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -24,25 +28,17 @@ public class TempGameClient extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		//final SwingNode swingNode = new SwingNode();
+		final SwingNode swingNode = new SwingNode();
 		
 		Parent root = (Parent)FXMLLoader.load(getClass().getResource("GameClient.fxml"));
-		BorderPane mainScene = new BorderPane(); 
-		mainScene.setCenter(root);;
-				
-		Scene scene = new Scene(mainScene);
+		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 	}
 
-	 private void createSwingContent(final SwingNode swingNode) {
-	        SwingUtilities.invokeLater(new Runnable() {
-	            @Override
-	            public void run() {
-	            	board = new LudoBoard();
-	                swingNode.setContent(board);
-	            }
-	        });
-	    }
+	 @FXML
+	 void goToMain(ActionEvent event) {
+	   	Main.changeScene(Main.mainScene);
+    }
 }
