@@ -37,8 +37,7 @@ public class ClientLoginUIController {
     void userLogin(ActionEvent event) {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
-    	
-    	System.out.println("\nFørst hva username er: " + username + "\nAndre hva password er: " + password);
+
     	int ID;
     	int port;
  
@@ -48,8 +47,6 @@ public class ClientLoginUIController {
     		ID = Main.input.read();
     		port = Main.input.read();
     		
-    		System.out.println("\nHva er ID: " + ID + "\nHva er port: " + port);
-    		
 			if (ID > 0) {
 				
 				Main.serverPort += port;
@@ -57,6 +54,7 @@ public class ClientLoginUIController {
 				Main.userName = username;
 				Main.playerID = ID;
 				Main.startChatHandler();
+				//Main.startGameServer();
 				Main.changeScene(Main.mainScene);
 				
 			}

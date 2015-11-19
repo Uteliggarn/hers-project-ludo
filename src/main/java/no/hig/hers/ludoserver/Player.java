@@ -84,6 +84,10 @@ public class Player {
 		this.host = host;
 	}
 	
+	public boolean returnHost() {
+		return host;
+	}
+	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
 	 * to check what the message contains. If the message contains the correct keyword

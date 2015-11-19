@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameServer {
-
-	private String name;
 	
 	private ServerSocket server;
 	private ExecutorService executorService;
@@ -23,8 +21,7 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
-	public GameServer(String name, int socket) {
-		this.name = name;
+	public GameServer(int socket) {
 		
 		try {
 			
@@ -78,6 +75,13 @@ public class GameServer {
 	                } catch (InterruptedException ie) {
 	                	ie.printStackTrace();
 	                } 
+	              //The thread goes to sleep to save the CPU energy
+					try {
+						Thread.sleep(250);
+					} catch (Exception e) {
+						// Prints the stackTrace if anything goes wrong.
+						e.printStackTrace();
+					}
 	           }
 	        });
 	    }
@@ -104,6 +108,13 @@ public class GameServer {
 	                } catch (InterruptedException ie) {
 	                    ie.printStackTrace();
 	                }
+	              //The thread goes to sleep to save the CPU energy
+					try {
+						Thread.sleep(250);
+					} catch (Exception e) {
+						// Prints the stackTrace if anything goes wrong.
+						e.printStackTrace();
+					}
 	            }
 	        });
 	    }
@@ -135,12 +146,15 @@ public class GameServer {
 	                } catch (IOException ioe) {
 	                    ioe.printStackTrace();
 	                }
+	                
+	              //The thread goes to sleep to save the CPU energy
+					try {
+						Thread.sleep(250);
+					} catch (Exception e) {
+						// Prints the stackTrace if anything goes wrong.
+						e.printStackTrace();
+					}
 	            }
 	        });
 	    }
-	    
-	    public String returnName() {
-	    	return name;
-	    }
-
 }

@@ -27,7 +27,13 @@ public class ClientMainUIController {
     private Button newGameButton;
     
     @FXML
+    private Button queueButton;
+    
+    @FXML
     private TabPane chatTabPane;
+    
+    @FXML
+    private TabPane gameTabs; 
     
     
 
@@ -40,9 +46,34 @@ public class ClientMainUIController {
     
     @FXML
     void newGameButtonPressed(ActionEvent event) {
-    	System.out.println("Skjer det noe?\n");
-    	Main.sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
+    	newGameTab();
     }
     
+    @FXML
+    void queueButtonPressed(ActionEvent event) {
+    	Main.sendText("queue");
+    	queueButton.setDisable(true);
+    	
+    }
+    
+    public void newGameTab() {
+    	try {
+			Tab tmp = new Tab("Ludo");
+			
+			FXMLLoader loader = new FXMLLoader();
+			
+			tmp.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+			
+			HostGameLobbyController gameLobbyWindowController = (HostGameLobbyController) loader.getController();
+					
+			gameTabs.getTabs().add(tmp);
+			gameTabs.getSelectionModel().select(tmp);
+    	} catch (IOException ioe) {
+    		ioe.printStackTrace();
+    	}
+    	
+    	//gameTabs.getTabs().add(tab);
+    	//gameTabs.getSelectionModel().select(tab);
+    }
     
 }

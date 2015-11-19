@@ -12,14 +12,13 @@
          <center>
             <AnchorPane prefHeight="800.0" prefWidth="1700.0">
                <children>
-                  <TabPane prefHeight="294.0" prefWidth="1700.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TabPane fx:id="gameTabs" prefHeight="294.0" prefWidth="1700.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
                       <Tab text="Main">
                         <content>
                               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="992.0" stroke="BLACK" strokeType="INSIDE" width="1719.0" />
                         </content>
                       </Tab>
-                      <Tab text="Untitled Tab 2" />
                     </tabs>
                   </TabPane>
                   <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1100.0" AnchorPane.topAnchor="600.0">
@@ -32,6 +31,7 @@
                      </tabs>
                   </TabPane>
                   <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" AnchorPane.rightAnchor="100.0" />
+                  <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" text="Queue" AnchorPane.rightAnchor="220.0" />
                   <Button fx:id="buttonTest" mnemonicParsing="false" onAction="#testCode" text="Button" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>

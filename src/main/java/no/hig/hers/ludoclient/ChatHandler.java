@@ -24,11 +24,16 @@ public class ChatHandler {
 	private ExecutorService executorService;
 	private List<Tab> chats;
 	private TabPane chatTabs;
+	private TabPane gameTabs;
 	String message;
 	
-	public ChatHandler(TabPane chatTabs) {
+	//private ClientMainUIController clientMainUIController;
+	
+	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
 		chats = new ArrayList<>();
 		this.chatTabs = chatTabs;
+		this.gameTabs = gameTabs;
+		//this.clientMainUIController = clientMainUIController;
 		
 		addNewChat("Global");
 		addNewChat("Glotest");
@@ -58,6 +63,27 @@ public class ChatHandler {
 		}	
 	}
 	
+	private void newHostGameLobby() {
+		try {
+			Tab tab = new Tab("Ludo");
+			
+			FXMLLoader loader = new FXMLLoader();
+			
+			tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+			
+			HostGameLobbyController hostGameLobbyController = (HostGameLobbyController) loader.getController();
+			
+			hostGameLobbyController.getServerPort(Main.serverPort);
+			
+			tab.setId("tab1");
+			
+			chatTabs.getTabs().add(tab);
+			chatTabs.getSelectionModel().select(tab);
+			
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
@@ -77,7 +103,13 @@ public class ChatHandler {
 	                else if (message.equals("ERRORCHAT")) {	// Forteller at chaten finnes allerede
 	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
 	                }
-	                           
+	                else if (message.equals("HOST")) {
+	                	newHostGameLobby();
+	                }
+	                else if (message.equals("JOIN")) {
+	                	
+	                }
+	                      /*     
 	                for (int i = 1; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
 	                	FXMLLoader loader = new FXMLLoader();
 	                	Tab tab = chats.get(i);
@@ -89,15 +121,16 @@ public class ChatHandler {
 		                	String username = message.substring(tab.getId().length() + 5);
 		                	c.addUserToList(username);
 		                	//Main.sendText(tab.getId() + "JOIN:" + username); // Sender klient som lyst å joine til chaten
-		                }/*
+		                }
 		                else if (message.startsWith(chats.get(i).tab.getId()+ "OUT:")) { // Mottar melding om at noen har logget ut
 		                	String username = message.substring(tab.getId().length() + 4);
 		                	c.removeUserFromList(username);
 		                } 
 		                else if (message.startsWith(chats.get(i).tab.getId() + ":")) { // Tar alle andre meldinger
 		                	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
+		                }
 		                }*/
-	                }
+	                
 	            } catch (Exception e) {
 	             //   Main.showAlert("Error", "Error receiving message from server");
 	            }

@@ -36,19 +36,21 @@ public class MainWindowController {
 			
 			FXMLLoader loader = new FXMLLoader();
 			
-			tmp.setContent(loader.load(getClass().getResource("GameLobbyWindow.fxml").openStream()));
+			tmp.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 			
-			GameLobbyWindowController gameLobbyWindowController = (GameLobbyWindowController) loader.getController();
+			HostGameLobbyController host = (HostGameLobbyController) loader.getController();
+			
+			host.test("Duchi");
+					
+			tabPane.getTabs().add(tmp);
+			tabPane.getSelectionModel().select(tmp);;
 			
 			//gameLobbyWindowController.test("Hello");
 			
 			//tmp.setContent(FXMLLoader.load(getClass().getResource("GameLobbyWindow.fxml")));
 			
-			tabPane.getTabs().add(tmp);
-			tabPane.getSelectionModel().select(tmp);;
-			
 			//String title = tabPane.getTabs().get(1).getText();
-			
+			/*
 			sock += 1;
 			
 			GameServer gameServer = new GameServer("test", sock);
@@ -58,6 +60,7 @@ public class MainWindowController {
 			gameServerList.add(gameServer);
 			
 			tabPane.getTabs().get(1).setText(gameServer.returnName());
+			*/
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
