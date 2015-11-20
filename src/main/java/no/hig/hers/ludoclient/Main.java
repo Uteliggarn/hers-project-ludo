@@ -53,8 +53,6 @@ public class Main extends Application {
 	private static TabPane chatTabs;
 	public static TabPane gameTabs;
 	
-	private static ClientMainUIController clientMainUIController;
-	
 	@Override
 	public void start(Stage primaryStage) {
 	
@@ -138,8 +136,7 @@ public class Main extends Application {
 			
 		} catch(Exception e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	
 	public static void startChatHandler() {
