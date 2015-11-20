@@ -15,11 +15,11 @@ public class HostGameLobbyController {
 	@FXML private Button startGameButton;
 	
 	private int serverPort;
-	/*
+	
 	public void initialize() {
-		
+		startGameButton.setDisable(false);
 	}
-	*/
+	
 	public void test(String name) {
 		playerOne.setText(name);
 	}
