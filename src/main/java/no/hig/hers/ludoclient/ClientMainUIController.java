@@ -70,13 +70,13 @@ public class ClientMainUIController {
 				
 				tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 				
-			//	CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
+				CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
 				
 				for (int i=0; i<1; i++) {
 					String msg = Main.input.readLine();
 					System.out.println("\nHva kommer in som msg: " + msg);
 					if (!msg.substring(7).equals(Main.userName))    ;
-					//	createLobbyWindowController.addNewPlayerToList(msg.substring(7));
+						createLobbyWindowController.addNewPlayerToList(msg.substring(7));
 				}
 				
 				gameTabs.getTabs().add(tmp);

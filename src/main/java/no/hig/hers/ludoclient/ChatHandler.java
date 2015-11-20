@@ -55,27 +55,6 @@ public class ChatHandler {
     	});
 	}
 	
-	private void newHostGameLobby() {
-		try {
-			Tab tab = new Tab("Ludo");
-			
-			FXMLLoader loader = new FXMLLoader();
-			
-			tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
-			
-			//HostGameLobbyController hostGameLobbyController = (HostGameLobbyController) loader.getController();
-			
-			//hostGameLobbyController.getServerPort(Main.serverPort);
-			
-			tab.setId("tab1");
-			
-			gameTabs.getTabs().add(tab);
-			gameTabs.getSelectionModel().select(tab);
-			
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
 	/**
 	 * Handles incoming chat-messages.
 	 * @param message Message to handle
@@ -88,7 +67,7 @@ public class ChatHandler {
             if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine		                	
             	String username = message.substring(tab.getId().length() + 5);
             	c.addUserToList(username);
-            	Main.sendText(tab.getId() + Main.JOINCHAT + username); // Sender klient som lyst å joine til chaten
+            	//Main.sendText(tab.getId() + Main.JOINCHAT + username); // Sender klient som lyst å joine til chaten
             }
             else if (message.startsWith(chats.get(i).getId()+ Main.LEAVECHAT)) { // Mottar melding om at noen har logget ut
             	String username = message.substring(tab.getId().length() + 4);
