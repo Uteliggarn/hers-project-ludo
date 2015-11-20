@@ -84,7 +84,7 @@ public class Main extends Application {
 	
 	public static void connect() {
 		try {
-			connection = new Socket("127.0.0.1", 12345);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
