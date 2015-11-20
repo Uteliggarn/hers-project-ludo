@@ -101,6 +101,9 @@ public class GlobalServer extends JFrame{
 		setVisible(true);	
 	}
 
+	/**
+	 * Listens to all messages that comes in. Sends the different messages to the correct methods.
+	 */
 	private void startMessageListener() {
 		executorService.execute(() -> {
 			while (!shutdown) {
@@ -143,6 +146,9 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	/**
+	 * Sends the message to all players.
+	 */
 	private void startMessageSender() {
 		executorService.execute(() -> {
 			while (!shutdown) {
@@ -178,6 +184,9 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	/**
+	 * Managing when players are logging on and off.
+	 */
 	private void startLoginMonitor() {
 		executorService.execute(() -> {
 			while (!shutdown) {
