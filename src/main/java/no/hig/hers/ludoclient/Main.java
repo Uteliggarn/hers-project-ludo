@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -40,6 +41,7 @@ public class Main extends Application {
 	
 	private static ChatHandler cHandler; 
 	private static GameServer gameServer;
+	private static GameHandler gameHandler;
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -77,6 +79,7 @@ public class Main extends Application {
 			
 			connect();
 			
+			gameHandler = new GameHandler(10004);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -225,7 +228,13 @@ public class Main extends Application {
 	                message = Main.input.readLine();
 	
 	                if (message.equals("HOST")) {
-	                	//cHandler.newHostGameLobby();
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			gameHandler.newHostGameLobby();	
+	                		}
+	                	});
+	               
 	                }
 	                else if (message.equals("JOIN")) {
 	                	int port = Main.input.read();
