@@ -91,8 +91,8 @@ public class ChatHandler {
 			
 			tab.setId("tab1");
 			
-			chatTabs.getTabs().add(tab);
-			chatTabs.getSelectionModel().select(tab);
+			gameTabs.getTabs().add(tab);
+			gameTabs.getSelectionModel().select(tab);
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -110,7 +110,12 @@ public class ChatHandler {
 	                message = Main.input.readLine();
 	
 	                if (message.equals("HOST")) {
-	                	newHostGameLobby();
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			newHostGameLobby();
+	                		}
+	                	});
 	                }
 	                else if (message.equals("JOIN")) {
 	                	int port = Main.input.read();
