@@ -87,7 +87,7 @@ public class LudoBoardFX extends Pane {
 		} catch(Exception e) {
 			System.out.println("Error while drawing board or pawns");
 		}
-		setMinSize(1000, 1000);
+		setMinSize(900, 900);
 		
 		//-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 		//Image image = new Image("ludo_board.png");
@@ -108,8 +108,8 @@ public class LudoBoardFX extends Pane {
 	}
 	
 	private void drawGameBoard() {
-		board = new Image("ludo_board.png", 900, 900, true, true);
-		gameBoard = new Canvas(1000, 1000);
+		board = new Image("ludo_board.png", 800, 900, true, true);
+		gameBoard = new Canvas(800, 900);
 		GraphicsContext gb = gameBoard.getGraphicsContext2D();
 		gb.drawImage(board, 0, 0);
 		getChildren().add(gameBoard);
@@ -523,10 +523,10 @@ public class LudoBoardFX extends Pane {
 		//Used to clear the canvas
 		if(drawn > 0) {
 		GraphicsContext gp1 = gamePieces.getGraphicsContext2D();
-		gp1.clearRect(0, 0, 1000, 1000);
+		gp1.clearRect(0, 0, 800, 900);
 		}
 		
-		else gamePieces = new Canvas(1000, 1000);
+		else gamePieces = new Canvas(800, 900);
 		GraphicsContext gp = gamePieces.getGraphicsContext2D();
 		try {	
 			for (int j = 0; j < greenPawns.size() ; j++) {

@@ -184,11 +184,14 @@ public class GameClientUIController {
 				}
 				dieRoller.setDisable(false);
 				dieRoller.setText("Throw the dice");
+				setPawnMovesFalse();
 			}
 		});
+		/*
 		pass.setStyle("-fx-background-color: red");
 		pass.getStylesheets().add("ludoBoard.css");
-		setPawnMovesFalse();
+		*/
+		
 	}
 	@FXML
 	void rollDice(ActionEvent even) {
@@ -315,7 +318,7 @@ public class GameClientUIController {
 			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.greenPawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Green Player won");
+				//displayMessage("Green Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -333,7 +336,7 @@ public class GameClientUIController {
 				if (inGoal == 4) {
 						System.out.println(("You won"));
 						gameOver = true;
-						displayMessage("Red Player won");
+						//displayMessage("Red Player won");
 				}
 				pawnToMove = 0;
 			} catch (Exception e ) {
@@ -350,7 +353,7 @@ public class GameClientUIController {
 			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.yellowPawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Yellow Player won");
+				//displayMessage("Yellow Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -365,7 +368,7 @@ public class GameClientUIController {
 			board.bluePawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.bluePawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Blue Player won");
+				//displayMessage("Blue Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -404,14 +407,4 @@ public class GameClientUIController {
 			break;
 		}
 	}
-	
-	/**
-     * Used to add messages to the message area in a thread safe manner
-     * 
-     * @param text
-     *            the text to be added
-     */
-    private void displayMessage(String text) {
-        SwingUtilities.invokeLater(() -> chatArea.appendText(text));
-    }
 }
