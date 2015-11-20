@@ -1,43 +1,33 @@
 package no.hig.hers.ludoclient;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+/**
+ * Class for handling chats.
+ * This does everything from adding new chat tabs, to handling messages
+ * @author Daniel Rosland on 13.11.2015
+ */
 
 public class ChatHandler {
-	private ExecutorService executorService;
 	private List<Tab> chats;
 	private TabPane chatTabs;
 	private TabPane gameTabs;
-	
-
-
-	List<ClientChatOverlayController> controllers;
-	
-	String message;
+	private List<ClientChatOverlayController> controllers;
 	
 	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
-		chats = new ArrayList<>();
 		this.chatTabs = chatTabs;
 		this.gameTabs = gameTabs;
-		//this.clientMainUIController = clientMainUIController;
-
+		
+		chats = new ArrayList<>();
 		controllers = new ArrayList<ClientChatOverlayController>();
 
-		Main.sendText("NEWGROUPCHAT:Glotest2");
-		
 		addNewChat("Global");
-		}
+	}
 	
 	/**
 	 * Adds a new chat.
@@ -86,7 +76,10 @@ public class ChatHandler {
 			ioe.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Handles incoming chat-messages.
+	 * @param message Message to handle
+	 */
 	public void handleChatMessage(String message) {
 		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
         	Tab tab = chats.get(i);

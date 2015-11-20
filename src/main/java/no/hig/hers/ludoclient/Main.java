@@ -101,6 +101,7 @@ public class Main extends Application {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			showAlert("Server down", "The server is currently down for maintenance");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,25 +133,16 @@ public class Main extends Application {
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
 		
-			
-			
-			
-			//FXMLLoader loader = new FXMLLoader();
-			
-			//loader = loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
-			
-			//clientMainUIController = (ClientMainUIController) loader.getController();
-			
-			
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
-	
+	/**
+	 * Method for creating a new ChatHandler,
+	 * and start to listen for messages.
+	 */
 	public static void startChatHandler() {
-		// Making a new chathandler, which should handle the chats.
 		cHandler = new ChatHandler(chatTabs, gameTabs);
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
@@ -161,7 +153,12 @@ public class Main extends Application {
 	public static void startGameServer() {
 		gameServer = new GameServer(serverPort);
 	}
-	
+	/**
+	 * Method for showing alerts to the user.
+	 * Just for simple error messages.
+	 * @param title The title of the alert
+	 * @param content the content in the alert
+	 */
 	public static void showAlert(String title, String content) {
 	   	Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
@@ -169,12 +166,13 @@ public class Main extends Application {
 		alert.setContentText(content);
 		alert.showAndWait();
 	}
-	
-	
-	
+	/**
+	 * Method for changing the scene.
+	 * Called from the Controllers / scenes.
+	 * @param newScene The new scene to load.
+	 */
 	public static void changeScene(Scene newScene) {
 		currentStage.setScene(newScene);
-	//	currentStage.setFullScreen(true);
 	}
 
 	public static void sendLogin(String code, String username, String password) {
