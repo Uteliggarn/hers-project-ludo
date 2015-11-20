@@ -8,7 +8,7 @@
    <center>
       <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab fx:id="mainTab" closable="false" text="Main">
+          <Tab id="mainTab" closable="false" text="Main">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
@@ -19,7 +19,7 @@
    <top>
       <HBox prefHeight="33.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="newGameButton" onAction="#newGameButtonPressed" mnemonicParsing="false" text="New game" />
+            <Button fx:id="newGameButton"  onAction="#newGameButtonPressed" mnemonicParsing="false" text="New game" />
          </children>
       </HBox>
    </top>
