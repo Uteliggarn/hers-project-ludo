@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,12 +17,12 @@ public class ClientChatOverlayController {
     private TextField chatTextField;
 
     @FXML
-    private ListView<?> playerListView;
+    private ListView<String> playerListView;
 
     @FXML
     private TextArea chatTextArea;
     
-    private ObservableList players;
+    private ObservableList<String> players = FXCollections.observableArrayList();
     
     private String ID;
 
@@ -34,14 +36,25 @@ public class ClientChatOverlayController {
     }
     
     public void receiveChatMessage(String msg) {
-    	chatTextArea.setWrapText(true);
-    	chatTextArea.appendText(msg + "\n");
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+    	    	chatTextArea.setWrapText(true);
+    	    	chatTextArea.appendText(msg + "\n");	
+    		}});
+
     }
     
     public void addUserToList(String name) {
-    	players.add(name);
-    	removeUserFromList(name);
-    	playerListView.setItems(players);
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+				players.add(name);
+		    	removeUserFromList(name);
+		    	playerListView.setItems(players);
+			}
+    	});
+    	
     }
 
 	public void removeUserFromList(String username) {

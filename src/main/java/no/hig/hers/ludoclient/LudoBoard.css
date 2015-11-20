@@ -1,0 +1,9 @@
+.pass {
+	  -fx-text-fill: black;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.pass:hover {
+	-fx-background-color: linear-gradient(#2A5058, #61a2b1);
+}
