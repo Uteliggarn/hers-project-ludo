@@ -119,10 +119,6 @@ public class Main extends Application {
 			registerScene = new Scene(root);
 			registerScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			root = (Parent)FXMLLoader.load(getClass().getResource("ClientTempUI.fxml"));
-			tempScene = new Scene(root);
-			tempScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
 			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

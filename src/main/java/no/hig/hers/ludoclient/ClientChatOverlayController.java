@@ -22,8 +22,6 @@ public class ClientChatOverlayController {
     @FXML
     private TextArea chatTextArea;
     
-    private ObservableList<String> players = FXCollections.observableArrayList();
-    
     private String ID;
 
     @FXML
@@ -49,9 +47,7 @@ public class ClientChatOverlayController {
     	Platform.runLater(new Runnable() {
     		@Override
     		public void run() {
-				players.add(name);
-		    	removeUserFromList(name);
-		    	playerListView.setItems(players);
+		    	playerListView.getItems().add(name);
 			}
     	});
     	
@@ -61,9 +57,9 @@ public class ClientChatOverlayController {
     	Platform.runLater(new Runnable() {
     		@Override
     		public void run() {
-    			for (int i = 0; i < players.size(); i++) {
-    				if (players.get(i).toString().equals(username)) {
-    					players.remove(i);
+    			for (int i = 0; i < playerListView.getItems().size(); i++) {
+    				if (playerListView.getItems().get(i).equals(username)) {
+    					playerListView.getItems().remove(i);
     				}
     			}
     		}
