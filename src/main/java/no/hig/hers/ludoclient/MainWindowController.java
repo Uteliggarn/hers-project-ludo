@@ -38,7 +38,7 @@ public class MainWindowController {
 			
 			tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 			
-			CreateGameLobbyController host = (CreateGameLobbyController) loader.getController();
+		//	CreateGameLobbyController host = (CreateGameLobbyController) loader.getController();
 			
 			//host.test("Duchi");
 					

@@ -58,11 +58,17 @@ public class ClientChatOverlayController {
     }
 
 	public void removeUserFromList(String username) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).toString().equals(username)) {
-				players.remove(i);
-			}
-		}
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+    			for (int i = 0; i < players.size(); i++) {
+    				if (players.get(i).toString().equals(username)) {
+    					players.remove(i);
+    				}
+    			}
+    		}
+    	});
+
 	}
 	
 	public void setID(String id) {
