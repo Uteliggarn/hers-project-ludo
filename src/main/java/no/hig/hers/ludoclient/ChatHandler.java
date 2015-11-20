@@ -25,13 +25,21 @@ public class ChatHandler {
 	private ExecutorService executorService;
 	private List<Tab> chats;
 	private TabPane chatTabs;
+	private TabPane gameTabs;
+
 	List<ClientChatOverlayController> controllers;
 	
+
 	String message;
 	
-	public ChatHandler(TabPane chatTabs) {
+	//private ClientMainUIController clientMainUIController;
+	
+	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
 		chats = new ArrayList<>();
 		this.chatTabs = chatTabs;
+		this.gameTabs = gameTabs;
+		//this.clientMainUIController = clientMainUIController;
+
 		controllers = new ArrayList<ClientChatOverlayController>();
 		
 		
@@ -41,7 +49,7 @@ public class ChatHandler {
 		
 		Main.sendText("NEWGROUPCHAT:Glotest2");
 		
-		Main.sendText("Global:" + "JOIN:" + Main.userName); // Sender klient som lyst å joine til chaten
+		Main.sendText("Global" + "JOIN:" + Main.userName); // Sender klient som lyst å joine til chaten
 				
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
@@ -69,6 +77,27 @@ public class ChatHandler {
 		}	
 	}
 	
+	private void newHostGameLobby() {
+		try {
+			Tab tab = new Tab("Ludo");
+			
+			FXMLLoader loader = new FXMLLoader();
+			
+			tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+			
+			HostGameLobbyController hostGameLobbyController = (HostGameLobbyController) loader.getController();
+			
+			hostGameLobbyController.getServerPort(Main.serverPort);
+			
+			tab.setId("tab1");
+			
+			gameTabs.getTabs().add(tab);
+			gameTabs.getSelectionModel().select(tab);
+			
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
@@ -79,6 +108,20 @@ public class ChatHandler {
 			while (true) {
 				try {
 	                message = Main.input.readLine();
+	
+	                if (message.equals("HOST")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			newHostGameLobby();
+	                		}
+	                	});
+	                }
+	                else if (message.equals("JOIN")) {
+	                	int port = Main.input.read();
+	                	//GameLobby gameLobby = new GameLobby(port);
+	                	
+	                }
 	                
 	                if (!message.equals(null)) {
                 			if (message.startsWith("NEWGROUPCHAT:")) { //Legger til ny chatTab
@@ -129,6 +172,7 @@ public class ChatHandler {
         		                }
         	                }
 	                }
+
 	            } catch (Exception e) {
 	             //   Main.showAlert("Error", "Error receiving message from server");
 	            }

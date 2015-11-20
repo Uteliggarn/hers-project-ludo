@@ -37,6 +37,7 @@ public class Main extends Application {
 	static boolean connected = false;
 	
 	private static ChatHandler cHandler; 
+	private static GameServer gameServer;
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -50,6 +51,9 @@ public class Main extends Application {
 	public static int serverPort = 10000;
 	
 	private static TabPane chatTabs;
+	public static TabPane gameTabs;
+	
+	private static ClientMainUIController clientMainUIController;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -66,7 +70,6 @@ public class Main extends Application {
 			
 			currentStage = primaryStage;
 			
-			System.out.println("Hei?");
 			connect();
 			
 			
@@ -81,7 +84,7 @@ public class Main extends Application {
 	
 	public static void connect() {
 		try {
-			connection = new Socket("127.0.0.1", 12348);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -118,9 +121,21 @@ public class Main extends Application {
 			
 			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+					
+			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+		
 			
-			// Making a new chathandler, which should handle the chats.
-			//cHandler = new ChatHandler(chatTabs);
+			
+			
+			//FXMLLoader loader = new FXMLLoader();
+			
+			//loader = loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
+			
+			//clientMainUIController = (ClientMainUIController) loader.getController();
+			
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -129,9 +144,12 @@ public class Main extends Application {
 	
 	public static void startChatHandler() {
 		// Making a new chathandler, which should handle the chats.
-		cHandler = new ChatHandler(chatTabs);
+		cHandler = new ChatHandler(chatTabs, gameTabs);
 	}
 
+	public static void startGameServer() {
+		gameServer = new GameServer(serverPort);
+	}
 	
 	public static void showAlert(String title, String content) {
 	   	Alert alert = new Alert(AlertType.INFORMATION);
@@ -187,9 +205,9 @@ public class Main extends Application {
 	
 	public void close() {
 		try {
-			Main.output.close();
-			Main.input.close();
-			Main.connection.close();
+			output.close();
+			input.close();
+			connection.close();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} 
