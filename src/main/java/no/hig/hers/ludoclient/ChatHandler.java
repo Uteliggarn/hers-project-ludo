@@ -27,30 +27,41 @@ public class ChatHandler {
 		controllers = new ArrayList<ClientChatOverlayController>();
 
 		addNewChat("Global");
+		
+		Main.sendText(Main.NEWCHAT + "Test");
 	}
 	
 	/**
 	 * Adds a new chat.
 	 * @param name The name/id of the tab/chat
 	 */
-	public void addNewChat(String name) {
+	public void addNewChat(String name) {	
 		Platform.runLater(new Runnable() {
     		@Override
     		public void run() {
     			Tab newTab = new Tab(name);
     			newTab.setId(name);
     			FXMLLoader loader = new FXMLLoader();
-    			try {
-    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
-    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-    				c.setID(name);
-    				controllers.add(c);
-    				chats.add(newTab);
-    				chatTabs.getTabs().add(newTab);
-    			} catch (IOException e) {
-    				Main.showAlert("Error", "Couldn't find FXML file");
-    				e.printStackTrace();
-    			}	
+    			
+    			boolean exists = false;
+    			for (int i = 0; i < chats.size(); i++) {
+    				if (chats.get(i).getId().equals(name)) exists = true; 
+    			}
+    			
+    			if (!exists) {
+	    			try {
+	    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
+	    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
+	    				c.setID(name);
+	    				controllers.add(c);
+	    				chats.add(newTab);
+	    				chatTabs.getTabs().add(newTab);
+	    				Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+	    			} catch (IOException e) {
+	    				Main.showAlert("Error", "Couldn't find FXML file");
+	    				e.printStackTrace();
+	    			}
+	    		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
     		}
     	});
 	}

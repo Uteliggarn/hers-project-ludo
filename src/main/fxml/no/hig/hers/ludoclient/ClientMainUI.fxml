@@ -37,7 +37,15 @@
             </AnchorPane>
          </center>
          <right>
-            <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <ListView fx:id="chatListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" >
+	            <contextMenu>
+		            <ContextMenu>
+		              <items>
+		                <MenuItem fx:id="join" mnemonicParsing="false" onAction="#joinChat" text="Join" />
+		              </items>
+		            </ContextMenu>
+	        	</contextMenu> 
+         	</ListView>
          </right>
       </BorderPane>
    </children>
