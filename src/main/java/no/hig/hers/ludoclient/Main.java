@@ -53,15 +53,13 @@ public class Main extends Application {
 	private static TabPane chatTabs;
 	public static TabPane gameTabs;
 	
-	private static ClientMainUIController clientMainUIController;
-	
 	static ExecutorService executorService;
 	private static String message;
 	final static String NEWCHAT = "NEWGROUPCHAT:";
 	final static String JOINCHAT = "JOIN:";
 	final static String ERRORCHAT = "ERRORCHAT";
 	final static String LEAVECHAT = "OUT:";
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 	
@@ -131,8 +129,7 @@ public class Main extends Application {
 		
 		} catch(Exception e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	/**
 	 * Method for creating a new ChatHandler,
