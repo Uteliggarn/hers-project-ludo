@@ -27,10 +27,13 @@ public class ClientMainUIController {
     private Button newGameButton;
     
     @FXML
+    private Button queueButton;
+    
+    @FXML
     private TabPane chatTabPane;
     
-    
-
+    @FXML
+    private TabPane gameTabs; 
 
     @FXML
     void testCode(ActionEvent event) {
@@ -40,9 +43,53 @@ public class ClientMainUIController {
     
     @FXML
     void newGameButtonPressed(ActionEvent event) {
-    	System.out.println("Skjer det noe?\n");
-    	Main.sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
+    	newGameTab();
     }
     
+    @FXML
+    void queueButtonPressed(ActionEvent event) {
+    	Main.sendText("queue");
+    	queueButton.setDisable(true);
+    	
+    }
+    
+    public void newGameTab() {
+    	try {
+    		
+    		Main.sendText("createGame");
+    		
+    		int count = Main.input.read();
+    		
+    		System.out.println("\nHva er count:" + count);
+    		
+    		if (count != -1) {
+    		
+				Tab tmp = new Tab("Ludo");
+				
+				FXMLLoader loader = new FXMLLoader();
+				
+				tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
+				
+				CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
+				
+				for (int i=0; i<1; i++) {
+					String msg = Main.input.readLine();
+					System.out.println("\nHva kommer in som msg: " + msg);
+					if (!msg.substring(7).equals(Main.userName))
+						createLobbyWindowController.addNewPlayerToList(msg.substring(7));
+				}
+				
+				gameTabs.getTabs().add(tmp);
+				gameTabs.getSelectionModel().select(tmp);
+    		}
+    		else
+    			Main.showAlert("Error", "Could not create game. You're allready hosting a game");
+    	} catch (IOException ioe) {
+    		ioe.printStackTrace();
+    	}
+    	
+    	//gameTabs.getTabs().add(tab);
+    	//gameTabs.getSelectionModel().select(tab);
+    }
     
 }

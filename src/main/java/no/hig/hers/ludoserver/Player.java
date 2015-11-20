@@ -57,6 +57,7 @@ public class Player {
 	}
 	
 	public void sendPort(int port) throws IOException {
+		output.flush();
 		output.write(port);
 		output.newLine();
 		output.flush();
@@ -82,6 +83,10 @@ public class Player {
 	
 	public void setHost(boolean host) {
 		this.host = host;
+	}
+	
+	public boolean returnHost() {
+		return host;
 	}
 	
 	/**
