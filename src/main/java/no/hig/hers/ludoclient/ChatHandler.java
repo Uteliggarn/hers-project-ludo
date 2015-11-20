@@ -88,7 +88,7 @@ public class ChatHandler {
             if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine		                	
             	String username = message.substring(tab.getId().length() + 5);
             	c.addUserToList(username);
-            	Main.sendText(tab.getId() + Main.JOINCHAT + username); // Sender klient som lyst å joine til chaten
+            //	Main.sendText(tab.getId() + Main.JOINCHAT + username); // Sender klient som lyst å joine til chaten
             }
             else if (message.startsWith(chats.get(i).getId()+ Main.LEAVECHAT)) { // Mottar melding om at noen har logget ut
             	String username = message.substring(tab.getId().length() + 4);
