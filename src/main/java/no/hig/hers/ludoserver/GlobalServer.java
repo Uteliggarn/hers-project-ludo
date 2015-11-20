@@ -138,6 +138,22 @@ public class GlobalServer extends JFrame{
 										
 									}
 								}
+								else if (msg != null && msg.equals("createGame")) {
+									if (p.returnHost() != true) {
+										p.sendPort(player.size());
+										for (int y=0; y<player.size(); y++) 
+											p.sendText("player:" + player.get(y).returnName());
+									}
+									else
+										p.sendPort(-1);
+								}
+								else if (msg != null && msg.startsWith("invite:")) {
+									for (int y=0; y<player.size(); y++)
+										if(msg.substring(7).equals(player.get(y).returnName())) {
+											player.get(y).sendText("JOIN");
+											player.get(y).sendPort(p.returnServerPort());
+										}
+								}
 								else if (msg != null && msg.equals(">>>LOGOUT<<<")) {
 									i.remove();
 									que.remove(p.returnName());

@@ -123,6 +123,7 @@ public class Main extends Application {
 					
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+		
 			
 			
 			

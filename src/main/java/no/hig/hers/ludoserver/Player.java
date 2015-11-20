@@ -57,6 +57,7 @@ public class Player {
 	}
 	
 	public void sendPort(int port) throws IOException {
+		output.flush();
 		output.write(port);
 		output.newLine();
 		output.flush();

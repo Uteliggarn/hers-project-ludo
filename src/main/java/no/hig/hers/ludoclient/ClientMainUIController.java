@@ -34,9 +34,6 @@ public class ClientMainUIController {
     
     @FXML
     private TabPane gameTabs; 
-    
-    
-
 
     @FXML
     void testCode(ActionEvent event) {
@@ -58,16 +55,35 @@ public class ClientMainUIController {
     
     public void newGameTab() {
     	try {
-			Tab tmp = new Tab("Ludo");
-			
-			FXMLLoader loader = new FXMLLoader();
-			
-			tmp.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
-			
-			HostGameLobbyController gameLobbyWindowController = (HostGameLobbyController) loader.getController();
-					
-			gameTabs.getTabs().add(tmp);
-			gameTabs.getSelectionModel().select(tmp);
+    		
+    		Main.sendText("createGame");
+    		
+    		int count = Main.input.read();
+    		
+    		System.out.println("\nHva er count:" + count);
+    		
+    		if (count != -1) {
+    		
+				Tab tmp = new Tab("Ludo");
+				
+				FXMLLoader loader = new FXMLLoader();
+				
+				tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
+				
+				CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
+				
+				for (int i=0; i<1; i++) {
+					String msg = Main.input.readLine();
+					System.out.println("\nHva kommer in som msg: " + msg);
+					if (!msg.substring(7).equals(Main.userName))
+						createLobbyWindowController.addNewPlayerToList(msg.substring(7));
+				}
+				
+				gameTabs.getTabs().add(tmp);
+				gameTabs.getSelectionModel().select(tmp);
+    		}
+    		else
+    			Main.showAlert("Error", "Could not create game. You're allready hosting a game");
     	} catch (IOException ioe) {
     		ioe.printStackTrace();
     	}

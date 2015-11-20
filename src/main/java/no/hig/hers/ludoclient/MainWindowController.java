@@ -36,11 +36,11 @@ public class MainWindowController {
 			
 			FXMLLoader loader = new FXMLLoader();
 			
-			tmp.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+			tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 			
-			HostGameLobbyController host = (HostGameLobbyController) loader.getController();
+			CreateGameLobbyController host = (CreateGameLobbyController) loader.getController();
 			
-			host.test("Duchi");
+			//host.test("Duchi");
 					
 			tabPane.getTabs().add(tmp);
 			tabPane.getSelectionModel().select(tmp);;

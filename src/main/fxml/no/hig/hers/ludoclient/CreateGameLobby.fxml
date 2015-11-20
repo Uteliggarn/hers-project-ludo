@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.CreateGameLobbyController">
    <children>
-      <ListView fx:id="playerList" layoutX="386.0" layoutY="71.0" prefHeight="258.0" prefWidth="200.0" />
+      <ListView fx:id="playerList" layoutX="386.0" layoutY="71.0" prefHeight="258.0" prefWidth="200.0">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem fx:id="invite" mnemonicParsing="false" onAction="#invitePlayer" text="Invite" />
+              </items>
+            </ContextMenu>
+         </contextMenu></ListView>
       <VBox layoutX="25.0" layoutY="71.0" prefHeight="200.0" prefWidth="275.0" spacing="4.0">
          <children>
             <Label text="Host">

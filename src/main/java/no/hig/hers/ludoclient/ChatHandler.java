@@ -107,6 +107,8 @@ public class ChatHandler {
 	                	newHostGameLobby();
 	                }
 	                else if (message.equals("JOIN")) {
+	                	int port = Main.input.read();
+	                	GameLobby gameLobby = new GameLobby(port);
 	                	
 	                }
 	                      /*     
