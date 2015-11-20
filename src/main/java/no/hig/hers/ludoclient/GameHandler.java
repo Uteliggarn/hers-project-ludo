@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
-public class GameLobby {
+public class GameHandler {
 	
 	private static int serverPort;
 	
@@ -21,7 +21,7 @@ public class GameLobby {
 	public static BufferedReader input;
 	private ExecutorService executorService;
 	
-	public GameLobby(int serverPort) {
+	public GameHandler(int serverPort) {
 		this.serverPort = serverPort;
 		
 		connect();

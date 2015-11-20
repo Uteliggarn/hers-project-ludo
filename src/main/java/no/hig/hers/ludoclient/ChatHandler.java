@@ -79,8 +79,8 @@ public class ChatHandler {
 			
 			tab.setId("tab1");
 			
-			chatTabs.getTabs().add(tab);
-			chatTabs.getSelectionModel().select(tab);
+			gameTabs.getTabs().add(tab);
+			gameTabs.getSelectionModel().select(tab);
 			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
@@ -107,9 +107,4 @@ public class ChatHandler {
             }
         }
 	}
-	
-
-
-	 
-
 }
