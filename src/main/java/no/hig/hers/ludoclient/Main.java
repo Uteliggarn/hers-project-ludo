@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import javafx.scene.layout.HBox;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -37,24 +36,27 @@ public class Main extends Application {
 	
 	static boolean connected = false;
 	
-	private ChatHandler cHandler; 
+	private static ChatHandler cHandler; 
 	
 	static String LudoClientHost;
 	static Socket connection;
 	public static BufferedWriter output;
 	public static BufferedReader input;
+
 	
 	
 	public static int playerID;
+	public static String userName;
+	public static int serverPort = 10000;
+	
+	private static TabPane chatTabs;
 	
 	@Override
 	public void start(Stage primaryStage) {
 	
 		
 		try {			
-			setUpScenes();
-				
-			
+			setUpScenes();	
 			
 			primaryStage.setScene(loginScene);
 			
@@ -64,6 +66,7 @@ public class Main extends Application {
 			
 			currentStage = primaryStage;
 			
+			System.out.println("Hei?");
 			connect();
 			
 			
@@ -78,11 +81,13 @@ public class Main extends Application {
 	
 	public static void connect() {
 		try {
-			connection = new Socket("127.0.0.1", 12347);
+			connection = new Socket("127.0.0.1", 12348);
+			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,7 +99,6 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
-			
 			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
@@ -112,15 +116,20 @@ public class Main extends Application {
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			TabPane chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
 			
 			// Making a new chathandler, which should handle the chats.
-			cHandler = new ChatHandler(chatTabs);
+			//cHandler = new ChatHandler(chatTabs);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void startChatHandler() {
+		// Making a new chathandler, which should handle the chats.
+		cHandler = new ChatHandler(chatTabs);
 	}
 
 	
@@ -151,7 +160,16 @@ public class Main extends Application {
 	    	showAlert("Error sending message", ioe.toString());		
 		}
 	}
-	public static void sendText(String textToSend) {
+	
+	 /**
+     * Method used to send a message to the server. Handled in a separate method
+     * to ensure that all messages are ended with a newline character and are
+     * flushed (ensure they are sent.)
+     * 
+     * @param textToSend
+     *            the message to send to the server
+     */
+    public static void sendText(String textToSend) {
         try {
             output.write(textToSend);
             output.newLine();
@@ -159,5 +177,21 @@ public class Main extends Application {
         } catch (IOException ioe) {
         	Main.showAlert("Error", "Unable to send message to server");
         }
- }
+    }
+	
+	@Override
+	public void stop() {
+		sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
+		close();
+	}
+	
+	public void close() {
+		try {
+			Main.output.close();
+			Main.input.close();
+			Main.connection.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} 
+	}
 }

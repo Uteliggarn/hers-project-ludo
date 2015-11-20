@@ -10,8 +10,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import no.hig.hers.ludoserver.Player;
-
 public class GameServer {
 
 	private String name;
@@ -59,8 +57,12 @@ public class GameServer {
 		                        Player p = i.next();
 		                        try {
 			                        String msg = p.read();
-			                        if (msg != null && !msg.equals(">>>LOGOUT<<<"))
-			                            messages.put(p.returnName()+"> "+msg);
+			                        if (msg != null && msg.startsWith("msg:")) {
+			                        	messages.put(p.returnName() + " < " + msg.substring(0, 4));
+			                        }
+			                        else if (msg != null && msg.startsWith("name:")) {
+			                        	p.setName(msg.substring(0, 5));
+			                        }
 			                        else if (msg != null) {	// >>>LOGOUT<<< received, remove the client
 			                            i.remove();
 			                            messages.put("LOGOUT:"+p.returnName());
@@ -111,26 +113,24 @@ public class GameServer {
 	            while (!shutdown) {
 	                try {
 	                    Socket s = server.accept();
-	                    Player p = new Player(s);
-	                    messages.add (p.returnName() +" joined the conversation");
-	                    synchronized (player) {
-	                    	player.add(p);
-	                    	Iterator<Player> i = player.iterator();
-		                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-		                        Player p1 = i.next();
-		                        if (p != p1)
-		                        	try {
-		                        		p.sendText("LOGIN:"+p1.returnName());
-		                        	} catch (IOException ioelocal) {
-		                        		// Lost connection, but doesn't bother to handle it here
-		                        	}
+	                    if (player.size() != 4) {
+		                    Player p = new Player(s);
+		                    messages.add (p.returnName() +" joined the server");
+		                    synchronized (player) {
+		                    	player.add(p);
+		                    	/*
+		                    	Iterator<Player> i = player.iterator();
+			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
+			                        Player p1 = i.next();
+			                        if (p != p1)
+			                        	try {
+			                        		p.sendText("LOGIN:"+p1.returnName());
+			                        	} catch (IOException ioelocal) {
+			                        		// Lost connection, but doesn't bother to handle it here
+			                        	}
+			                    }
+			                    */
 		                    }
-	                    }
-	                    
-	                    try {
-	                        messages.put("LOGIN:" + p.returnName());
-	                    } catch (InterruptedException e) {
-	                        e.printStackTrace();
 	                    }
 	                } catch (IOException ioe) {
 	                    ioe.printStackTrace();

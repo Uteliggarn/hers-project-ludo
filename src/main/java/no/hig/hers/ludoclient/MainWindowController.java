@@ -38,7 +38,6 @@ public class MainWindowController {
 			
 			tmp.setContent(loader.load(getClass().getResource("GameLobbyWindow.fxml").openStream()));
 			
-			
 			GameLobbyWindowController gameLobbyWindowController = (GameLobbyWindowController) loader.getController();
 			
 			//gameLobbyWindowController.test("Hello");
@@ -49,8 +48,6 @@ public class MainWindowController {
 			tabPane.getSelectionModel().select(tmp);;
 			
 			//String title = tabPane.getTabs().get(1).getText();
-			
-			//gameLobbyWindowController.test(title);
 			
 			sock += 1;
 			

@@ -37,21 +37,33 @@ public class ClientLoginUIController {
     void userLogin(ActionEvent event) {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
+    	
+    	System.out.println("\nFørst hva username er: " + username + "\nAndre hva password er: " + password);
     	int ID;
-
+    	int port;
+ 
     	Main.sendLogin("SENDLOGIN:", username, password);
     	
     	try {
     		ID = Main.input.read();
+    		port = Main.input.read();
+    		
+    		System.out.println("\nHva er ID: " + ID + "\nHva er port: " + port);
     		
 			if (ID > 0) {
+				
+				Main.serverPort += port;
+				
+				Main.userName = username;
 				Main.playerID = ID;
+				Main.startChatHandler();
 				Main.changeScene(Main.mainScene);
+				
 			}
 			else Main.showAlert("User not found", 
 						"Wrong username and/or password.\nPlease try again, or register a new user.");
 			
-			Main.connect();
+			//Main.connect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
