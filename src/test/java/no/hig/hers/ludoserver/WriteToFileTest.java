@@ -15,7 +15,7 @@ import java.util.Calendar;
 import org.junit.Test;
 
 public class WriteToFileTest {
-	private final String FILE_NAME = "fileTest.txt";
+	private final String FILE_NAME = "fileTestChatLog.log";
 	private final String FILE_DATA = "This is a test.";
 
 	/**
