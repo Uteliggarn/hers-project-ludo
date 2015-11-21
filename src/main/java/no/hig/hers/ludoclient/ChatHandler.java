@@ -1,117 +1,92 @@
 package no.hig.hers.ludoclient;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.swing.JOptionPane;
-
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+/**
+ * Class for handling chats.
+ * This does everything from adding new chat tabs, to handling messages
+ * @author Daniel Rosland on 13.11.2015
+ */
 
 public class ChatHandler {
-	private ExecutorService executorService;
 	private List<Tab> chats;
 	private TabPane chatTabs;
-	String message;
+	private TabPane gameTabs;
+	private List<ClientChatOverlayController> controllers;
 	
-	public ChatHandler(TabPane chatTabs) {
-		chats = new ArrayList<>();
+	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
 		this.chatTabs = chatTabs;
+		this.gameTabs = gameTabs;
 		
+		chats = new ArrayList<>();
+		controllers = new ArrayList<ClientChatOverlayController>();
+
 		addNewChat("Global");
-		addNewChat("Glotest");
-				
-		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		executorService.shutdown();	// Dreper tråden når klassen dør
+		
+		Main.sendText(Main.NEWCHAT + "Test");
 	}
 	
 	/**
 	 * Adds a new chat.
 	 * @param name The name/id of the tab/chat
 	 */
-	public void addNewChat(String name) {
-		Tab newTab = new Tab(name);
-		newTab.setId(name);
-		FXMLLoader loader = new FXMLLoader();
-		try {
-			newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
-			ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-			c.setID(name);
-			chats.add(newTab);
-			chatTabs.getTabs().add(newTab);
-		} catch (IOException e) {
-			Main.showAlert("Error", "Couldn't find FXML file");
-			e.printStackTrace();
-		}	
+	public void addNewChat(String name) {	
+		Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+    			Tab newTab = new Tab(name);
+    			newTab.setId(name);
+    			FXMLLoader loader = new FXMLLoader();
+    			
+    			boolean exists = false;
+    			for (int i = 0; i < chats.size(); i++) {
+    				if (chats.get(i).getId().equals(name)) exists = true; 
+    			}
+    			
+    			if (!exists) {
+	    			try {
+	    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
+	    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
+	    				c.setID(name);
+	    				controllers.add(c);
+	    				chats.add(newTab);
+	    				chatTabs.getTabs().add(newTab);
+	    				Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+	    			} catch (IOException e) {
+	    				Main.showAlert("Error", "Couldn't find FXML file");
+	    				e.printStackTrace();
+	    			}
+	    		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
+    		}
+    	});
 	}
-	
 	
 	/**
-	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
-	 * Ser ikke ut til å fungere.
+	 * Handles incoming chat-messages.
+	 * @param message Message to handle
 	 */
-	private void processConnection() {
-		executorService.execute(() -> {
-			while (true) {
-				try {
-	                message = Main.input.readLine();
-	                              
-	                if (message.startsWith("NEWGROUPCHAT:")) { //Legger til ny chatTab
-	                	addNewChat(message.substring(13));
-	                	
-	                //	sendText(message.substring(13) + "JOIN:" + clientUserName); // Sender ut at brukern også vil joine chaten.
-	                }
-	                else if (message.equals("ERRORCHAT")) {	// Forteller at chaten finnes allerede
-	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
-	                }
-	                           
-	                for (int i = 1; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
-	                	FXMLLoader loader = new FXMLLoader();
-	                	Tab tab = chats.get(i);
-	                			// Denne får en error
-	                	tab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
-	                	ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-	                	
-		                if (message.startsWith(chats.get(i).getId() + "JOIN:")){	// Sjekker om noen har lyst å joine		                	
-		                	String username = message.substring(tab.getId().length() + 5);
-		                	c.addUserToList(username);
-		                	//Main.sendText(tab.getId() + "JOIN:" + username); // Sender klient som lyst å joine til chaten
-		                }/*
-		                else if (message.startsWith(chats.get(i).tab.getId()+ "OUT:")) { // Mottar melding om at noen har logget ut
-		                	String username = message.substring(tab.getId().length() + 4);
-		                	c.removeUserFromList(username);
-		                } 
-		                else if (message.startsWith(chats.get(i).tab.getId() + ":")) { // Tar alle andre meldinger
-		                	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
-		                }*/
-	                }
-	            } catch (Exception e) {
-	             //   Main.showAlert("Error", "Error receiving message from server");
-	            }
-				
-				try {
-					Thread.sleep(250);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
+	public void handleChatMessage(String message) {
+		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
+        	Tab tab = chats.get(i);
+        	ClientChatOverlayController c = controllers.get(i);
+        	
+            if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine		                	
+            	String username = message.substring(tab.getId().length() + 5);
+            	c.addUserToList(username);
+            }
+            else if (message.startsWith(chats.get(i).getId()+ Main.LEAVECHAT)) { // Mottar melding om at noen har logget ut
+            	String username = message.substring(tab.getId().length() + 4);
+            	c.removeUserFromList(username);
+            	
+            } 
+            else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
+            	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
+            }
+        }
 	}
-
-	 
-
 }

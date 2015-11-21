@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -36,20 +39,30 @@ public class Main extends Application {
 	
 	static boolean connected = false;
 	
-	private static ChatHandler cHandler; 
+	static ChatHandler cHandler; 
+	private static GameServer gameServer;
+	private static GameHandler gameHandler;
 	
 	static String LudoClientHost;
 	static Socket connection;
 	public static BufferedWriter output;
 	public static BufferedReader input;
-	
-	
+
 	public static int playerID;
 	public static String userName;
 	public static int serverPort = 10000;
 	
 	private static TabPane chatTabs;
+	public static TabPane gameTabs;
+	private static ClientMainUIController mainController;
 	
+	static ExecutorService executorService;
+	private static String message;
+	final static String NEWCHAT = "NEWGROUPCHAT:";
+	final static String JOINCHAT = "JOIN:";
+	final static String ERRORCHAT = "ERRORCHAT";
+	final static String LEAVECHAT = "OUT:";
+
 	@Override
 	public void start(Stage primaryStage) {
 	
@@ -65,9 +78,9 @@ public class Main extends Application {
 			
 			currentStage = primaryStage;
 			
-			System.out.println("Hei?");
 			connect();
 			
+			gameHandler = new GameHandler(10004);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -80,7 +93,7 @@ public class Main extends Application {
 	
 	public static void connect() {
 		try {
-			connection = new Socket("127.0.0.1", 12348);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -90,6 +103,7 @@ public class Main extends Application {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			showAlert("Server down", "The server is currently down for maintenance");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -98,7 +112,6 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
-			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -107,31 +120,44 @@ public class Main extends Application {
 			registerScene = new Scene(root);
 			registerScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			root = (Parent)FXMLLoader.load(getClass().getResource("ClientTempUI.fxml"));
-			tempScene = new Scene(root);
-			tempScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
-			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			FXMLLoader loader = new FXMLLoader();
+			StackPane mainRoot = (StackPane)loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
+			mainController = (ClientMainUIController) loader.getController();
+			
 			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-			
-			// Making a new chathandler, which should handle the chats.
-			//cHandler = new ChatHandler(chatTabs);
+					
+			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+		
 		} catch(Exception e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
-	
+	/**
+	 * Method for creating a new ChatHandler,
+	 * and start to listen for messages.
+	 */
 	public static void startChatHandler() {
-		// Making a new chathandler, which should handle the chats.
-		cHandler = new ChatHandler(chatTabs);
+		cHandler = new ChatHandler(chatTabs, gameTabs);
+		
+		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
+		executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 
-	
+	public static void startGameServer() {
+		gameServer = new GameServer(serverPort);
+	}
+	/**
+	 * Method for showing alerts to the user.
+	 * Just for simple error messages.
+	 * @param title The title of the alert
+	 * @param content the content in the alert
+	 */
 	public static void showAlert(String title, String content) {
 	   	Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle(title);
@@ -139,12 +165,13 @@ public class Main extends Application {
 		alert.setContentText(content);
 		alert.showAndWait();
 	}
-	
-	
-	
+	/**
+	 * Method for changing the scene.
+	 * Called from the Controllers / scenes.
+	 * @param newScene The new scene to load.
+	 */
 	public static void changeScene(Scene newScene) {
 		currentStage.setScene(newScene);
-	//	currentStage.setFullScreen(true);
 	}
 
 	public static void sendLogin(String code, String username, String password) {
@@ -186,11 +213,58 @@ public class Main extends Application {
 	
 	public void close() {
 		try {
-			Main.output.close();
-			Main.input.close();
-			Main.connection.close();
+			output.close();
+			input.close();
+			connection.close();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} 
+	}
+	/**
+	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
+	 * Ser mer eller mindre ut til å fungere.
+	 */
+	private static void processConnection() {
+		executorService.execute(() -> {
+			while (true) {
+				try {
+	                message = Main.input.readLine();
+	
+	                if (message.equals("HOST")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			gameHandler.newHostGameLobby();	
+	                		}
+	                	});
+	               
+	                }
+	                else if (message.equals("JOIN")) {
+	                	int port = Main.input.read();
+	                	//GameLobby gameLobby = new GameLobby(port);	                	
+	                }
+	                
+	                if (!message.equals(null)) {
+                			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
+                				mainController.addChatToList(message.substring(13));
+        	                }
+        	                else if (message.equals(ERRORCHAT)) {	// Forteller at chaten finnes allerede
+        	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
+        	                }
+        	                else cHandler.handleChatMessage(message);
+	                }
+
+	            } catch (Exception e) {
+	             //   Main.showAlert("Error", "Error receiving message from server");
+	            }
+				
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

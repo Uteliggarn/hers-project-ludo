@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,12 +17,10 @@ public class ClientChatOverlayController {
     private TextField chatTextField;
 
     @FXML
-    private ListView<?> playerListView;
+    private ListView<String> playerListView;
 
     @FXML
     private TextArea chatTextArea;
-    
-    private ObservableList players;
     
     private String ID;
 
@@ -34,22 +34,37 @@ public class ClientChatOverlayController {
     }
     
     public void receiveChatMessage(String msg) {
-    	chatTextArea.setWrapText(true);
-    	chatTextArea.appendText(msg + "\n");
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+    	    	chatTextArea.setWrapText(true);
+    	    	chatTextArea.appendText(msg + "\n");	
+    		}});
+
     }
     
     public void addUserToList(String name) {
-    	players.add(name);
-    	removeUserFromList(name);
-    	playerListView.setItems(players);
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+		    	playerListView.getItems().add(name);
+			}
+    	});
+    	
     }
 
 	public void removeUserFromList(String username) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).toString().equals(username)) {
-				players.remove(i);
-			}
-		}
+    	Platform.runLater(new Runnable() {
+    		@Override
+    		public void run() {
+    			for (int i = 0; i < playerListView.getItems().size(); i++) {
+    				if (playerListView.getItems().get(i).equals(username)) {
+    					playerListView.getItems().remove(i);
+    				}
+    			}
+    		}
+    	});
+
 	}
 	
 	public void setID(String id) {

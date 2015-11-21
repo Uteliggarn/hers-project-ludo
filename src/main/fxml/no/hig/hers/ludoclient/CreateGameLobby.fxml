@@ -6,18 +6,17 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.GameLobbyWindowPlayerController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.CreateGameLobbyController">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <ListView fx:id="playerList" layoutX="386.0" layoutY="71.0" prefHeight="258.0" prefWidth="200.0">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem fx:id="invite" mnemonicParsing="false" onAction="#invitePlayer" text="Invite" />
+              </items>
+            </ContextMenu>
+         </contextMenu></ListView>
+      <VBox layoutX="25.0" layoutY="71.0" prefHeight="200.0" prefWidth="275.0" spacing="4.0">
          <children>
             <Label text="Host">
                <font>
@@ -29,27 +28,28 @@
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
-            <Label text="Players">
+            <Label text="Invited Players">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="PlayerTwo">
+            <Label fx:id="playerTwo">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="PlayerThree">
+            <Label fx:id="playerThree">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
-            <Label fx:id="PlayerFour">
+            <Label fx:id="playerFour">
                <VBox.margin>
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
          </children>
       </VBox>
+      <Button fx:id="startGameButton" disable="true" layoutX="25.0" layoutY="329.0" mnemonicParsing="false" onAction="#startGameButtonPressed" text="Start Game" />
    </children>
-</GridPane>
+</AnchorPane>
