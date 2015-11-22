@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 
@@ -24,8 +25,39 @@ public class GameHandler {
 	public static BufferedReader input;
 	private ExecutorService executorService;
 	
-	public GameHandler(int serverPort) {
+	private CreateGameLobbyController createGameLobbyController;
+	private HostGameLobbyController hostGameLobbyController;
+	private PlayerGameLobbyController playerGameLobbyController;
+	
+	public GameHandler(int serverPort, int type) {
 		this.serverPort = serverPort;
+		
+		switch (type) {
+			case 1: Platform.runLater(new Runnable() {
+	    				@Override
+	    				public void run() {
+							Tab tab = new Tab("Ludo");
+							tab.setId(Main.IDGK + Main.userName);
+							FXMLLoader loader = new FXMLLoader();
+							try {
+								tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
+								createGameLobbyController = (CreateGameLobbyController) loader.getController();
+								
+								addPlayersToList();
+								
+								Main.gameTabs.getTabs().add(tab);
+								Main.gameTabs.getSelectionModel().select(tab);
+							} catch (IOException ioe) {
+								ioe.printStackTrace();
+							}
+	    				}
+					});
+				break;
+			case 2: 
+				break;
+			case 3:
+				break;
+		}
 		
 		//connect();
 		
@@ -34,6 +66,12 @@ public class GameHandler {
 		//executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 	
+	
+	private void addPlayersToList() {
+		for (int i=0; i<Main.playerList.size(); i++) {
+			createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+		}
+	}
 	
 	public static void connect() {
 		try {

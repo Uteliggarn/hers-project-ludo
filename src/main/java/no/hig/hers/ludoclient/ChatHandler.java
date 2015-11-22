@@ -64,8 +64,10 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
-            if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine		                	
+            if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine
             	String username = message.substring(tab.getId().length() + 5);
+            	if (!Main.playerList.contains(username) && message.startsWith("Global"))
+					Main.playerList.add(username);
             	c.addUserToList(username);
             	//Main.sendText(tab.getId() + Main.JOINCHAT + username); // Sender klient som lyst å joine til chaten
             }

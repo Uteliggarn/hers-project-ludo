@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,7 +42,8 @@ public class Main extends Application {
 	
 	private static ChatHandler cHandler; 
 	private static GameServer gameServer;
-	private static GameHandler gameHandler;
+	private static ArrayList<GameHandler> gameHandler = new ArrayList<>();
+	public static ArrayList<String> playerList = new ArrayList<>();
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -61,6 +63,8 @@ public class Main extends Application {
 	final static String JOINCHAT = "JOIN:";
 	final static String ERRORCHAT = "ERRORCHAT";
 	final static String LEAVECHAT = "OUT:";
+	final static String CREATEGAME = "CREATEGAME";
+	final static String IDGK = "IDGK";	// Unique name
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -78,8 +82,6 @@ public class Main extends Application {
 			currentStage = primaryStage;
 			
 			connect();
-			
-			gameHandler = new GameHandler(10004);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -231,10 +233,14 @@ public class Main extends Application {
 	                	Platform.runLater(new Runnable() {
 	                		@Override
 	                		public void run() {
-	                			gameHandler.newHostGameLobby();	
+	                			//gameHandler.newHostGameLobby();	
 	                		}
 	                	});
 	               
+	                }
+	                else if (message.equals(CREATEGAME)) {
+	                	GameHandler gh = new GameHandler(serverPort, 1);
+	                	gameHandler.add(gh);
 	                }
 	                else if (message.equals("JOIN")) {
 	                	int port = Main.input.read();

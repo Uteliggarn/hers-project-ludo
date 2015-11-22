@@ -25,7 +25,7 @@ public class Player {
 	private String name;
 	private int serverPort;
 	
-	private boolean host = false;
+	//private boolean host = false;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -81,6 +81,7 @@ public class Player {
 		return serverPort;
 	}
 	
+	/*
 	public void setHost(boolean host) {
 		this.host = host;
 	}
@@ -88,6 +89,7 @@ public class Player {
 	public boolean returnHost() {
 		return host;
 	}
+	*/
 	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's

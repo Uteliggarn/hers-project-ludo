@@ -34,6 +34,8 @@ public class ClientMainUIController {
     
     @FXML
     private TabPane gameTabs; 
+    
+    private int count = 0;
 
     @FXML
     void testCode(ActionEvent event) {
@@ -43,7 +45,22 @@ public class ClientMainUIController {
     
     @FXML
     void newGameButtonPressed(ActionEvent event) {
-    	newGameTab();
+    	System.out.println("\nKnapp brukt!");
+    	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+    		System.out.println("\nHva er size: " + Main.gameTabs.getTabs().size());
+    		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
+    			++count;
+    			System.out.println("\ntab id: " + Main.gameTabs.getTabs().get(i).getId());
+    		}
+    		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
+    			System.out.println("\nhmm her kom jeg in ja?");
+    			Main.sendText(Main.CREATEGAME);
+    			count = 0;
+    		}
+    		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
+    			Main.showAlert("Error", "You have allready created a game.");
+    	}
+       	//newGameTab();
     }
     
     @FXML
