@@ -21,6 +21,8 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
+	private final String LOGOUT = "LOGOUT:";
+	
 	public GameServer(int socket) {
 		
 		try {
@@ -62,12 +64,12 @@ public class GameServer {
 			                        }
 			                        else if (msg != null) {	// >>>LOGOUT<<< received, remove the client
 			                            i.remove();
-			                            messages.put("LOGOUT:"+p.returnName());
+			                            messages.put(LOGOUT+p.returnName());
 			                            messages.put(p.returnName()+" logged out");
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                            messages.put("LOGOUT:"+p.returnName());
+		                            messages.put(LOGOUT+p.returnName());
 		                            messages.put(p.returnName()+" got lost in hyperspace");
 		                        }
 		                    }
@@ -100,7 +102,7 @@ public class GameServer {
 		                        	p.sendText(message);
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                        	messages.add("LOGOUT:"+p.returnName());
+		                        	messages.add(LOGOUT+p.returnName());
 		                        	messages.add(p.returnName()+" got lost in hyperspace");
 		                        }
 		                    }

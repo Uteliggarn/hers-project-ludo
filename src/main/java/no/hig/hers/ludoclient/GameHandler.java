@@ -116,6 +116,8 @@ public class GameHandler {
 	
 	public static void connect() {
 		try {
+			System.out.println("\nHva er connect: " + serverPort);
+			
 			connection = new Socket("127.0.0.1", serverPort);
 			
 			output = new BufferedWriter(new OutputStreamWriter(

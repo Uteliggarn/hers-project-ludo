@@ -48,6 +48,11 @@ public class GlobalServer extends JFrame{
     private final String makeMoveText;
     
     private final String JOIN = "JOIN:";
+    private final String HOST = "HOST";
+    private final String INVITE = "invite:";
+    private final String LOGOUT = "logout:";
+    private final String CLOGOUT = ">>>LOGOUT<<<";
+    
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
@@ -127,14 +132,14 @@ public class GlobalServer extends JFrame{
 								handleGroupChatKeywords(p, msg);
 								handleGameKeywords(p, msg);
 								
-								if (msg != null && msg.equals(">>>LOGOUT<<<")) {
+								if (msg != null && msg.equals(CLOGOUT)) {
 									i.remove();
 									que.remove(p.returnName());
-									messages.put("LOGOUT:" + p.returnName());
+									messages.put(LOGOUT + p.returnName());
 								}
 							} catch (IOException ioe) {
 								i.remove();
-								messages.put("LOGOUT:" + p.returnName());
+								messages.put(LOGOUT + p.returnName());
 								messages.put(p.returnName() + " got lost in hyperspace");
 							}
 						}
@@ -177,7 +182,7 @@ public class GlobalServer extends JFrame{
 			}
 			for (int i=0; i<groupChatList.size(); i++) {
 				
-				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
+				if (msg != null && msg.startsWith(groupChatList.get(i) + JOIN)) {
 					messages.put(msg); 
 				}
 				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
@@ -207,12 +212,12 @@ public class GlobalServer extends JFrame{
 							//player.get(player.indexOf(que.get(t))).setHost(true);
 							gameList.add(IDGK + que.get(t));
 							hostFound = true;
-							que.get(t).sendText("HOST");
+							que.get(t).sendText(HOST);
 							tmpPort = que.get(t).returnServerPort();
 							tmpName = que.get(t).returnName();
 						}
 						else {
-							que.get(t).sendText("JOIN:" + tmpName);
+							que.get(t).sendText(JOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}	
 						
@@ -220,27 +225,20 @@ public class GlobalServer extends JFrame{
 				}
 			}
 			else if (msg != null && msg.equals(CREATEGAME)) {
+				displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
 				if (!gameList.contains(IDGK + p.returnName())) {
 					gameList.add(IDGK + p.returnName());
 					p.sendText(CREATEGAME);
 				}
 				else
 					p.sendText(ERROR);
-				/*
-				if (p.returnHost() != true) {
-					p.sendPort(player.size());
-					for (int y=0; y<player.size(); y++) 
-						p.sendText("player:" + player.get(y).returnName());
-				}
-				else
-					p.sendPort(-1);
-				*/
 			}
-			else if (msg != null && msg.startsWith("invite:")) {
+			else if (msg != null && msg.startsWith(INVITE)) {
+				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
 				for (int y=0; y<player.size(); y++)
 					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText("JOIN");
-						player.get(y).sendPort(p.returnServerPort());
+						player.get(y).sendText(JOIN + p.returnName());
+						player.get(y).sendText(Integer.toString(p.returnServerPort()));
 					}
 			}
 		} catch (IOException ioe) {
@@ -352,27 +350,6 @@ public class GlobalServer extends JFrame{
 				}
 			}
 		});
-	}
-	
-	/**
-	 * Handles all the game messages / commands.
-	 * @param p The active player
-	 * @param msg The message that was read
-	 */
-	private void handleGameActivity(Player p, String msg) {
-		try {
-			if (msg != null && msg.startsWith(throwDiceText)) {
-				//TODO:Check received id with correct id (not really needed, but why not)
-				//TODO:Send the dice value to the clients
-				//messages.put(receiveDiceText + diceValue);
-				
-			} else if (msg != null && msg.startsWith(makeMoveText)) {
-				//Send a broadcast to every player about the move
-				messages.put(msg);
-			}
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
 	}
 	
 	private void displayMessage(String text) {

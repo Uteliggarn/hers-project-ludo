@@ -251,6 +251,7 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
+	                	System.out.println("\nHva er port: " + port);
 	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
 	                	gameHandler.add(gh);
 	                }

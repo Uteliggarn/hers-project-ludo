@@ -44,4 +44,5 @@ public class HostGameLobbyController {
 	public void getServerPort(int serverPort) {
 		this.serverPort = serverPort;
 	}
+	
 }
