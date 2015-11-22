@@ -54,8 +54,15 @@ public class GameServer {
 		                        Player p = i.next();
 		                        try {
 			                        String msg = p.read();
-			                        if(msg != null && msg.startsWith("gamestart:"))
-			                        	messages.put(msg + p.returnPlayerNr());
+			                        
+			                        System.out.println("hva er msg " + msg);
+			                        
+			                        if(msg != null && msg.startsWith("gamestart:")) {
+			                        	String tmp;
+			                        	tmp = Integer.toString(p.returnPlayerNr());
+			                        	System.out.println("hva er return player: " + tmp);
+			                        	messages.put(msg + tmp);
+			                        }
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
 			                        }
@@ -130,7 +137,9 @@ public class GameServer {
 	            while (!shutdown) {
 	                try {
 	                    Socket s = server.accept();
+	                    System.out.println("players, bør være 2");
 	                    if (player.size() != 4) {
+	                    	System.out.println("server");
 		                    Player p = new Player(s, playerNr++);
 		                    synchronized (player) {
 		                    	player.add(p);

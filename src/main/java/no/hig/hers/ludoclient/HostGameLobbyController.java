@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -20,6 +22,8 @@ public class HostGameLobbyController {
 	@FXML private Button startGameButton;
 	
 	private int serverPort;
+	private static BufferedReader input;
+	private static BufferedWriter output;
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
@@ -32,10 +36,14 @@ public class HostGameLobbyController {
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
 		Tab tab = Main.gameTabs.getTabs().get(1);
-		FXMLLoader loader = new FXMLLoader();
+		
+		//FXMLLoader loader = new FXMLLoader();
 		
 		try {
-			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
+			String gamestart;
+			gamestart = "gamestart:";
+			sendText(gamestart);
+			//tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
@@ -44,4 +52,26 @@ public class HostGameLobbyController {
 	public void getServerPort(int serverPort) {
 		this.serverPort = serverPort;
 	}
+	public void setConnetion(BufferedWriter write, BufferedReader read) {
+		output = write;
+		input = read;
+	}
+	
+	/**
+     * Method used to send a message to the server. Handled in a separate method
+     * to ensure that all messages are ended with a newline character and are
+     * flushed (ensure they are sent.)
+     * 
+     * @param textToSend
+     *            the message to send to the server
+     */
+    public static void sendText(String textToSend) {
+        try {
+            output.write(textToSend);
+            output.newLine();
+            output.flush();
+        } catch (IOException ioe) {
+        	Main.showAlert("Error", "Unable to send message to server");
+        }
+    }
 }

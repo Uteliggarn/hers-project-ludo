@@ -69,7 +69,8 @@ public class GameHandler {
 							try {
 								tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 								hostGameLobbyController = (HostGameLobbyController) loader.getController();
-								
+								connect();
+								hostGameLobbyController.setConnetion(output, input);
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
@@ -89,7 +90,8 @@ public class GameHandler {
 							try {
 								tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 								playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
-								
+								connect();
+								playerGameLobbyController.setConnetion(output, input);
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
@@ -100,9 +102,6 @@ public class GameHandler {
 			});
 				break;
 		}
-		
-
-		connect();
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
@@ -119,12 +118,13 @@ public class GameHandler {
 	
 	public static void connect() {
 		try {
-			connection = new Socket("127.0.0.1", 13333);
+			connection = new Socket("127.0.0.1", serverPort);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
+			
 			
 			sendText(Main.userName);
 			
@@ -159,7 +159,9 @@ public class GameHandler {
 		executorService.execute(() -> {
 			while (true) {
 				try {
+					System.out.println("før");
 	                String msg = input.readLine();
+	                System.out.println("etter");
 	                if(msg != null && msg.startsWith("gamestart:")) {
 	                	int n = Integer.parseInt(msg.substring(11, 11));
 	                	

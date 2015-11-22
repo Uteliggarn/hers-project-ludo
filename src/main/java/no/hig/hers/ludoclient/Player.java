@@ -23,6 +23,8 @@ public class Player {
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
 		
+		System.out.println("playernr " + playerNr);
+		
 		String name = input.readLine();
 	}
 	
@@ -69,4 +71,5 @@ public class Player {
 	public int returnPlayerNr() {
 		return playerNr;
 	}
+	
 }
