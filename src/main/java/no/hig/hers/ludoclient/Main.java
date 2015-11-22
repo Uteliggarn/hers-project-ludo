@@ -67,6 +67,10 @@ public class Main extends Application {
 	final static String CREATEGAME = "CREATEGAME";
 	final static String IDGK = "IDGK";	// Unique name
 	final static String INVITE = "invite:";	// Unique name
+	final static String HOST = "HOST";	// Unique name
+	final static String QUEUE = "queue";	// Unique name
+	final static String JOIN = "JOIN:";	// Unique name
+	
 	
 
 	@Override
@@ -156,6 +160,7 @@ public class Main extends Application {
 	public static void startGameServer() {
 		gameServer = new GameServer(serverPort);
 	}
+	
 	/**
 	 * Method for showing alerts to the user.
 	 * Just for simple error messages.
@@ -220,6 +225,7 @@ public class Main extends Application {
 			output.close();
 			input.close();
 			connection.close();
+			gameServer.close();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} 
@@ -235,21 +241,18 @@ public class Main extends Application {
 	                message = Main.input.readLine();
 	
 	                if (message.equals("HOST")) {
-	                	Platform.runLater(new Runnable() {
-	                		@Override
-	                		public void run() {
-	                			//gameHandler.newHostGameLobby();	
-	                		}
-	                	});
+	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
+	                	gameHandler.add(gh);
 	               
 	                }
 	                else if (message.equals(CREATEGAME)) {
-	                	GameHandler gh = new GameHandler(serverPort, 1);
+	                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
 	                	gameHandler.add(gh);
 	                }
-	                else if (message.equals("JOIN")) {
-	                	int port = Main.input.read();
-	                	//GameLobby gameLobby = new GameLobby(port);	                	
+	                else if (message.startsWith(JOIN)) {
+	                	int port = Integer.valueOf(Main.input.readLine());
+	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+	                	gameHandler.add(gh);
 	                }
 	                
 	                if (!message.equals(null)) {
@@ -275,4 +278,13 @@ public class Main extends Application {
 			}
 		});
 	}
+	
+	/*
+	 Platform.runLater(new Runnable() {
+	        @Override
+	                		public void run() {
+	                				
+	                		}
+	                	});
+	 */
 }

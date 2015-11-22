@@ -61,6 +61,7 @@ public class GlobalServer extends JFrame{
     private int serverPorts = 10000;
     
     private int tmpPort;
+    private String tmpName;
 	
 	public GlobalServer() {
 		
@@ -195,22 +196,26 @@ public class GlobalServer extends JFrame{
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-				if(que.size() == 1) {
-					//boolean hostFound = false;
-					for (int t=0; t<1; t++) {
+				if(que.size() == 2) {
+					boolean hostFound = false;
+					for (int t=0; t<2; t++) {
+						
+						//que.get(t).sendText("HOST");
 						//System.out.println("Hva er que: "  );
-						/*
-						if (!que.get(t).returnHost() && hostFound != true) {
-							player.get(player.indexOf(que.get(t))).setHost(true);
+						
+						if (!gameList.contains(IDGK + que.get(t).returnName()) && hostFound != true) {
+							//player.get(player.indexOf(que.get(t))).setHost(true);
+							gameList.add(IDGK + que.get(t));
 							hostFound = true;
 							que.get(t).sendText("HOST");
 							tmpPort = que.get(t).returnServerPort();
+							tmpName = que.get(t).returnName();
 						}
 						else {
-							que.get(t).sendText("JOIN");
-							que.get(t).sendPort(tmpPort);
+							que.get(t).sendText("JOIN:" + tmpName);
+							que.get(t).sendText(Integer.toString(tmpPort));
 						}	
-						*/
+						
 					}
 				}
 			}

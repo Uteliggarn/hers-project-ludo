@@ -126,18 +126,22 @@ public class Player {
 					
 					this.serverPort = serverPort;
 					
-					String tmp = Integer.toString(this.serverPort);
+					String tmp = Integer.toString(login);
+					
+					sendText(tmp);
+					
+					tmp = Integer.toString(this.serverPort);
 								
-					output.write(login);	//Sends message back to client
-					output.newLine();
-					output.flush();
 					sendText(tmp);	//Sends the given serverport
+					
 					return true;
 				}
 				else if (login == 0) {
-					output.write(login);
-					output.newLine();
-					output.flush();
+
+					String tmp = Integer.toString(login);
+					
+					sendText(tmp);
+					
 					return false;
 				}
 			}
