@@ -30,15 +30,13 @@ public class HostGameLobbyController {
 	
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) {
-		
 		Tab tab = Main.gameTabs.getTabs().get(1);
 		FXMLLoader loader = new FXMLLoader();
 		
 		try {
 			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		}
 	}
 	

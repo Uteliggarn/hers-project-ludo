@@ -12,6 +12,9 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Tab;
+
 public class GameHandler {
 	
 	private static int serverPort;
@@ -24,11 +27,11 @@ public class GameHandler {
 	public GameHandler(int serverPort) {
 		this.serverPort = serverPort;
 		
-		connect();
+		//connect();
 		
-		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		executorService.shutdown();	// Dreper tråden når klassen dør
+		//executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		//processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
+		//executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 	
 	
@@ -63,6 +66,28 @@ public class GameHandler {
 	            
 			}
 		});
+	}
+	
+	public void newHostGameLobby() {
+		try {
+			Tab tab = new Tab("Ludo");
+			
+			FXMLLoader loader = new FXMLLoader();
+			
+			tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+			
+			//HostGameLobbyController hostGameLobbyController = (HostGameLobbyController) loader.getController();
+			
+			//hostGameLobbyController.getServerPort(Main.serverPort);
+			
+			tab.setId("tab1");
+			
+			Main.gameTabs.getTabs().add(tab);
+			Main.gameTabs.getSelectionModel().select(tab);
+			
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 }
