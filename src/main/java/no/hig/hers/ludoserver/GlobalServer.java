@@ -54,10 +54,11 @@ public class GlobalServer extends JFrame{
     
     
     
+    
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
     
-    private int serverPorts = 0;
+    private int serverPorts = 10000;
     
     private int tmpPort;
 	

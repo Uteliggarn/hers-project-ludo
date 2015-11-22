@@ -66,6 +66,8 @@ public class Main extends Application {
 	final static String LEAVECHAT = "OUT:";
 	final static String CREATEGAME = "CREATEGAME";
 	final static String IDGK = "IDGK";	// Unique name
+	final static String INVITE = "invite:";	// Unique name
+	
 
 	@Override
 	public void start(Stage primaryStage) {
