@@ -95,14 +95,16 @@ public class GameClientUIController {
 		die4 = new Image("dice4.png");
 		die5 = new Image("dice5.png");
 		die6 = new Image("dice6.png");
-		
+
 		/*
 		dieRoller.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				rollDiceActionListener();
 			}
+		
 		});
 		*/
+		
 		pawn1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 0;
@@ -208,7 +210,7 @@ public class GameClientUIController {
 	
 	
 	@FXML
-	void rollDice(ActionEvent even) {
+	private void rollDice(ActionEvent even) {
 //		if (yourTurn) {
 		//dieRoller.setDisable(false);
 		rollDiceActionListener();

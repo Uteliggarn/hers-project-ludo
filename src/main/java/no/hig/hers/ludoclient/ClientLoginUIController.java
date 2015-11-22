@@ -39,17 +39,21 @@ public class ClientLoginUIController {
     	String password = passwordTextField.getText();
 
     	int ID;
-    	int port;
+    	String port = null;
  
     	Main.sendLogin("SENDLOGIN:", username, password);
     	
     	try {
-    		ID = Main.input.read();
-    		port = Main.input.read();
+    		
+    		
+    		ID = Integer.valueOf(Main.input.readLine());
+    		
+    		if (ID == 0)
+    			Main.connect();
     		
 			if (ID > 0) {
 				
-				Main.serverPort += port;
+				Main.serverPort = Integer.valueOf(Main.input.readLine());
 				
 				Main.userName = username;
 				Main.playerID = ID;

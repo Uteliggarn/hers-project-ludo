@@ -25,16 +25,21 @@ public class CreateGameLobbyController {
 
 	@FXML private MenuItem invite;
 	
+	public void initialize() {
+		startGameButton.setDisable(false);
+	}
+	
 	public void addNewPlayerToList(String name) {
 		playerList.getItems().add(name);
 	}
 	
 	@FXML private void invitePlayer(ActionEvent e) {
 		String item = playerList.getSelectionModel().getSelectedItem();
-		Main.sendText("invite:" + item);
+		Main.sendText(Main.INVITE + item);
 	}
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) {
+		startGameButton.setDisable(false);
 		Tab tab = Main.gameTabs.getTabs().get(1);
 		
 		FXMLLoader loader = new FXMLLoader();

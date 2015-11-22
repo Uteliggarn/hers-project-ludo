@@ -132,7 +132,6 @@ public class GameServer {
 	                    Socket s = server.accept();
 	                    if (player.size() != 4) {
 		                    Player p = new Player(s, playerNr++);
-		                    messages.add (p.returnName() +" joined the server");
 		                    synchronized (player) {
 		                    	player.add(p);
 		                    	
@@ -163,5 +162,9 @@ public class GameServer {
 					}
 	            }
 	        });
+	    }
+	    
+	    public void close() {
+	    	executorService.shutdown();
 	    }
 }

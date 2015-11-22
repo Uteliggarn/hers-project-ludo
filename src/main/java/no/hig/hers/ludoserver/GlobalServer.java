@@ -36,6 +36,7 @@ public class GlobalServer extends JFrame{
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
 	private ArrayList<String> groupChatList = new ArrayList<String>();
+	private ArrayList<String> gameList = new ArrayList<String>();
 	
 	private ArrayList<Player> que = new ArrayList<Player>();
 	
@@ -47,13 +48,20 @@ public class GlobalServer extends JFrame{
     private final String makeMoveText;
     
     private final String JOIN = "JOIN:";
+    private final String IDGK = "IDGK";
+    private final String CREATEGAME = "CREATEGAME";
+    private final String ERROR = "ERROR";
+    
+    
+    
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
     
-    private int serverPorts = 0;
+    private int serverPorts = 10000;
     
     private int tmpPort;
+    private String tmpName;
 	
 	public GlobalServer() {
 		
@@ -144,6 +152,100 @@ public class GlobalServer extends JFrame{
 				}
 			}
 		});
+	}
+	
+	/**
+	 * All the chat messages / commands will be handled in this method.
+	 * @param p The active player
+	 * @param msg The message that was read
+	 */
+	private void handleGroupChatKeywords(Player p, String msg) {
+		try {
+			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
+				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
+					try {
+						p.sendText("ERRORCHAT");
+						writeToFile(fileName, "ERRORCHAT");
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+				else {
+					groupChatList.add(msg.substring(13));
+					messages.put("NEWGROUPCHAT:" + msg.substring(13));
+					displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
+				}
+			}
+			for (int i=0; i<groupChatList.size(); i++) {
+				
+				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
+					messages.put(msg); 
+				}
+				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
+					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
+					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
+				}	
+			}
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		}
+	}
+	
+	private void handleGameKeywords(Player p, String msg) {
+		try {
+			if (msg != null && msg.equals("queue")){
+				Player tmp = p;
+				que.add(tmp);
+				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
+				if(que.size() == 2) {
+					boolean hostFound = false;
+					for (int t=0; t<2; t++) {
+						
+						//que.get(t).sendText("HOST");
+						//System.out.println("Hva er que: "  );
+						
+						if (!gameList.contains(IDGK + que.get(t).returnName()) && hostFound != true) {
+							//player.get(player.indexOf(que.get(t))).setHost(true);
+							gameList.add(IDGK + que.get(t));
+							hostFound = true;
+							que.get(t).sendText("HOST");
+							tmpPort = que.get(t).returnServerPort();
+							tmpName = que.get(t).returnName();
+						}
+						else {
+							que.get(t).sendText("JOIN:" + tmpName);
+							que.get(t).sendText(Integer.toString(tmpPort));
+						}	
+						
+					}
+				}
+			}
+			else if (msg != null && msg.equals(CREATEGAME)) {
+				if (!gameList.contains(IDGK + p.returnName())) {
+					gameList.add(IDGK + p.returnName());
+					p.sendText(CREATEGAME);
+				}
+				else
+					p.sendText(ERROR);
+				/*
+				if (p.returnHost() != true) {
+					p.sendPort(player.size());
+					for (int y=0; y<player.size(); y++) 
+						p.sendText("player:" + player.get(y).returnName());
+				}
+				else
+					p.sendPort(-1);
+				*/
+			}
+			else if (msg != null && msg.startsWith("invite:")) {
+				for (int y=0; y<player.size(); y++)
+					if(msg.substring(7).equals(player.get(y).returnName())) {
+						player.get(y).sendText("JOIN");
+						player.get(y).sendPort(p.returnServerPort());
+					}
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 	
 	/**
@@ -250,87 +352,6 @@ public class GlobalServer extends JFrame{
 				}
 			}
 		});
-	}
-	
-	/**
-	 * All the chat messages / commands will be handled in this method.
-	 * @param p The active player
-	 * @param msg The message that was read
-	 */
-	private void handleGroupChatKeywords(Player p, String msg) {
-		try {
-			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
-				if(groupChatList.contains(msg.substring(13)))
-					try {
-						p.sendText("ERRORCHAT");
-						writeToFile(fileName, "ERRORCHAT");
-					} catch (IOException ioe) {
-						ioe.printStackTrace();
-					}
-				else {
-					groupChatList.add(msg.substring(13));
-					messages.put("NEWGROUPCHAT:" + msg.substring(13));
-					displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
-				}
-			}
-			for (int i=0; i<groupChatList.size(); i++) {
-				
-				if (msg != null && msg.startsWith(groupChatList.get(i) + "JOIN:")) {
-					messages.put(msg); 
-				}
-				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
-					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
-					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
-				}	
-			}
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
-		}
-	}
-	
-	private void handleGameKeywords(Player p, String msg) {
-		try {
-			if (msg != null && msg.equals("queue")){
-				Player tmp = p;
-				que.add(tmp);
-				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-				if(que.size() == 1) {
-					boolean hostFound = false;
-					for (int t=0; t<1; t++) {
-						//System.out.println("Hva er que: "  );
-						
-						if (!que.get(t).returnHost() && hostFound != true) {
-							player.get(player.indexOf(que.get(t))).setHost(true);
-							hostFound = true;
-							que.get(t).sendText("HOST");
-							tmpPort = que.get(t).returnServerPort();
-						}
-						else {
-							que.get(t).sendText("JOIN");
-							que.get(t).sendPort(tmpPort);
-						}	
-					}
-				}
-			}
-			else if (msg != null && msg.equals("createGame")) {
-				if (p.returnHost() != true) {
-					p.sendPort(player.size());
-					for (int y=0; y<player.size(); y++) 
-						p.sendText("player:" + player.get(y).returnName());
-				}
-				else
-					p.sendPort(-1);
-			}
-			else if (msg != null && msg.startsWith("invite:")) {
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText("JOIN");
-						player.get(y).sendPort(p.returnServerPort());
-					}
-			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
 	}
 	
 	/**

@@ -22,6 +22,8 @@ public class Player {
 		playerNr = nr;
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
+		
+		String name = input.readLine();
 	}
 	
 	/**

@@ -32,11 +32,10 @@ public class HostGameLobbyController {
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
 		Tab tab = Main.gameTabs.getTabs().get(1);
-		//FXMLLoader loader = new FXMLLoader();
-		Parent root = (Parent)FXMLLoader.load(getClass().getResource("GameClient.fxml"));
+		FXMLLoader loader = new FXMLLoader();
 		
 		try {
-			tab.setContent(root);
+			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
