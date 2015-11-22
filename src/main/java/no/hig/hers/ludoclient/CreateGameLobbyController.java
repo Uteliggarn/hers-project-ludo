@@ -27,7 +27,7 @@ public class CreateGameLobbyController {
 	
 	@FXML private void invitePlayer(ActionEvent e) {
 		String item = playerList.getSelectionModel().getSelectedItem();
-		Main.sendText("invite:" + item);
+		Main.sendText(Main.INVITE + item);
 	}
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) {

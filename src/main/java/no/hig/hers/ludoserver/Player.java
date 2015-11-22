@@ -25,7 +25,13 @@ public class Player {
 	private String name;
 	private int serverPort;
 	
-	private boolean host = false;
+	private final String ACCEPTED = "ACCEPTED";
+    private final String DECLINED = "DECLINED";
+    private final String SENDLOGIN = "SENDLOGIN:";
+    private final String SENDREGISTER = "SENDREGISTER:";
+    
+	
+	//private boolean host = false;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -81,6 +87,7 @@ public class Player {
 		return serverPort;
 	}
 	
+	/*
 	public void setHost(boolean host) {
 		this.host = host;
 	}
@@ -88,6 +95,7 @@ public class Player {
 	public boolean returnHost() {
 		return host;
 	}
+	*/
 	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
@@ -105,10 +113,10 @@ public class Player {
 			String tempPass = input.readLine();
 			
 			
-			if (!tempName.startsWith("SENDLOGIN:") && !tempName.startsWith("SENDREGISTER:"))
+			if (!tempName.startsWith(SENDLOGIN) && !tempName.startsWith(SENDREGISTER))
 				return false;
 			
-			if (tempName.startsWith("SENDLOGIN:") && tempPass.startsWith("SENDLOGIN:")) {
+			if (tempName.startsWith(SENDLOGIN) && tempPass.startsWith(SENDLOGIN)) {
 				int login = 0;
 				
 				name = tempName.substring(10);	//Saves the name in the player class
@@ -117,11 +125,13 @@ public class Player {
 				if(login > 0) {		// checks the value given by the database
 					
 					this.serverPort = serverPort;
+					
+					String tmp = Integer.toString(this.serverPort);
 								
 					output.write(login);	//Sends message back to client
-					output.write(serverPort);	//Sends message back to client
 					output.newLine();
 					output.flush();
+					sendText(tmp);	//Sends the given serverport
 					return true;
 				}
 				else if (login == 0) {
@@ -131,21 +141,17 @@ public class Player {
 					return false;
 				}
 			}
-			else if (tempName.startsWith("SENDREGISTER:") && tempPass.startsWith("SENDREGISTER:")){
+			else if (tempName.startsWith(SENDREGISTER) && tempPass.startsWith(SENDREGISTER)){
 				boolean register = false; 
 				
 				register = DatabaseHandler.registerNewUser(tempName.substring(13), tempPass.substring(13));
 			
 				if (register) {		// Checks the value given be the database
-					output.write("ACCEPTED");	// Sends an accepted message back to client
-					output.newLine();
-					output.flush();
+					sendText(ACCEPTED); // Sends an accepted message back to client
 					return false;
 				}
 				else {
-					output.write("DECLINED");	// sends an declined message back to client
-					output.newLine();
-					output.flush();
+					sendText(DECLINED);	// sends an declined message back to client
 					return false;
 				}
 			}
