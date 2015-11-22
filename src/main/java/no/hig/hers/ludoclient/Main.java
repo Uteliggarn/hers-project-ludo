@@ -40,7 +40,7 @@ public class Main extends Application {
 	
 	static boolean connected = false;
 	
-	private static ChatHandler cHandler; 
+	static ChatHandler cHandler; 
 	private static GameServer gameServer;
 	private static ArrayList<GameHandler> gameHandler = new ArrayList<>();
 	public static ArrayList<String> playerList = new ArrayList<>();
@@ -56,6 +56,7 @@ public class Main extends Application {
 	
 	private static TabPane chatTabs;
 	public static TabPane gameTabs;
+	private static ClientMainUIController mainController;
 	
 	static ExecutorService executorService;
 	private static String message;
@@ -113,7 +114,6 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
-			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -122,9 +122,12 @@ public class Main extends Application {
 			registerScene = new Scene(root);
 			registerScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			FXMLLoader loader = new FXMLLoader();
+			StackPane mainRoot = (StackPane)loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
+			mainController = (ClientMainUIController) loader.getController();
 			
 			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
@@ -249,8 +252,7 @@ public class Main extends Application {
 	                
 	                if (!message.equals(null)) {
                 			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
-                				cHandler.addNewChat(message.substring(13));
-                				sendText(message.substring(13) + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+                				mainController.addChatToList(message.substring(13));
         	                }
         	                else if (message.equals(ERRORCHAT)) {	// Forteller at chaten finnes allerede
         	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
