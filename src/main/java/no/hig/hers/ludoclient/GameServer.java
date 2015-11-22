@@ -21,17 +21,17 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
+	private int playerNr = 1; 
+	
 	public GameServer(int socket) {
 		
 		try {
-			
 			server = new ServerSocket();
 			server.setReuseAddress(true);
 			server.bind(new InetSocketAddress(socket));
 			
 			//executorService = Executors.newCachedThreadPool();
 			executorService = Executors.newFixedThreadPool(3);
-			
 			startLoginMonitor();
 			startMessageSender();
 			startMessageListener();
@@ -54,6 +54,12 @@ public class GameServer {
 		                        Player p = i.next();
 		                        try {
 			                        String msg = p.read();
+			                        if(msg != null && msg.startsWith("gamestart:"))
+			                        	messages.put(msg + p.returnPlayerNr());
+			                        if(msg != null && msg.startsWith("dicevalue:")) {
+			                        	messages.put(msg);
+			                        }
+			                        	
 			                        if (msg != null && msg.startsWith("msg:")) {
 			                        	messages.put(p.returnName() + " < " + msg.substring(0, 4));
 			                        }
@@ -125,10 +131,11 @@ public class GameServer {
 	                try {
 	                    Socket s = server.accept();
 	                    if (player.size() != 4) {
-		                    Player p = new Player(s);
+		                    Player p = new Player(s, playerNr++);
 		                    messages.add (p.returnName() +" joined the server");
 		                    synchronized (player) {
 		                    	player.add(p);
+		                    	
 		                    	/*
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined

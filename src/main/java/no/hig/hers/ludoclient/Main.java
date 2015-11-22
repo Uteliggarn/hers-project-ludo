@@ -80,7 +80,7 @@ public class Main extends Application {
 			
 			connect();
 			
-			gameHandler = new GameHandler(10004);
+			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -150,7 +150,8 @@ public class Main extends Application {
 	}
 
 	public static void startGameServer() {
-		gameServer = new GameServer(serverPort);
+		gameServer = new GameServer(13333);
+		gameHandler = new GameHandler(12349);
 	}
 	/**
 	 * Method for showing alerts to the user.

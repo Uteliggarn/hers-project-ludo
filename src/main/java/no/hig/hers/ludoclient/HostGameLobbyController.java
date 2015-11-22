@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 public class HostGameLobbyController {
@@ -29,13 +30,14 @@ public class HostGameLobbyController {
 	}
 	
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) {
+	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
 		Tab tab = Main.gameTabs.getTabs().get(1);
-		FXMLLoader loader = new FXMLLoader();
+		//FXMLLoader loader = new FXMLLoader();
+		Parent root = (Parent)FXMLLoader.load(getClass().getResource("GameClient.fxml"));
 		
 		try {
-			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-		} catch (IOException ioe) {
+			tab.setContent(root);
+		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
 	}

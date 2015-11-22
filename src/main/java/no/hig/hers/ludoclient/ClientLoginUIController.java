@@ -54,7 +54,7 @@ public class ClientLoginUIController {
 				Main.userName = username;
 				Main.playerID = ID;
 				Main.startChatHandler();
-				//Main.startGameServer();
+				Main.startGameServer();
 				Main.changeScene(Main.mainScene);
 				
 			}
