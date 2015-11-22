@@ -46,8 +46,9 @@ public class CreateGameLobbyController {
 		
 		try {
 			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 }

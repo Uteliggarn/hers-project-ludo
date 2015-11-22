@@ -25,6 +25,8 @@ public class GameHandler {
 	public static BufferedReader input;
 	private ExecutorService executorService;
 	
+	private GameClientUIController gameClientUIController;
+
 	private CreateGameLobbyController createGameLobbyController;
 	private HostGameLobbyController hostGameLobbyController;
 	private PlayerGameLobbyController playerGameLobbyController;
@@ -67,7 +69,8 @@ public class GameHandler {
 							try {
 								tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 								hostGameLobbyController = (HostGameLobbyController) loader.getController();
-								
+								connect();
+								hostGameLobbyController.setConnetion(output, input);
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
@@ -87,7 +90,8 @@ public class GameHandler {
 							try {
 								tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 								playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
-								
+								connect();
+								playerGameLobbyController.setConnetion(output, input);
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
@@ -99,11 +103,9 @@ public class GameHandler {
 				break;
 		}
 		
-		connect();
-		
-		//executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		//processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		//executorService.shutdown();	// Dreper tråden når klassen dør
+		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
+		executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 	
 	
@@ -122,6 +124,7 @@ public class GameHandler {
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
+			
 			
 			sendText(Main.userName);
 			
@@ -156,8 +159,30 @@ public class GameHandler {
 		executorService.execute(() -> {
 			while (true) {
 				try {
-	                String tmp = input.readLine();
-	                        	                
+					System.out.println("før");
+	                String msg = input.readLine();
+	                System.out.println("etter");
+	                if(msg != null && msg.startsWith("gamestart:")) {
+	                	int n = Integer.parseInt(msg.substring(11, 11));
+	                	
+	                	Tab tab = Main.gameTabs.getTabs().get(1);
+	            		FXMLLoader loader = new FXMLLoader();
+	            		try {
+	            			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
+	            			gameClientUIController.setConnetion(output, input);
+	            			gameClientUIController.setPlayer(n);
+	            		} catch (IOException e1) {
+	            			// TODO Auto-generated catch block
+	            			e1.printStackTrace();
+	            		}	
+	                }
+	                if(msg != null && msg.startsWith("diceValue:")) {
+	                	int diceVal = Integer.parseInt(msg.substring(11,11));
+	                	int player = Integer.parseInt(msg.substring(12,12));
+	                	int pawn = Integer.parseInt(msg.substring(13,13));
+	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                }
+                    	        	                
 	                
 	            } catch (IOException ioe) {
 	                ioe.printStackTrace();
@@ -189,4 +214,10 @@ public class GameHandler {
 		}
 	}
 
+	public String read() throws IOException {
+		if (input.ready())
+			return input.readLine();
+		return null;
+	}
+	
 }

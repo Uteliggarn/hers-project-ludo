@@ -21,17 +21,17 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
+	private int playerNr = 1; 
+	
 	public GameServer(int socket) {
 		
 		try {
-			
 			server = new ServerSocket();
 			server.setReuseAddress(true);
 			server.bind(new InetSocketAddress(socket));
 			
 			//executorService = Executors.newCachedThreadPool();
 			executorService = Executors.newFixedThreadPool(3);
-			
 			startLoginMonitor();
 			startMessageSender();
 			startMessageListener();
@@ -54,6 +54,19 @@ public class GameServer {
 		                        Player p = i.next();
 		                        try {
 			                        String msg = p.read();
+			                        
+			                        System.out.println("hva er msg " + msg);
+			                        
+			                        if(msg != null && msg.startsWith("gamestart:")) {
+			                        	String tmp;
+			                        	tmp = Integer.toString(p.returnPlayerNr());
+			                        	System.out.println("hva er return player: " + tmp);
+			                        	messages.put(msg + tmp);
+			                        }
+			                        if(msg != null && msg.startsWith("dicevalue:")) {
+			                        	messages.put(msg);
+			                        }
+			                        	
 			                        if (msg != null && msg.startsWith("msg:")) {
 			                        	messages.put(p.returnName() + " < " + msg.substring(0, 4));
 			                        }
@@ -124,11 +137,13 @@ public class GameServer {
 	            while (!shutdown) {
 	                try {
 	                    Socket s = server.accept();
+	                    System.out.println("players, bør være 2");
 	                    if (player.size() != 4) {
-		                    Player p = new Player(s);
-		                    
+	                    	System.out.println("server");
+		                    Player p = new Player(s, playerNr++);
 		                    synchronized (player) {
 		                    	player.add(p);
+		                    	
 		                    	/*
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
