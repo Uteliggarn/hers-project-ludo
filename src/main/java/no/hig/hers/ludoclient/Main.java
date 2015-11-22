@@ -240,7 +240,7 @@ public class Main extends Application {
 				try {
 	                message = Main.input.readLine();
 	
-	                if (message.equals("HOST")) {
+	                if (message.equals(HOST)) {
 	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
 	                	gameHandler.add(gh);
 	               
@@ -251,7 +251,7 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                	System.out.println("\nHva er port: " + port);
+	                	
 	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
 	                	gameHandler.add(gh);
 	                }

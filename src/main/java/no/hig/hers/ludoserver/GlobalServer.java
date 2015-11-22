@@ -52,6 +52,7 @@ public class GlobalServer extends JFrame{
     private final String INVITE = "invite:";
     private final String LOGOUT = "logout:";
     private final String CLOGOUT = ">>>LOGOUT<<<";
+    private final String QUEUE = "queue";
     
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
@@ -197,7 +198,7 @@ public class GlobalServer extends JFrame{
 	
 	private void handleGameKeywords(Player p, String msg) {
 		try {
-			if (msg != null && msg.equals("queue")){
+			if (msg != null && msg.equals(QUEUE)){
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
@@ -264,7 +265,7 @@ public class GlobalServer extends JFrame{
 								writeToFile(fileName, message);
 							} catch (IOException ioe) {
 								i.remove();
-								messages.add("LOGOUT:" + p.returnName());
+								messages.add(LOGOUT + p.returnName());
 								messages.add(p.returnName() + " got lost in hyperspace");
 							}
 						}

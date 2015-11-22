@@ -51,6 +51,8 @@ public class GameHandler {
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
+								connect();
+								
 							} catch (IOException ioe) {
 								ioe.printStackTrace();
 							}
@@ -70,6 +72,8 @@ public class GameHandler {
 								
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
+								
+								connect();
 								
 							} catch (IOException ioe) {
 								ioe.printStackTrace();
@@ -91,6 +95,8 @@ public class GameHandler {
 								Main.gameTabs.getTabs().add(tab);
 								Main.gameTabs.getSelectionModel().select(tab);
 								
+								connect();
+								
 							} catch (IOException ioe) {
 								ioe.printStackTrace();
 							}
@@ -99,11 +105,11 @@ public class GameHandler {
 				break;
 		}
 		
-		connect();
+		//connect();
 		
-		//executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		//processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		//executorService.shutdown();	// Dreper tråden når klassen dør
+		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
+		executorService.shutdown();	// Dreper tråden når klassen dør
 	}
 	
 	
