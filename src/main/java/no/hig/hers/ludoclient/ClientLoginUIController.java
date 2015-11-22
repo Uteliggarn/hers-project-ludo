@@ -39,26 +39,26 @@ public class ClientLoginUIController {
     	String password = passwordTextField.getText();
 
     	int ID;
-    	String port;
+    	String port = null;
  
     	Main.sendLogin("SENDLOGIN:", username, password);
     	
     	try {
-    		ID = Main.input.read();
-    		System.out.println("\nHva er ID: " + ID);
-    		port = Main.input.readLine();
-    		System.out.println("\nHva er port: " + port);
+    		
+    		
+    		ID = Integer.valueOf(Main.input.readLine());
+    		
+    		if (ID == 0)
+    			Main.connect();
     		
 			if (ID > 0) {
 				
-				Main.serverPort = Integer.valueOf(port);
-				
-				System.out.println("Hva er serverPort: " + Main.serverPort);
+				Main.serverPort = Integer.valueOf(Main.input.readLine());
 				
 				Main.userName = username;
 				Main.playerID = ID;
 				Main.startChatHandler();
-				//Main.startGameServer();
+				Main.startGameServer();
 				Main.changeScene(Main.mainScene);
 				
 			}

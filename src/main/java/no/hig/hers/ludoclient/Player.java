@@ -14,13 +14,15 @@ public class Player {
 	private BufferedReader input;
 	private BufferedWriter output;
 	
-	private String name;
+	String name;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
+		
+		String name = input.readLine();
 	}
 	
 	/**
