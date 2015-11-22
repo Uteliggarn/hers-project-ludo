@@ -72,7 +72,7 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ImageView>
-                  <Button fx:id="dieRoller" mnemonicParsing="false" prefHeight="68.0" prefWidth="118.0" text="Roll dice" textAlignment="CENTER" translateX="37.0">
+                  <Button fx:id="dieRoller" mnemonicParsing="false" prefHeight="68.0" prefWidth="118.0" onAction="#rollDice" text="Roll dice" textAlignment="CENTER" translateX="37.0">
                      <font>
                         <Font name="Arial Italic" size="18.0" />
                      </font>

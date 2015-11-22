@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 public class GameClientUIController {
 	
 	LudoBoardFX board;
+	
 	private int turnOwner = 2;
 	private int player = 1;
 	private int pawnToMove = 0;
@@ -72,10 +73,9 @@ public class GameClientUIController {
 	
 	@FXML
 	public void initialize() {
-		try {
-			
-		board = new LudoBoardFX();
-		gameClientPane.setCenter(board);
+		try {	
+			board = new LudoBoardFX();
+			gameClientPane.setCenter(board);
 		} catch (Exception e) {
 			System.out.println("Error while trying to add gameboard");
 		}
@@ -91,11 +91,15 @@ public class GameClientUIController {
 		die5 = new Image("dice5.png");
 		die6 = new Image("dice6.png");
 		
+	
+		
+		/*
 		dieRoller.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				rollDiceActionListener();
 			}
 		});
+		*/
 		pawn1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 0;
@@ -179,6 +183,7 @@ public class GameClientUIController {
 					greenPlayer.setText("Green player: Your Turn!");
 					break;
 				}
+				setNotValid();
 				dieRoller.setDisable(false);
 				dieRoller.setText("Roll dice");
 		/*
@@ -380,7 +385,7 @@ public class GameClientUIController {
 		}
 		setPawnMovesFalse();
 		dieRoller.setDisable(false);
-		dieRoller.setText("Throw the dice");
+		dieRoller.setText("Roll dice");
 		
 	}
 	
@@ -406,8 +411,6 @@ public class GameClientUIController {
 			break;
 		}
 	}
-<<<<<<< HEAD
-=======
 	
 	public void setNotValid() {
 		switch (turnOwner) {
@@ -443,5 +446,4 @@ public class GameClientUIController {
     private void displayMessage(String text) {
         SwingUtilities.invokeLater(() -> chatArea.appendText(text));
     }
->>>>>>> refs/remotes/origin/master
 }
