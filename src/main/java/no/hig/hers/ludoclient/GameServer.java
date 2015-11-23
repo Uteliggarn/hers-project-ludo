@@ -60,9 +60,14 @@ public class GameServer {
 			                        //System.out.println("hva er msg " + msg);
 			                        
 			                        if(msg != null && msg.startsWith("gamestart:")) {
-			                        	String tmp;
-			                        	tmp = Integer.toString(p.returnPlayerNr());
-			                        	messages.put(msg + tmp);
+			                        	//String tmp;
+			                        	//tmp = Integer.toString(p.returnPlayerNr());
+			                        	//System.out.println("Hvilken player:" + tmp);
+			                        	//messages.put(msg + tmp);
+			                        	for (int t=0; t<player.size(); t++) {
+			                    			System.out.println("\n" + t);
+			                    			player.get(t).sendText(msg + (t+1) + player.get(t).returnName());
+										}
 			                        }
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
@@ -130,8 +135,8 @@ public class GameServer {
 	                    
 	                    if (player.size() != 4) {
 	                    	
-		                    Player p = new Player(s, playerNr++);
-		                    
+		                    Player p = new Player(s, playerNr);
+		                    playerNr++;
 		                    try {
 								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
 	                    		for (int t=0; t<player.size(); t++) {

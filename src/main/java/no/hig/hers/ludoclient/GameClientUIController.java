@@ -30,6 +30,7 @@ public class GameClientUIController {
 	private int pawnToMove = 0;
 	private int diceRolls = 0;
 	private boolean gameOver = false;
+	private String playerName;
 	
 	private int lastDiceValue;
 	private int diceValue;
@@ -205,7 +206,9 @@ public class GameClientUIController {
 				
 			}
 		});
+		setNotValidPass();
 		setPawnMovesFalse();
+		dieRoller.setDisable(true);
 	}
 	
 	
@@ -408,6 +411,12 @@ public class GameClientUIController {
 		pawn3.setDisable(true);
 		pawn4.setDisable(true);
 	}
+	public void setNotValidPass() {
+		pass.setDisable(true);
+	}
+	public void setValidPass() {
+		pass.setDisable(false);
+	}
 	public void setPawnMovesTrue(int val) {
 		switch(val) {
 		case 0:
@@ -452,6 +461,31 @@ public class GameClientUIController {
 	
 	public void setPlayer(int n) {
 		player = n;
+		if(player == turnOwner) {
+			setValidPass();
+			dieRoller.setDisable(false);
+			dieRoller.setText("Roll");
+		}
+		
+	}
+	
+	public void setPlayerName(String name) {
+		playerName = name;
+		switch (player) {
+			case 1:
+				greenPlayer.setText("Green: " + playerName);
+				break;
+			case 2:
+				redPlayer.setText("Red: " + playerName);
+				break;
+			case 3: 
+				yellowPlayer.setText("Yellow: " + playerName);
+				break;
+			case 4:
+				bluePlayer.setText("Blue: " + playerName);
+				break;
+		
+		}
 	}
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
 		output = write;
@@ -461,14 +495,17 @@ public class GameClientUIController {
 	public void getDiceValue(int diceV, int playernr, int pawn) {
 		turnOwner = playernr;
 		pawnToMove = pawn;
-		processRoll(diceV);
+		diceValue = diceV;
+		if(diceValue == 0) {
+			passChangeTurnOwner();
+		} else processRoll(diceV);
 		diceValue = 0;
 		diceRolls = 0;
-		dieTextLabel.setText("Roll dice");
-		dieLabel.setImage(null);
 		setPawnMovesFalse();
-		turnOwner++;
-		if(turnOwner == player) dieRoller.setDisable(false);
+		if(turnOwner == player) {
+			dieRoller.setDisable(false);
+			setValidPass();
+		}
 	}
 	
 	/**
@@ -500,6 +537,32 @@ public class GameClientUIController {
 			sendText(tmp);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	public void passChangeTurnOwner() {
+		
+		switch(turnOwner) {
+		case 1:	//Green
+			turnOwner ++;
+			greenPlayer.setText("Green:");
+			redPlayer.setText("Red: Your turn!");
+			break;
+		case 2:	//Red
+			turnOwner ++;
+			redPlayer.setText("Red:");
+			yellowPlayer.setText("Yellow: Your Turn!");
+			break;
+		case 3: //Yellow
+			turnOwner ++;
+			yellowPlayer.setText("Yellow:");
+			bluePlayer.setText("Blue: Your turn!");
+			break;
+		case 4: //Blue
+			turnOwner = 1;
+			bluePlayer.setText("Blue:");
+			greenPlayer.setText("Green: Your Turn!");
+			break;
+			
 		}
 	}
 }
