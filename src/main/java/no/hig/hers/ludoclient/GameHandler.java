@@ -122,27 +122,60 @@ public class GameHandler {
 					
 	                String msg = input.readLine();
 	                
-	                System.out.println("\nHva er msg: " + msg);
+	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if(msg != null && msg.startsWith("gamestart:")) {
-	                	int n = Integer.parseInt(msg.substring(10, 11));
-	                	
-	                	Tab tab = Main.gameTabs.getTabs().get(1);
-	            		FXMLLoader loader = new FXMLLoader();
-	            		try {
-	            			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-	            			gameClientUIController.setConnetion(output, input);
-	            			gameClientUIController.setPlayer(n);
-	            		} catch (IOException e1) {
-	            			// TODO Auto-generated catch block
-	            			e1.printStackTrace();
-	            		}	
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int n = Integer.parseInt(msg.substring(10, 11));
+	                							
+	                			Tab tab = Main.gameTabs.getTabs().get(1);
+	                			FXMLLoader loader = new FXMLLoader();
+	                			try {
+	                				System.out.print("Starter spill for " + n);
+	                				tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
+	                				gameClientUIController = loader.getController();
+	                				gameClientUIController.setConnetion(output, input);
+	                				gameClientUIController.setPlayer(n);
+	                				
+	                			} catch (IOException e1) {
+		            			// TODO Auto-generated catch block
+		            			e1.printStackTrace();
+	                			}	
+	                		}
+	                	});
 	                }
-	                else if(msg != null && msg.startsWith("diceValue:")) {
-	                	int diceVal = Integer.parseInt(msg.substring(10,11));
-	                	int player = Integer.parseInt(msg.substring(11,12));
-	                	int pawn = Integer.parseInt(msg.substring(12,13));
-	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                else if(msg != null && msg.startsWith("gamename:")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int n = Integer.parseInt(msg.substring(9, 10));
+	                			System.out.println("playernamenr " + n);
+	                			String tmpNavn = msg.substring(10, msg.length());
+	                			gameClientUIController.setPlayerName(n, tmpNavn);
+	                		}
+	                	});
+	                }
+	                else if(msg != null && msg.startsWith("dicevalue:")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int diceVal = Integer.parseInt(msg.substring(10,11));
+	                			int player = Integer.parseInt(msg.substring(11,12));
+			                	int pawn = Integer.parseInt(msg.substring(12,13));
+			                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
+			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                		}
+	                	});
+	                }
+	                else if(msg != null && msg.startsWith("gameover")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                		gameClientUIController.gameover();	
+	                		}
+	                	});	
 	                }
 	                else if (msg != null && msg.startsWith(JOIN)) {
 	                	System.out.println("\nHva er switchen min her: " + caseNr);

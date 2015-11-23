@@ -46,10 +46,6 @@ public class HostGameLobbyController {
 	
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
-		Tab tab = Main.gameTabs.getTabs().get(1);
-		
-		//FXMLLoader loader = new FXMLLoader();
-		
 		try {
 			String gamestart;
 			gamestart = "gamestart:";

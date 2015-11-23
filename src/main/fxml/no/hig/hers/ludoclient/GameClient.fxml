@@ -15,28 +15,33 @@
          <top>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="redPlayer" alignment="CENTER" contentDisplay="CENTER" text="Red player: Your turn">
+                  <Label fx:id="redPlayer" alignment="CENTER" contentDisplay="CENTER" text="Red player: Your turn" textFill="#fc0707" underline="true">
                      <font>
                         <Font name="Arial" size="20.0" />
                      </font></Label>
-                  <Label fx:id="yellowPlayer" text="Yellow player:">
+                  <Label fx:id="yellowPlayer" text="Yellow player:" textFill="#e1e117" underline="true">
                      <VBox.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
-                  <Label fx:id="bluePlayer" text="Blue player:">
+                  <Label fx:id="bluePlayer" text="Blue player:" textFill="#0c2ccd" underline="true">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
-                  <Label fx:id="greenPlayer" text="Green player:">
+                  <Label fx:id="greenPlayer" text="Green player:" textFill="#0be12b" underline="true">
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
+                  <Label fx:id="nameLabel" text="You are:" translateY="20.0">
+                     <font>
+                        <Font name="Arial Bold Italic" size="20.0" />
+                     </font>
+                  </Label>
                </children></VBox>
          </top>
          <center>
@@ -72,7 +77,7 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></ImageView>
-                  <Button fx:id="dieRoller" mnemonicParsing="false" prefHeight="68.0" prefWidth="118.0" onAction="#rollDice" text="Roll dice" textAlignment="CENTER" translateX="37.0">
+                  <Button fx:id="dieRoller" mnemonicParsing="false" onAction="#rollDice" prefHeight="68.0" prefWidth="118.0" text="Roll dice" textAlignment="CENTER" translateX="37.0">
                      <font>
                         <Font name="Arial Italic" size="18.0" />
                      </font>
