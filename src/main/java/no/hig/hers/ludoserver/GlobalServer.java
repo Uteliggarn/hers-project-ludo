@@ -196,6 +196,11 @@ public class GlobalServer extends JFrame{
 		}
 	}
 	
+	/**
+	 * All the commands concerning the game will be handled here.
+	 * @param p The active player
+	 * @param msg The message that was read
+	 */
 	private void handleGameKeywords(Player p, String msg) {
 		try {
 			if (msg != null && msg.equals(QUEUE)){
