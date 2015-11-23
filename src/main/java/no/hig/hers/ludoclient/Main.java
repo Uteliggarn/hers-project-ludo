@@ -221,14 +221,7 @@ public class Main extends Application {
 	}
 	
 	public void close() {
-		try {
-			output.close();
-			input.close();
-			connection.close();
-			gameServer.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} 
+		System.exit(0);
 	}
 	/**
 	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.

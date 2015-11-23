@@ -131,20 +131,21 @@ public class GameServer {
 	                    if (player.size() != 4) {
 	                    	
 		                    Player p = new Player(s, playerNr++);
-		                    synchronized (player) {
-		                    	
-		                    	try {
-									//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-		                    		for (int t=0; t<player.size(); t++) {
-										p.sendText(JOIN + player.get(t).returnName());
-									}
-		                    		
-									messages.put(JOIN + p.returnName());
-									
-								} catch (InterruptedException ie) {
-									ie.printStackTrace();
+		                    
+		                    try {
+								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+	                    		for (int t=0; t<player.size(); t++) {
+	                    			System.out.println("\nKom vel ikke in her");
+									p.sendText(JOIN + player.get(t).returnName());
 								}
-		                    	
+	                    		
+								messages.put(JOIN + p.returnName());
+								
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}
+		                    
+		                    synchronized (player) {
 		                    	player.add(p);
 		                    	
 		                    	/*

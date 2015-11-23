@@ -23,8 +23,7 @@ public class Player {
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
 		
-		String name = input.readLine();
-		System.out.println("Hva heter playeren: " + name);
+		name = input.readLine();
 	}
 	
 	/**

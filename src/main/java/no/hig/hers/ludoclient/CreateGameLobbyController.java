@@ -33,9 +33,10 @@ public class CreateGameLobbyController {
 		playerList.getItems().add(name);
 	}
 	
-	public void joinedPlayer(String name) {
-		if (playerOne.equals(""))
-			playerOne.setText(name);
+	public void joinedPlayer(String name) {		
+		//playerOne.setText(name);
+		if (playerOne.getText() == null)
+			System.out.println("\nHype");
 		else if (playerTwo.equals(""))
 			playerTwo.setText(name);
 		else if (playerThree.equals(""))

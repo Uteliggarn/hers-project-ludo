@@ -96,7 +96,6 @@ public class GlobalServer extends JFrame{
 			server.setReuseAddress(true);
 			server.bind(new InetSocketAddress(12344));
 			
-			//server = new ServerSocket(1234); // Set up serverSocket
 			executorService = Executors.newCachedThreadPool();
 			//executorService = Executors.newFixedThreadPool(3);
 			
