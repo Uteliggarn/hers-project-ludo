@@ -44,19 +44,36 @@ public class GameHandler {
 		this.hostName = hostName;
 		this.caseNr = caseNr;
 		
+		System.out.println("\nHva caseNr er i konstruktoren: " + caseNr);
+		
 		connect();
 		createNewLobby();
 		
+		if (caseNr == 1)
+			addPlayersToList();
 		
 	}
 	
 	
 	private void addPlayersToList() {
-		for (int i=0; i<Main.playerList.size(); i++) {
-			if (!Main.playerList.get(i).equals(Main.userName))
-				createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
-		}
-	}
+		Thread t = new Thread(() -> {
+			while (true) {
+				//System.out.println("\nKjører jeg!");
+				for (int i=0; i<Main.playerList.size(); i++) {
+					if (!Main.playerList.get(i).equals(Main.userName))
+						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+				}
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(5000);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
+	}	
 	
 	public void connect() {
 		try {			
@@ -112,7 +129,7 @@ public class GameHandler {
 	                System.out.println("\nHva er msg: " + msg);
 	                
 	                if(msg != null && msg.startsWith("gamestart:")) {
-	                	int n = Integer.parseInt(msg.substring(11, 11));
+	                	int n = Integer.parseInt(msg.substring(10, 11));
 	                	
 	                	Tab tab = Main.gameTabs.getTabs().get(1);
 	            		FXMLLoader loader = new FXMLLoader();
@@ -126,16 +143,18 @@ public class GameHandler {
 	            		}	
 	                }
 	                else if(msg != null && msg.startsWith("diceValue:")) {
-	                	int diceVal = Integer.parseInt(msg.substring(11,11));
-	                	int player = Integer.parseInt(msg.substring(12,12));
-	                	int pawn = Integer.parseInt(msg.substring(13,13));
+	                	int diceVal = Integer.parseInt(msg.substring(10,11));
+	                	int player = Integer.parseInt(msg.substring(11,12));
+	                	int pawn = Integer.parseInt(msg.substring(12,13));
 	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 	                }
 	                else if (msg != null && msg.startsWith(JOIN)) {
+	                	System.out.println("\nHva er switchen min her: " + caseNr);
 	                	switch (caseNr) {
 	                	case 1: Platform.runLater(new Runnable() {
 	                				@Override
 	                				public void run() {
+	                					System.out.println("\nKom vi in JOIN createGame");
 	                					createGameLobbyController.joinedPlayer(msg.substring(5));
 	                				}
 	                			});
@@ -143,6 +162,7 @@ public class GameHandler {
 	                	case 2: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
+            							System.out.println("\nKom vi in JOIN hostGame");
             							hostGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
@@ -150,6 +170,7 @@ public class GameHandler {
 	                	case 3: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
+            							System.out.println("\nKom vi in JOIN playerGame");
             							playerGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
@@ -187,7 +208,7 @@ public class GameHandler {
 							tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 							createGameLobbyController = (CreateGameLobbyController) loader.getController();
 							
-							addPlayersToList();
+							//addPlayersToList();
 							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);

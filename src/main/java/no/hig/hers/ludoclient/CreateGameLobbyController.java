@@ -27,15 +27,21 @@ public class CreateGameLobbyController {
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
+		playerOne.setText("");
+		playerTwo.setText("");
+		playerThree.setText("");
+		playerFour.setText("");
 	}
 	
 	public void addNewPlayerToList(String name) {
-		playerList.getItems().add(name);
+		if (!playerList.getItems().contains(name))
+			playerList.getItems().add(name);
 	}
 	
-	public void joinedPlayer(String name) {		
-		//playerOne.setText(name);
-		if (playerOne.getText() == null)
+	public void joinedPlayer(String name) {
+		System.out.println("Hva er string name verdien: " + name);
+		System.out.println(playerOne.getText());
+		if (playerOne.getText() == "")
 			System.out.println("\nHype");
 		else if (playerTwo.equals(""))
 			playerTwo.setText(name);

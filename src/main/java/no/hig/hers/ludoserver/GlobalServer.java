@@ -135,6 +135,7 @@ public class GlobalServer extends JFrame{
 								if (msg != null && msg.equals(CLOGOUT)) {
 									i.remove();
 									que.remove(p.returnName());
+									gameList.remove(IDGK + p.returnName());
 									messages.put(LOGOUT + p.returnName());
 								}
 							} catch (IOException ioe) {
