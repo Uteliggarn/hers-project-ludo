@@ -28,7 +28,7 @@ public class TempGameClient extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		final SwingNode swingNode = new SwingNode();
+	
 		
 		Parent root = (Parent)FXMLLoader.load(getClass().getResource("GameClient.fxml"));
 		Scene scene = new Scene(root);

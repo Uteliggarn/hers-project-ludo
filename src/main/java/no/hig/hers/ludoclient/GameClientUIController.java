@@ -1,10 +1,10 @@
 package no.hig.hers.ludoclient;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 import javafx.event.ActionEvent;
@@ -23,14 +23,16 @@ import javafx.scene.paint.Color;
 public class GameClientUIController {
 	
 	LudoBoardFX board;
+	
+	
 	private int turnOwner = 2;
-	private int player = 1;
+	private int player;
 	private int pawnToMove = 0;
 	private int diceRolls = 0;
 	private boolean gameOver = false;
 	
-	 private int lastDiceValue;
-	 private int diceValue;
+	private int lastDiceValue;
+	private int diceValue;
 	
 	private Image die1;
     private Image die2;
@@ -38,6 +40,9 @@ public class GameClientUIController {
     private Image die4;
 	private Image die5;
 	private Image die6;
+	
+	public static BufferedWriter output;
+	public static BufferedReader input;
 	
 	@FXML
 	private BorderPane gameClientPane;
@@ -72,10 +77,10 @@ public class GameClientUIController {
 	
 	@FXML
 	public void initialize() {
-		try {
-			
-		board = new LudoBoardFX();
-		gameClientPane.setCenter(board);
+		
+		try {	
+			board = new LudoBoardFX();
+			gameClientPane.setCenter(board);
 		} catch (Exception e) {
 			System.out.println("Error while trying to add gameboard");
 		}
@@ -90,19 +95,24 @@ public class GameClientUIController {
 		die4 = new Image("dice4.png");
 		die5 = new Image("dice5.png");
 		die6 = new Image("dice6.png");
+
 		/*
 		dieRoller.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				rollDiceActionListener();
 			}
-		});*/
+		
+		});
+		*/
+		
 		pawn1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 0;
 				processRoll(diceValue);
+				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
-				dieTextLabel.setText("Throw the dice!");
+				dieTextLabel.setText("Roll dice");
 				dieLabel.setImage(null);
 				setPawnMovesFalse();
 				
@@ -113,9 +123,10 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 1;
 				processRoll(diceValue);
+				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
-				dieTextLabel.setText("Throw the dice!");
+				dieTextLabel.setText("Roll dice");
 				dieLabel.setImage(null);
 				setPawnMovesFalse();
 			}
@@ -125,9 +136,10 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 2;
 				processRoll(diceValue);
+				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
-				dieTextLabel.setText("Throw the dice!");
+				dieTextLabel.setText("Roll dice");
 				dieLabel.setImage(null);
 				setPawnMovesFalse();
 			}
@@ -138,6 +150,7 @@ public class GameClientUIController {
 				pawnToMove = 3;
 				try {
 				processRoll(diceValue);
+				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				} catch (Exception e) {
 					System.out.println("test");
 				}
@@ -178,17 +191,27 @@ public class GameClientUIController {
 					bluePlayer.setText("Blue player:");
 					greenPlayer.setText("Green player: Your Turn!");
 					break;
+					
 				}
+				setPawnMovesFalse();
+				setNotValid();
+				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				dieRoller.setDisable(false);
 				dieRoller.setText("Roll dice");
+		/*
+		pass.setStyle("-fx-background-color: red");
+		pass.getStylesheets().add("ludoBoard.css");
+		*/
+				
 			}
 		});
 		setPawnMovesFalse();
 	}
+	
+	
 	@FXML
 	private void rollDice(ActionEvent even) {
 //		if (yourTurn) {
-		
 		//dieRoller.setDisable(false);
 		rollDiceActionListener();
 	//	dieRoller.setEnabled(false);
@@ -258,11 +281,11 @@ public class GameClientUIController {
 				}
 			}
 				
-			if (turnOwner == player) {
+			//if (turnOwner == player) {
 				//sendText(throwDiceText + player);
-			} else {
+			//} else {
 			//	displayMessage("It's not your turn!\n");
-			}
+			//}
 			
 			switch (diceValue) {
 			case 1:
@@ -308,7 +331,7 @@ public class GameClientUIController {
 			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.greenPawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Green Player won");
+				//displayMessage("Green Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -327,7 +350,7 @@ public class GameClientUIController {
 				if (inGoal == 4) {
 						System.out.println(("You won"));
 						gameOver = true;
-						displayMessage("Red Player won");
+						//displayMessage("Red Player won");
 				}
 				pawnToMove = 0;
 			} catch (Exception e ) {
@@ -345,7 +368,7 @@ public class GameClientUIController {
 			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.yellowPawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Yellow Player won");
+				//displayMessage("Yellow Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -361,7 +384,7 @@ public class GameClientUIController {
 			board.bluePawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.bluePawnsInGoal.size();
 			if (inGoal == 4) {
-				displayMessage("Blue Player won");
+				//displayMessage("Blue Player won");
 				System.out.println(("You won"));
 				gameOver = true;
 			}
@@ -375,7 +398,7 @@ public class GameClientUIController {
 		}
 		setPawnMovesFalse();
 		dieRoller.setDisable(false);
-		dieRoller.setText("Throw the dice");
+		dieRoller.setText("Roll dice");
 		
 	}
 	
@@ -427,6 +450,27 @@ public class GameClientUIController {
 		}
 	}
 	
+	public void setPlayer(int n) {
+		player = n;
+	}
+	public void setConnetion(BufferedWriter write, BufferedReader read) {
+		output = write;
+		input = read;
+	}
+	
+	public void getDiceValue(int diceV, int playernr, int pawn) {
+		turnOwner = playernr;
+		pawnToMove = pawn;
+		processRoll(diceV);
+		diceValue = 0;
+		diceRolls = 0;
+		dieTextLabel.setText("Roll dice");
+		dieLabel.setImage(null);
+		setPawnMovesFalse();
+		turnOwner++;
+		if(turnOwner == player) dieRoller.setDisable(false);
+	}
+	
 	/**
      * Used to add messages to the message area in a thread safe manner
      * 
@@ -436,4 +480,26 @@ public class GameClientUIController {
     private void displayMessage(String text) {
         SwingUtilities.invokeLater(() -> chatArea.appendText(text));
     }
+    
+	/**
+	 * Send the given message to the client. Ensures that all messages
+	 * have a trailing newline and are flushed.
+	 * @param text the message to send
+	 * @throws IOException if an error occurs when sending the message
+	 */
+	public void sendText(String text) throws IOException {
+		output.write(text);
+		output.newLine();
+		output.flush();
+	}
+	
+	public void SendDiceValue(int diceVal, int playernr, int pawn) {
+		String tmp;
+		tmp = ("dicevalue:" + diceVal + playernr + pawn);
+		try {
+			sendText(tmp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

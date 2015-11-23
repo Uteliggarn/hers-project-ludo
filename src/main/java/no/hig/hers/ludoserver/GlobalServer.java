@@ -295,17 +295,7 @@ public class GlobalServer extends JFrame{
 					Socket s = server.accept();
 					Player p = new Player(s);
 					if (p.loginChecker(++serverPorts)) {
-						displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
-						try {
-							//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-							messages.put("GlobalJOIN:" + p.returnName());
-							
-							for (int t=0; t<player.size(); t++) {
-								p.sendText("GlobalJOIN:" + player.get(t).returnName());
-							}
-						} catch (InterruptedException ie) {
-							ie.printStackTrace();
-						}
+						
 						/*
 						for (int i=0; i<groupChatList.size(); i++) {
 							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
@@ -313,7 +303,21 @@ public class GlobalServer extends JFrame{
 						}*/
 						
 						synchronized (player) {
-							player.add(p);/*
+							player.add(p);
+							
+							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
+							try {
+								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+								messages.put("GlobalJOIN:" + p.returnName());
+								
+								for (int t=0; t<player.size(); t++) {
+									p.sendText("GlobalJOIN:" + player.get(t).returnName());
+								}
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}
+							/*
+							
 							Iterator<Player> i = player.iterator();
 							while (i.hasNext()) {
 								Player p1 = i.next();

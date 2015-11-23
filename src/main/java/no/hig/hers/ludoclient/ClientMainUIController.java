@@ -41,6 +41,11 @@ public class ClientMainUIController {
     private ListView<String> chatListView;
 
     @FXML
+	public void initialize() {
+		//chatTextArea.setMouseTransparent(false);
+		chatTabPane.setMouseTransparent(true);
+	}
+    @FXML
     void testCode(ActionEvent event) {
     	Tab newTab = new Tab("random");	
     	chatTabPane.getTabs().add(newTab);

@@ -33,6 +33,17 @@ public class CreateGameLobbyController {
 		playerList.getItems().add(name);
 	}
 	
+	public void joinedPlayer(String name) {
+		if (playerOne.equals(""))
+			playerOne.setText(name);
+		else if (playerTwo.equals(""))
+			playerTwo.setText(name);
+		else if (playerThree.equals(""))
+			playerThree.setText(name);
+		else if (playerFour.equals(""))
+			playerFour.setText(name);
+	}
+	
 	@FXML private void invitePlayer(ActionEvent e) {
 		String item = playerList.getSelectionModel().getSelectedItem();
 		Main.sendText(Main.INVITE + item);
@@ -46,8 +57,9 @@ public class CreateGameLobbyController {
 		
 		try {
 			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 }

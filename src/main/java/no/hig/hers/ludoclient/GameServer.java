@@ -22,18 +22,18 @@ public class GameServer {
 	private boolean shutdown = false;
 	
 	private final String LOGOUT = "LOGOUT:";
+	private final String JOIN = "JOIN:";
+	private int playerNr = 1; 
 	
 	public GameServer(int socket) {
 		
 		try {
-			
 			server = new ServerSocket();
 			server.setReuseAddress(true);
 			server.bind(new InetSocketAddress(socket));
 			
 			//executorService = Executors.newCachedThreadPool();
 			executorService = Executors.newFixedThreadPool(3);
-			
 			startLoginMonitor();
 			startMessageSender();
 			startMessageListener();
@@ -56,17 +56,18 @@ public class GameServer {
 		                        Player p = i.next();
 		                        try {
 			                        String msg = p.read();
-			                        if (msg != null && msg.startsWith("msg:")) {
-			                        	messages.put(p.returnName() + " < " + msg.substring(0, 4));
+			                        
+			                        //System.out.println("hva er msg " + msg);
+			                        
+			                        if(msg != null && msg.startsWith("gamestart:")) {
+			                        	String tmp;
+			                        	tmp = Integer.toString(p.returnPlayerNr());
+			                        	messages.put(msg + tmp);
 			                        }
-			                        else if (msg != null && msg.startsWith("name:")) {
-			                        	p.setName(msg.substring(0, 5));
+			                        if(msg != null && msg.startsWith("dicevalue:")) {
+			                        	messages.put(msg);
 			                        }
-			                        else if (msg != null) {	// >>>LOGOUT<<< received, remove the client
-			                            i.remove();
-			                            messages.put(LOGOUT+p.returnName());
-			                            messages.put(p.returnName()+" logged out");
-			                        }
+			                   
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
 		                            messages.put(LOGOUT+p.returnName());
@@ -126,11 +127,26 @@ public class GameServer {
 	            while (!shutdown) {
 	                try {
 	                    Socket s = server.accept();
+	                    
 	                    if (player.size() != 4) {
-		                    Player p = new Player(s);
-		                    
+	                    	
+		                    Player p = new Player(s, playerNr++);
 		                    synchronized (player) {
+		                    	
+		                    	try {
+									//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+		                    		for (int t=0; t<player.size(); t++) {
+										p.sendText(JOIN + player.get(t).returnName());
+									}
+		                    		
+									messages.put(JOIN + p.returnName());
+									
+								} catch (InterruptedException ie) {
+									ie.printStackTrace();
+								}
+		                    	
 		                    	player.add(p);
+		                    	
 		                    	/*
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
