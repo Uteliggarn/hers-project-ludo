@@ -18,11 +18,11 @@ import javafx.scene.control.Tab;
 
 public class GameHandler {
 	
-	private static int serverPort;
+	private int serverPort;
 	
-	static Socket connection;
-	public static BufferedWriter output;
-	public static BufferedReader input;
+	private Socket connection;
+	private BufferedWriter output;
+	private BufferedReader input;
 	private ExecutorService executorService;
 	
 	private GameClientUIController gameClientUIController;
@@ -31,81 +31,23 @@ public class GameHandler {
 	private HostGameLobbyController hostGameLobbyController;
 	private PlayerGameLobbyController playerGameLobbyController;
 	
-	private String tabName;
+	private String hostName;
+	private int caseNr = 0;
 	
-	public GameHandler(int serverPort, int type, String hostName) {
+	private final String JOIN = "JOIN:";
+	
+	public GameHandler(int serverPort, int caseNr, String hostName) {
+		
+		System.out.println("GameHandler serverPort: " + serverPort);
+		
 		this.serverPort = serverPort;
+		this.hostName = hostName;
+		this.caseNr = caseNr;
 		
-		switch (type) {
-			case 1: Platform.runLater(new Runnable() {	//Create
-	    				@Override
-	    				public void run() {
-							Tab tab = new Tab("Ludo");
-							tab.setId(Main.IDGK + Main.userName);
-							tabName = Main.IDGK + Main.userName;
-							FXMLLoader loader = new FXMLLoader();
-							try {
-								tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
-								createGameLobbyController = (CreateGameLobbyController) loader.getController();
-								
-								addPlayersToList();
-								
-								Main.gameTabs.getTabs().add(tab);
-								Main.gameTabs.getSelectionModel().select(tab);
-								
-							} catch (IOException ioe) {
-								ioe.printStackTrace();
-							}
-	    				}
-					});
-				break;
-			case 2: Platform.runLater(new Runnable() {	// Host
-						@Override
-						public void run() {
-							Tab tab = new Tab("Ludo");
-							tab.setId(Main.IDGK + Main.userName);
-							tabName = Main.IDGK + Main.userName;
-							FXMLLoader loader = new FXMLLoader();
-							try {
-								tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
-								hostGameLobbyController = (HostGameLobbyController) loader.getController();
-								connect();
-								hostGameLobbyController.setConnetion(output, input);
-								Main.gameTabs.getTabs().add(tab);
-								Main.gameTabs.getSelectionModel().select(tab);
-								
-							} catch (IOException ioe) {
-								ioe.printStackTrace();
-							}
-						}
-			});
-				break;
-			case 3: Platform.runLater(new Runnable() {	//Player
-						@Override
-						public void run() {
-							Tab tab = new Tab("Ludo");
-							tab.setId(hostName);
-							tabName = hostName;
-							FXMLLoader loader = new FXMLLoader();
-							try {
-								tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
-								playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
-								connect();
-								playerGameLobbyController.setConnetion(output, input);
-								Main.gameTabs.getTabs().add(tab);
-								Main.gameTabs.getSelectionModel().select(tab);
-								
-							} catch (IOException ioe) {
-								ioe.printStackTrace();
-							}
-						}
-			});
-				break;
-		}
+		connect();
+		createNewLobby();
 		
-		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		executorService.shutdown();	// Dreper tråden når klassen dør
+		
 	}
 	
 	
@@ -116,15 +58,14 @@ public class GameHandler {
 		}
 	}
 	
-	public static void connect() {
-		try {
+	public void connect() {
+		try {			
 			connection = new Socket("127.0.0.1", serverPort);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
-			
 			
 			sendText(Main.userName);
 			
@@ -145,7 +86,7 @@ public class GameHandler {
      * @param textToSend
      *            the message to send to the server
      */
-    public static void sendText(String textToSend) {
+    public void sendText(String textToSend) {
         try {
             output.write(textToSend);
             output.newLine();
@@ -155,13 +96,21 @@ public class GameHandler {
         }
     }
 	
-	private void processConnection() {
+    public void startProcessConnection() {
+    	executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+    	processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
+    	executorService.shutdown();	// Dreper tråden når klassen dør
+    }
+    
+	public void processConnection() {
 		executorService.execute(() -> {
 			while (true) {
 				try {
-					System.out.println("før");
+					
 	                String msg = input.readLine();
-	                System.out.println("etter");
+	                
+	                System.out.println("\nHva er msg: " + msg);
+	                
 	                if(msg != null && msg.startsWith("gamestart:")) {
 	                	int n = Integer.parseInt(msg.substring(11, 11));
 	                	
@@ -176,41 +125,127 @@ public class GameHandler {
 	            			e1.printStackTrace();
 	            		}	
 	                }
-	                if(msg != null && msg.startsWith("diceValue:")) {
+	                else if(msg != null && msg.startsWith("diceValue:")) {
 	                	int diceVal = Integer.parseInt(msg.substring(11,11));
 	                	int player = Integer.parseInt(msg.substring(12,12));
 	                	int pawn = Integer.parseInt(msg.substring(13,13));
 	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                }
+	                else if (msg != null && msg.startsWith(JOIN)) {
+	                	switch (caseNr) {
+	                	case 1: Platform.runLater(new Runnable() {
+	                				@Override
+	                				public void run() {
+	                					createGameLobbyController.joinedPlayer(msg.substring(5));
+	                				}
+	                			});
+	                		break;
+	                	case 2: Platform.runLater(new Runnable() {
+            						@Override
+            						public void run() {
+            							hostGameLobbyController.joinedPlayer(msg.substring(5));
+            						}
+            					});
+	                		break;
+	                	case 3: Platform.runLater(new Runnable() {
+            						@Override
+            						public void run() {
+            							playerGameLobbyController.joinedPlayer(msg.substring(5));
+            						}
+            					});
+	                		break;
+	                	}
 	                }
                     	        	                
 	                
 	            } catch (IOException ioe) {
 	                ioe.printStackTrace();
 	            }
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(250);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
+				}
 	            
 			}
 		});
 	}
 	
-	public void newHostGameLobby() {
-		try {
-			Tab tab = new Tab("Ludo");
-			
-			FXMLLoader loader = new FXMLLoader();
-			
-			tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
-			
-			//HostGameLobbyController hostGameLobbyController = (HostGameLobbyController) loader.getController();
-			
-			//hostGameLobbyController.getServerPort(Main.serverPort);
-			
-			tab.setId("tab1");
-			
-			Main.gameTabs.getTabs().add(tab);
-			Main.gameTabs.getSelectionModel().select(tab);
-			
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+
+	public void createNewLobby() {
+		switch (caseNr) {
+		case 1: Platform.runLater(new Runnable() {	//Create
+    				@Override
+    				public void run() {
+						Tab tab = new Tab("Ludo");
+						tab.setId(Main.IDGK + Main.userName);
+					
+						FXMLLoader loader = new FXMLLoader();
+						try {
+							tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
+							createGameLobbyController = (CreateGameLobbyController) loader.getController();
+							
+							addPlayersToList();
+							
+							Main.gameTabs.getTabs().add(tab);
+							Main.gameTabs.getSelectionModel().select(tab);
+							
+							startProcessConnection();				
+							
+						} catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+    				}
+				});
+			break;
+		case 2: Platform.runLater(new Runnable() {	// Host
+					@Override
+					public void run() {
+						Tab tab = new Tab("Ludo");
+						tab.setId(Main.IDGK + Main.userName);
+						
+						FXMLLoader loader = new FXMLLoader();
+						try {
+							tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
+							hostGameLobbyController = (HostGameLobbyController) loader.getController();
+							
+							hostGameLobbyController.setConnetion(output, input);
+							Main.gameTabs.getTabs().add(tab);
+							Main.gameTabs.getSelectionModel().select(tab);
+							
+							startProcessConnection();
+							
+						} catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+					}
+		});
+			break;
+		case 3: Platform.runLater(new Runnable() {	//Player
+					@Override
+					public void run() {
+						Tab tab = new Tab("Ludo");
+						tab.setId(hostName);
+						
+						FXMLLoader loader = new FXMLLoader();
+						try {
+							tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
+							playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
+							
+							//playerGameLobbyController.setConnetion(output, input);
+							Main.gameTabs.getTabs().add(tab);
+							Main.gameTabs.getSelectionModel().select(tab);
+							
+							startProcessConnection();
+							
+						} catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+					}
+		});
+			break;
 		}
 	}
 
@@ -218,6 +253,17 @@ public class GameHandler {
 		if (input.ready())
 			return input.readLine();
 		return null;
+	}
+	
+	public void close() {
+		try {
+			executorService.shutdownNow();
+			output.close();
+			input.close();
+			connection.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} 
 	}
 	
 }

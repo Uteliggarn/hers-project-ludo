@@ -21,6 +21,8 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
+	private final String LOGOUT = "LOGOUT:";
+	private final String JOIN = "JOIN:";
 	private int playerNr = 1; 
 	
 	public GameServer(int socket) {
@@ -55,32 +57,20 @@ public class GameServer {
 		                        try {
 			                        String msg = p.read();
 			                        
-			                        System.out.println("hva er msg " + msg);
+			                        //System.out.println("hva er msg " + msg);
 			                        
 			                        if(msg != null && msg.startsWith("gamestart:")) {
 			                        	String tmp;
 			                        	tmp = Integer.toString(p.returnPlayerNr());
-			                        	System.out.println("hva er return player: " + tmp);
 			                        	messages.put(msg + tmp);
 			                        }
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
 			                        }
-			                        	
-			                        if (msg != null && msg.startsWith("msg:")) {
-			                        	messages.put(p.returnName() + " < " + msg.substring(0, 4));
-			                        }
-			                        else if (msg != null && msg.startsWith("name:")) {
-			                        	p.setName(msg.substring(0, 5));
-			                        }
-			                        else if (msg != null) {	// >>>LOGOUT<<< received, remove the client
-			                            i.remove();
-			                            messages.put("LOGOUT:"+p.returnName());
-			                            messages.put(p.returnName()+" logged out");
-			                        }
+			                   
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                            messages.put("LOGOUT:"+p.returnName());
+		                            messages.put(LOGOUT+p.returnName());
 		                            messages.put(p.returnName()+" got lost in hyperspace");
 		                        }
 		                    }
@@ -113,7 +103,7 @@ public class GameServer {
 		                        	p.sendText(message);
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                        	messages.add("LOGOUT:"+p.returnName());
+		                        	messages.add(LOGOUT+p.returnName());
 		                        	messages.add(p.returnName()+" got lost in hyperspace");
 		                        }
 		                    }
@@ -137,10 +127,24 @@ public class GameServer {
 	            while (!shutdown) {
 	                try {
 	                    Socket s = server.accept();
-	                    System.out.println("players, bør være 2");
+	                    
 	                    if (player.size() != 4) {
-	                    	System.out.println("server");
+	                    	
 		                    Player p = new Player(s, playerNr++);
+		                    
+		                    try {
+								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+	                    		for (int t=0; t<player.size(); t++) {
+	                    			System.out.println("\nKom vel ikke in her");
+									p.sendText(JOIN + player.get(t).returnName());
+								}
+	                    		
+								messages.put(JOIN + p.returnName());
+								
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}
+		                    
 		                    synchronized (player) {
 		                    	player.add(p);
 		                    	
