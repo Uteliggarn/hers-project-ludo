@@ -39,15 +39,13 @@ public class CreateGameLobbyController {
 	}
 	
 	public void joinedPlayer(String name) {
-		System.out.println("Hva er string name verdien: " + name);
-		System.out.println(playerOne.getText());
 		if (playerOne.getText() == "")
-			System.out.println("\nHype");
-		else if (playerTwo.equals(""))
+			playerOne.setText(name);
+		else if (playerTwo.getText() == "")
 			playerTwo.setText(name);
-		else if (playerThree.equals(""))
+		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.equals(""))
+		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
 	

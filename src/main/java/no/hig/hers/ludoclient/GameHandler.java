@@ -38,13 +38,9 @@ public class GameHandler {
 	
 	public GameHandler(int serverPort, int caseNr, String hostName) {
 		
-		System.out.println("GameHandler serverPort: " + serverPort);
-		
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
-		
-		System.out.println("\nHva caseNr er i konstruktoren: " + caseNr);
 		
 		connect();
 		createNewLobby();
@@ -58,7 +54,7 @@ public class GameHandler {
 	private void addPlayersToList() {
 		Thread t = new Thread(() -> {
 			while (true) {
-				//System.out.println("\nKjører jeg!");
+				
 				for (int i=0; i<Main.playerList.size(); i++) {
 					if (!Main.playerList.get(i).equals(Main.userName))
 						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
@@ -208,8 +204,6 @@ public class GameHandler {
 							tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 							createGameLobbyController = (CreateGameLobbyController) loader.getController();
 							
-							//addPlayersToList();
-							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
@@ -255,7 +249,6 @@ public class GameHandler {
 							tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 							playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
 							
-							//playerGameLobbyController.setConnetion(output, input);
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
@@ -278,7 +271,6 @@ public class GameHandler {
 	
 	public void close() {
 		try {
-			executorService.shutdownNow();
 			output.close();
 			input.close();
 			connection.close();
