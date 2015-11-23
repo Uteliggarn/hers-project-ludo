@@ -137,10 +137,12 @@ public class GameServer {
 	                    	
 		                    Player p = new Player(s, playerNr);
 		                    playerNr++;
+		                    
+		                    /*
+>>>>>>> refs/remotes/origin/master
 		                    try {
 								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
 	                    		for (int t=0; t<player.size(); t++) {
-	                    			System.out.println("\nKom vel ikke in her");
 									p.sendText(JOIN + player.get(t).returnName());
 								}
 	                    		
@@ -149,22 +151,21 @@ public class GameServer {
 							} catch (InterruptedException ie) {
 								ie.printStackTrace();
 							}
-		                    
+		                    */
 		                    synchronized (player) {
-		                    	player.add(p);
+		                    	player.add(p);     	
 		                    	
-		                    	/*
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
 			                        Player p1 = i.next();
 			                        if (p != p1)
 			                        	try {
-			                        		p.sendText("LOGIN:"+p1.returnName());
+			                        		p.sendText(JOIN + p1.returnName());
 			                        	} catch (IOException ioelocal) {
 			                        		// Lost connection, but doesn't bother to handle it here
 			                        	}
 			                    }
-			                    */
+			                    
 		                    }
 	                    }
 	                } catch (IOException ioe) {

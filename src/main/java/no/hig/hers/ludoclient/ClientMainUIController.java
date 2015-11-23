@@ -54,10 +54,8 @@ public class ClientMainUIController {
     @FXML
     void newGameButtonPressed(ActionEvent event) {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-    		System.out.println("\nHva er size: " + Main.gameTabs.getTabs().size());
     		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
     			++count;
-    			System.out.println("\ntab id: " + Main.gameTabs.getTabs().get(i).getId());
     		}
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
     			Main.sendText(Main.CREATEGAME);

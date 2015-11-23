@@ -27,16 +27,20 @@ public class HostGameLobbyController {
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
+		playerOne.setText("");
+		playerTwo.setText("");
+		playerThree.setText("");
+		playerFour.setText("");
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerOne.equals(""))
+		if (playerOne.getText() == "")
 			playerOne.setText(name);
-		else if (playerTwo.equals(""))
+		else if (playerTwo.getText() == "")
 			playerTwo.setText(name);
-		else if (playerThree.equals(""))
+		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.equals(""))
+		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
 	
