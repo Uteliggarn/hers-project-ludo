@@ -12,25 +12,22 @@ public class PlayerGameLobbyController {
 	@FXML private Label playerTwo;
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
-
-	/*
-	private static BufferedReader input;
-	private static BufferedWriter output;
 	
-	public void setConnetion(BufferedWriter write, BufferedReader read) {
-		output = write;
-		input = read;
+	public void initialize() {
+		playerOne.setText("");
+		playerTwo.setText("");
+		playerThree.setText("");
+		playerFour.setText("");
 	}
-	*/
 	
 	public void joinedPlayer(String name) {
-		if (playerOne.equals(""))
+		if (playerOne.getText() == "")
 			playerOne.setText(name);
-		else if (playerTwo.equals(""))
+		else if (playerTwo.getText() == "")
 			playerTwo.setText(name);
-		else if (playerThree.equals(""))
+		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.equals(""))
+		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
 }
