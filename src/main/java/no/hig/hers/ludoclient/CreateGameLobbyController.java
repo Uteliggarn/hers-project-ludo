@@ -33,6 +33,18 @@ public class CreateGameLobbyController {
 		playerList.getItems().add(name);
 	}
 	
+	public void joinedPlayer(String name) {		
+		//playerOne.setText(name);
+		if (playerOne.getText() == null)
+			System.out.println("\nHype");
+		else if (playerTwo.equals(""))
+			playerTwo.setText(name);
+		else if (playerThree.equals(""))
+			playerThree.setText(name);
+		else if (playerFour.equals(""))
+			playerFour.setText(name);
+	}
+	
 	@FXML private void invitePlayer(ActionEvent e) {
 		String item = playerList.getSelectionModel().getSelectedItem();
 		Main.sendText(Main.INVITE + item);

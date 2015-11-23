@@ -29,8 +29,15 @@ public class HostGameLobbyController {
 		startGameButton.setDisable(false);
 	}
 	
-	public void test(String name) {
-		playerOne.setText(name);
+	public void joinedPlayer(String name) {
+		if (playerOne.equals(""))
+			playerOne.setText(name);
+		else if (playerTwo.equals(""))
+			playerTwo.setText(name);
+		else if (playerThree.equals(""))
+			playerThree.setText(name);
+		else if (playerFour.equals(""))
+			playerFour.setText(name);
 	}
 	
 	
@@ -52,6 +59,7 @@ public class HostGameLobbyController {
 	public void getServerPort(int serverPort) {
 		this.serverPort = serverPort;
 	}
+
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
 		output = write;
 		input = read;
@@ -74,4 +82,5 @@ public class HostGameLobbyController {
         	Main.showAlert("Error", "Unable to send message to server");
         }
     }
+
 }

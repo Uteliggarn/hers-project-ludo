@@ -13,6 +13,7 @@ public class PlayerGameLobbyController {
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
 
+	/*
 	private static BufferedReader input;
 	private static BufferedWriter output;
 	
@@ -20,7 +21,18 @@ public class PlayerGameLobbyController {
 		output = write;
 		input = read;
 	}
-
+	*/
+	
+	public void joinedPlayer(String name) {
+		if (playerOne.equals(""))
+			playerOne.setText(name);
+		else if (playerTwo.equals(""))
+			playerTwo.setText(name);
+		else if (playerThree.equals(""))
+			playerThree.setText(name);
+		else if (playerFour.equals(""))
+			playerFour.setText(name);
+	}
 }
 
 

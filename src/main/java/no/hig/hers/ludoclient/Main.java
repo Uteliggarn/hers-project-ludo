@@ -221,14 +221,7 @@ public class Main extends Application {
 	}
 	
 	public void close() {
-		try {
-			output.close();
-			input.close();
-			connection.close();
-			gameServer.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} 
+		System.exit(0);
 	}
 	/**
 	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
@@ -240,17 +233,19 @@ public class Main extends Application {
 				try {
 	                message = Main.input.readLine();
 	
-	                if (message.equals("HOST")) {
+	                if (message.equals(CREATEGAME)) {
+	                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
+	                	gameHandler.add(gh);
+	                }
+	                else if (message.equals(HOST)) {
 	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
 	                	gameHandler.add(gh);
 	               
 	                }
-	                else if (message.equals(CREATEGAME)) {
-	                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
-	                	gameHandler.add(gh);
-	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
+	                	System.out.println("\nFikk vi riktig port: " + port);	                	
+	                	System.out.println("\nHva er msg: " + Main.IDGK + message.substring(5));	                	
 	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
 	                	gameHandler.add(gh);
 	                }
