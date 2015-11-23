@@ -15,12 +15,15 @@ public class Player {
 	private BufferedWriter output;
 	
 	private String name;
+	private int playerNr;
 
-	public Player(Socket connection) throws IOException {
+	public Player(Socket connection, int nr) throws IOException {
 		this.connection = connection;
-		
+		playerNr = nr;
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
+		
+		name = input.readLine();
 	}
 	
 	/**
@@ -62,4 +65,9 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int returnPlayerNr() {
+		return playerNr;
+	}
+	
 }

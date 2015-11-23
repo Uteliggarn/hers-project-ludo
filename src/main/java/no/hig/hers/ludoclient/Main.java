@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,8 +40,10 @@ public class Main extends Application {
 	
 	static boolean connected = false;
 	
-	private static ChatHandler cHandler; 
+	static ChatHandler cHandler; 
 	private static GameServer gameServer;
+	private static ArrayList<GameHandler> gameHandler = new ArrayList<>();
+	public static ArrayList<String> playerList = new ArrayList<>();
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -52,6 +56,7 @@ public class Main extends Application {
 	
 	private static TabPane chatTabs;
 	public static TabPane gameTabs;
+	private static ClientMainUIController mainController;
 	
 	static ExecutorService executorService;
 	private static String message;
@@ -59,6 +64,14 @@ public class Main extends Application {
 	final static String JOINCHAT = "JOIN:";
 	final static String ERRORCHAT = "ERRORCHAT";
 	final static String LEAVECHAT = "OUT:";
+	final static String CREATEGAME = "CREATEGAME";
+	final static String IDGK = "IDGK";	// Unique name
+	final static String INVITE = "invite:";	// Unique name
+	final static String HOST = "HOST";	// Unique name
+	final static String QUEUE = "queue";	// Unique name
+	final static String JOIN = "JOIN:";	// Unique name
+	
+	
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -76,7 +89,6 @@ public class Main extends Application {
 			currentStage = primaryStage;
 			
 			connect();
-			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -108,7 +120,6 @@ public class Main extends Application {
 
 	private void setUpScenes() {
 		try {
-			
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("ClientLoginUI.fxml"));
 			loginScene = new Scene(root);
 			loginScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -117,9 +128,12 @@ public class Main extends Application {
 			registerScene = new Scene(root);
 			registerScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
-			StackPane mainRoot = (StackPane)FXMLLoader.load(getClass().getResource("ClientMainUI.fxml"));
+			FXMLLoader loader = new FXMLLoader();
+			StackPane mainRoot = (StackPane)loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
+			mainController = (ClientMainUIController) loader.getController();
 			
 			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
@@ -146,6 +160,7 @@ public class Main extends Application {
 	public static void startGameServer() {
 		gameServer = new GameServer(serverPort);
 	}
+	
 	/**
 	 * Method for showing alerts to the user.
 	 * Just for simple error messages.
@@ -206,13 +221,7 @@ public class Main extends Application {
 	}
 	
 	public void close() {
-		try {
-			output.close();
-			input.close();
-			connection.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} 
+		System.exit(0);
 	}
 	/**
 	 * Kopiert mer eller mindre fra den vi hadde på forrige prosjekt.
@@ -224,18 +233,26 @@ public class Main extends Application {
 				try {
 	                message = Main.input.readLine();
 	
-	                if (message.equals("HOST")) {
-	                	//cHandler.newHostGameLobby();
+	                if (message.equals(CREATEGAME)) {
+	                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
+	                	gameHandler.add(gh);
 	                }
-	                else if (message.equals("JOIN")) {
-	                	int port = Main.input.read();
-	                	//GameLobby gameLobby = new GameLobby(port);	                	
+	                else if (message.equals(HOST)) {
+	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
+	                	gameHandler.add(gh);
+	               
+	                }
+	                else if (message.startsWith(JOIN)) {
+	                	int port = Integer.valueOf(Main.input.readLine());
+	                	System.out.println("\nFikk vi riktig port: " + port);	                	
+	                	System.out.println("\nHva er msg: " + Main.IDGK + message.substring(5));	                	
+	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+	                	gameHandler.add(gh);
 	                }
 	                
 	                if (!message.equals(null)) {
                 			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
-                				cHandler.addNewChat(message.substring(13));
-                				sendText(message.substring(13) + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+                				mainController.addChatToList(message.substring(13));
         	                }
         	                else if (message.equals(ERRORCHAT)) {	// Forteller at chaten finnes allerede
         	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
@@ -256,4 +273,13 @@ public class Main extends Application {
 			}
 		});
 	}
+	
+	/*
+	 Platform.runLater(new Runnable() {
+	        @Override
+	                		public void run() {
+	                				
+	                		}
+	                	});
+	 */
 }
