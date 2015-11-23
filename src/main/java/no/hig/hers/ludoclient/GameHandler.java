@@ -129,7 +129,6 @@ public class GameHandler {
 	                		@Override
             				public void run() {
 	                			int n = Integer.parseInt(msg.substring(10, 11));
-	                			String tmpNavn = msg.substring(11, msg.length());
 	                							
 	                			Tab tab = Main.gameTabs.getTabs().get(1);
 	                			FXMLLoader loader = new FXMLLoader();
@@ -139,12 +138,22 @@ public class GameHandler {
 	                				gameClientUIController = loader.getController();
 	                				gameClientUIController.setConnetion(output, input);
 	                				gameClientUIController.setPlayer(n);
-	                				gameClientUIController.setPlayerName(tmpNavn);
 	                				
 	                			} catch (IOException e1) {
 		            			// TODO Auto-generated catch block
 		            			e1.printStackTrace();
 	                			}	
+	                		}
+	                	});
+	                }
+	                else if(msg != null && msg.startsWith("gamename:")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int n = Integer.parseInt(msg.substring(9, 10));
+	                			System.out.println("playernamenr " + n);
+	                			String tmpNavn = msg.substring(10, msg.length());
+	                			gameClientUIController.setPlayerName(n, tmpNavn);
 	                		}
 	                	});
 	                }
@@ -159,6 +168,14 @@ public class GameHandler {
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 	                		}
 	                	});
+	                }
+	                else if(msg != null && msg.startsWith("gameover")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                		gameClientUIController.gameover();	
+	                		}
+	                	});	
 	                }
 	                else if (msg != null && msg.startsWith(JOIN)) {
 	                	System.out.println("\nHva er switchen min her: " + caseNr);

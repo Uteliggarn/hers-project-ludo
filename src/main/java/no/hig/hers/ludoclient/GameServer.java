@@ -66,13 +66,20 @@ public class GameServer {
 			                        	//messages.put(msg + tmp);
 			                        	for (int t=0; t<player.size(); t++) {
 			                    			System.out.println("\n" + t);
-			                    			player.get(t).sendText(msg + (t+1) + player.get(t).returnName());
+			                    			player.get(t).sendText(msg + (t+1));
 										}
+			                        	for(int t=0; t < player.size(); t++) {
+			                        		String tmp;
+			                        		tmp = "gamename:" + (t+1) + player.get(t).returnName(); 
+			                        		messages.put(tmp);
+			                        	}
 			                        }
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
 			                        }
-			                   
+			                        if(msg != null && msg.startsWith("gameover")) {
+			                        	messages.put(msg);
+			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
 		                            messages.put(LOGOUT+p.returnName());

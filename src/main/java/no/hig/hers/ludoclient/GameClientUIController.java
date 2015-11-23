@@ -24,15 +24,17 @@ public class GameClientUIController {
 	
 	LudoBoardFX board;
 	
-	
 	private int turnOwner = 2;
 	private int player;
 	private int pawnToMove = 0;
 	private int diceRolls = 0;
 	private boolean gameOver = false;
-	private String playerName;
+	private int gameStatus = 0;
+	private String playerName1;
+	private String playerName2;
+	private String playerName3;
+	private String playerName4;
 	
-	private int lastDiceValue;
 	private int diceValue;
 	
 	private Image die1;
@@ -59,6 +61,8 @@ public class GameClientUIController {
 	private Label yellowPlayer;
 	@FXML
 	private Label greenPlayer;
+	@FXML
+	private Label nameLabel;
 	@FXML
 	private Button pawn1;
 	@FXML
@@ -109,7 +113,7 @@ public class GameClientUIController {
 		pawn1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 0;
-				processRoll(diceValue);
+				//processRoll(diceValue);
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
@@ -123,7 +127,7 @@ public class GameClientUIController {
 		pawn2.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 1;
-				processRoll(diceValue);
+				//processRoll(diceValue);
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
@@ -136,7 +140,7 @@ public class GameClientUIController {
 		pawn3.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 2;
-				processRoll(diceValue);
+				//processRoll(diceValue);
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
@@ -150,8 +154,8 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 3;
 				try {
-				processRoll(diceValue);
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+					//processRoll(diceValue);
+					SendDiceValue(diceValue, turnOwner, pawnToMove);
 				} catch (Exception e) {
 					System.out.println("test");
 				}
@@ -168,9 +172,9 @@ public class GameClientUIController {
 				diceValue = 0;
 				diceRolls = 0;
 				
-				dieTextLabel.setText("Roll dice");
+				dieTextLabel.setText("");
 				dieLabel.setImage(null);
-				
+				/*
 				switch(turnOwner) {
 				case 1:	//Green
 					turnOwner ++;
@@ -194,11 +198,14 @@ public class GameClientUIController {
 					break;
 					
 				}
+				*/
 				setPawnMovesFalse();
 				setNotValid();
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				/*
 				dieRoller.setDisable(false);
 				dieRoller.setText("Roll dice");
+				*/
 		/*
 		pass.setStyle("-fx-background-color: red");
 		pass.getStylesheets().add("ludoBoard.css");
@@ -284,12 +291,6 @@ public class GameClientUIController {
 				}
 			}
 				
-			//if (turnOwner == player) {
-				//sendText(throwDiceText + player);
-			//} else {
-			//	displayMessage("It's not your turn!\n");
-			//}
-			
 			switch (diceValue) {
 			case 1:
 				dieTextLabel.setText("You got a: ");
@@ -316,11 +317,6 @@ public class GameClientUIController {
 				dieLabel.setImage(die6);
 				break;
 			}	
-			
-			if(gameOver) {
-				dieRoller.setDisable(true);
-				dieRoller.setText("GG");
-			}
 		}
 		else {
 			dieRoller.setText("Pass");
@@ -328,8 +324,99 @@ public class GameClientUIController {
 		}
 	}
 	
-	private void processRoll(int diceVal) {
+	private void processRoll() {
 		int inGoal;
+		if ( turnOwner == 1 && diceValue !=0) {	//Green player
+			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			inGoal = board.greenPawnsInGoal.size();
+			if (inGoal == 4) {
+				gameStatus = 1;
+				sendGameStatus();
+				System.out.println(("You won"));
+			}
+			if(diceValue !=6) {
+				turnOwner ++;
+				greenPlayer.setText("Green: " + playerName1);
+				redPlayer.setText("Red: " + playerName2 + "-Roll");
+			}
+			setNotValid();
+			board.makePawns();
+			}
+		else if(turnOwner == 2 && diceValue !=0) { //Red player
+			try {
+				board.redPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+				inGoal = board.redPawnsInGoal.size();
+				if (inGoal == 4) {
+					gameStatus = 1;
+					sendGameStatus();
+					System.out.println(("You won"));
+				}
+				pawnToMove = 0;
+			} catch (Exception e ) {
+				System.out.println("Goalerror");
+			}
+			if(diceValue !=6) {
+				turnOwner ++;
+				redPlayer.setText("Red: " + playerName2);
+				yellowPlayer.setText("Yellow: " + playerName3 + "-Roll");
+			}
+			setNotValid();
+			board.makePawns();
+		}
+		else if (turnOwner == 3 && diceValue !=0) { //Yellow player
+			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			inGoal = board.yellowPawnsInGoal.size();
+			if (inGoal == 4) {
+				gameStatus = 1;
+				sendGameStatus();
+				System.out.println(("You won"));
+			}
+			if(diceValue !=6) {
+				turnOwner ++;
+				yellowPlayer.setText("Yellow: " + playerName3);
+				bluePlayer.setText("Blue: " + playerName4 + "-Roll");
+			}
+			setNotValid();
+			board.makePawns();
+		}
+		else if (turnOwner == 4 && diceValue !=0) { //Blue player
+			board.bluePawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			inGoal = board.bluePawnsInGoal.size();
+			if (inGoal == 4) {
+				gameStatus = 1;
+				sendGameStatus();
+				System.out.println(("You won"));
+			}
+			if(diceValue !=6) {
+			bluePlayer.setText("Blue: " + playerName4);
+			greenPlayer.setText("Green: " + playerName1 + "-Roll");
+			turnOwner = 1;
+			}
+			setNotValid();
+			board.makePawns();
+		}
+		
+		if(diceValue == 0) {
+			passChangeTurnOwner();
+		};
+		
+		diceValue = 0;
+		diceRolls = 0;
+		setPawnMovesFalse();
+		
+		if(player == turnOwner) {
+			setValidPass();
+			dieRoller.setDisable(false);
+			dieRoller.setText("Roll");
+			dieTextLabel.setText("Your turn");
+		} else {
+			dieRoller.setDisable(true);
+			dieRoller.setText("Wait");
+			dieTextLabel.setText("Wait for your turn");
+			setNotValidPass();
+		}
+		
+		/*
 		if ( turnOwner == 1 && diceValue !=0) {	//Green player
 			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.greenPawnsInGoal.size();
@@ -339,9 +426,9 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceVal !=6) {
-			turnOwner ++;
-			greenPlayer.setText("Green player:");
-			redPlayer.setText("Red player: Your turn!");
+				turnOwner ++;
+				greenPlayer.setText("Green player:");
+				redPlayer.setText("Red player: Your turn!");
 			}
 			setNotValid();
 			board.makePawns();
@@ -360,9 +447,9 @@ public class GameClientUIController {
 				System.out.println("Goalerror");
 			}
 			if(diceVal !=6) {
-			turnOwner ++;
-			redPlayer.setText("Red player:");
-			yellowPlayer.setText("Yellow player: Your Turn!");
+				turnOwner ++;
+				redPlayer.setText("Red player:");
+				yellowPlayer.setText("Yellow player: Your Turn!");
 			}
 			setNotValid();
 			board.makePawns();
@@ -377,8 +464,8 @@ public class GameClientUIController {
 			}
 			if(diceVal !=6) {
 			turnOwner ++;
-			yellowPlayer.setText("Yellow player:");
-			bluePlayer.setText("Blue player: Your turn!");
+				yellowPlayer.setText("Yellow player:");
+				bluePlayer.setText("Blue player: Your turn!");
 			}
 			setNotValid();
 			board.makePawns();
@@ -399,10 +486,7 @@ public class GameClientUIController {
 			setNotValid();
 			board.makePawns();
 		}
-		setPawnMovesFalse();
-		dieRoller.setDisable(false);
-		dieRoller.setText("Roll dice");
-		
+		*/
 	}
 	
 	public void setPawnMovesFalse() {
@@ -465,26 +549,43 @@ public class GameClientUIController {
 			setValidPass();
 			dieRoller.setDisable(false);
 			dieRoller.setText("Roll");
-		}
+			dieTextLabel.setText("Your turn");
+		} else dieTextLabel.setText("Wait for your turn");
 		
 	}
 	
-	public void setPlayerName(String name) {
-		playerName = name;
-		switch (player) {
+	public void setPlayerName(int pnr, String name) {
+		switch (pnr) {
 			case 1:
-				greenPlayer.setText("Green: " + playerName);
+				playerName1 = name;
+				greenPlayer.setText("Green: " + playerName1);
 				break;
 			case 2:
-				redPlayer.setText("Red: " + playerName);
+				playerName2 = name;
+				redPlayer.setText("Red: " + playerName2 + "-Roll");
 				break;
 			case 3: 
-				yellowPlayer.setText("Yellow: " + playerName);
+				playerName3 = name;
+				yellowPlayer.setText("Yellow: " + playerName3);
 				break;
 			case 4:
-				bluePlayer.setText("Blue: " + playerName);
+				playerName4 = name;
+				bluePlayer.setText("Blue: " + playerName4);
 				break;
-		
+		}
+		switch (player) {
+			case 1:
+				nameLabel.setText("You are: " + playerName1);
+				break;
+			case 2:
+				nameLabel.setText("You are: " + playerName2);
+				break;
+			case 3:
+				nameLabel.setText("You are: " + playerName3);
+				break;
+			case 4:
+				nameLabel.setText("You are: " + playerName4);
+				break;
 		}
 	}
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
@@ -496,28 +597,18 @@ public class GameClientUIController {
 		turnOwner = playernr;
 		pawnToMove = pawn;
 		diceValue = diceV;
-		if(diceValue == 0) {
-			passChangeTurnOwner();
-		} else processRoll(diceV);
-		diceValue = 0;
-		diceRolls = 0;
-		setPawnMovesFalse();
-		if(turnOwner == player) {
-			dieRoller.setDisable(false);
-			setValidPass();
+		processRoll();
+		if(gameOver) {
+			setNotValidPass();
+			setPawnMovesFalse();
+			dieRoller.setDisable(true);
+			dieRoller.setText("GG");
+			if(gameStatus == 1) 
+			dieTextLabel.setText("You won");
+			else dieTextLabel.setText("Better luck next time");
 		}
 	}
 	
-	/**
-     * Used to add messages to the message area in a thread safe manner
-     * 
-     * @param text
-     *            the text to be added
-     */
-    private void displayMessage(String text) {
-        SwingUtilities.invokeLater(() -> chatArea.appendText(text));
-    }
-    
 	/**
 	 * Send the given message to the client. Ensures that all messages
 	 * have a trailing newline and are flushed.
@@ -539,30 +630,47 @@ public class GameClientUIController {
 			e.printStackTrace();
 		}
 	}
+	
+	public void sendGameStatus() {
+		String tmp;
+		tmp =("gamewon");
+		Main.sendText(tmp);
+		
+		tmp = "gameover";
+		try {
+			sendText(tmp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void passChangeTurnOwner() {
 		
 		switch(turnOwner) {
 		case 1:	//Green
 			turnOwner ++;
-			greenPlayer.setText("Green:");
-			redPlayer.setText("Red: Your turn!");
+			greenPlayer.setText("Green: " + playerName1);
+			redPlayer.setText("Red: " + playerName2 + "- Roll");
 			break;
 		case 2:	//Red
 			turnOwner ++;
-			redPlayer.setText("Red:");
-			yellowPlayer.setText("Yellow: Your Turn!");
+			redPlayer.setText("Red: " + playerName2);
+			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
 			break;
 		case 3: //Yellow
 			turnOwner ++;
-			yellowPlayer.setText("Yellow:");
-			bluePlayer.setText("Blue: Your turn!");
+			yellowPlayer.setText("Yellow: " + playerName3);
+			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
 			break;
 		case 4: //Blue
 			turnOwner = 1;
-			bluePlayer.setText("Blue:");
-			greenPlayer.setText("Green: Your Turn!");
+			bluePlayer.setText("Blue: " + playerName4);
+			greenPlayer.setText("Green: " + playerName1 + "- Roll");
 			break;
 			
 		}
+	}
+	public void gameover() {
+		gameOver = true;
 	}
 }
