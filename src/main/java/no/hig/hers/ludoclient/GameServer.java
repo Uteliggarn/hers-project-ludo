@@ -162,11 +162,18 @@ public class GameServer {
 		                    synchronized (player) {
 		                    	player.add(p);     	
 		                    	
+		                    	try {
+		                    		messages.put(JOIN + p.returnName());
+		                    	} catch (InterruptedException ie) {
+		                    		ie.printStackTrace();
+		                    	}
+		                    	
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
 			                        Player p1 = i.next();
 			                        if (p != p1)
 			                        	try {
+			                        		System.out.println("\n Synchronized i loginMonitor: " + p1.returnName());
 			                        		p.sendText(JOIN + p1.returnName());
 			                        	} catch (IOException ioelocal) {
 			                        		// Lost connection, but doesn't bother to handle it here

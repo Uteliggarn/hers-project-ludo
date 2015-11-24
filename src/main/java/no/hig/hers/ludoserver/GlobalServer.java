@@ -49,17 +49,19 @@ public class GlobalServer extends JFrame{
     
     private final String JOIN = "JOIN:";
     private final String HOST = "HOST";
-    private final String INVITE = "invite:";	// invite: +7
-    private final String LOGOUT = "logout:";
+    private final String INVITE = "INVITE:";	// invite: +7
+    private final String LOGOUT = "LOGOUT:";
     private final String CLOGOUT = ">>>LOGOUT<<<";
-    private final String QUEUE = "queue";
+    private final String QUEUE = "QUEUE";
+    
+    private final String GLOBALCHAT = "GlobalJOIN:";	// Global chat name
     
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
     
-    
-    
+    private final String GWON = "GAMEWON";
+    private final String GLOST = "GAMELOST";
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
@@ -97,7 +99,6 @@ public class GlobalServer extends JFrame{
 			server.bind(new InetSocketAddress(12344));
 			
 			executorService = Executors.newCachedThreadPool();
-			//executorService = Executors.newFixedThreadPool(3);
 			
 			startLoginMonitor();
 			startMessageSender();
@@ -241,15 +242,18 @@ public class GlobalServer extends JFrame{
 			}
 			else if (msg != null && msg.startsWith(INVITE)) {
 				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-				
-				
-				
+			
 				for (int y=0; y<player.size(); y++)
 					if(msg.substring(7).equals(player.get(y).returnName())) {
 						player.get(y).sendText(JOIN + player.get(y).returnName());
 						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
 					}
 			}
+			else if (msg != null && msg.equals(GWON))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+			else if (msg != null && msg.equals(GLOST))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
+			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -313,26 +317,25 @@ public class GlobalServer extends JFrame{
 					player.add(p);
 					int g = player.indexOf(p);
 					
-						synchronized (player) {
-							if (p.loginChecker(++serverPorts)) {
-								
-								
-								displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
-								try {
-									//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-									messages.put("GlobalJOIN:" + p.returnName());
+					synchronized (player) {
+						if (p.loginChecker(++serverPorts)) {
 									
-									for (int t=0; t<player.size(); t++) {
-										p.sendText("GlobalJOIN:" + player.get(t).returnName());
-									}
-								} catch (InterruptedException ie) {
-									ie.printStackTrace();
-								}	
-							}
-							else {
-								--serverPorts;
-								player.remove(g);
-							}
+							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
+							try {
+								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
+								messages.put(GLOBALCHAT + p.returnName());
+									
+								for (int t=0; t<player.size(); t++) {
+									p.sendText(GLOBALCHAT + player.get(t).returnName());
+								}
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}	
+						}
+						else {
+							--serverPorts;
+							player.remove(g);
+						}
 							
 							/*
 							
