@@ -204,80 +204,46 @@ public class GameHandler {
 	
 
 	public void createNewLobby() {
-		switch (caseNr) {
-		case 1: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-			
-				FXMLLoader loader = new FXMLLoader();
-				try {
+		Tab tab = new Tab("Ludo");
+		tab.setId(hostName);
+		tab.setClosable(true);
+	
+		FXMLLoader loader = new FXMLLoader();
+		Platform.runLater(() -> {
+			try {
+				switch (caseNr) {
+				case 1: 
 					tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 					createGameLobbyController = (CreateGameLobbyController) loader.getController();
-					
 					createGameLobbyController.setHostPlayer(hostName);
 					createGameLobbyController.setConnetion(output);
+					break;
 					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();				
-					
-				} catch (IOException ioe) {
-					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
-				}
-			});
-			break;
-		case 2: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-				
-				FXMLLoader loader = new FXMLLoader();
-				try {
+				case 2: 
 					tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 					hostGameLobbyController = (HostGameLobbyController) loader.getController();
-					
 					hostGameLobbyController.setHostPlayer(hostName);
 					hostGameLobbyController.setConnetion(output);
+					break;
 					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();
-					
-				} catch (IOException ioe) {
-					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
-				}
-			});
-			break;
-		case 3: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-				
-				FXMLLoader loader = new FXMLLoader();
-				try {
+				case 3: 
 					tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 					playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
-					
 					playerGameLobbyController.setHostPlayer(hostName);
+					break;
 					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();
-					
-				} catch (IOException ioe) {
-					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
+				default: 
+					break;
 				}
-			});
-			break;
-		default: break;
-		}
+		
+				Main.gameTabs.getTabs().add(tab);
+				Main.gameTabs.getSelectionModel().select(tab);
+				
+				processConnection();
+			} catch (IOException ioe) {
+				Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
+			}
+		});
 	}
 
 	public String read() throws IOException {

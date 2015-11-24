@@ -23,11 +23,9 @@ public class CreateGameLobbyController {
 	
 	@FXML private Button startGameButton;
 
-	@FXML private MenuItem invite;
+	private static BufferedWriter output;
 	
 	private String hostName;
-	
-	private static BufferedWriter output;
 	
 	public void initialize() {
 		startGameButton.setDisable(true);
@@ -59,12 +57,12 @@ public class CreateGameLobbyController {
 	}
 	
 	
-	@FXML private void invitePlayer(ActionEvent e) {
+	@FXML private void invitePlayer() {
 		String item = playerList.getSelectionModel().getSelectedItem();
 		Main.sendText(Main.INVITE + item);
 	}
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) {
+	@FXML private void startGameButtonPressed() {
 		try {
 			String gamestart = "gamestart:";
 			sendText(gamestart);

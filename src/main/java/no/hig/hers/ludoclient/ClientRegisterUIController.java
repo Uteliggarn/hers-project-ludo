@@ -10,13 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class ClientRegisterUIController {
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button registerButton;
-
     @FXML
     private PasswordField passwordTextField;
 
@@ -32,7 +25,7 @@ public class ClientRegisterUIController {
     }
 
     @FXML
-    void registerUser(ActionEvent event) {
+    void registerUser() {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
     	String confirm = confirmTextField.getText();
@@ -41,7 +34,7 @@ public class ClientRegisterUIController {
 			if (password.equals(confirm)) {
 				try {
 					Main.sendLogin("SENDREGISTER:", username, password);
-					if(Main.input.readLine().equals("ACCEPTED")) {
+					if("ACCEPTED".equals(Main.input.readLine())) {
 						Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
 						Main.changeScene(Main.loginScene);
 						Main.connect();

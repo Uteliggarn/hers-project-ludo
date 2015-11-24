@@ -44,20 +44,23 @@ public class ChatHandler {
 		}
 		
 		if (!exists) {
+			Tab newTab = new Tab(name);
+			newTab.setId(name);
+			FXMLLoader loader = new FXMLLoader();
+			
+			try {
+				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
+				newTab.setOnClosed(new EventHandler<Event>() {
+					@Override
+					public void handle(Event e) {
+						Main.sendText(Main.LEAVECHAT + newTab.getId());
+					}
+				});
+			} catch (IOException e) {
+				Main.LOGGER.log(Level.SEVERE, "Couldn't find FXML file", e);
+			}
+
 			Platform.runLater(() -> {
-				Tab newTab = new Tab(name);
-				newTab.setId(name);
-				FXMLLoader loader = new FXMLLoader();
-				
-				try {
-    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
-    				newTab.setOnClosed(new EventHandler<Event>() {
-						@Override
-						public void handle(Event e) {
-							Main.sendText(Main.LEAVECHAT + newTab.getId());
-						}
-    				});
-    				
     				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
     				c.setID(name);
     				controllers.add(c);
@@ -66,10 +69,6 @@ public class ChatHandler {
     				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
     				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
-    				
-    			} catch (IOException e) {
-    				Main.LOGGER.log(Level.SEVERE, "Couldn't find FXML file", e);
-    			}
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}

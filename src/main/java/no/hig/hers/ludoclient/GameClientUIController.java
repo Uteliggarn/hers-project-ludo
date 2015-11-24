@@ -45,8 +45,8 @@ public class GameClientUIController {
 	private Image die5;
 	private Image die6;
 	
-	public static BufferedWriter output;
-	public static BufferedReader input;
+	private static BufferedWriter output;
+	private static BufferedReader input;
 	
 	@FXML
 	private BorderPane gameClientPane;
@@ -120,7 +120,7 @@ public class GameClientUIController {
 				
 			}
 		});
-		
+
 		pawn2.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 1;
@@ -447,6 +447,7 @@ public class GameClientUIController {
 				playerName4 = name;
 				bluePlayer.setText("Blue: " + playerName4);
 				break;
+			default: break;
 		}
 		switch (player) {
 			case 1:
@@ -461,6 +462,7 @@ public class GameClientUIController {
 			case 4:
 				nameLabel.setText("You are: " + playerName4);
 				break;
+			default: break;
 		}
 	}
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
@@ -543,7 +545,8 @@ public class GameClientUIController {
 			turnOwner = 1;
 			bluePlayer.setText("Blue: " + playerName4);
 			greenPlayer.setText("Green: " + playerName1 + "- Roll");
-			break;	
+			break;
+		default: break;
 		}
 	}
 	public void gameover() {

@@ -12,22 +12,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class ClientLoginUIController {
-
-    @FXML
-    private Button registerButton;
-
-    @FXML
-    private Button loginButton;
-
     @FXML
     private PasswordField passwordTextField;
 
     @FXML
     private TextField usernameTextField;
-    
-    @FXML
-    private Label labelConnectionStatus;
-    
+
     /**
      * Method that logs in the user, and stores the ID
      * and username for further use.
@@ -36,7 +26,7 @@ public class ClientLoginUIController {
      * @param event
      */
     @FXML
-    void userLogin(ActionEvent event) {
+    void userLogin() {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
 
@@ -67,7 +57,7 @@ public class ClientLoginUIController {
     }
     
     @FXML
-    void userRegister(ActionEvent event) {
+    void userRegister() {
     	Main.changeScene(Main.registerScene);	
     }
 }

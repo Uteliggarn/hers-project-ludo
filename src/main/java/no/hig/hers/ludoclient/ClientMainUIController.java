@@ -15,44 +15,23 @@ import javafx.scene.control.TextInputDialog;
 public class ClientMainUIController {
 	@FXML
 	private Label labelUserName;
-	
-    @FXML
-    private Button buttonTest;
-    
-    @FXML
-    private Button newGameButton;
-    
+
     @FXML
     private Button queueButton;
-    
-    @FXML
-    private Button buttonAddChat;
-    
-    @FXML
-    private Button buttonCreateChat;
-    
+
     @FXML
     private TabPane chatTabPane;
     
     @FXML
     private CheckBox checkBoxHideChat;
     
-    @FXML
-    private TabPane gameTabs; 
-    
     private int count = 0;
     
     @FXML
     private ListView<String> chatListView;
     
-
     @FXML
-	public void initialize() {
-    	
-	}
-
-    @FXML
-    void newGameButtonPressed(ActionEvent event) {
+    void newGameButtonPressed() {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
     		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
     			System.out.println("\nKom vi in i ++count?");
@@ -73,7 +52,7 @@ public class ClientMainUIController {
      * @param event
      */
     @FXML
-    void createChatButtonPressed(ActionEvent event) {
+    void createChatButtonPressed() {
     	TextInputDialog dialog = new TextInputDialog("");
     	dialog.setTitle("Create a new chatroom");
     	dialog.setHeaderText(null);
@@ -85,30 +64,28 @@ public class ClientMainUIController {
     }
     
     @FXML
-    void queueButtonPressed(ActionEvent event) {
+    void queueButtonPressed() {
     	Main.sendText(Main.QUEUE);
     	queueButton.setDisable(true);
     }
     
     @FXML
-    void joinChat(ActionEvent event) {
+    void joinChat() {
     	String chatName = chatListView.getSelectionModel().getSelectedItem();
     	Main.cHandler.addNewChat(chatName);
     }
     
     @FXML
-    void hideChat(ActionEvent event) {
+    void hideChat() {
     	if (checkBoxHideChat.isSelected()) {
     		chatTabPane.setVisible(false);
     	} else chatTabPane.setVisible(true);
     }
 
     public void addChatToList(String name) {
-       	Platform.runLater(new Runnable() {
-    		@Override
-    		public void run() {
+       	Platform.runLater(() -> {
     			chatListView.getItems().add(name);	
-    		}});
+    	});
     }
     
 	public void setLabelUserName(String username) {

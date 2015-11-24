@@ -26,8 +26,8 @@
       <Label text="Password:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
       <TextField fx:id="usernameTextField" prefHeight="31.0" prefWidth="203.0" GridPane.columnIndex="1" />
       <PasswordField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button fx:id="loginButton" mnemonicParsing="false" onAction="#userLogin" text="Login" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <Button fx:id="registerButton" mnemonicParsing="false" onAction="#userRegister" text="Register" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+      <Button mnemonicParsing="false" onAction="#userLogin" text="Login" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+      <Button mnemonicParsing="false" onAction="#userRegister" text="Register" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets left="5.0" />
          </GridPane.margin>
