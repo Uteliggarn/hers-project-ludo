@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.shape.Rectangle;
 /**
  * Class for handling chats.
  * This does everything from adding new chat tabs, to handling messages
@@ -22,7 +24,7 @@ public class ChatHandler {
 	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
 		this.chatTabs = chatTabs;
 		this.gameTabs = gameTabs;
-		
+	
 		chats = new ArrayList<>();
 		controllers = new ArrayList<ClientChatOverlayController>();
 
