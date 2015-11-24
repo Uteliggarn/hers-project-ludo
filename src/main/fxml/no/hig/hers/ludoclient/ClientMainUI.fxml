@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -15,29 +16,48 @@
                   <TabPane fx:id="gameTabs" prefHeight="294.0" prefWidth="1700.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
                       <Tab text="Main">
-                        <content>
-                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="992.0" stroke="BLACK" strokeType="INSIDE" width="1719.0" />
-                        </content>
+                           <content>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" text="Queue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
+                                    <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
+                                    <Label text="Hash3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                           </content>
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="600.0">
-                     <tabs>
-                        <Tab closable="false" text="Hide chat">
-                          <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                          </content>
-                        </Tab>
-                     </tabs>
-                  </TabPane>
-                  <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" AnchorPane.rightAnchor="100.0" />
-                  <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" text="Queue" AnchorPane.rightAnchor="220.0" />
-                  <Button fx:id="buttonTest" mnemonicParsing="false" onAction="#testCode" text="Button" AnchorPane.rightAnchor="0.0" />
+                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="600.0" />
+                  <CheckBox fx:id="checkBoxHideChat" mnemonicParsing="false" onAction="#hideChat" text="Hide Chat" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="610.0" />
                </children>
             </AnchorPane>
          </center>
          <right>
-            <ListView fx:id="chatListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" >
+            <ListView fx:id="chatListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 	            <contextMenu>
 		            <ContextMenu>
 		              <items>

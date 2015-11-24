@@ -12,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -33,6 +34,9 @@ public class ClientMainUIController {
     private TabPane chatTabPane;
     
     @FXML
+    private CheckBox checkBoxHideChat;
+    
+    @FXML
     private TabPane gameTabs; 
     
     private int count = 0;
@@ -43,7 +47,7 @@ public class ClientMainUIController {
     @FXML
 	public void initialize() {
 		//chatTextArea.setMouseTransparent(false);
-		chatTabPane.setMouseTransparent(true);
+	//	chatTabPane.setMouseTransparent(true);
 	}
     @FXML
     void testCode(ActionEvent event) {
@@ -79,6 +83,13 @@ public class ClientMainUIController {
     	Main.cHandler.addNewChat(chatName);
     }
     
+    @FXML
+    void hideChat(ActionEvent event) {
+    	if (checkBoxHideChat.isSelected()) {
+    		chatTabPane.setVisible(false);
+    	} else chatTabPane.setVisible(true);
+    }
+
     public void addChatToList(String name) {
        	Platform.runLater(new Runnable() {
     		@Override
