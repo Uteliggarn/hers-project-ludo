@@ -60,13 +60,7 @@ public class ClientMainUIController {
 	public void initialize() {
     	
 	}
-    
-    @FXML
-    void testCode(ActionEvent event) {
-    	Tab newTab = new Tab("random");	
-    	chatTabPane.getTabs().add(newTab);
-    }
-    
+
     @FXML
     void newGameButtonPressed(ActionEvent event) {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
@@ -82,7 +76,12 @@ public class ClientMainUIController {
     			Main.showAlert("Error", "You have allready created a game.");
     	}
     }
-    
+    /**
+     * Creates a TextInputDialog, asking the user to type a name for the new chat room.
+     * It then creates the new chat room by sending a message to the server with the name.
+     * Lastly, joins the new chat.
+     * @param event
+     */
     @FXML
     void createChatButtonPressed(ActionEvent event) {
     	TextInputDialog dialog = new TextInputDialog("");
@@ -92,6 +91,7 @@ public class ClientMainUIController {
 
     	Optional<String> result = dialog.showAndWait();
     	result.ifPresent(name -> Main.sendText(Main.NEWCHAT + name));
+    	result.ifPresent(name -> Main.sendText(name + Main.JOINCHAT + Main.userName));
     }
     
     @FXML

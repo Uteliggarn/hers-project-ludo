@@ -33,6 +33,13 @@ public class ClientLoginUIController {
     @FXML
     private Label labelConnectionStatus;
     
+    /**
+     * Method that logs in the user, and stores the ID
+     * and username for further use.
+     * If successful, starts the connection, chat handler,
+     * and prepares a gameserver. 
+     * @param event
+     */
     @FXML
     void userLogin(ActionEvent event) {
     	String username = usernameTextField.getText();
@@ -42,17 +49,13 @@ public class ClientLoginUIController {
     	String port = null;
  
     	Main.sendLogin("SENDLOGIN:", username, password);
-    	
     	try {
-    		
-    		
     		ID = Integer.valueOf(Main.input.readLine());
     		
     		if (ID == 0)
     			Main.connect();
     		
-			if (ID > 0) {
-				
+			if (ID > 0) {	
 				Main.serverPort = Integer.valueOf(Main.input.readLine());
 				
 				Main.userName = username;
@@ -60,7 +63,6 @@ public class ClientLoginUIController {
 				Main.startChatHandler();
 				Main.startGameServer();
 				Main.changeScene(Main.mainScene);
-				
 			}
 			else Main.showAlert("User not found", 
 						"Wrong username and/or password.\nPlease try again, or register a new user.");
@@ -71,12 +73,9 @@ public class ClientLoginUIController {
 		}
     }
     
-    
-    
     @FXML
     void userRegister(ActionEvent event) {
-    	Main.changeScene(Main.registerScene);
-    	
+    	Main.changeScene(Main.registerScene);	
     }
     
     

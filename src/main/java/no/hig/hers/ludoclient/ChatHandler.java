@@ -46,7 +46,7 @@ public class ChatHandler {
 				Tab newTab = new Tab(name);
 				newTab.setId(name);
 				FXMLLoader loader = new FXMLLoader();
-
+				
 				try {
     				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
     				newTab.setOnClosed(new EventHandler<Event>() {
@@ -61,7 +61,10 @@ public class ChatHandler {
     				controllers.add(c);
     				chats.add(newTab);
     				chatTabs.getTabs().add(newTab);
-    				Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+    				if (newTab.getId().equals("Global")) {
+    					newTab.setClosable(false);
+    				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
+    				
     			} catch (IOException e) {
     				Main.showAlert("Error", "Couldn't find FXML file");
     				e.printStackTrace();
