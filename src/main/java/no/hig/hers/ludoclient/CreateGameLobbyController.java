@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -27,6 +29,8 @@ public class CreateGameLobbyController {
 	
 	private String hostName;
 	
+	private static BufferedWriter output;
+	
 	public void initialize() {
 		startGameButton.setDisable(true);
 		playerOne.setText("");
@@ -46,14 +50,14 @@ public class CreateGameLobbyController {
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "") {
-			playerTwo.setText(name);
-			startGameButton.setDisable(false);
-		}
+		if (playerTwo.getText() == "") 
+			playerTwo.setText(name);	
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.getText() == "")
+		else if (playerFour.getText() == "") {
 			playerFour.setText(name);
+			startGameButton.setDisable(false);
+		}
 	}
 	
 	
@@ -64,18 +68,33 @@ public class CreateGameLobbyController {
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) {
 		
-		FXMLLoader loader = new FXMLLoader();
-		
 		try {
-			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
-					Main.gameTabs.getTabs().get(i).setContent(loader.load(getClass().getResource("GameClient.fxml")));
-				}	
-			}
-			//tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			String gamestart = "gamestart:";
+			sendText(gamestart);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
 		}
 	}
+	
+	public void setConnetion(BufferedWriter write) {
+		output = write;
+	}
+	
+	/**
+     * Method used to send a message to the server. Handled in a separate method
+     * to ensure that all messages are ended with a newline character and are
+     * flushed (ensure they are sent.)
+     * 
+     * @param textToSend
+     *            the message to send to the server
+     */
+    public static void sendText(String textToSend) {
+        try {
+            output.write(textToSend);
+            output.newLine();
+            output.flush();
+        } catch (IOException ioe) {
+        	Main.showAlert("Error", "Unable to send message to server");
+        }
+    }
 }

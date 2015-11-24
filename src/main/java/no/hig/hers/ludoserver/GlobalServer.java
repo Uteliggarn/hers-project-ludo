@@ -41,11 +41,6 @@ public class GlobalServer extends JFrame{
 	private ArrayList<Player> que = new ArrayList<Player>();
 	
 	private boolean shutdown = false;
-	
-	private final String throwDiceText;
-    private final String receiveDiceText;
-    private final String turnOwnerText;
-    private final String makeMoveText;
     
     private final String JOIN = "JOIN:";
     private final String HOST = "HOST";
@@ -84,14 +79,6 @@ public class GlobalServer extends JFrame{
 		outputArea.setEditable(false);
 		add(new JScrollPane(outputArea), BorderLayout.CENTER);
 		outputArea.setText("Server awaiting connections\n");
-		
-		//The commands that will be received from the gameClient
-		throwDiceText = "THROWDICE:"; //Request for a dice value
-		makeMoveText = "MOVE:"; //Announce which piece moved
-		
-		//The commands that will be sent to the gameClient
-		receiveDiceText = "RECEIVEDICE:"; //Return the dice value
-		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
 				
 		try {
 			server = new ServerSocket();
@@ -168,6 +155,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
+			
 			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
