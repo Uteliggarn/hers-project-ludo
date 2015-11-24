@@ -36,10 +36,11 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" text="Queue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                                    <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
+                                    <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" prefHeight="70.0" prefWidth="300.0" text="Queue" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
+                                    <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" prefHeight="70.0" prefWidth="300.0" text="New Game" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
                                     <Label fx:id="labelUserName" text="Temp" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                        <font>
                                           <Font size="24.0" />
@@ -50,6 +51,10 @@
                                           <Font size="72.0" />
                                        </font>
                                     </Label>
+                                    <Label text="Won" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                                    <Label text="Played" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                                    <Label text="0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                    <Label text="0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                                  </children>
                               </GridPane>
                            </content>

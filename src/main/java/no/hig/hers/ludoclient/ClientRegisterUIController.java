@@ -54,7 +54,7 @@ public class ClientRegisterUIController {
 					/** TODO FIX THIS! */
 				}
 			} else Main.showAlert("Password mistyped", "The passwords do not match.\nPlease try again.");
-    	} else Main.showAlert("Too short/long passowrd", "Passwords must be between 6 and 10 characters long.");
+    	} else Main.showAlert("Too short/long password", "Passwords must be between 6 and 10 characters long.");
     }
     	
 }
