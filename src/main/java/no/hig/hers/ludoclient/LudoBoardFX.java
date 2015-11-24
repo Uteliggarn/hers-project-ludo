@@ -54,13 +54,6 @@ public class LudoBoardFX extends Pane {
 		
 		try {
 			drawn = 0;
-		//getStylesheets().add("LudoBoard.css");
-			/*
-			setStyle("-fx-background-image: url('ludo_board.png'); " +
-			           "-fx-background-position: center center; " +
-			           "-fx-background-repeat: stretch;" +
-			           "-fx-background-size: 900 800;");
-			 */     
 			
 			//Makes all the valid coordinates the pawns can move on
 			makeGreenCoordinates();
@@ -83,26 +76,10 @@ public class LudoBoardFX extends Pane {
 			//Makes a new canvas and draw pawns onto it
 			makePawns();
 		} catch(Exception e) {
-			System.out.println("Error while drawing board or pawns");
+			System.out.println("Error while drawing board");
 		}
 		setMinSize(900, 900);
-		
-		//-fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
-		//Image image = new Image("ludo_board.png");
-		// new BackgroundSize(width, height, widthAsPercentage, heightAsPercentage, contain, cover)
-		//BackgroundSize backgroundSize = new BackgroundSize(1, 1, false, false, true, false);
-		// new BackgroundImage(image, repeatX, repeatY, position, size)
-		//BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-		// new Background(images...)
-		//Background boardBackground = new Background(backgroundImage);
-		/*
-		BackgroundImage boardBackground= new BackgroundImage(new Image("ludo_board.png"),
-		        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-		          BackgroundSize.DEFAULT);
-		*/
-		//setBackground(boardBackground);
-		//setStyle("-fx-background-image: url('ludo_board.png')");
-		//getChildren().add(stack);
+
 	}
 	
 	private void drawGameBoard() {
@@ -116,341 +93,340 @@ public class LudoBoardFX extends Pane {
 	private void makeGreenCoordinates() {
 		
 		//Green home:
-		coordinatesGreen.add(new Point(197,117));	//location 0
-		coordinatesGreen.add(new Point(135, 175));
-		coordinatesGreen.add(new Point(260, 175));
-		coordinatesGreen.add(new Point(197, 230));
+		coordinatesGreen.add(new Point(160, 110));	//location 0
+		coordinatesGreen.add(new Point(110, 160));
+		coordinatesGreen.add(new Point(210, 160));
+		coordinatesGreen.add(new Point(160, 210));
 		
 		//Green Track
-		coordinatesGreen.add(new Point(102, 372));
-		coordinatesGreen.add(new Point(167, 372));
-		coordinatesGreen.add(new Point(227, 372));
-		coordinatesGreen.add(new Point(292, 372));
-		coordinatesGreen.add(new Point(355, 372));
+		coordinatesGreen.add(new Point(85, 335));
+		coordinatesGreen.add(new Point(135, 335));
+		coordinatesGreen.add(new Point(185, 335));
+		coordinatesGreen.add(new Point(235, 335));
+		coordinatesGreen.add(new Point(285, 335));
 		
-		coordinatesGreen.add(new Point(415, 317));
-		coordinatesGreen.add(new Point(415, 257));
-		coordinatesGreen.add(new Point(415, 205));
-		coordinatesGreen.add(new Point(415, 147));
-		coordinatesGreen.add(new Point(415, 92));
+		coordinatesGreen.add(new Point(335, 285));
+		coordinatesGreen.add(new Point(335, 235));
+		coordinatesGreen.add(new Point(335, 185));
+		coordinatesGreen.add(new Point(335, 135));
+		coordinatesGreen.add(new Point(335, 85));
 		
-		coordinatesGreen.add(new Point(415, 37));	
-		coordinatesGreen.add(new Point(482, 37));
-		coordinatesGreen.add(new Point(545, 37));
+		coordinatesGreen.add(new Point(335, 35));	
+		coordinatesGreen.add(new Point(385, 35));
+		coordinatesGreen.add(new Point(435, 35));
 		
-		coordinatesGreen.add(new Point(545, 92));
-		coordinatesGreen.add(new Point(545, 147));
-		coordinatesGreen.add(new Point(545, 205));
-		coordinatesGreen.add(new Point(545, 257));
-		coordinatesGreen.add(new Point(545, 317));
+		coordinatesGreen.add(new Point(435, 85));
+		coordinatesGreen.add(new Point(435, 135));
+		coordinatesGreen.add(new Point(435, 185));
+		coordinatesGreen.add(new Point(435, 235));
+		coordinatesGreen.add(new Point(435, 285));
 		
-		coordinatesGreen.add(new Point(605, 372));
-		coordinatesGreen.add(new Point(665, 372));
-		coordinatesGreen.add(new Point(725, 372));
-		coordinatesGreen.add(new Point(795, 372));
-		coordinatesGreen.add(new Point(855, 372));
+		coordinatesGreen.add(new Point(485, 335));
+		coordinatesGreen.add(new Point(535, 335));
+		coordinatesGreen.add(new Point(585, 335));
+		coordinatesGreen.add(new Point(635, 335));
+		coordinatesGreen.add(new Point(685, 335));
 		
-		coordinatesGreen.add(new Point(915, 372));
-		coordinatesGreen.add(new Point(915, 432));
-		coordinatesGreen.add(new Point(915, 487));
+		coordinatesGreen.add(new Point(735, 335));
+		coordinatesGreen.add(new Point(735, 385));
+		coordinatesGreen.add(new Point(735, 435));
 		
-		coordinatesGreen.add(new Point(855, 487));
-		coordinatesGreen.add(new Point(795, 487));
-		coordinatesGreen.add(new Point(725, 487));
-		coordinatesGreen.add(new Point(665, 487));
-		coordinatesGreen.add(new Point(605, 487));
+		coordinatesGreen.add(new Point(685, 435));
+		coordinatesGreen.add(new Point(635, 435));
+		coordinatesGreen.add(new Point(585, 435));
+		coordinatesGreen.add(new Point(535, 435));
+		coordinatesGreen.add(new Point(485, 435));
 		
-		coordinatesGreen.add(new Point(545, 542));
-		coordinatesGreen.add(new Point(545, 602));
-		coordinatesGreen.add(new Point(545, 657));
-		coordinatesGreen.add(new Point(545, 712));
-		coordinatesGreen.add(new Point(545, 767));
+		coordinatesGreen.add(new Point(435, 485));
+		coordinatesGreen.add(new Point(435, 535));
+		coordinatesGreen.add(new Point(435, 585));
+		coordinatesGreen.add(new Point(435, 635));
+		coordinatesGreen.add(new Point(435, 685));
 		
-		coordinatesGreen.add(new Point(545, 825));
-		coordinatesGreen.add(new Point(482, 825));
-		coordinatesGreen.add(new Point(415, 825));
+		coordinatesGreen.add(new Point(435, 735));
+		coordinatesGreen.add(new Point(385, 735));
+		coordinatesGreen.add(new Point(335, 735));
 		
-		coordinatesGreen.add(new Point(415, 767));
-		coordinatesGreen.add(new Point(415, 712));
-		coordinatesGreen.add(new Point(415, 657));
-		coordinatesGreen.add(new Point(415, 602));
-		coordinatesGreen.add(new Point(415, 542));
+		coordinatesGreen.add(new Point(335, 685));
+		coordinatesGreen.add(new Point(335, 635));
+		coordinatesGreen.add(new Point(335, 585));
+		coordinatesGreen.add(new Point(335, 535));
+		coordinatesGreen.add(new Point(335, 485));
 		
-		coordinatesGreen.add(new Point(355, 487));
-		coordinatesGreen.add(new Point(292, 487));
-		coordinatesGreen.add(new Point(227, 487));
-		coordinatesGreen.add(new Point(167, 487));
-		coordinatesGreen.add(new Point(102, 487));
+		coordinatesGreen.add(new Point(285, 435));
+		coordinatesGreen.add(new Point(235, 435));
+		coordinatesGreen.add(new Point(185, 435));
+		coordinatesGreen.add(new Point(135, 435));
+		coordinatesGreen.add(new Point(85, 435));
 		
-		coordinatesGreen.add(new Point(42, 487));
-		coordinatesGreen.add(new Point(42, 432));
-		coordinatesGreen.add(new Point(42, 372));
+		coordinatesGreen.add(new Point(35, 435));
+		coordinatesGreen.add(new Point(35, 385));
+		coordinatesGreen.add(new Point(35, 335));
 		
 		//Green Goal highway
-		coordinatesGreen.add(new Point(102, 372));
-		coordinatesGreen.add(new Point(102, 432));
-		coordinatesGreen.add(new Point(167,432));
-		coordinatesGreen.add(new Point(227,432));
-		coordinatesGreen.add(new Point(292,432));
-		coordinatesGreen.add(new Point(355,432));
+		coordinatesGreen.add(new Point(85, 335));
+		coordinatesGreen.add(new Point(85, 385));
+		coordinatesGreen.add(new Point(135,385));
+		coordinatesGreen.add(new Point(185,385));
+		coordinatesGreen.add(new Point(235,385));
+		coordinatesGreen.add(new Point(285,385));
 		
 		//Green Goal
-		coordinatesGreen.add(new Point(415,432));	//Location 62	
+		coordinatesGreen.add(new Point(335,385));	//Location 62	
 	}
 	
 	private void makeRedCoordinates() {
 		//Red home coordinates
-		coordinatesRed.add(new Point(762, 117));
-		coordinatesRed.add(new Point(702, 175));
-		coordinatesRed.add(new Point(827, 175));
-		coordinatesRed.add(new Point(762, 230));
+		coordinatesRed.add(new Point(610, 110));
+		coordinatesRed.add(new Point(560, 160));
+		coordinatesRed.add(new Point(660, 160));
+		coordinatesRed.add(new Point(610, 210));
 		
 		//Red Track
-		coordinatesRed.add(new Point(545, 92));
-		coordinatesRed.add(new Point(545, 147));
-		coordinatesRed.add(new Point(545, 205));
-		coordinatesRed.add(new Point(545, 257));
-		coordinatesRed.add(new Point(545, 317));
+		coordinatesRed.add(new Point(435, 85));
+		coordinatesRed.add(new Point(435, 135));
+		coordinatesRed.add(new Point(435, 185));
+		coordinatesRed.add(new Point(435, 235));
+		coordinatesRed.add(new Point(435, 285));
 		
-		coordinatesRed.add(new Point(605, 372));
-		coordinatesRed.add(new Point(665, 372));
-		coordinatesRed.add(new Point(725, 372));
-		coordinatesRed.add(new Point(795, 372));
-		coordinatesRed.add(new Point(855, 372));
+		coordinatesRed.add(new Point(485, 335));
+		coordinatesRed.add(new Point(535, 335));
+		coordinatesRed.add(new Point(585, 335));
+		coordinatesRed.add(new Point(635, 335));
+		coordinatesRed.add(new Point(685, 335));
 		
-		coordinatesRed.add(new Point(915, 372));
-		coordinatesRed.add(new Point(915, 432));
-		coordinatesRed.add(new Point(915, 487));
+		coordinatesRed.add(new Point(735, 335));
+		coordinatesRed.add(new Point(735, 385));
+		coordinatesRed.add(new Point(735, 435));
 		
-		coordinatesRed.add(new Point(855, 487));
-		coordinatesRed.add(new Point(795, 487));
-		coordinatesRed.add(new Point(725, 487));
-		coordinatesRed.add(new Point(665, 487));
-		coordinatesRed.add(new Point(605, 487));
+		coordinatesRed.add(new Point(685, 435));
+		coordinatesRed.add(new Point(635, 435));
+		coordinatesRed.add(new Point(585, 435));
+		coordinatesRed.add(new Point(535, 435));
+		coordinatesRed.add(new Point(485, 435));
 		
-		coordinatesRed.add(new Point(545, 542));
-		coordinatesRed.add(new Point(545, 602));
-		coordinatesRed.add(new Point(545, 657));
-		coordinatesRed.add(new Point(545, 712));
-		coordinatesRed.add(new Point(545, 767));
+		coordinatesRed.add(new Point(435, 485));
+		coordinatesRed.add(new Point(435, 535));
+		coordinatesRed.add(new Point(435, 585));
+		coordinatesRed.add(new Point(435, 635));
+		coordinatesRed.add(new Point(435, 685));
 		
-		coordinatesRed.add(new Point(545, 825));
-		coordinatesRed.add(new Point(482, 825));
-		coordinatesRed.add(new Point(415, 825));
+		coordinatesRed.add(new Point(435, 735));
+		coordinatesRed.add(new Point(385, 735));
+		coordinatesRed.add(new Point(335, 735));
 		
-		coordinatesRed.add(new Point(415, 767));
-		coordinatesRed.add(new Point(415, 712));
-		coordinatesRed.add(new Point(415, 657));
-		coordinatesRed.add(new Point(415, 602));
-		coordinatesRed.add(new Point(415, 542));
+		coordinatesRed.add(new Point(335, 685));
+		coordinatesRed.add(new Point(335, 635));
+		coordinatesRed.add(new Point(335, 585));
+		coordinatesRed.add(new Point(335, 535));
+		coordinatesRed.add(new Point(335, 485));
 		
-		coordinatesRed.add(new Point(355, 487));
-		coordinatesRed.add(new Point(292, 487));
-		coordinatesRed.add(new Point(227, 487));
-		coordinatesRed.add(new Point(167, 487));
-		coordinatesRed.add(new Point(102, 487));
+		coordinatesRed.add(new Point(285, 435));
+		coordinatesRed.add(new Point(235, 435));
+		coordinatesRed.add(new Point(185, 435));
+		coordinatesRed.add(new Point(135, 435));
+		coordinatesRed.add(new Point(85, 435));
 		
-		coordinatesRed.add(new Point(42, 487));
-		coordinatesRed.add(new Point(42, 432));
-		coordinatesRed.add(new Point(42, 372));
+		coordinatesRed.add(new Point(35, 435));
+		coordinatesRed.add(new Point(35, 385));
+		coordinatesRed.add(new Point(35, 335));
 		
-		coordinatesRed.add(new Point(102, 372));
-		coordinatesRed.add(new Point(167, 372));
-		coordinatesRed.add(new Point(227, 372));
-		coordinatesRed.add(new Point(292, 372));
-		coordinatesRed.add(new Point(355, 372));
+		coordinatesRed.add(new Point(85, 335));
+		coordinatesRed.add(new Point(135, 335));
+		coordinatesRed.add(new Point(185, 335));
+		coordinatesRed.add(new Point(235, 335));
+		coordinatesRed.add(new Point(285, 335));
 		
-		coordinatesRed.add(new Point(415, 317));
-		coordinatesRed.add(new Point(415, 257));
-		coordinatesRed.add(new Point(415, 205));
-		coordinatesRed.add(new Point(415, 147));
-		coordinatesRed.add(new Point(415, 92));
+		coordinatesRed.add(new Point(335, 285));
+		coordinatesRed.add(new Point(335, 235));
+		coordinatesRed.add(new Point(335, 185));
+		coordinatesRed.add(new Point(335, 135));
+		coordinatesRed.add(new Point(335, 85));
 		
-		coordinatesRed.add(new Point(415, 37));	
-		coordinatesRed.add(new Point(482, 37));
-		coordinatesRed.add(new Point(545, 37));
+		coordinatesRed.add(new Point(335, 35));	
+		coordinatesRed.add(new Point(385, 35));
+		coordinatesRed.add(new Point(435, 35));
 		
 		//Red Goalhighway coordinates
-		coordinatesRed.add(new Point(545, 92));
-		coordinatesRed.add(new Point(482, 92));
-		coordinatesRed.add(new Point(482, 147));
-		coordinatesRed.add(new Point(482, 205));
-		coordinatesRed.add(new Point(482, 257));
-		coordinatesRed.add(new Point(482, 317));
+		coordinatesRed.add(new Point(435, 85));
+		coordinatesRed.add(new Point(385, 85));
+		coordinatesRed.add(new Point(385, 135));
+		coordinatesRed.add(new Point(385, 185));
+		coordinatesRed.add(new Point(385, 235));
+		coordinatesRed.add(new Point(385, 285));
 		
 		//Red Goal coordinate
-		coordinatesRed.add(new Point(482, 372));
+		coordinatesRed.add(new Point(385, 335));
 		
 	}
 	
 	private void makeYellowCoordinates() {
 		//Yellow home coordinates
-		coordinatesYellow.add(new Point(197, 627));
-		coordinatesYellow.add(new Point(135, 685));
-		coordinatesYellow.add(new Point(260, 685));
-		coordinatesYellow.add(new Point(197, 740));
+		coordinatesYellow.add(new Point(160, 560));
+		coordinatesYellow.add(new Point(110, 610));
+		coordinatesYellow.add(new Point(210, 610));
+		coordinatesYellow.add(new Point(160, 660));
 		
 		//Yellow Track
-		coordinatesYellow.add(new Point(415, 767));
-		coordinatesYellow.add(new Point(415, 712));
-		coordinatesYellow.add(new Point(415, 657));
-		coordinatesYellow.add(new Point(415, 602));
-		coordinatesYellow.add(new Point(415, 542));
+		coordinatesYellow.add(new Point(335, 685));
+		coordinatesYellow.add(new Point(335, 635));
+		coordinatesYellow.add(new Point(335, 585));
+		coordinatesYellow.add(new Point(335, 535));
+		coordinatesYellow.add(new Point(335, 485));
 		
-		coordinatesYellow.add(new Point(355, 487));
-		coordinatesYellow.add(new Point(292, 487));
-		coordinatesYellow.add(new Point(227, 487));
-		coordinatesYellow.add(new Point(167, 487));
-		coordinatesYellow.add(new Point(102, 487));
+		coordinatesYellow.add(new Point(285, 435));
+		coordinatesYellow.add(new Point(235, 435));
+		coordinatesYellow.add(new Point(185, 435));
+		coordinatesYellow.add(new Point(135, 435));
+		coordinatesYellow.add(new Point(85, 435));
 		
-		coordinatesYellow.add(new Point(42, 487));
-		coordinatesYellow.add(new Point(42, 432));
-		coordinatesYellow.add(new Point(42, 372));
+		coordinatesYellow.add(new Point(35, 435));
+		coordinatesYellow.add(new Point(35, 385));
+		coordinatesYellow.add(new Point(35, 335));
 		
-		coordinatesYellow.add(new Point(102, 372));
-		coordinatesYellow.add(new Point(167, 372));
-		coordinatesYellow.add(new Point(227, 372));
-		coordinatesYellow.add(new Point(292, 372));
-		coordinatesYellow.add(new Point(355, 372));
+		coordinatesYellow.add(new Point(85, 335));
+		coordinatesYellow.add(new Point(135, 335));
+		coordinatesYellow.add(new Point(185, 335));
+		coordinatesYellow.add(new Point(235, 335));
+		coordinatesYellow.add(new Point(285, 335));
 		
-		coordinatesYellow.add(new Point(415, 317));
-		coordinatesYellow.add(new Point(415, 257));
-		coordinatesYellow.add(new Point(415, 205));
-		coordinatesYellow.add(new Point(415, 147));
-		coordinatesYellow.add(new Point(415, 92));
+		coordinatesYellow.add(new Point(335, 285));
+		coordinatesYellow.add(new Point(335, 235));
+		coordinatesYellow.add(new Point(335, 185));
+		coordinatesYellow.add(new Point(335, 135));
+		coordinatesYellow.add(new Point(335, 85));
 		
-		coordinatesYellow.add(new Point(415, 37));	
-		coordinatesYellow.add(new Point(482, 37));
-		coordinatesYellow.add(new Point(545, 37));
+		coordinatesYellow.add(new Point(335, 35));	
+		coordinatesYellow.add(new Point(385, 35));
+		coordinatesYellow.add(new Point(435, 35));
 		
-		coordinatesYellow.add(new Point(545, 92));
-		coordinatesYellow.add(new Point(545, 147));
-		coordinatesYellow.add(new Point(545, 205));
-		coordinatesYellow.add(new Point(545, 257));
-		coordinatesYellow.add(new Point(545, 317));
+		coordinatesYellow.add(new Point(435, 85));
+		coordinatesYellow.add(new Point(435, 135));
+		coordinatesYellow.add(new Point(435, 185));
+		coordinatesYellow.add(new Point(435, 235));
+		coordinatesYellow.add(new Point(435, 285));
 		
-		coordinatesYellow.add(new Point(605, 372));
-		coordinatesYellow.add(new Point(665, 372));
-		coordinatesYellow.add(new Point(725, 372));
-		coordinatesYellow.add(new Point(795, 372));
-		coordinatesYellow.add(new Point(855, 372));
+		coordinatesYellow.add(new Point(485, 335));
+		coordinatesYellow.add(new Point(535, 335));
+		coordinatesYellow.add(new Point(585, 335));
+		coordinatesYellow.add(new Point(635, 335));
+		coordinatesYellow.add(new Point(685, 335));
 		
-		coordinatesYellow.add(new Point(915, 372));
-		coordinatesYellow.add(new Point(915, 432));
-		coordinatesYellow.add(new Point(915, 487));
+		coordinatesYellow.add(new Point(735, 335));
+		coordinatesYellow.add(new Point(735, 385));
+		coordinatesYellow.add(new Point(735, 435));
 		
-		coordinatesYellow.add(new Point(855, 487));
-		coordinatesYellow.add(new Point(795, 487));
-		coordinatesYellow.add(new Point(725, 487));
-		coordinatesYellow.add(new Point(665, 487));
-		coordinatesYellow.add(new Point(605, 487));
+		coordinatesYellow.add(new Point(685, 435));
+		coordinatesYellow.add(new Point(635, 435));
+		coordinatesYellow.add(new Point(585, 435));
+		coordinatesYellow.add(new Point(535, 435));
+		coordinatesYellow.add(new Point(485, 435));
 		
-		coordinatesYellow.add(new Point(545, 542));
-		coordinatesYellow.add(new Point(545, 602));
-		coordinatesYellow.add(new Point(545, 657));
-		coordinatesYellow.add(new Point(545, 712));
-		coordinatesYellow.add(new Point(545, 767));
+		coordinatesYellow.add(new Point(435, 485));
+		coordinatesYellow.add(new Point(435, 535));
+		coordinatesYellow.add(new Point(435, 585));
+		coordinatesYellow.add(new Point(435, 635));
+		coordinatesYellow.add(new Point(435, 685));
 		
-		coordinatesYellow.add(new Point(545, 825));
-		coordinatesYellow.add(new Point(482, 825));
-		coordinatesYellow.add(new Point(415, 825));
+		coordinatesYellow.add(new Point(435, 735));
+		coordinatesYellow.add(new Point(385, 735));
+		coordinatesYellow.add(new Point(335, 735));
 		
 		//Yellow GoalHighway
-		coordinatesYellow.add(new Point(415, 767));
-		coordinatesYellow.add(new Point(482, 767));
-		coordinatesYellow.add(new Point(482, 712));
-		coordinatesYellow.add(new Point(482, 657));
-		coordinatesYellow.add(new Point(482, 602));
-		coordinatesYellow.add(new Point(482, 542));
+		coordinatesYellow.add(new Point(335, 685));
+		coordinatesYellow.add(new Point(385, 685));
+		coordinatesYellow.add(new Point(385, 635));
+		coordinatesYellow.add(new Point(385, 585));
+		coordinatesYellow.add(new Point(385, 535));
+		coordinatesYellow.add(new Point(385, 485));
 		
 		//Yellow Goal
-		coordinatesYellow.add(new Point(482, 487));
+		coordinatesYellow.add(new Point(385, 435));
 	
 	}
 	
 	private void makeBlueCoordinates() {
 		//Blue Home
-		coordinatesBlue.add(new Point(762, 627));
-		coordinatesBlue.add(new Point(702, 685));
-		coordinatesBlue.add(new Point(827, 685));
-		coordinatesBlue.add(new Point(762, 740));
+		coordinatesBlue.add(new Point(610, 560));
+		coordinatesBlue.add(new Point(560, 610));
+		coordinatesBlue.add(new Point(660, 610));
+		coordinatesBlue.add(new Point(610, 660));
 		
 		//Blue Track
-		coordinatesBlue.add(new Point(855, 487));
-		coordinatesBlue.add(new Point(795, 487));
-		coordinatesBlue.add(new Point(725, 487));
-		coordinatesBlue.add(new Point(665, 487));
-		coordinatesBlue.add(new Point(605, 487));
+		coordinatesBlue.add(new Point(685, 435));
+		coordinatesBlue.add(new Point(635, 435));
+		coordinatesBlue.add(new Point(585, 435));
+		coordinatesBlue.add(new Point(535, 435));
+		coordinatesBlue.add(new Point(485, 435));
 		
-		coordinatesBlue.add(new Point(545, 542));
-		coordinatesBlue.add(new Point(545, 602));
-		coordinatesBlue.add(new Point(545, 657));
-		coordinatesBlue.add(new Point(545, 712));
-		coordinatesBlue.add(new Point(545, 767));
+		coordinatesBlue.add(new Point(435, 485));
+		coordinatesBlue.add(new Point(435, 535));
+		coordinatesBlue.add(new Point(435, 585));
+		coordinatesBlue.add(new Point(435, 635));
+		coordinatesBlue.add(new Point(435, 685));
 		
-		coordinatesBlue.add(new Point(545, 825));
-		coordinatesBlue.add(new Point(482, 825));
-		coordinatesBlue.add(new Point(415, 825));
+		coordinatesBlue.add(new Point(435, 735));
+		coordinatesBlue.add(new Point(385, 735));
+		coordinatesBlue.add(new Point(335, 735));
 		
-		coordinatesBlue.add(new Point(415, 767));
-		coordinatesBlue.add(new Point(415, 712));
-		coordinatesBlue.add(new Point(415, 657));
-		coordinatesBlue.add(new Point(415, 602));
-		coordinatesBlue.add(new Point(415, 542));
+		coordinatesBlue.add(new Point(335, 685));
+		coordinatesBlue.add(new Point(335, 635));
+		coordinatesBlue.add(new Point(335, 585));
+		coordinatesBlue.add(new Point(335, 535));
+		coordinatesBlue.add(new Point(335, 485));
 		
-		coordinatesBlue.add(new Point(355, 487));
-		coordinatesBlue.add(new Point(292, 487));
-		coordinatesBlue.add(new Point(227, 487));
-		coordinatesBlue.add(new Point(167, 487));
-		coordinatesBlue.add(new Point(102, 487));
+		coordinatesBlue.add(new Point(285, 435));
+		coordinatesBlue.add(new Point(235, 435));
+		coordinatesBlue.add(new Point(185, 435));
+		coordinatesBlue.add(new Point(135, 435));
+		coordinatesBlue.add(new Point(85, 435));
 		
-		coordinatesBlue.add(new Point(42, 487));
-		coordinatesBlue.add(new Point(42, 432));
-		coordinatesBlue.add(new Point(42, 372));
+		coordinatesBlue.add(new Point(35, 435));
+		coordinatesBlue.add(new Point(35, 385));
+		coordinatesBlue.add(new Point(35, 335));
 		
-		coordinatesBlue.add(new Point(102, 372));
-		coordinatesBlue.add(new Point(167, 372));
-		coordinatesBlue.add(new Point(227, 372));
-		coordinatesBlue.add(new Point(292, 372));
-		coordinatesBlue.add(new Point(355, 372));
+		coordinatesBlue.add(new Point(85, 335));
+		coordinatesBlue.add(new Point(135, 335));
+		coordinatesBlue.add(new Point(185, 335));
+		coordinatesBlue.add(new Point(235, 335));
+		coordinatesBlue.add(new Point(285, 335));
 		
-		coordinatesBlue.add(new Point(415, 317));
-		coordinatesBlue.add(new Point(415, 257));
-		coordinatesBlue.add(new Point(415, 205));
-		coordinatesBlue.add(new Point(415, 147));
-		coordinatesBlue.add(new Point(415, 92));
+		coordinatesBlue.add(new Point(335, 285));
+		coordinatesBlue.add(new Point(335, 235));
+		coordinatesBlue.add(new Point(335, 185));
+		coordinatesBlue.add(new Point(335, 135));
+		coordinatesBlue.add(new Point(335, 85));
 		
-		coordinatesBlue.add(new Point(415, 37));	
-		coordinatesBlue.add(new Point(482, 37));
-		coordinatesBlue.add(new Point(545, 37));
+		coordinatesBlue.add(new Point(335, 35));	
+		coordinatesBlue.add(new Point(385, 35));
+		coordinatesBlue.add(new Point(435, 35));
 		
-		coordinatesBlue.add(new Point(545, 92));
-		coordinatesBlue.add(new Point(545, 147));
-		coordinatesBlue.add(new Point(545, 205));
-		coordinatesBlue.add(new Point(545, 257));
-		coordinatesBlue.add(new Point(545, 317));
+		coordinatesBlue.add(new Point(435, 85));
+		coordinatesBlue.add(new Point(435, 135));
+		coordinatesBlue.add(new Point(435, 185));
+		coordinatesBlue.add(new Point(435, 235));
+		coordinatesBlue.add(new Point(435, 285));
 		
-		coordinatesBlue.add(new Point(605, 372));
-		coordinatesBlue.add(new Point(665, 372));
-		coordinatesBlue.add(new Point(725, 372));
-		coordinatesBlue.add(new Point(795, 372));
-		coordinatesBlue.add(new Point(855, 372));
+		coordinatesBlue.add(new Point(485, 335));
+		coordinatesBlue.add(new Point(535, 335));
+		coordinatesBlue.add(new Point(585, 335));
+		coordinatesBlue.add(new Point(635, 335));
+		coordinatesBlue.add(new Point(685, 335));
 		
-		coordinatesBlue.add(new Point(915, 372));
-		coordinatesBlue.add(new Point(915, 432));
-		coordinatesBlue.add(new Point(915, 487));
+		coordinatesBlue.add(new Point(735, 335));
+		coordinatesBlue.add(new Point(735, 385));
+		coordinatesBlue.add(new Point(735, 435));
 		
 		//Blue GoalHighway
-		coordinatesBlue.add(new Point(855, 487));
-		coordinatesBlue.add(new Point(855, 432));
-		coordinatesBlue.add(new Point(795, 432));
-		coordinatesBlue.add(new Point(725, 432));
-		coordinatesBlue.add(new Point(665, 432));
-		coordinatesBlue.add(new Point(605, 432));
+		coordinatesBlue.add(new Point(685, 435));
+		coordinatesBlue.add(new Point(685, 385));
+		coordinatesBlue.add(new Point(635, 385));
+		coordinatesBlue.add(new Point(585, 382));
+		coordinatesBlue.add(new Point(535, 385));
+		coordinatesBlue.add(new Point(485, 385));
 		
 		//Blue Goal
-		coordinatesBlue.add(new Point(545, 432));
-		
+		coordinatesBlue.add(new Point(435, 385));	
 	}
 	
 	public int getpawnInGoalLocation(int col) {
@@ -529,6 +505,7 @@ public class LudoBoardFX extends Pane {
 		GraphicsContext gp = gamePieces.getGraphicsContext2D();
 		try {	
 			for (int j = 0; j < greenPawns.size() ; j++) {
+				greenPawns.get(j).setVisible();
 				if (greenPawns.get(j).getVisible()) {
 					int l = greenPawns.get(j).returnLocation();
 					//Draw Pawns
@@ -540,13 +517,14 @@ public class LudoBoardFX extends Pane {
 					gp.setFill(color[0]);
 					gp.setFont(new Font("Dialog",20));
 					if(greenPawns.get(j).getTower()) {
-						gp.fillText("T", coordinatesGreen.elementAt(l).x+8, coordinatesGreen.elementAt(l).y+25);
-						gp.fillText("" + (j+1), coordinatesGreen.elementAt(l).x+20, coordinatesGreen.elementAt(l).y+25);
+						gp.fillText("T", coordinatesGreen.elementAt(l).x+2, coordinatesGreen.elementAt(l).y+20);
+						gp.fillText("" + (j+1), coordinatesGreen.elementAt(l).x+15, coordinatesGreen.elementAt(l).y+20);
 					} else
-						gp.fillText("" + (j+1), coordinatesGreen.elementAt(l).x+15, coordinatesGreen.elementAt(l).y+25);
+						gp.fillText("" + (j+1), coordinatesGreen.elementAt(l).x+10, coordinatesGreen.elementAt(l).y+20);
+						
 				}
 			}
-			for (int j = 0; j < yellowPawns.size() ; j++) {	
+			for (int j = 0; j < yellowPawns.size() ; j++) {
 				if (yellowPawns.get(j).getVisible()) {
 					int l = yellowPawns.get(j).returnLocation();
 					//Draw pawns
@@ -557,11 +535,13 @@ public class LudoBoardFX extends Pane {
 					//Draw numbers and mark if tower or not
 					gp.setFill(color[0]);
 					gp.setFont(new Font("Dialog",20));
+					
 					if(yellowPawns.get(j).getTower()) {
-						gp.fillText("T", coordinatesYellow.elementAt(l).x+8, coordinatesYellow.elementAt(l).y+25);
-						gp.fillText("" + (j+1), coordinatesYellow.elementAt(l).x+20, coordinatesYellow.elementAt(l).y+25);
+						gp.fillText("T", coordinatesYellow.elementAt(l).x+2, coordinatesYellow.elementAt(l).y+20);
+						gp.fillText("" + (j+1), coordinatesYellow.elementAt(l).x+15, coordinatesYellow.elementAt(l).y+20);
 					} else
-						gp.fillText("" + (j+1), coordinatesYellow.elementAt(l).x+15, coordinatesYellow.elementAt(l).y+25);
+						gp.fillText("" + (j+1), coordinatesYellow.elementAt(l).x+10, coordinatesYellow.elementAt(l).y+20);
+						
 				}	
 			}
 			for (int j = 0; j < redPawns.size() ; j++) {
@@ -575,11 +555,12 @@ public class LudoBoardFX extends Pane {
 					//Draw numbers and mark if tower or not
 					gp.setFill(color[5]);
 					gp.setFont(new Font("Dialog",20));
+					
 					if(redPawns.get(j).getTower()) {
-						gp.fillText("T", coordinatesRed.elementAt(l).x+8, coordinatesRed.elementAt(l).y+25);
-						gp.fillText("" + (j+1), coordinatesRed.elementAt(l).x+20, coordinatesRed.elementAt(l).y+25);
+						gp.fillText("T", coordinatesRed.elementAt(l).x+2, coordinatesRed.elementAt(l).y+20);
+						gp.fillText("" + (j+1), coordinatesRed.elementAt(l).x+15, coordinatesRed.elementAt(l).y+20);
 					} else
-						gp.fillText("" + (j+1), coordinatesRed.elementAt(l).x+15, coordinatesRed.elementAt(l).y+25);
+						gp.fillText("" + (j+1), coordinatesRed.elementAt(l).x+10, coordinatesRed.elementAt(l).y+20);	
 				}
 			}
 			for (int j = 0; j < bluePawns.size() ; j++) {	
@@ -594,10 +575,11 @@ public class LudoBoardFX extends Pane {
 					gp.setFill(color[5]);
 					gp.setFont(new Font("Dialog",20));
 					if(bluePawns.get(j).getTower()) {
-						gp.fillText("T", coordinatesBlue.elementAt(l).x+8, coordinatesBlue.elementAt(l).y+25);
-						gp.fillText("" + (j+1), coordinatesBlue.elementAt(l).x+20, coordinatesBlue.elementAt(l).y+25);
+						gp.fillText("T", coordinatesBlue.elementAt(l).x+2, coordinatesBlue.elementAt(l).y+20);
+						gp.fillText("" + (j+1), coordinatesBlue.elementAt(l).x+15, coordinatesBlue.elementAt(l).y+20);
 					} else
-						gp.fillText("" + (j+1), coordinatesBlue.elementAt(l).x+15, coordinatesBlue.elementAt(l).y+25);
+						gp.fillText("" + (j+1), coordinatesBlue.elementAt(l).x+10, coordinatesBlue.elementAt(l).y+20);
+						
 				}
 			}
 			if(drawn == 0) getChildren().add(gamePieces);
