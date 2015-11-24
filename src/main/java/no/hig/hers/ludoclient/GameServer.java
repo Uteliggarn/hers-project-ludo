@@ -146,7 +146,7 @@ public class GameServer {
 		                    playerNr++;
 		                    
 		                    /*
->>>>>>> refs/remotes/origin/master
+
 		                    try {
 								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
 	                    		for (int t=0; t<player.size(); t++) {

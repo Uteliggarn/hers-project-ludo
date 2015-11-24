@@ -231,6 +231,7 @@ public class GameHandler {
     				public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 					
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -256,6 +257,7 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -281,6 +283,7 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
