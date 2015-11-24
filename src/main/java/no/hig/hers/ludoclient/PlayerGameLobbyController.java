@@ -20,16 +20,19 @@ public class PlayerGameLobbyController {
 		playerFour.setText("");
 	}
 	
+	public void setHostPlayer(String hostName) {
+		playerOne.setText(hostName.substring(4));
+	}
+	
 	public void joinedPlayer(String name) {
-		if (playerOne.getText() == "")
-			playerOne.setText(name);
-		else if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "")
 			playerTwo.setText(name);
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
+	
 }
 
 

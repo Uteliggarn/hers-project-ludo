@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.shape.Rectangle;
 /**
  * Class for handling chats.
  * This does everything from adding new chat tabs, to handling messages
@@ -16,54 +20,54 @@ import javafx.scene.control.TabPane;
 public class ChatHandler {
 	private List<Tab> chats;
 	private TabPane chatTabs;
-	private TabPane gameTabs;
 	private List<ClientChatOverlayController> controllers;
 	
-	public ChatHandler(TabPane chatTabs, TabPane gameTabs) {
+	public ChatHandler(TabPane chatTabs) {
 		this.chatTabs = chatTabs;
-		this.gameTabs = gameTabs;
-		
+	
 		chats = new ArrayList<>();
 		controllers = new ArrayList<ClientChatOverlayController>();
 
 		addNewChat("Global");
-		
-		Main.sendText(Main.NEWCHAT + "Test");
 	}
 	
 	/**
-	 * Adds a new chat.
+	 * Adds a new chat, if it not already exists.
 	 * @param name The name/id of the tab/chat
 	 */
-	public void addNewChat(String name) {	
-		Platform.runLater(new Runnable() {
-    		@Override
-    		public void run() {
-    			Tab newTab = new Tab(name);
-    			newTab.setId(name);
-    			FXMLLoader loader = new FXMLLoader();
-    			
-    			boolean exists = false;
-    			for (int i = 0; i < chats.size(); i++) {
-    				if (chats.get(i).getId().equals(name)) exists = true; 
+	public void addNewChat(String name) {
+		boolean exists = false;
+		for (int i = 0; i < chats.size(); i++) {
+			if (chats.get(i).getId().equals(name)) exists = true; 
+		}
+		
+		if (!exists) {
+			Platform.runLater(() -> {
+				Tab newTab = new Tab(name);
+				newTab.setId(name);
+				FXMLLoader loader = new FXMLLoader();
+
+				try {
+    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
+    				newTab.setOnClosed(new EventHandler<Event>() {
+						@Override
+						public void handle(Event e) {
+							Main.sendText(Main.LEAVECHAT + newTab.getId());
+						}
+    				});
+    				
+    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
+    				c.setID(name);
+    				controllers.add(c);
+    				chats.add(newTab);
+    				chatTabs.getTabs().add(newTab);
+    				Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
+    			} catch (IOException e) {
+    				Main.showAlert("Error", "Couldn't find FXML file");
+    				e.printStackTrace();
     			}
-    			
-    			if (!exists) {
-	    			try {
-	    				newTab.setContent(loader.load(getClass().getResource("ClientChatOverlay.fxml").openStream()));
-	    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-	    				c.setID(name);
-	    				controllers.add(c);
-	    				chats.add(newTab);
-	    				chatTabs.getTabs().add(newTab);
-	    				Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten.
-	    			} catch (IOException e) {
-	    				Main.showAlert("Error", "Couldn't find FXML file");
-	    				e.printStackTrace();
-	    			}
-	    		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
-    		}
-    	});
+			});	
+		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}
 	
 	/**
@@ -81,10 +85,9 @@ public class ChatHandler {
 					Main.playerList.add(username);
             	c.addUserToList(username);
             }
-            else if (message.startsWith(chats.get(i).getId()+ Main.LEAVECHAT)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(tab.getId().length() + 4);
+            else if (message.startsWith(Main.QUITGAME)) { // Mottar melding om at noen har logget ut
+            	String username = message.substring(Main.QUITGAME.length());
             	c.removeUserFromList(username);
-            	
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));

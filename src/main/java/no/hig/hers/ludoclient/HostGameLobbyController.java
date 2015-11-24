@@ -22,22 +22,28 @@ public class HostGameLobbyController {
 	@FXML private Button startGameButton;
 	
 	private int serverPort;
-	private static BufferedReader input;
 	private static BufferedWriter output;
 	
+	private String hostName;
+	
 	public void initialize() {
-		startGameButton.setDisable(false);
+		startGameButton.setDisable(true);
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
 		playerFour.setText("");
 	}
 	
+	public void setHostPlayer(String hostName) {
+		playerOne.setText(hostName.substring(4));
+		this.hostName = hostName;
+	}
+	
 	public void joinedPlayer(String name) {
-		if (playerOne.getText() == "")
-			playerOne.setText(name);
-		else if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "") {
 			playerTwo.setText(name);
+			startGameButton.setDisable(false);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "")
@@ -45,12 +51,10 @@ public class HostGameLobbyController {
 	}
 	
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
+	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
-			String gamestart;
-			gamestart = "gamestart:";
+			String gamestart = "gamestart:";
 			sendText(gamestart);
-			//tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
@@ -60,9 +64,8 @@ public class HostGameLobbyController {
 		this.serverPort = serverPort;
 	}
 
-	public void setConnetion(BufferedWriter write, BufferedReader read) {
+	public void setConnetion(BufferedWriter write) {
 		output = write;
-		input = read;
 	}
 	
 	/**

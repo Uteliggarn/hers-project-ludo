@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,6 +24,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -63,13 +66,14 @@ public class Main extends Application {
 	final static String NEWCHAT = "NEWGROUPCHAT:";
 	final static String JOINCHAT = "JOIN:";
 	final static String ERRORCHAT = "ERRORCHAT";
-	final static String LEAVECHAT = "OUT:";
+	final static String LEAVECHAT = "LEAVE:";
 	final static String CREATEGAME = "CREATEGAME";
 	final static String IDGK = "IDGK";	// Unique name
-	final static String INVITE = "invite:";	// Unique name
+	final static String INVITE = "INVITE:";	// Unique name
 	final static String HOST = "HOST";	// Unique name
-	final static String QUEUE = "queue";	// Unique name
+	final static String QUEUE = "QUEUE";	// Unique name
 	final static String JOIN = "JOIN:";	// Unique name
+	static final String QUITGAME = "LOGOUT:";
 	
 	
 
@@ -140,7 +144,6 @@ public class Main extends Application {
 					
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}	
@@ -150,7 +153,7 @@ public class Main extends Application {
 	 * and start to listen for messages.
 	 */
 	public static void startChatHandler() {
-		cHandler = new ChatHandler(chatTabs, gameTabs);
+		cHandler = new ChatHandler(chatTabs);
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
@@ -185,6 +188,7 @@ public class Main extends Application {
 
 	public static void sendLogin(String code, String username, String password) {
 		try {
+			mainController.setLabelUserName(username);
 	        Main.output.write(code + username);
 	        Main.output.newLine();
 	        Main.output.flush();
@@ -244,10 +248,13 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                	System.out.println("\nFikk vi riktig port: " + port);	                	
-	                	System.out.println("\nHva er msg: " + Main.IDGK + message.substring(5));	                	
-	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
-	                	gameHandler.add(gh);
+	                	
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			inviteAccept(port);       				
+	                		}
+	                	});
 	                }
 	                
 	                if (!message.equals(null)) {
@@ -274,12 +281,32 @@ public class Main extends Application {
 		});
 	}
 	
+	private static void inviteAccept(int port) {
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Game invite");
+		alert.setHeaderText(null);
+		alert.setContentText("Accept the invite or decline it");
+		
+		ButtonType buttonTypeAccept = new ButtonType("Accept");
+		ButtonType buttonTypeDecline = new ButtonType("Decline", ButtonData.CANCEL_CLOSE);
+		
+		alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeDecline);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeAccept.OK){
+			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+        	gameHandler.add(gh);
+		} else {
+		}
+	}
+	
 	/*
 	 Platform.runLater(new Runnable() {
-	        @Override
-	                		public void run() {
+	 	@Override
+	    public void run() {
 	                				
-	                		}
-	                	});
+	    }
+	 });
 	 */
 }

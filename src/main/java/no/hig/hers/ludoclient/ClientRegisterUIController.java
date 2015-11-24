@@ -48,6 +48,7 @@ public class ClientRegisterUIController {
 					if(Main.input.readLine().equals("ACCEPTED")) {
 						Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
 						Main.changeScene(Main.loginScene);
+						Main.connect();
 					}	
 					else Main.showAlert("User already exists", "Sorry, that username is already taken.\nPlease select another.");
 				} catch (Exception e1) {

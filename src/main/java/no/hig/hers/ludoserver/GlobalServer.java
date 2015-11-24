@@ -41,25 +41,22 @@ public class GlobalServer extends JFrame{
 	private ArrayList<Player> que = new ArrayList<Player>();
 	
 	private boolean shutdown = false;
-	
-	private final String throwDiceText;
-    private final String receiveDiceText;
-    private final String turnOwnerText;
-    private final String makeMoveText;
     
     private final String JOIN = "JOIN:";
     private final String HOST = "HOST";
-    private final String INVITE = "invite:";	// invite: +7
-    private final String LOGOUT = "logout:";
+    private final String INVITE = "INVITE:";	// invite: +7
+    private final String LOGOUT = "LOGOUT:";
     private final String CLOGOUT = ">>>LOGOUT<<<";
-    private final String QUEUE = "queue";
+    private final String QUEUE = "QUEUE";
+    
+    private final String GLOBALCHAT = "GlobalJOIN:";	// Global chat name
     
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
     
-    
-    
+    private final String GWON = "GAMEWON";
+    private final String GLOST = "GAMELOST";
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
@@ -82,14 +79,6 @@ public class GlobalServer extends JFrame{
 		outputArea.setEditable(false);
 		add(new JScrollPane(outputArea), BorderLayout.CENTER);
 		outputArea.setText("Server awaiting connections\n");
-		
-		//The commands that will be received from the gameClient
-		throwDiceText = "THROWDICE:"; //Request for a dice value
-		makeMoveText = "MOVE:"; //Announce which piece moved
-		
-		//The commands that will be sent to the gameClient
-		receiveDiceText = "RECEIVEDICE:"; //Return the dice value
-		turnOwnerText = "TURNOWNER:"; //Announce who has the turn
 				
 		try {
 			server = new ServerSocket();
@@ -97,7 +86,6 @@ public class GlobalServer extends JFrame{
 			server.bind(new InetSocketAddress(12344));
 			
 			executorService = Executors.newCachedThreadPool();
-			//executorService = Executors.newFixedThreadPool(3);
 			
 			startLoginMonitor();
 			startMessageSender();
@@ -167,6 +155,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
+			
 			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
@@ -241,15 +230,18 @@ public class GlobalServer extends JFrame{
 			}
 			else if (msg != null && msg.startsWith(INVITE)) {
 				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-				
-				
-				
+			
 				for (int y=0; y<player.size(); y++)
 					if(msg.substring(7).equals(player.get(y).returnName())) {
 						player.get(y).sendText(JOIN + player.get(y).returnName());
 						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
 					}
 			}
+			else if (msg != null && msg.equals(GWON))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+			else if (msg != null && msg.equals(GLOST))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
+			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -310,54 +302,61 @@ public class GlobalServer extends JFrame{
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}*/
 						
-					player.add(p);
+					//player.add(p);
 					int g = player.indexOf(p);
-					
-						synchronized (player) {
-							if (p.loginChecker(++serverPorts)) {
-								
-								
-								displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
-								try {
-									//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-									messages.put("GlobalJOIN:" + p.returnName());
+					/*
+					synchronized (player) {
+						player.add(p);
+						int g = player.indexOf(p);
+						
+						if (p.loginChecker(++serverPorts)) {
 									
-									for (int t=0; t<player.size(); t++) {
-										p.sendText("GlobalJOIN:" + player.get(t).returnName());
-									}
-								} catch (InterruptedException ie) {
-									ie.printStackTrace();
-								}	
+							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
+							try {
+								messages.put(GLOBALCHAT + p.returnName());
+									
+								for (int t=0; t<player.size(); t++) {
+									if(!player.get(t).equals(p.returnName()))
+										p.sendText(GLOBALCHAT + player.get(t).returnName());
+								}
+							} catch (InterruptedException ie) {
+								ie.printStackTrace();
+							}	
+						}
+						else {
+							--serverPorts;
+							player.remove(g);
+						}
+							*/
+						synchronized (player) {
+							//player.add(p);
+							//int g = player.indexOf(p);
+							
+							if (p.loginChecker(++serverPorts)) {    	
+	                    	
+		                    	try {
+		                    		messages.put(GLOBALCHAT + p.returnName());
+		                    	} catch (InterruptedException ie) {
+		                    		ie.printStackTrace();
+		                    	}
+		                    	
+		                    	Iterator<Player> i = player.iterator();
+			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
+			                        Player p1 = i.next();
+			                        if (p != p1)
+			                        	try {
+											p.sendText(GLOBALCHAT + p1.returnName());
+											//p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
+			                        	} catch (IOException ioelocal) {
+			                        		// Lost connection, but doesn't bother to handle it here
+			                        	}
+			                    }
 							}
 							else {
 								--serverPorts;
 								player.remove(g);
 							}
-							
-							/*
-							
-							Iterator<Player> i = player.iterator();
-							while (i.hasNext()) {
-								Player p1 = i.next();
-								if (p != p1)
-									for (int y=0; y<groupChatList.size(); y++) {
-										p.sendText("NEWGROUPCHAT:" + groupChatList.get(y));
-										writeToFile(fileName, "NEWGROUPCHAT:" + groupChatList.get(y));
-									}
-									try {
-									p.sendText("GlobalChatRoomJOIN:" + p1.returnName());
-									} catch (IOException ioe) {
-										ioe.printStackTrace();
-									}
-							}*/
 						}
-						/*try {
-							messages.put("GlobalChatRoomJOIN:" + p.returnName());
-						} catch (InterruptedException ie) {
-							ie.printStackTrace();
-						}*/
-					
-						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
 				}
