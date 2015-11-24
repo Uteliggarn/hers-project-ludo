@@ -13,7 +13,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.shape.Rectangle;
 /**
  * Class for handling chats.
- * This does everything from adding new chat tabs, to handling messages
+ * This handles the chat tabs, and the chat-related messages.
  * @author Daniel Rosland on 13.11.2015
  */
 
