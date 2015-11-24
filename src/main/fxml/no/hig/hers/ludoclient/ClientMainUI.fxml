@@ -13,9 +13,9 @@
          <center>
             <AnchorPane prefHeight="800.0" prefWidth="1700.0">
                <children>
-                  <TabPane fx:id="gameTabs" prefHeight="294.0" prefWidth="1700.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TabPane fx:id="gameTabs" prefHeight="294.0" prefWidth="1700.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
-                      <Tab id="main" text="Main">
+                      <Tab id="main" closable="false" text="Main">
                            <content>
                               <GridPane>
                                 <columnConstraints>
@@ -61,7 +61,7 @@
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" />
+                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="600.0" />
                   <CheckBox fx:id="checkBoxHideChat" mnemonicParsing="false" onAction="#hideChat" text="Hide Chat" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="610.0" />
                </children>
             </AnchorPane>

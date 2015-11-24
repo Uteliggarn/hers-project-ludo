@@ -88,7 +88,6 @@ public class ClientMainUIController {
     void queueButtonPressed(ActionEvent event) {
     	Main.sendText(Main.QUEUE);
     	queueButton.setDisable(true);
-    	
     }
     
     @FXML
