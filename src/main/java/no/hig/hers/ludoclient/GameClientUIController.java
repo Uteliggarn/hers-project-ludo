@@ -283,8 +283,7 @@ public class GameClientUIController {
 			inGoal = board.greenPawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -300,8 +299,7 @@ public class GameClientUIController {
 				inGoal = board.redPawnsInGoal.size();
 				if (inGoal == 4) {
 					gameStatus = 1;
-					sendGameStatus();
-					System.out.println(("You won"));
+					gameOver = true;
 				}
 				pawnToMove = 0;
 			} catch (Exception e ) {
@@ -320,8 +318,7 @@ public class GameClientUIController {
 			inGoal = board.yellowPawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -336,8 +333,7 @@ public class GameClientUIController {
 			inGoal = board.bluePawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 			bluePlayer.setText("Blue: " + playerName4);
@@ -483,9 +479,16 @@ public class GameClientUIController {
 			setPawnMovesFalse();
 			dieRoller.setDisable(true);
 			dieRoller.setText("GG");
-			if(gameStatus == 1) 
-			dieTextLabel.setText("You won");
-			else dieTextLabel.setText("Better luck next time");
+			if(gameStatus == 1) {
+				dieTextLabel.setText("You won");
+				sendGameStatus();
+			}
+			else {
+				dieTextLabel.setText("Better luck next time");
+				String tmp;
+				tmp =("GAMELOST");
+				Main.sendText(tmp);
+			}			
 		}
 	}
 	
@@ -513,16 +516,15 @@ public class GameClientUIController {
 	
 	public void sendGameStatus() {
 		String tmp;
-		tmp =("gamewon");
-		Main.sendText(tmp);
-		
-		tmp = "gameover";
+		tmp = ("GAMEOVER");
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		tmp =("GAMEWON");
+		Main.sendText(tmp);
 	}
 	public void passChangeTurnOwner() {
 		

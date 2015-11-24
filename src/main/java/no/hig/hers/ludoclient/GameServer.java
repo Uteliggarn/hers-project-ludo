@@ -77,7 +77,7 @@ public class GameServer {
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
 			                        }
-			                        if(msg != null && msg.startsWith("gameover")) {
+			                        if(msg != null && msg.startsWith("GAMEOVER")) {
 			                        	messages.put(msg);
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it

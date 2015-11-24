@@ -165,7 +165,7 @@ public class GameHandler {
 		                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 	                	});
 	                }
-	                else if(msg != null && msg.startsWith("gameover")) {
+	                else if(msg != null && msg.startsWith("GAMEOVER")) {
 						Platform.runLater(() -> {
 							gameClientUIController.gameover();	
 	                	});
