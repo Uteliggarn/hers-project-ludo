@@ -40,9 +40,14 @@
                                  <children>
                                     <Button fx:id="queueButton" mnemonicParsing="false" onAction="#queueButtonPressed" text="Queue" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
                                     <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" text="New Game" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="CENTER" />
-                                    <Label text="Hash3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                    <Label fx:id="labelUserName" text="Temp" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                        <font>
                                           <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Welcome" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                       <font>
+                                          <Font size="72.0" />
                                        </font>
                                     </Label>
                                  </children>
@@ -57,15 +62,22 @@
             </AnchorPane>
          </center>
          <right>
-            <ListView fx:id="chatListView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-	            <contextMenu>
-		            <ContextMenu>
-		              <items>
-		                <MenuItem fx:id="join" mnemonicParsing="false" onAction="#joinChat" text="Join" />
-		              </items>
-		            </ContextMenu>
-	        	</contextMenu> 
-         	</ListView>
+            <BorderPane>
+               <center>
+                  <ListView fx:id="chatListView" prefWidth="200.0">
+      	            <contextMenu>
+      		            <ContextMenu>
+      		              <items>
+      		                <MenuItem fx:id="join" mnemonicParsing="false" onAction="#joinChat" text="Join" />
+      		              </items>
+      		            </ContextMenu>
+      	        	</contextMenu> 
+               	</ListView>
+               </center>
+               <top>
+                  <Button fx:id="buttonCreateChat" mnemonicParsing="false" onAction="#createChatButtonPressed" prefWidth="200.0" text="Create chatroom" BorderPane.alignment="CENTER" />
+               </top>
+            </BorderPane>
          </right>
       </BorderPane>
    </children>
