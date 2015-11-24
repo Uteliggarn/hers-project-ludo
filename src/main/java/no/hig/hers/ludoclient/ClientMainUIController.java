@@ -63,7 +63,7 @@ public class ClientMainUIController {
     			count = 0;
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
-    			Main.showAlert("Error", "You have allready created a game.");
+    			Main.showAlert("Error", "You have already created a game.");
     	}
     }
     /**

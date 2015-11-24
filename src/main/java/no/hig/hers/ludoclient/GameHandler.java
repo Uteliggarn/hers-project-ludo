@@ -58,11 +58,12 @@ public class GameHandler {
 	private void addPlayersToList() {
 		executorService.execute(() -> {
 			while (true) {
-				for (int i=0; i<Main.playerList.size(); i++) {
-					if (Main.playerList.get(i) != Main.userName) {
-						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+				Platform.runLater(() -> {
+					for (int i=0; i<Main.playerList.size(); i++) {
+						if (Main.playerList.get(i) != Main.userName)
+							createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
 					}
-				}
+				});
 				//The thread goes to sleep to save the CPU energy
 				try {
 					Thread.sleep(5000);
@@ -122,70 +123,68 @@ public class GameHandler {
 	                String msg = input.readLine();
 	                System.out.println("\nHva er msg handler: " + msg);
 	                
-	                if(msg != null && msg.startsWith("gamestart:")) {
-	                	Platform.runLater(() -> {
-	                		int n = Integer.parseInt(msg.substring(10, 11));
-                			
-                			FXMLLoader loader = new FXMLLoader();
-                			try {
-                				System.out.print("Starter spill for " + n);
-	                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-	                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
-	                					Main.gameTabs.getTabs().get(i).setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-	                					gameClientUIController = loader.getController();
-		                				gameClientUIController.setConnetion(output, input);
-		                				gameClientUIController.setPlayer(n);
-	                				}	
-	                			}
-                			} catch (IOException e) {
-                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
-                			}	
-	                	});
-	                }
-	                else if(msg != null && msg.startsWith("gamename:")) {
-						Platform.runLater(() -> {
-							int n = Integer.parseInt(msg.substring(9, 10));
-                			System.out.println("playernamenr " + n);
-                			String tmpNavn = msg.substring(10, msg.length());
-                			gameClientUIController.setPlayerName(n, tmpNavn);    		
-						});
-	                }
-	                else if(msg != null && msg.startsWith("dicevalue:")) {
-						Platform.runLater(() -> {
-							int diceVal = Integer.parseInt(msg.substring(10,11));
-                			int player = Integer.parseInt(msg.substring(11,12));
-		                	int pawn = Integer.parseInt(msg.substring(12,13));
-		                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
-		                	gameClientUIController.getDiceValue(diceVal, player, pawn);
-	                	});
-	                }
-	                else if(msg != null && msg.startsWith("GAMEOVER")) {
-						Platform.runLater(() -> {
-							gameClientUIController.gameover();	
-	                	});
-	                }
-	                else if (msg != null && msg.startsWith(JOIN)) {
-	                	switch (caseNr) {
-	                	case 1: 
-	                		Platform.runLater(() -> {
-			                	if (!msg.substring(5).equals(hostName.substring(4)))
-		        					createGameLobbyController.joinedPlayer(msg.substring(5));
-	                		});
-	                		break;
-	                	case 2: 
-	                		Platform.runLater(() -> {
-		                		if (!msg.substring(5).equals(hostName.substring(4)))
-									hostGameLobbyController.joinedPlayer(msg.substring(5));
+	                if (msg != null) {
+		                if(msg.startsWith("gamestart:")) {
+		                	Platform.runLater(() -> {
+		                		int n = Integer.parseInt(msg.substring(10, 11));
+	                			
+	                			FXMLLoader loader = new FXMLLoader();
+	                			try {
+	                				System.out.print("Starter spill for " + n);
+		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+		                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
+		                					Main.gameTabs.getTabs().get(i).setContent(
+		                							loader.load(getClass().getResource("GameClient.fxml").openStream()));
+		                					gameClientUIController = loader.getController();
+			                				gameClientUIController.setConnetion(output, input);
+			                				gameClientUIController.setPlayer(n);
+		                				}	
+		                			}
+	                			} catch (IOException e) {
+	                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
+	                			}	
+		                	});
+		                }
+		                else if(msg.startsWith("gamename:")) {
+							Platform.runLater(() -> {
+								int n = Integer.parseInt(msg.substring(9, 10));
+	                			System.out.println("playernamenr " + n);
+	                			String tmpNavn = msg.substring(10, msg.length());
+	                			gameClientUIController.setPlayerName(n, tmpNavn);    		
+							});
+		                }
+		                else if(msg.startsWith("dicevalue:")) {
+							Platform.runLater(() -> {
+								int diceVal = Integer.parseInt(msg.substring(10,11));
+	                			int player = Integer.parseInt(msg.substring(11,12));
+			                	int pawn = Integer.parseInt(msg.substring(12,13));
+			                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
+			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+		                	});
+		                }
+		                else if(msg.startsWith("GAMEOVER")) {
+							Platform.runLater(() -> {
+								gameClientUIController.gameover();	
+		                	});
+		                }
+		                else if (msg.startsWith(JOIN)) {
+		                	if (!msg.substring(5).equals(hostName.substring(4))) {
+		                		Platform.runLater(() -> {
+				                	switch (caseNr) {
+				                	case 1:      					
+				                		createGameLobbyController.joinedPlayer(msg.substring(5));
+				                		break;
+				                	case 2: 
+										hostGameLobbyController.joinedPlayer(msg.substring(5));
+				                		break;
+				                	case 3: 
+										playerGameLobbyController.joinedPlayer(msg.substring(5));	
+				                		break;
+				                	default: break;
+				                	}
 		                		});
-	                		break;
-	                	case 3: 
-	                		Platform.runLater(() -> {
-		                		if (!msg.substring(5).equals(hostName.substring(4)))
-									playerGameLobbyController.joinedPlayer(msg.substring(5));
-		                		});
-	                		break;
-	                	default: break;
-	                	}
+		                	}
+		                }
 	                }
                     	        	                
 	                

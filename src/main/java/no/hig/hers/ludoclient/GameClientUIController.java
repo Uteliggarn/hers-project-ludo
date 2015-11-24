@@ -243,33 +243,31 @@ public class GameClientUIController {
 					}
 				}
 			}
-				
+			
+			dieTextLabel.setText("You got a: ");
+			
 			switch (diceValue) {
 			case 1:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die1);
 				break;
 			case 2:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die2);
 				break;
 			case 3:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die3);
 				break;
 			case 4:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die4);
 				break;
 			case 5:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die5);
 				break;
 			case 6:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die6);
 				break;
-			}	
+			default:
+				break;
+			}
 		}
 		else {
 			dieRoller.setText("Pass");
@@ -528,19 +526,16 @@ public class GameClientUIController {
 	}
 	public void passChangeTurnOwner() {
 		
-		switch(turnOwner) {
+		switch(turnOwner++) {
 		case 1:	//Green
-			turnOwner ++;
 			greenPlayer.setText("Green: " + playerName1);
 			redPlayer.setText("Red: " + playerName2 + "- Roll");
 			break;
 		case 2:	//Red
-			turnOwner ++;
 			redPlayer.setText("Red: " + playerName2);
 			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
 			break;
 		case 3: //Yellow
-			turnOwner ++;
 			yellowPlayer.setText("Yellow: " + playerName3);
 			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
 			break;
