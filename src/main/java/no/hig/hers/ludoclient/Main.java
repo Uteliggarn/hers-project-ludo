@@ -65,13 +65,14 @@ public class Main extends Application {
 	final static String NEWCHAT = "NEWGROUPCHAT:";
 	final static String JOINCHAT = "JOIN:";
 	final static String ERRORCHAT = "ERRORCHAT";
-	final static String LEAVECHAT = "OUT:";
+	final static String LEAVECHAT = "LEAVE:";
 	final static String CREATEGAME = "CREATEGAME";
 	final static String IDGK = "IDGK";	// Unique name
 	final static String INVITE = "INVITE:";	// Unique name
 	final static String HOST = "HOST";	// Unique name
 	final static String QUEUE = "QUEUE";	// Unique name
 	final static String JOIN = "JOIN:";	// Unique name
+	static final String QUITGAME = "LOGOUT:";
 	
 	
 
@@ -142,7 +143,6 @@ public class Main extends Application {
 					
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}	
@@ -152,7 +152,7 @@ public class Main extends Application {
 	 * and start to listen for messages.
 	 */
 	public static void startChatHandler() {
-		cHandler = new ChatHandler(chatTabs, gameTabs);
+		cHandler = new ChatHandler(chatTabs);
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
@@ -187,6 +187,7 @@ public class Main extends Application {
 
 	public static void sendLogin(String code, String username, String password) {
 		try {
+			mainController.setLabelUserName(username);
 	        Main.output.write(code + username);
 	        Main.output.newLine();
 	        Main.output.flush();

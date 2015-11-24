@@ -1,6 +1,7 @@
 package no.hig.hers.ludoclient;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,8 +20,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 
 public class ClientMainUIController {
+	@FXML
+	private Label labelUserName;
+	
     @FXML
     private Button buttonTest;
     
@@ -29,6 +34,12 @@ public class ClientMainUIController {
     
     @FXML
     private Button queueButton;
+    
+    @FXML
+    private Button buttonAddChat;
+    
+    @FXML
+    private Button buttonCreateChat;
     
     @FXML
     private TabPane chatTabPane;
@@ -43,12 +54,13 @@ public class ClientMainUIController {
     
     @FXML
     private ListView<String> chatListView;
+    
 
     @FXML
 	public void initialize() {
-		//chatTextArea.setMouseTransparent(false);
-	//	chatTabPane.setMouseTransparent(true);
+    	
 	}
+    
     @FXML
     void testCode(ActionEvent event) {
     	Tab newTab = new Tab("random");	
@@ -69,6 +81,17 @@ public class ClientMainUIController {
     		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
     			Main.showAlert("Error", "You have allready created a game.");
     	}
+    }
+    
+    @FXML
+    void createChatButtonPressed(ActionEvent event) {
+    	TextInputDialog dialog = new TextInputDialog("");
+    	dialog.setTitle("Create a new chatroom");
+    	dialog.setHeaderText(null);
+    	dialog.setContentText("Please enter the name of the chatroom:");
+
+    	Optional<String> result = dialog.showAndWait();
+    	result.ifPresent(name -> Main.sendText(Main.NEWCHAT + name));
     }
     
     @FXML
@@ -98,5 +121,9 @@ public class ClientMainUIController {
     			chatListView.getItems().add(name);	
     		}});
     }
+    
+	public void setLabelUserName(String username) {
+		labelUserName.setText(username);
+	}
     
 }
