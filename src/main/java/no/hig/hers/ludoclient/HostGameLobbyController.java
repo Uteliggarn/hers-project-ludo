@@ -22,7 +22,6 @@ public class HostGameLobbyController {
 	@FXML private Button startGameButton;
 	
 	private int serverPort;
-	private static BufferedReader input;
 	private static BufferedWriter output;
 	
 	private String hostName;
@@ -52,21 +51,10 @@ public class HostGameLobbyController {
 	}
 	
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
-		for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-			if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
-				Tab tab = Main.gameTabs.getTabs().get(i);
-			}	
-		}
-		
-		
-		//FXMLLoader loader = new FXMLLoader();
-		
+	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
-			String gamestart;
-			gamestart = "gamestart:";
+			String gamestart = "gamestart:";
 			sendText(gamestart);
-			//tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 		}
@@ -76,9 +64,8 @@ public class HostGameLobbyController {
 		this.serverPort = serverPort;
 	}
 
-	public void setConnetion(BufferedWriter write, BufferedReader read) {
+	public void setConnetion(BufferedWriter write) {
 		output = write;
-		input = read;
 	}
 	
 	/**
