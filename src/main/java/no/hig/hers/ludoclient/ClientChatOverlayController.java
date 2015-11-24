@@ -38,7 +38,7 @@ public class ClientChatOverlayController {
      */
     @FXML
     void sendChat(KeyEvent event) {
-    	if (event.getCode() == KeyCode.ENTER) {
+    	if (event.getCode() == KeyCode.ENTER && chatTextField.getText() != null) {
     		Main.sendText(this.ID + ":" + chatTextField.getText().toString());
     		System.out.println("Hva har vi i sendChat: " + this.ID + ":" + chatTextField.getText().toString());
     		chatTextField.setText(null);
