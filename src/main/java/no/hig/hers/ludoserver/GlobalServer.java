@@ -64,7 +64,6 @@ public class GlobalServer extends JFrame{
     private String tmpName;
 	
 	public GlobalServer() {
-		
 		super("GlobalServer");
 		
 		groupChatList.add("Global");

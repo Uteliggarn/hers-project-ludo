@@ -1,21 +1,13 @@
 package no.hig.hers.ludoclient;
 
-import java.awt.BasicStroke;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -83,7 +75,7 @@ public class LudoBoardFX extends Pane {
 	}
 	
 	private void drawGameBoard() {
-		board = new Image("images/ludo_board.png", 800, 800, true, true);
+		board = new Image("ludo_board.png", 800, 800, true, true);
 		gameBoard = new Canvas(800, 800);
 		GraphicsContext gb = gameBoard.getGraphicsContext2D();
 		gb.drawImage(board, 0, 0);
@@ -490,8 +482,10 @@ public class LudoBoardFX extends Pane {
 		return coordinatesBlue.elementAt(i);
 	}
 	
+	//Is called istead of repaint() from swing project.
 	//
 	void makePawns() {
+		
 		//Used to clear the canvas
 		if(drawn > 0) {
 		GraphicsContext gp1 = gamePieces.getGraphicsContext2D();
@@ -593,13 +587,12 @@ public class LudoBoardFX extends Pane {
 		private int color;		
 		private boolean inHome;
 		private boolean isTower;
+		private int pointWorth;
 		private boolean visible;
 		private boolean canBeMoved;
 		
 		/**
-		 * Class constructor that makes every pawn and set their starting location,
-		 * homelocation, color, sets that it is in home, sets that it is not a tower,
-		 * sets that it should be drawed on the board
+		 * Class constructor that makes every pawn and set their starting location
 		 * @param loc holds the start location of the current pawn
 		 * @param col holds the same nuber as location, but this is to verify the color
 		 */
@@ -610,6 +603,7 @@ public class LudoBoardFX extends Pane {
 			inHome = true;
 			isTower = false;
 			visible = true;
+			pointWorth = 1;
 			canBeMoved = false;
 		}
 		/**
@@ -745,8 +739,9 @@ public class LudoBoardFX extends Pane {
 					j = getpawnInGoalLocation(color);
 					if (j < 5) {
 						temp = redPawns.get(j);
-						redPawnsInGoal.add(new Pawned(0, 0));
-						redPawnsInGoal.add(temp);
+						for(int i = 1; i <= redPawns.get(j).returnPointWorth(); i++ ) {
+							redPawnsInGoal.add(new Pawned(0, 0));
+						}
 						redPawns.remove(j);
 					}
 				}
@@ -793,6 +788,7 @@ public class LudoBoardFX extends Pane {
 		
 		public void setTower() {
 			isTower = true;
+			//pointWorth++; Not used anymore. Cant move towers
 		}
 		
 		public boolean getTower() {
@@ -800,6 +796,10 @@ public class LudoBoardFX extends Pane {
 		}
 		public void setNotTower() {
 			isTower = false;
+		}
+		
+		public int returnPointWorth() {
+			return pointWorth;
 		}
 		
 		public void setNotVisible() {
@@ -1115,20 +1115,6 @@ public class LudoBoardFX extends Pane {
 			}
 			
 			return n;
-		}
-		
-		public void testForTowersGreen(int diceVal) {
-			
-		}
-		
-		public void testForTowersRed(int diceVal) {
-			
-		}
-		public void testForTowersBlue(int diceVal) {
-			
-		}
-		public void testForTowersYellow(int diceVal) {
-			
 		}
 		
 		public void bounceFromTower(int t, int diceVal) {
