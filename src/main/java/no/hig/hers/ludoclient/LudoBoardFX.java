@@ -83,7 +83,7 @@ public class LudoBoardFX extends Pane {
 	}
 	
 	private void drawGameBoard() {
-		board = new Image("ludo_board.png", 800, 800, true, true);
+		board = new Image("images/ludo_board.png", 800, 800, true, true);
 		gameBoard = new Canvas(800, 800);
 		GraphicsContext gb = gameBoard.getGraphicsContext2D();
 		gb.drawImage(board, 0, 0);

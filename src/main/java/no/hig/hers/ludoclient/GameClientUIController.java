@@ -94,12 +94,12 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		die1 = new Image("dice1.png");
-		die2 = new Image("dice2.png");
-		die3 = new Image("dice3.png");
-		die4 = new Image("dice4.png");
-		die5 = new Image("dice5.png");
-		die6 = new Image("dice6.png");
+		die1 = new Image("images/dice1.png");
+		die2 = new Image("images/dice2.png");
+		die3 = new Image("images/dice3.png");
+		die4 = new Image("images/dice4.png");
+		die5 = new Image("images/dice5.png");
+		die6 = new Image("images/dice6.png");
 
 		/*
 		dieRoller.setOnAction(new EventHandler<ActionEvent>() {
@@ -206,10 +206,6 @@ public class GameClientUIController {
 				dieRoller.setDisable(false);
 				dieRoller.setText("Roll dice");
 				*/
-		/*
-		pass.setStyle("-fx-background-color: red");
-		pass.getStylesheets().add("ludoBoard.css");
-		*/
 				
 			}
 		});
