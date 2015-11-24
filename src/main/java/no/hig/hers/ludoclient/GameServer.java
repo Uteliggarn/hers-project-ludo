@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 public class GameServer {
 	
@@ -41,8 +42,7 @@ public class GameServer {
 			executorService.shutdown();
 			
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.exit(1);
+			Main.LOGGER.log(Level.SEVERE, "Unable to create gameserver", ioe);
 		}
 	}
 	
@@ -84,18 +84,18 @@ public class GameServer {
 		                        	i.remove();
 		                            messages.put(LOGOUT+p.returnName());
 		                            messages.put(p.returnName()+" got lost in hyperspace");
+		                            Main.LOGGER.log(Level.WARNING, "Disconnected from server", ioe);
 		                        }
 		                    }
 	                	}
 	                } catch (InterruptedException ie) {
-	                	ie.printStackTrace();
+	                	Main.LOGGER.log(Level.SEVERE, "Synchronized function for player failed", ie);
 	                } 
 	              //The thread goes to sleep to save the CPU energy
 					try {
 						Thread.sleep(250);
 					} catch (Exception e) {
-						// Prints the stackTrace if anything goes wrong.
-						e.printStackTrace();
+						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}
 	           }
 	        });
@@ -117,18 +117,18 @@ public class GameServer {
 		                        	i.remove();
 		                        	messages.add(LOGOUT+p.returnName());
 		                        	messages.add(p.returnName()+" got lost in hyperspace");
+		                        	Main.LOGGER.log(Level.WARNING, p.returnName() + " disconnected from server", ioe);
 		                        }
 		                    }
 	                    }
 	                } catch (InterruptedException ie) {
-	                    ie.printStackTrace();
+	                	Main.LOGGER.log(Level.SEVERE, "Synchronized function for player failed", ie);
 	                }
 	              //The thread goes to sleep to save the CPU energy
 					try {
 						Thread.sleep(250);
 					} catch (Exception e) {
-						// Prints the stackTrace if anything goes wrong.
-						e.printStackTrace();
+						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}
 	            }
 	        });
@@ -165,7 +165,7 @@ public class GameServer {
 		                    	try {
 		                    		messages.put(JOIN + p.returnName());
 		                    	} catch (InterruptedException ie) {
-		                    		ie.printStackTrace();
+		                    		Main.LOGGER.log(Level.SEVERE, "Synchronized function for player failed", ie);
 		                    	}
 		                    	
 		                    	Iterator<Player> i = player.iterator();
@@ -177,21 +177,21 @@ public class GameServer {
 			                        		p.sendText(JOIN + p1.returnName());
 			                        	} catch (IOException ioelocal) {
 			                        		// Lost connection, but doesn't bother to handle it here
+			                        		Main.LOGGER.log(Level.INFO, "Synchronized function for player failed", ioelocal);
 			                        	}
 			                    }
 			                    
 		                    }
 	                    }
 	                } catch (IOException ioe) {
-	                    ioe.printStackTrace();
+	                	Main.LOGGER.log(Level.SEVERE, "Unable to setup socket", ioe);
 	                }
 	                
 	              //The thread goes to sleep to save the CPU energy
 					try {
 						Thread.sleep(250);
 					} catch (Exception e) {
-						// Prints the stackTrace if anything goes wrong.
-						e.printStackTrace();
+						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}
 	            }
 	        });

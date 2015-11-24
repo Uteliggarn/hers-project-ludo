@@ -13,6 +13,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -31,30 +37,28 @@ import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
-	public static Stage currentStage;
-	public static Scene loginScene;
-	public static Scene registerScene;
-	public static Scene tempScene;
-	public static Scene mainScene;
-	
-	static boolean connected = false;
-	
+	private static Stage currentStage;
+	static Scene loginScene;
+	static Scene registerScene;
+	static Scene tempScene;
+	static Scene mainScene;
+
 	static ChatHandler cHandler; 
+	static ArrayList<String> playerList = new ArrayList<>();
 	private static GameServer gameServer;
 	private static ArrayList<GameHandler> gameHandler = new ArrayList<>();
-	public static ArrayList<String> playerList = new ArrayList<>();
 	
 	static String LudoClientHost;
 	static Socket connection;
-	public static BufferedWriter output;
-	public static BufferedReader input;
+	static BufferedWriter output;
+	static BufferedReader input;
 
-	public static int playerID;
-	public static String userName;
-	public static int serverPort = 10000;
+	static int playerID;
+	static String userName;
+	static int serverPort = 10000;
 	
+	static TabPane gameTabs;
 	private static TabPane chatTabs;
-	public static TabPane gameTabs;
 	private static ClientMainUIController mainController;
 	
 	static ExecutorService executorService;
@@ -71,28 +75,22 @@ public class Main extends Application {
 	final static String JOIN = "JOIN:";	// Unique name
 	static final String QUITGAME = "LOGOUT:";
 	
-	
+	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
 
 	@Override
 	public void start(Stage primaryStage) {
-	
-		
-		try {			
-			setUpScenes();	
-			
-			primaryStage.setScene(loginScene);
-			
-			primaryStage.setTitle("Ludo");
-			
-			primaryStage.show();
-			
-			currentStage = primaryStage;
-			
-			connect();
-			
-		} catch(Exception e) {
-			e.printStackTrace();
+		try {
+			setupLogger();
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, "Couldn't create log files", e);
 		}
+		setUpScenes();	
+		primaryStage.setScene(loginScene);
+		primaryStage.setTitle("Ludo");
+		primaryStage.show();
+		currentStage = primaryStage;
+		
+		connect();
 	}
 	
 	public static void main(String[] args) {
@@ -116,12 +114,10 @@ public class Main extends Application {
                     connection.getInputStream()));
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error connecting to server", e);
 			showAlert("Server down", "The server is currently down for maintenance");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Could not connect to server", e);
 		}
 	}
 	/**
@@ -151,7 +147,7 @@ public class Main extends Application {
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
 		} catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
 		}	
 	}
 	/**
@@ -218,12 +214,10 @@ public class Main extends Application {
 	        Main.output.newLine();
 	        Main.output.flush(); 
 	    } catch (IOException ioe) {
-	    	showAlert("Error sending message", ioe.toString());		
+	    	LOGGER.log(Level.WARNING, "Unable to send login", ioe);		
 		}
 	}
-	
-	
-	
+
 	 /**
      * Method used to send a message to the server. Handled in a separate method
      * to ensure that all messages are ended with a newline character and are
@@ -238,7 +232,7 @@ public class Main extends Application {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);	
         }
     }
 	/**
@@ -263,57 +257,45 @@ public class Main extends Application {
 			while (true) {
 				try {
 	                message = Main.input.readLine();
-	
-	                if (message.equals(CREATEGAME)) {
-	                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
-	                	gameHandler.add(gh);
-	                }
-	                else if (message.equals(HOST)) {
-	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
-	                	gameHandler.add(gh);
-	               
-	                }
-	                else if (message.startsWith(JOIN)) {
-	                	int port = Integer.valueOf(Main.input.readLine());
 
-	                	Platform.runLater(() -> {
-	                		inviteAccept(port);
-	                	});
-	                }
-	                else if (message.startsWith("TOPLISTPLAYED:")) {
-	                	String playedName;
-	                	String playedCount;
-	                	playedName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
-	                	playedCount = message.substring(message.lastIndexOf(",") + 1, message.length());
-	                	//Sette disse strengene til en label og lag en topliste
-	                }
-	                else if (message.startsWith("TOPLISTWON:")) {
-	                	String wonName;
-	                	String wonCount;
-	                	wonName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
-	                	wonCount = message.substring(message.lastIndexOf(",") + 1, message.length());
-	                	//Sette disse strengene til en label og lag en topliste
-	                }
 	                if (message != null) {
-                			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
-                				mainController.addChatToList(message.substring(13));
-        	                }
-        	                else if (message.equals(ERRORCHAT)) {	// Forteller at chaten finnes allerede
-        	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
-        	                }
-        	                else cHandler.handleChatMessage(message);
+		                if (message.equals(CREATEGAME)) {
+		                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
+		                	gameHandler.add(gh);
+		                } else if (message.equals(HOST)) {
+		                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
+		                	gameHandler.add(gh);
+		                } else if (message.startsWith(JOIN)) {
+		                	int port = Integer.parseInt(Main.input.readLine());
+		                	Platform.runLater(() -> {
+		                		inviteAccept(port);
+		                	});
+		                }
+		                else if (message.startsWith("TOPLISTPLAYED:")) {
+		                	String playedName;
+		                	String playedCount;
+		                	playedName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                	playedCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	//Sette disse strengene til en label og lag en topliste
+		                }
+		                else if (message.startsWith("TOPLISTWON:")) {
+		                	String wonName;
+		                	String wonCount;
+		                	wonName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                	wonCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	//Sette disse strengene til en label og lag en topliste
+		                }		
+		                 else if (message.startsWith(NEWCHAT))  //Legger til ny chatTab
+            				mainController.addChatToList(message.substring(13));
+    	                 else if (message.equals(ERRORCHAT)) 	// Forteller at chaten finnes allerede
+    	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
+    	                 else cHandler.handleChatMessage(message);
 	                }
-
+	                
+	                Thread.sleep(250);
 	            } catch (Exception e) {
-	             //   Main.showAlert("Error", "Error receiving message from server");
+	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
 	            }
-				
-				try {
-					Thread.sleep(250);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 		});
 	}
@@ -334,7 +316,24 @@ public class Main extends Application {
 		if (result.get() == buttonTypeAccept.OK){
 			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
         	gameHandler.add(gh);
-		} else {
 		}
+	}
+	
+	private static void setupLogger() throws IOException {	
+		LOGGER.setLevel(Level.WARNING);
+		
+		Logger rootLogger = Logger.getLogger("");
+		Handler[] handlers = rootLogger.getHandlers();
+		if (handlers[0] instanceof ConsoleHandler) {
+			rootLogger.removeHandler(handlers[0]);
+		}
+		
+		LOGGER.setLevel(Level.INFO);
+		FileHandler fileTxt = new FileHandler("Logging.txt");
+
+	    // create a TXT formatter
+	    SimpleFormatter formatterTxt = new SimpleFormatter();
+	    fileTxt.setFormatter(formatterTxt);
+	    LOGGER.addHandler(fileTxt);
 	}
 }

@@ -3,6 +3,7 @@ package no.hig.hers.ludoclient;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,11 +23,9 @@ public class CreateGameLobbyController {
 	
 	@FXML private Button startGameButton;
 
-	@FXML private MenuItem invite;
+	private static BufferedWriter output;
 	
 	private String hostName;
-	
-	private static BufferedWriter output;
 	
 	public void initialize() {
 		startGameButton.setDisable(true);
@@ -58,18 +57,17 @@ public class CreateGameLobbyController {
 	}
 	
 	
-	@FXML private void invitePlayer(ActionEvent e) {
+	@FXML private void invitePlayer() {
 		String item = playerList.getSelectionModel().getSelectedItem();
 		Main.sendText(Main.INVITE + item);
 	}
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) {
-		
+	@FXML private void startGameButtonPressed() {
 		try {
 			String gamestart = "gamestart:";
 			sendText(gamestart);
 		} catch (Exception ioe) {
-			ioe.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error trying to send text to server", ioe);
 		}
 	}
 	
@@ -91,7 +89,7 @@ public class CreateGameLobbyController {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	Main.LOGGER.log(Level.SEVERE, "Can't send message to server", ioe);
         }
     }
 }

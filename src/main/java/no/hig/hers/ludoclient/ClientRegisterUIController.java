@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import java.util.logging.Level;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
@@ -8,13 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class ClientRegisterUIController {
-
-    @FXML
-    private Button cancelButton;
-
-    @FXML
-    private Button registerButton;
-
     @FXML
     private PasswordField passwordTextField;
 
@@ -30,7 +25,7 @@ public class ClientRegisterUIController {
     }
 
     @FXML
-    void registerUser(ActionEvent event) {
+    void registerUser() {
     	String username = usernameTextField.getText();
     	String password = passwordTextField.getText();
     	String confirm = confirmTextField.getText();
@@ -39,14 +34,14 @@ public class ClientRegisterUIController {
 			if (password.equals(confirm)) {
 				try {
 					Main.sendLogin("SENDREGISTER:", username, password);
-					if(Main.input.readLine().equals("ACCEPTED")) {
+					if("ACCEPTED".equals(Main.input.readLine())) {
 						Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
 						Main.changeScene(Main.loginScene);
 						Main.connect();
 					}	
 					else Main.showAlert("User already exists", "Sorry, that username is already taken.\nPlease select another.");
-				} catch (Exception e1) {
-					/** TODO FIX THIS! */
+				} catch (Exception e) {
+					Main.LOGGER.log(Level.SEVERE, "Can't connect to server", e);
 				}
 			} else Main.showAlert("Password mistyped", "The passwords do not match.\nPlease try again.");
     	} else Main.showAlert("Too short/long password", "Passwords must be between 6 and 10 characters long.");

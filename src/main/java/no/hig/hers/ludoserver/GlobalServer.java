@@ -34,7 +34,7 @@ public class GlobalServer extends JFrame{
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
-	private ArrayList<String> groupChatList = new ArrayList<String>();
+	ArrayList<String> groupChatList = new ArrayList<String>();
 	private ArrayList<String> gameList = new ArrayList<String>();
 	
 	private ArrayList<Player> que = new ArrayList<Player>();
