@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -174,7 +176,7 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		//sendText("TOPWON");
+		sendText("TOP");
 	}
 	
 	/**
@@ -278,7 +280,20 @@ public class Main extends Application {
 	                		inviteAccept(port);
 	                	});
 	                }
-	                
+	                else if (message.startsWith("TOPLISTPLAYED:")) {
+	                	String playedName;
+	                	String playedCount;
+	                	playedName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+	                	playedCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+	                	//Sette disse strengene til en label og lag en topliste
+	                }
+	                else if (message.startsWith("TOPLISTWON:")) {
+	                	String wonName;
+	                	String wonCount;
+	                	wonName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+	                	wonCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+	                	//Sette disse strengene til en label og lag en topliste
+	                }
 	                if (message != null) {
                 			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
                 				mainController.addChatToList(message.substring(13));
