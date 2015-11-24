@@ -42,21 +42,27 @@ public class GameHandler {
 		this.hostName = hostName;
 		this.caseNr = caseNr;
 		
+		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		
 		connect();
 		createNewLobby();
 		
 		if (caseNr == 1)
 			addPlayersToList();
 		
+		//executorService.shutdown();	// Dreper tråden når klassen dør
+		
 	}
 	
 	
 	private void addPlayersToList() {
-		Thread t = new Thread(() -> {
+		executorService.execute(() -> {
 			while (true) {
 				for (int i=0; i<Main.playerList.size(); i++) {
-					if (!Main.playerList.get(i).equals(Main.userName))
+					if (Main.playerList.get(i) != Main.userName) {
+						System.out.println("Hva har vi i player list: " + Main.playerList.get(i) + " og userName: " + Main.userName);
 						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+					}
 				}
 				//The thread goes to sleep to save the CPU energy
 				try {
@@ -67,7 +73,6 @@ public class GameHandler {
 				}
 			}
 		});
-		t.start();
 	}	
 	
 	public void connect() {
@@ -127,25 +132,30 @@ public class GameHandler {
 	                	Platform.runLater(new Runnable() {
 	                		@Override
             				public void run() {
-	                			int n = Integer.parseInt(msg.substring(10, 11));
-	                			
-	                			FXMLLoader loader = new FXMLLoader();
-	                			try {
-	                				System.out.print("Starter spill for " + n);
-		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+			                	int n = Integer.parseInt(msg.substring(10, 11));
+		            			
+		            			FXMLLoader loader = new FXMLLoader();
+		            			
+		            			System.out.print("Starter spill for " + n + "\n");
+		            			
+		        				try {
+		            				for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+		                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
+		                					//System.out.println("Hva er id navnet: " + Main.gameTabs.getTabs().get(i).getId());
 		                					Main.gameTabs.getTabs().get(i).setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		                					gameClientUIController = loader.getController();
 			                				gameClientUIController.setConnetion(output, input);
-			                				gameClientUIController.setPlayer(n);
-		                				}	
+			                				gameClientUIController.setPlayer(n);	
+		                				}
 		                			}
-	                			} catch (IOException e1) {
-		            			// TODO Auto-generated catch block
-		            			e1.printStackTrace();
-	                			}	
-	                		}
-	                	});
+		                			
+		            			} catch (IOException ioe) {
+		            				ioe.printStackTrace();
+		            			}			
+				            	                			
+				            	                		
+			                }
+	                	});	
 	                }
 	                else if(msg != null && msg.startsWith("gamename:")) {
 	                	Platform.runLater(new Runnable() {
@@ -204,6 +214,7 @@ public class GameHandler {
             						}
             					});
 	                		break;
+	                	default: break;
 	                	}
 	                }
                     	        	                
@@ -231,7 +242,6 @@ public class GameHandler {
     				public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
-						tab.setClosable(true);
 					
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -244,7 +254,7 @@ public class GameHandler {
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
-							startProcessConnection();				
+							processConnection();				
 							
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
@@ -257,7 +267,6 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
-						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -270,7 +279,7 @@ public class GameHandler {
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
-							startProcessConnection();
+							processConnection();
 							
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
@@ -283,7 +292,6 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
-						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -295,7 +303,7 @@ public class GameHandler {
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
-							startProcessConnection();
+							processConnection();
 							
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
@@ -303,6 +311,7 @@ public class GameHandler {
 					}
 		});
 			break;
+		default: break;
 		}
 	}
 
