@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.List;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,14 +14,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import no.hig.hers.ludoserver.Player;
 
 public class GlobalServer extends JFrame{
 	
@@ -302,8 +299,8 @@ public class GlobalServer extends JFrame{
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}*/
 						
-					player.add(p);
-					int g = player.indexOf(p);
+					//player.add(p);
+					//int g = player.indexOf(p);
 					/*
 					synchronized (player) {
 						player.add(p);
@@ -329,11 +326,10 @@ public class GlobalServer extends JFrame{
 						}
 							*/
 						synchronized (player) {
-							//player.add(p);
-							//int g = player.indexOf(p);
+							player.add(p);
+							int g = player.indexOf(p);
 							
 							if (p.loginChecker(++serverPorts)) {    	
-	                    	
 		                    	try {
 		                    		messages.put(GLOBALCHAT + p.returnName());
 		                    	} catch (InterruptedException ie) {

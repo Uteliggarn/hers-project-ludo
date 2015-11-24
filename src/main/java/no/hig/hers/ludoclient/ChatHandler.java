@@ -13,7 +13,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.shape.Rectangle;
 /**
  * Class for handling chats.
- * This does everything from adding new chat tabs, to handling messages
+ * This handles the chat tabs, and the chat-related messages.
  * @author Daniel Rosland on 13.11.2015
  */
 
@@ -61,7 +61,7 @@ public class ChatHandler {
     				controllers.add(c);
     				chats.add(newTab);
     				chatTabs.getTabs().add(newTab);
-    				if (newTab.getId().equals("Global")) {
+    				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
     				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
     				
