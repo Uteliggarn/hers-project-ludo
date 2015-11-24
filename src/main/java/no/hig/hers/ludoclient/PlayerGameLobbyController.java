@@ -1,8 +1,5 @@
 package no.hig.hers.ludoclient;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

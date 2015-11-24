@@ -1,13 +1,7 @@
 package no.hig.hers.ludoclient;
 
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import no.hig.hers.ludoclient.Main;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;

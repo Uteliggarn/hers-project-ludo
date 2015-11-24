@@ -1,15 +1,11 @@
 package no.hig.hers.ludoclient;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
 public class HostGameLobbyController {

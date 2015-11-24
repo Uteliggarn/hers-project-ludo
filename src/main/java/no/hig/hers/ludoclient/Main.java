@@ -15,21 +15,15 @@ import java.util.concurrent.Executors;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 
@@ -110,6 +104,7 @@ public class Main extends Application {
 	public static void connect() {
 		try {
 			connection = new Socket("128.39.83.87", 12344);
+			//connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -169,6 +164,15 @@ public class Main extends Application {
 
 	public static void startGameServer() {
 		gameServer = new GameServer(serverPort);
+		
+		gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
+			if (newTab.getId().equals("main"))  
+				requestTopTen();
+		});
+	}
+	
+	public static void requestTopTen() {
+		//sendText("TOPWON");
 	}
 	
 	/**
@@ -213,6 +217,8 @@ public class Main extends Application {
 	    	showAlert("Error sending message", ioe.toString());		
 		}
 	}
+	
+	
 	
 	 /**
      * Method used to send a message to the server. Handled in a separate method
@@ -265,16 +271,13 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                	
-	                	Platform.runLater(new Runnable() {
-	                		@Override
-	                		public void run() {
-	                			inviteAccept(port);       				
-	                		}
+
+	                	Platform.runLater(() -> {
+	                		inviteAccept(port);
 	                	});
 	                }
 	                
-	                if (!message.equals(null)) {
+	                if (message != null) {
                 			if (message.startsWith(NEWCHAT)) { //Legger til ny chatTab
                 				mainController.addChatToList(message.substring(13));
         	                }

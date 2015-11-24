@@ -1,21 +1,13 @@
 package no.hig.hers.ludoclient;
 
-import java.awt.BasicStroke;
 import java.awt.Point;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -83,7 +75,7 @@ public class LudoBoardFX extends Pane {
 	}
 	
 	private void drawGameBoard() {
-		board = new Image("images/ludo_board.png", 800, 800, true, true);
+		board = new Image("ludo_board.png", 800, 800, true, true);
 		gameBoard = new Canvas(800, 800);
 		GraphicsContext gb = gameBoard.getGraphicsContext2D();
 		gb.drawImage(board, 0, 0);
