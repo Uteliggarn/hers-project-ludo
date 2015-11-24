@@ -24,8 +24,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import no.hig.hers.ludoclient.Player;
-
 public class GlobalServer extends JFrame{
 	
 	private ServerSocket server;
@@ -358,7 +356,7 @@ public class GlobalServer extends JFrame{
 								--serverPorts;
 								player.remove(g);
 							}
-		
+						}
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
 				}
