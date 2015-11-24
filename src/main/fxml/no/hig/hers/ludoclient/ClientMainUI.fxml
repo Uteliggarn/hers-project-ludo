@@ -21,8 +21,8 @@
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="600.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="0.0" prefWidth="0.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
                                 <rowConstraints>
@@ -61,7 +61,8 @@
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="600.0" />
+                  <TabPane fx:id="chatTabPane" prefHeight="0.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="ALL_TABS" tabMaxHeight="300.0" tabMaxWidth="200.0" AnchorPane.bottomAnchor="0.0">
+                  </TabPane>
                   <CheckBox fx:id="checkBoxHideChat" mnemonicParsing="false" onAction="#hideChat" text="Hide Chat" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="610.0" />
                </children>
             </AnchorPane>

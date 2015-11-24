@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import no.hig.hers.ludoserver.Player;
 
 public class GlobalServer extends JFrame{
 	
@@ -333,7 +334,6 @@ public class GlobalServer extends JFrame{
 							//int g = player.indexOf(p);
 							
 							if (p.loginChecker(++serverPorts)) {    	
-	                    	
 		                    	try {
 		                    		messages.put(GLOBALCHAT + p.returnName());
 		                    	} catch (InterruptedException ie) {
