@@ -490,10 +490,8 @@ public class LudoBoardFX extends Pane {
 		return coordinatesBlue.elementAt(i);
 	}
 	
-	//Is called istead of repaint() from swing project.
 	//
 	void makePawns() {
-		
 		//Used to clear the canvas
 		if(drawn > 0) {
 		GraphicsContext gp1 = gamePieces.getGraphicsContext2D();
@@ -595,12 +593,13 @@ public class LudoBoardFX extends Pane {
 		private int color;		
 		private boolean inHome;
 		private boolean isTower;
-		private int pointWorth;
 		private boolean visible;
 		private boolean canBeMoved;
 		
 		/**
-		 * Class constructor that makes every pawn and set their starting location
+		 * Class constructor that makes every pawn and set their starting location,
+		 * homelocation, color, sets that it is in home, sets that it is not a tower,
+		 * sets that it should be drawed on the board
 		 * @param loc holds the start location of the current pawn
 		 * @param col holds the same nuber as location, but this is to verify the color
 		 */
@@ -611,7 +610,6 @@ public class LudoBoardFX extends Pane {
 			inHome = true;
 			isTower = false;
 			visible = true;
-			pointWorth = 1;
 			canBeMoved = false;
 		}
 		/**
@@ -747,9 +745,8 @@ public class LudoBoardFX extends Pane {
 					j = getpawnInGoalLocation(color);
 					if (j < 5) {
 						temp = redPawns.get(j);
-						for(int i = 1; i <= redPawns.get(j).returnPointWorth(); i++ ) {
-							redPawnsInGoal.add(new Pawned(0, 0));
-						}
+						redPawnsInGoal.add(new Pawned(0, 0));
+						redPawnsInGoal.add(temp);
 						redPawns.remove(j);
 					}
 				}
@@ -796,7 +793,6 @@ public class LudoBoardFX extends Pane {
 		
 		public void setTower() {
 			isTower = true;
-			//pointWorth++; Not used anymore. Cant move towers
 		}
 		
 		public boolean getTower() {
@@ -804,10 +800,6 @@ public class LudoBoardFX extends Pane {
 		}
 		public void setNotTower() {
 			isTower = false;
-		}
-		
-		public int returnPointWorth() {
-			return pointWorth;
 		}
 		
 		public void setNotVisible() {
@@ -1123,6 +1115,20 @@ public class LudoBoardFX extends Pane {
 			}
 			
 			return n;
+		}
+		
+		public void testForTowersGreen(int diceVal) {
+			
+		}
+		
+		public void testForTowersRed(int diceVal) {
+			
+		}
+		public void testForTowersBlue(int diceVal) {
+			
+		}
+		public void testForTowersYellow(int diceVal) {
+			
 		}
 		
 		public void bounceFromTower(int t, int diceVal) {
