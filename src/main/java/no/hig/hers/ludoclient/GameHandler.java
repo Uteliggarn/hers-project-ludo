@@ -128,16 +128,18 @@ public class GameHandler {
 	                		@Override
             				public void run() {
 	                			int n = Integer.parseInt(msg.substring(10, 11));
-	                							
-	                			Tab tab = Main.gameTabs.getTabs().get(1);
+	                			
 	                			FXMLLoader loader = new FXMLLoader();
 	                			try {
 	                				System.out.print("Starter spill for " + n);
-	                				tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-	                				gameClientUIController = loader.getController();
-	                				gameClientUIController.setConnetion(output, input);
-	                				gameClientUIController.setPlayer(n);
-	                				
+		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+		                					Main.gameTabs.getTabs().get(i).setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
+		                					gameClientUIController = loader.getController();
+			                				gameClientUIController.setConnetion(output, input);
+			                				gameClientUIController.setPlayer(n);
+		                				}	
+		                			}
 	                			} catch (IOException e1) {
 		            			// TODO Auto-generated catch block
 		            			e1.printStackTrace();
@@ -229,6 +231,7 @@ public class GameHandler {
     				public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 					
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -236,6 +239,7 @@ public class GameHandler {
 							createGameLobbyController = (CreateGameLobbyController) loader.getController();
 							
 							createGameLobbyController.setHostPlayer(hostName);
+							createGameLobbyController.setConnetion(output);
 							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
@@ -253,6 +257,7 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
@@ -260,8 +265,8 @@ public class GameHandler {
 							hostGameLobbyController = (HostGameLobbyController) loader.getController();
 							
 							hostGameLobbyController.setHostPlayer(hostName);
+							hostGameLobbyController.setConnetion(output);
 							
-							hostGameLobbyController.setConnetion(output, input);
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
@@ -278,6 +283,7 @@ public class GameHandler {
 					public void run() {
 						Tab tab = new Tab("Ludo");
 						tab.setId(hostName);
+						tab.setClosable(true);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {

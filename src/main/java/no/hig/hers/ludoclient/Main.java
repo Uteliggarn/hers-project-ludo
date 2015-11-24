@@ -24,6 +24,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -247,10 +248,13 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                
-	                	inviteAccept(port);
-	                	//GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
-	                	//gameHandler.add(gh);
+	                	
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+	                		public void run() {
+	                			inviteAccept(port);       				
+	                		}
+	                	});
 	                }
 	                
 	                if (!message.equals(null)) {
@@ -280,25 +284,29 @@ public class Main extends Application {
 	private static void inviteAccept(int port) {
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Dialog");
-		alert.setHeaderText("Game invite");
+		alert.setTitle("Game invite");
+		alert.setHeaderText(null);
 		alert.setContentText("Accept the invite or decline it");
+		
+		ButtonType buttonTypeAccept = new ButtonType("Accept");
+		ButtonType buttonTypeDecline = new ButtonType("Decline", ButtonData.CANCEL_CLOSE);
+		
+		alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeDecline);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
+		if (result.get() == buttonTypeAccept.OK){
 			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		} else {
-		    System.out.println("Må jeg?");
 		}
 	}
 	
 	/*
 	 Platform.runLater(new Runnable() {
-	        @Override
-	                		public void run() {
+	 	@Override
+	    public void run() {
 	                				
-	                		}
-	                	});
+	    }
+	 });
 	 */
 }
