@@ -271,12 +271,9 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                	
-	                	Platform.runLater(new Runnable() {
-	                		@Override
-	                		public void run() {
-	                			inviteAccept(port);       				
-	                		}
+
+	                	Platform.runLater(() -> {
+	                		inviteAccept(port);
 	                	});
 	                }
 	                

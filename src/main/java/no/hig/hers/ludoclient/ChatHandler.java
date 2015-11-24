@@ -61,7 +61,7 @@ public class ChatHandler {
     				controllers.add(c);
     				chats.add(newTab);
     				chatTabs.getTabs().add(newTab);
-    				if (newTab.getId().equals("Global")) {
+    				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
     				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
     				
