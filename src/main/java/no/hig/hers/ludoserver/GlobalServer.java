@@ -49,17 +49,19 @@ public class GlobalServer extends JFrame{
     
     private final String JOIN = "JOIN:";
     private final String HOST = "HOST";
-    private final String INVITE = "invite:";
-    private final String LOGOUT = "logout:";
+    private final String INVITE = "INVITE:";	// invite: +7
+    private final String LOGOUT = "LOGOUT:";
     private final String CLOGOUT = ">>>LOGOUT<<<";
-    private final String QUEUE = "queue";
+    private final String QUEUE = "QUEUE";
+    
+    private final String GLOBALCHAT = "GlobalJOIN:";	// Global chat name
     
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
     
-    
-    
+    private final String GWON = "GAMEWON";
+    private final String GLOST = "GAMELOST";
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
@@ -97,7 +99,6 @@ public class GlobalServer extends JFrame{
 			server.bind(new InetSocketAddress(12344));
 			
 			executorService = Executors.newCachedThreadPool();
-			//executorService = Executors.newFixedThreadPool(3);
 			
 			startLoginMonitor();
 			startMessageSender();
@@ -135,6 +136,7 @@ public class GlobalServer extends JFrame{
 								if (msg != null && msg.equals(CLOGOUT)) {
 									i.remove();
 									que.remove(p.returnName());
+									gameList.remove(IDGK + p.returnName());
 									messages.put(LOGOUT + p.returnName());
 								}
 							} catch (IOException ioe) {
@@ -206,9 +208,9 @@ public class GlobalServer extends JFrame{
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-				if(que.size() == 2) {
+				if(que.size() == 4) {
 					boolean hostFound = false;
-					for (int t=0; t<2; t++) {
+					for (int t=0; t<4; t++) {
 						
 						//que.get(t).sendText("HOST");
 						//System.out.println("Hva er que: "  );
@@ -240,12 +242,18 @@ public class GlobalServer extends JFrame{
 			}
 			else if (msg != null && msg.startsWith(INVITE)) {
 				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+			
 				for (int y=0; y<player.size(); y++)
 					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(JOIN + p.returnName());
-						player.get(y).sendText(Integer.toString(p.returnServerPort()));
+						player.get(y).sendText(JOIN + player.get(y).returnName());
+						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
 					}
 			}
+			else if (msg != null && msg.equals(GWON))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+			else if (msg != null && msg.equals(GLOST))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
+			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -298,7 +306,7 @@ public class GlobalServer extends JFrame{
 				try {
 					Socket s = server.accept();
 					Player p = new Player(s);
-					if (p.loginChecker(++serverPorts)) {
+					
 						
 						/*
 						for (int i=0; i<groupChatList.size(); i++) {
@@ -306,20 +314,29 @@ public class GlobalServer extends JFrame{
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}*/
 						
-						synchronized (player) {
-							player.add(p);
-							
+					player.add(p);
+					int g = player.indexOf(p);
+					
+					synchronized (player) {
+						if (p.loginChecker(++serverPorts)) {
+									
 							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
 							try {
 								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-								messages.put("GlobalJOIN:" + p.returnName());
-								
+								messages.put(GLOBALCHAT + p.returnName());
+									
 								for (int t=0; t<player.size(); t++) {
-									p.sendText("GlobalJOIN:" + player.get(t).returnName());
+									p.sendText(GLOBALCHAT + player.get(t).returnName());
 								}
 							} catch (InterruptedException ie) {
 								ie.printStackTrace();
-							}
+							}	
+						}
+						else {
+							--serverPorts;
+							player.remove(g);
+						}
+							
 							/*
 							
 							Iterator<Player> i = player.iterator();
@@ -342,9 +359,7 @@ public class GlobalServer extends JFrame{
 						} catch (InterruptedException ie) {
 							ie.printStackTrace();
 						}*/
-					}
-					else
-						--serverPorts;
+					
 						
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");

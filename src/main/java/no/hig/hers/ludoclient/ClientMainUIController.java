@@ -1,6 +1,7 @@
 package no.hig.hers.ludoclient;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,14 +13,19 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 
 public class ClientMainUIController {
+	@FXML
+	private Label labelUserName;
+	
     @FXML
     private Button buttonTest;
     
@@ -30,7 +36,16 @@ public class ClientMainUIController {
     private Button queueButton;
     
     @FXML
+    private Button buttonAddChat;
+    
+    @FXML
+    private Button buttonCreateChat;
+    
+    @FXML
     private TabPane chatTabPane;
+    
+    @FXML
+    private CheckBox checkBoxHideChat;
     
     @FXML
     private TabPane gameTabs; 
@@ -39,12 +54,13 @@ public class ClientMainUIController {
     
     @FXML
     private ListView<String> chatListView;
+    
 
     @FXML
 	public void initialize() {
-		//chatTextArea.setMouseTransparent(false);
-		chatTabPane.setMouseTransparent(true);
+    	
 	}
+    
     @FXML
     void testCode(ActionEvent event) {
     	Tab newTab = new Tab("random");	
@@ -54,10 +70,9 @@ public class ClientMainUIController {
     @FXML
     void newGameButtonPressed(ActionEvent event) {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-    		System.out.println("\nHva er size: " + Main.gameTabs.getTabs().size());
     		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
+    			System.out.println("\nKom vi in i ++count?");
     			++count;
-    			System.out.println("\ntab id: " + Main.gameTabs.getTabs().get(i).getId());
     		}
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
     			Main.sendText(Main.CREATEGAME);
@@ -66,6 +81,17 @@ public class ClientMainUIController {
     		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
     			Main.showAlert("Error", "You have allready created a game.");
     	}
+    }
+    
+    @FXML
+    void createChatButtonPressed(ActionEvent event) {
+    	TextInputDialog dialog = new TextInputDialog("");
+    	dialog.setTitle("Create a new chatroom");
+    	dialog.setHeaderText(null);
+    	dialog.setContentText("Please enter the name of the chatroom:");
+
+    	Optional<String> result = dialog.showAndWait();
+    	result.ifPresent(name -> Main.sendText(Main.NEWCHAT + name));
     }
     
     @FXML
@@ -81,6 +107,13 @@ public class ClientMainUIController {
     	Main.cHandler.addNewChat(chatName);
     }
     
+    @FXML
+    void hideChat(ActionEvent event) {
+    	if (checkBoxHideChat.isSelected()) {
+    		chatTabPane.setVisible(false);
+    	} else chatTabPane.setVisible(true);
+    }
+
     public void addChatToList(String name) {
        	Platform.runLater(new Runnable() {
     		@Override
@@ -89,43 +122,8 @@ public class ClientMainUIController {
     		}});
     }
     
-    public void newGameTab() {
-    	try {
-    		
-    		Main.sendText("createGame");
-    		
-    		int count = Main.input.read();
-    		
-    		System.out.println("\nHva er count:" + count);
-    		
-    		if (count != -1) {
-    		
-				Tab tmp = new Tab("Ludo");
-				
-				FXMLLoader loader = new FXMLLoader();
-				
-				tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
-				
-				CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
-				
-				for (int i=0; i<1; i++) {
-					String msg = Main.input.readLine();
-					System.out.println("\nHva kommer in som msg: " + msg);
-					if (!msg.substring(7).equals(Main.userName))    ;
-						createLobbyWindowController.addNewPlayerToList(msg.substring(7));
-				}
-				
-				gameTabs.getTabs().add(tmp);
-				gameTabs.getSelectionModel().select(tmp);
-    		}
-    		else
-    			Main.showAlert("Error", "Could not create game. You're allready hosting a game");
-    	} catch (IOException ioe) {
-    		ioe.printStackTrace();
-    	}
-    	
-    	//gameTabs.getTabs().add(tab);
-    	//gameTabs.getSelectionModel().select(tab);
-    }
+	public void setLabelUserName(String username) {
+		labelUserName.setText(username);
+	}
     
 }

@@ -38,8 +38,6 @@ public class GameHandler {
 	
 	public GameHandler(int serverPort, int caseNr, String hostName) {
 		
-		System.out.println("GameHandler serverPort: " + serverPort);
-		
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
@@ -47,16 +45,30 @@ public class GameHandler {
 		connect();
 		createNewLobby();
 		
+		if (caseNr == 1)
+			addPlayersToList();
 		
 	}
 	
 	
 	private void addPlayersToList() {
-		for (int i=0; i<Main.playerList.size(); i++) {
-			if (!Main.playerList.get(i).equals(Main.userName))
-				createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
-		}
-	}
+		Thread t = new Thread(() -> {
+			while (true) {
+				for (int i=0; i<Main.playerList.size(); i++) {
+					if (!Main.playerList.get(i).equals(Main.userName))
+						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+				}
+				//The thread goes to sleep to save the CPU energy
+				try {
+					Thread.sleep(5000);
+				} catch (Exception e) {
+					// Prints the stackTrace if anything goes wrong.
+					e.printStackTrace();
+				}
+			}
+		});
+		t.start();
+	}	
 	
 	public void connect() {
 		try {			
@@ -109,48 +121,84 @@ public class GameHandler {
 					
 	                String msg = input.readLine();
 	                
-	                System.out.println("\nHva er msg: " + msg);
+	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if(msg != null && msg.startsWith("gamestart:")) {
-	                	int n = Integer.parseInt(msg.substring(11, 11));
-	                	
-	                	Tab tab = Main.gameTabs.getTabs().get(1);
-	            		FXMLLoader loader = new FXMLLoader();
-	            		try {
-	            			tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
-	            			gameClientUIController.setConnetion(output, input);
-	            			gameClientUIController.setPlayer(n);
-	            		} catch (IOException e1) {
-	            			// TODO Auto-generated catch block
-	            			e1.printStackTrace();
-	            		}	
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int n = Integer.parseInt(msg.substring(10, 11));
+	                							
+	                			Tab tab = Main.gameTabs.getTabs().get(1);
+	                			FXMLLoader loader = new FXMLLoader();
+	                			try {
+	                				System.out.print("Starter spill for " + n);
+	                				tab.setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
+	                				gameClientUIController = loader.getController();
+	                				gameClientUIController.setConnetion(output, input);
+	                				gameClientUIController.setPlayer(n);
+	                				
+	                			} catch (IOException e1) {
+		            			// TODO Auto-generated catch block
+		            			e1.printStackTrace();
+	                			}	
+	                		}
+	                	});
 	                }
-	                else if(msg != null && msg.startsWith("diceValue:")) {
-	                	int diceVal = Integer.parseInt(msg.substring(11,11));
-	                	int player = Integer.parseInt(msg.substring(12,12));
-	                	int pawn = Integer.parseInt(msg.substring(13,13));
-	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                else if(msg != null && msg.startsWith("gamename:")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int n = Integer.parseInt(msg.substring(9, 10));
+	                			System.out.println("playernamenr " + n);
+	                			String tmpNavn = msg.substring(10, msg.length());
+	                			gameClientUIController.setPlayerName(n, tmpNavn);
+	                		}
+	                	});
+	                }
+	                else if(msg != null && msg.startsWith("dicevalue:")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                			int diceVal = Integer.parseInt(msg.substring(10,11));
+	                			int player = Integer.parseInt(msg.substring(11,12));
+			                	int pawn = Integer.parseInt(msg.substring(12,13));
+			                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
+			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
+	                		}
+	                	});
+	                }
+	                else if(msg != null && msg.startsWith("gameover")) {
+	                	Platform.runLater(new Runnable() {
+	                		@Override
+            				public void run() {
+	                		gameClientUIController.gameover();	
+	                		}
+	                	});	
 	                }
 	                else if (msg != null && msg.startsWith(JOIN)) {
 	                	switch (caseNr) {
 	                	case 1: Platform.runLater(new Runnable() {
 	                				@Override
 	                				public void run() {
-	                					createGameLobbyController.joinedPlayer(msg.substring(5));
+	                					if (!msg.substring(5).equals(hostName.substring(4)))
+	                						createGameLobbyController.joinedPlayer(msg.substring(5));
 	                				}
 	                			});
 	                		break;
 	                	case 2: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
-            							hostGameLobbyController.joinedPlayer(msg.substring(5));
+            							if (!msg.substring(5).equals(hostName.substring(4)))
+            								hostGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
 	                		break;
 	                	case 3: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
-            							playerGameLobbyController.joinedPlayer(msg.substring(5));
+            							if (!msg.substring(5).equals(hostName.substring(4)))
+            								playerGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
 	                		break;
@@ -180,14 +228,14 @@ public class GameHandler {
     				@Override
     				public void run() {
 						Tab tab = new Tab("Ludo");
-						tab.setId(Main.IDGK + Main.userName);
+						tab.setId(hostName);
 					
 						FXMLLoader loader = new FXMLLoader();
 						try {
 							tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 							createGameLobbyController = (CreateGameLobbyController) loader.getController();
 							
-							addPlayersToList();
+							createGameLobbyController.setHostPlayer(hostName);
 							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
@@ -204,12 +252,14 @@ public class GameHandler {
 					@Override
 					public void run() {
 						Tab tab = new Tab("Ludo");
-						tab.setId(Main.IDGK + Main.userName);
+						tab.setId(hostName);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
 							tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 							hostGameLobbyController = (HostGameLobbyController) loader.getController();
+							
+							hostGameLobbyController.setHostPlayer(hostName);
 							
 							hostGameLobbyController.setConnetion(output, input);
 							Main.gameTabs.getTabs().add(tab);
@@ -234,7 +284,8 @@ public class GameHandler {
 							tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 							playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
 							
-							//playerGameLobbyController.setConnetion(output, input);
+							playerGameLobbyController.setHostPlayer(hostName);
+							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
 							
@@ -257,7 +308,6 @@ public class GameHandler {
 	
 	public void close() {
 		try {
-			executorService.shutdownNow();
 			output.close();
 			input.close();
 			connection.close();

@@ -60,14 +60,26 @@ public class GameServer {
 			                        //System.out.println("hva er msg " + msg);
 			                        
 			                        if(msg != null && msg.startsWith("gamestart:")) {
-			                        	String tmp;
-			                        	tmp = Integer.toString(p.returnPlayerNr());
-			                        	messages.put(msg + tmp);
+			                        	//String tmp;
+			                        	//tmp = Integer.toString(p.returnPlayerNr());
+			                        	//System.out.println("Hvilken player:" + tmp);
+			                        	//messages.put(msg + tmp);
+			                        	for (int t=0; t<player.size(); t++) {
+			                    			System.out.println("\n" + t);
+			                    			player.get(t).sendText(msg + (t+1));
+										}
+			                        	for(int t=0; t < player.size(); t++) {
+			                        		String tmp;
+			                        		tmp = "gamename:" + (t+1) + player.get(t).returnName(); 
+			                        		messages.put(tmp);
+			                        	}
 			                        }
 			                        if(msg != null && msg.startsWith("dicevalue:")) {
 			                        	messages.put(msg);
 			                        }
-			                   
+			                        if(msg != null && msg.startsWith("gameover")) {
+			                        	messages.put(msg);
+			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
 		                            messages.put(LOGOUT+p.returnName());
@@ -130,12 +142,14 @@ public class GameServer {
 	                    
 	                    if (player.size() != 4) {
 	                    	
-		                    Player p = new Player(s, playerNr++);
+		                    Player p = new Player(s, playerNr);
+		                    playerNr++;
 		                    
+		                    /*
+>>>>>>> refs/remotes/origin/master
 		                    try {
 								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
 	                    		for (int t=0; t<player.size(); t++) {
-	                    			System.out.println("\nKom vel ikke in her");
 									p.sendText(JOIN + player.get(t).returnName());
 								}
 	                    		
@@ -144,22 +158,28 @@ public class GameServer {
 							} catch (InterruptedException ie) {
 								ie.printStackTrace();
 							}
-		                    
+		                    */
 		                    synchronized (player) {
-		                    	player.add(p);
+		                    	player.add(p);     	
 		                    	
-		                    	/*
+		                    	try {
+		                    		messages.put(JOIN + p.returnName());
+		                    	} catch (InterruptedException ie) {
+		                    		ie.printStackTrace();
+		                    	}
+		                    	
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
 			                        Player p1 = i.next();
 			                        if (p != p1)
 			                        	try {
-			                        		p.sendText("LOGIN:"+p1.returnName());
+			                        		System.out.println("\n Synchronized i loginMonitor: " + p1.returnName());
+			                        		p.sendText(JOIN + p1.returnName());
 			                        	} catch (IOException ioelocal) {
 			                        		// Lost connection, but doesn't bother to handle it here
 			                        	}
 			                    }
-			                    */
+			                    
 		                    }
 	                    }
 	                } catch (IOException ioe) {
