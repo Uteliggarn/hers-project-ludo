@@ -3,6 +3,8 @@ package no.hig.hers.ludoserver;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -51,6 +53,7 @@ public class GlobalServer extends JFrame{
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
+    private final String TOP = "TOP";
     
     private final String GWON = "GAMEWON";
     private final String GLOST = "GAMELOST";
@@ -122,6 +125,34 @@ public class GlobalServer extends JFrame{
 									gameList.remove(IDGK + p.returnName());
 									messages.put(LOGOUT + p.returnName());
 								}
+								if (msg != null && msg.equals(TOP)) {
+									try {
+										String[][] topten = null;
+										int rad = 0;
+										ResultSet resultSet = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+										ResultSetMetaData metaData;
+										
+										metaData = resultSet.getMetaData();
+								
+										int noColumns = metaData.getColumnCount();
+							
+										while (resultSet.next()) {
+											rad++;
+											String tmp = Integer.toString(rad);
+											topten[rad][0] = tmp; 	
+											for (int ii = 1; ii <= noColumns; ii++) {
+												topten[rad][ii] = (String) resultSet.getObject(ii);
+												//System.out.printf("%-8s\t", resultSet.getObject(ii));
+											} 
+										}
+										//for ( int j =0; j < topten[]. )
+										
+									}
+									catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+									}
+								}	
 							} catch (IOException ioe) {
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
@@ -298,8 +329,8 @@ public class GlobalServer extends JFrame{
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}*/
 						
-					player.add(p);
-					int g = player.indexOf(p);
+					//player.add(p);
+					//int g = player.indexOf(p);
 					/*
 					synchronized (player) {
 						player.add(p);
@@ -325,8 +356,8 @@ public class GlobalServer extends JFrame{
 						}
 							*/
 						synchronized (player) {
-							//player.add(p);
-							//int g = player.indexOf(p);
+							player.add(p);
+							int g = player.indexOf(p);
 							
 							if (p.loginChecker(++serverPorts)) {    	
 		                    	try {

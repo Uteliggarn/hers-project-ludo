@@ -172,7 +172,7 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		sendText("");
+		//sendText("TOPWON");
 	}
 	
 	/**

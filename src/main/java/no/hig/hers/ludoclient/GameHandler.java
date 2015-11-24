@@ -42,21 +42,26 @@ public class GameHandler {
 		this.hostName = hostName;
 		this.caseNr = caseNr;
 		
+		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		
 		connect();
 		createNewLobby();
 		
 		if (caseNr == 1)
 			addPlayersToList();
 		
+		//executorService.shutdown();	// Dreper tråden når klassen dør
+		
 	}
 	
 	
 	private void addPlayersToList() {
-		Thread t = new Thread(() -> {
+		executorService.execute(() -> {
 			while (true) {
 				for (int i=0; i<Main.playerList.size(); i++) {
-					if (!Main.playerList.get(i).equals(Main.userName))
+					if (Main.playerList.get(i) != Main.userName) {
 						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+					}
 				}
 				//The thread goes to sleep to save the CPU energy
 				try {
@@ -67,7 +72,6 @@ public class GameHandler {
 				}
 			}
 		});
-		t.start();
 	}	
 	
 	public void connect() {
@@ -131,7 +135,7 @@ public class GameHandler {
                 			try {
                 				System.out.print("Starter spill for " + n);
 	                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-	                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+	                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
 	                					Main.gameTabs.getTabs().get(i).setContent(loader.load(getClass().getResource("GameClient.fxml").openStream()));
 	                					gameClientUIController = loader.getController();
 		                				gameClientUIController.setConnetion(output, input);
@@ -186,6 +190,7 @@ public class GameHandler {
 									playerGameLobbyController.joinedPlayer(msg.substring(5));
 		                		});
 	                		break;
+	                	default: break;
 	                	}
 	                }
                     	        	                
@@ -225,7 +230,7 @@ public class GameHandler {
 					Main.gameTabs.getTabs().add(tab);
 					Main.gameTabs.getSelectionModel().select(tab);
 					
-					startProcessConnection();				
+					processConnection();				
 					
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
@@ -249,7 +254,7 @@ public class GameHandler {
 					Main.gameTabs.getTabs().add(tab);
 					Main.gameTabs.getSelectionModel().select(tab);
 					
-					startProcessConnection();
+					processConnection();
 					
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
@@ -272,13 +277,14 @@ public class GameHandler {
 					Main.gameTabs.getTabs().add(tab);
 					Main.gameTabs.getSelectionModel().select(tab);
 					
-					startProcessConnection();
+					processConnection();
 					
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
 			});
 			break;
+		default: break;
 		}
 	}
 
