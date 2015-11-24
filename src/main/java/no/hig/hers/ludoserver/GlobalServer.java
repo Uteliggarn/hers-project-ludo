@@ -303,7 +303,7 @@ public class GlobalServer extends JFrame{
 							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
 						}*/
 						
-					//player.add(p);
+					player.add(p);
 					int g = player.indexOf(p);
 					/*
 					synchronized (player) {
