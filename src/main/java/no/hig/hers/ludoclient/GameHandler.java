@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -37,7 +38,6 @@ public class GameHandler {
 	private final String JOIN = "JOIN:";
 	
 	public GameHandler(int serverPort, int caseNr, String hostName) {
-		
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
@@ -67,8 +67,7 @@ public class GameHandler {
 				try {
 					Thread.sleep(5000);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
-					e.printStackTrace();
+					Main.LOGGER.log(Level.WARNING, "Error sleeping", e);
 				}
 			}
 		});
@@ -86,11 +85,9 @@ public class GameHandler {
 			sendText(Main.userName);
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error connecting server", e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Error making output/input", e);
 		}
 	}
 	
@@ -108,7 +105,7 @@ public class GameHandler {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
         }
     }
 	
@@ -122,9 +119,7 @@ public class GameHandler {
 		executorService.execute(() -> {
 			while (true) {
 				try {
-					
 	                String msg = input.readLine();
-	                
 	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if(msg != null && msg.startsWith("gamestart:")) {
@@ -142,9 +137,8 @@ public class GameHandler {
 		                				gameClientUIController.setPlayer(n);
 	                				}	
 	                			}
-                			} catch (IOException e1) {
-	            			// TODO Auto-generated catch block
-	            			e1.printStackTrace();
+                			} catch (IOException e) {
+                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
                 			}	
 	                	});
 	                }
@@ -196,14 +190,13 @@ public class GameHandler {
                     	        	                
 	                
 	            } catch (IOException ioe) {
-	                ioe.printStackTrace();
+	            	Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", ioe);
 	            }
 				//The thread goes to sleep to save the CPU energy
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
-					e.printStackTrace();
+					Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 				}
 	            
 			}
@@ -233,7 +226,7 @@ public class GameHandler {
 					processConnection();				
 					
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
 				}
 			});
 			break;
@@ -257,7 +250,7 @@ public class GameHandler {
 					processConnection();
 					
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
 				}
 			});
 			break;
@@ -280,7 +273,7 @@ public class GameHandler {
 					processConnection();
 					
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
 				}
 			});
 			break;
@@ -300,7 +293,7 @@ public class GameHandler {
 			input.close();
 			connection.close();
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error closing GameHandler", ioe);
 		} 
 	}
 	

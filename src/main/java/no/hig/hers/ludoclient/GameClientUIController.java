@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
@@ -87,7 +88,7 @@ public class GameClientUIController {
 			board = new LudoBoardFX();
 			gameClientPane.setCenter(board);
 		} catch (Exception e) {
-			System.out.println("Error while trying to add gameboard");
+			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
 	}
@@ -304,8 +305,8 @@ public class GameClientUIController {
 					System.out.println(("You won"));
 				}
 				pawnToMove = 0;
-			} catch (Exception e ) {
-				System.out.println("Goalerror");
+			} catch (Exception e) {
+				Main.LOGGER.log(Level.WARNING, "Goalerror", e);
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -507,7 +508,7 @@ public class GameClientUIController {
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
 	}
 	
@@ -520,8 +521,7 @@ public class GameClientUIController {
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
 	}
 	public void passChangeTurnOwner() {

@@ -3,6 +3,8 @@ package no.hig.hers.ludoclient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -66,8 +68,7 @@ public class ChatHandler {
     				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
     				
     			} catch (IOException e) {
-    				Main.showAlert("Error", "Couldn't find FXML file");
-    				e.printStackTrace();
+    				Main.LOGGER.log(Level.SEVERE, "Couldn't find FXML file", e);
     			}
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");

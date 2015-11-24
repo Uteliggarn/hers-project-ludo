@@ -3,6 +3,7 @@ package no.hig.hers.ludoclient;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.logging.Level;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,7 +61,7 @@ public class LudoBoardFX extends Pane {
 				addPawns(redPawns, 3);
 				addPawns(bluePawns, 4);
 			} catch (Exception e) {
-				System.out.println("Something went wrong, when making the pawns");
+				Main.LOGGER.log(Level.SEVERE, "Unable to add pawns", e);
 			}
 			
 			//Makes a new canvas and draws the gameboard onto it
@@ -68,7 +69,7 @@ public class LudoBoardFX extends Pane {
 			//Makes a new canvas and draw pawns onto it
 			makePawns();
 		} catch(Exception e) {
-			System.out.println("Error while drawing board");
+			Main.LOGGER.log(Level.SEVERE, "Error while drawing board", e);
 		}
 		setMinSize(900, 900);
 
@@ -577,7 +578,7 @@ public class LudoBoardFX extends Pane {
 			if(drawn == 0) getChildren().add(gamePieces);
 			drawn++;
 		} catch (IndexOutOfBoundsException e) {
-			System.out.println("Error try to paint pawn");
+			Main.LOGGER.log(Level.SEVERE, "Error while trying to paint pawn", e);
 		}	
 }
 	

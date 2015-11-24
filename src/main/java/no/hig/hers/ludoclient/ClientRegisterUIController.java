@@ -1,5 +1,7 @@
 package no.hig.hers.ludoclient;
 
+import java.util.logging.Level;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
@@ -45,8 +47,8 @@ public class ClientRegisterUIController {
 						Main.connect();
 					}	
 					else Main.showAlert("User already exists", "Sorry, that username is already taken.\nPlease select another.");
-				} catch (Exception e1) {
-					/** TODO FIX THIS! */
+				} catch (Exception e) {
+					Main.LOGGER.log(Level.SEVERE, "Can't connect to server", e);
 				}
 			} else Main.showAlert("Password mistyped", "The passwords do not match.\nPlease try again.");
     	} else Main.showAlert("Too short/long password", "Passwords must be between 6 and 10 characters long.");

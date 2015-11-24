@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -69,28 +75,23 @@ public class Main extends Application {
 	final static String JOIN = "JOIN:";	// Unique name
 	static final String QUITGAME = "LOGOUT:";
 	
-	
+	public static Logger LOGGER;
 
 	@Override
 	public void start(Stage primaryStage) {
-	
-		
-		try {			
-			setUpScenes();	
-			
-			primaryStage.setScene(loginScene);
-			
-			primaryStage.setTitle("Ludo");
-			
-			primaryStage.show();
-			
-			currentStage = primaryStage;
-			
-			connect();
-			
-		} catch(Exception e) {
+		try {
+			setupLogger();
+		} catch (IOException e) {
 			e.printStackTrace();
+			throw new RuntimeException("Problems with creating the log files");
 		}
+		setUpScenes();	
+		primaryStage.setScene(loginScene);
+		primaryStage.setTitle("Ludo");
+		primaryStage.show();
+		currentStage = primaryStage;
+		
+		connect();
 	}
 	
 	public static void main(String[] args) {
@@ -112,12 +113,10 @@ public class Main extends Application {
                     connection.getInputStream()));
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error connecting to server", e);
 			showAlert("Server down", "The server is currently down for maintenance");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Could not connect to server", e);
 		}
 	}
 	/**
@@ -147,7 +146,7 @@ public class Main extends Application {
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
 		} catch(Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
 		}	
 	}
 	/**
@@ -214,12 +213,10 @@ public class Main extends Application {
 	        Main.output.newLine();
 	        Main.output.flush(); 
 	    } catch (IOException ioe) {
-	    	showAlert("Error sending message", ioe.toString());		
+	    	LOGGER.log(Level.WARNING, "Unable to send login", ioe);		
 		}
 	}
-	
-	
-	
+
 	 /**
      * Method used to send a message to the server. Handled in a separate method
      * to ensure that all messages are ended with a newline character and are
@@ -234,7 +231,7 @@ public class Main extends Application {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);	
         }
     }
 	/**
@@ -286,16 +283,14 @@ public class Main extends Application {
         	                }
         	                else cHandler.handleChatMessage(message);
 	                }
-
 	            } catch (Exception e) {
-	             //   Main.showAlert("Error", "Error receiving message from server");
+	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
 	            }
 				
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.log(Level.INFO, "Unable to sleep", e);
 				}
 			}
 		});
@@ -319,5 +314,24 @@ public class Main extends Application {
         	gameHandler.add(gh);
 		} else {
 		}
+	}
+	
+	private static void setupLogger() throws IOException {	
+		LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		LOGGER.setLevel(Level.WARNING);
+		
+		Logger rootLogger = Logger.getLogger("");
+		Handler[] handlers = rootLogger.getHandlers();
+		if (handlers[0] instanceof ConsoleHandler) {
+			rootLogger.removeHandler(handlers[0]);
+		}
+		
+		LOGGER.setLevel(Level.INFO);
+		FileHandler fileTxt = new FileHandler("Logging.txt");
+
+	    // create a TXT formatter
+	    SimpleFormatter formatterTxt = new SimpleFormatter();
+	    fileTxt.setFormatter(formatterTxt);
+	    LOGGER.addHandler(fileTxt);
 	}
 }

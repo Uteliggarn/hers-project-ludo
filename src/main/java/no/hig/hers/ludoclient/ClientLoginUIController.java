@@ -1,6 +1,8 @@
 package no.hig.hers.ludoclient;
 
 import java.io.IOException;
+import java.util.logging.Level;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
@@ -39,7 +41,6 @@ public class ClientLoginUIController {
     	String password = passwordTextField.getText();
 
     	int ID;
-    	String port = null;
  
     	Main.sendLogin("SENDLOGIN:", username, password);
     	try {
@@ -61,8 +62,7 @@ public class ClientLoginUIController {
 						"Wrong username and/or password.\nPlease try again, or register a new user.");
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Couldn't contact server", e);
 		}
     }
     
