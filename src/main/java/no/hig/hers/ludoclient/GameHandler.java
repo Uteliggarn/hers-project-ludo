@@ -76,7 +76,7 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			connection = new Socket("127.0.0.1", serverPort);
+			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
