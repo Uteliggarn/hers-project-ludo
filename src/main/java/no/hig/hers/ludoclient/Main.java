@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,6 +24,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -66,9 +68,9 @@ public class Main extends Application {
 	final static String LEAVECHAT = "OUT:";
 	final static String CREATEGAME = "CREATEGAME";
 	final static String IDGK = "IDGK";	// Unique name
-	final static String INVITE = "invite:";	// Unique name
+	final static String INVITE = "INVITE:";	// Unique name
 	final static String HOST = "HOST";	// Unique name
-	final static String QUEUE = "queue";	// Unique name
+	final static String QUEUE = "QUEUE";	// Unique name
 	final static String JOIN = "JOIN:";	// Unique name
 	
 	
@@ -244,10 +246,10 @@ public class Main extends Application {
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-	                	System.out.println("\nFikk vi riktig port: " + port);	                	
-	                	System.out.println("\nHva er msg: " + Main.IDGK + message.substring(5));	                	
-	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
-	                	gameHandler.add(gh);
+	                
+	                	inviteAccept(port);
+	                	//GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+	                	//gameHandler.add(gh);
 	                }
 	                
 	                if (!message.equals(null)) {
@@ -272,6 +274,22 @@ public class Main extends Application {
 				}
 			}
 		});
+	}
+	
+	private static void inviteAccept(int port) {
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Dialog");
+		alert.setHeaderText("Game invite");
+		alert.setContentText("Accept the invite or decline it");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+        	gameHandler.add(gh);
+		} else {
+		    System.out.println("Må jeg?");
+		}
 	}
 	
 	/*

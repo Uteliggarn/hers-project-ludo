@@ -13,6 +13,8 @@ public class PlayerGameLobbyController {
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
 	
+	private String hostName;
+	
 	public void initialize() {
 		playerOne.setText("");
 		playerTwo.setText("");
@@ -20,16 +22,20 @@ public class PlayerGameLobbyController {
 		playerFour.setText("");
 	}
 	
+	public void setHostPlayer(String hostName) {
+		playerOne.setText(hostName.substring(4));
+		this.hostName = hostName;
+	}
+	
 	public void joinedPlayer(String name) {
-		if (playerOne.getText() == "")
-			playerOne.setText(name);
-		else if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "")
 			playerTwo.setText(name);
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
+	
 }
 
 

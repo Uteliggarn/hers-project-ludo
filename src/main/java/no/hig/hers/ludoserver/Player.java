@@ -24,6 +24,7 @@ public class Player {
 	
 	private String name;
 	private int serverPort;
+	private int playerID;
 	
 	private final String ACCEPTED = "ACCEPTED";
     private final String DECLINED = "DECLINED";
@@ -87,15 +88,9 @@ public class Player {
 		return serverPort;
 	}
 	
-	/*
-	public void setHost(boolean host) {
-		this.host = host;
+	public int returnPlayerID() {
+		return playerID;
 	}
-	
-	public boolean returnHost() {
-		return host;
-	}
-	*/
 	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
@@ -124,6 +119,7 @@ public class Player {
 				login = DatabaseHandler.userLogin(name, tempPass.substring(10));
 				if(login > 0) {		// checks the value given by the database
 					
+					this.playerID = login;
 					this.serverPort = serverPort;
 					
 					String tmp = Integer.toString(login);
