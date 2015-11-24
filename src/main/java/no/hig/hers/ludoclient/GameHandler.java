@@ -54,7 +54,6 @@ public class GameHandler {
 	private void addPlayersToList() {
 		Thread t = new Thread(() -> {
 			while (true) {
-				
 				for (int i=0; i<Main.playerList.size(); i++) {
 					if (!Main.playerList.get(i).equals(Main.userName))
 						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
@@ -145,29 +144,28 @@ public class GameHandler {
 	                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 	                }
 	                else if (msg != null && msg.startsWith(JOIN)) {
-	                	System.out.println("\nHva er switchen min her: " + caseNr);
 	                	switch (caseNr) {
 	                	case 1: Platform.runLater(new Runnable() {
 	                				@Override
 	                				public void run() {
-	                					System.out.println("\nKom vi in JOIN createGame");
-	                					createGameLobbyController.joinedPlayer(msg.substring(5));
+	                					if (!msg.substring(5).equals(hostName.substring(4)))
+	                						createGameLobbyController.joinedPlayer(msg.substring(5));
 	                				}
 	                			});
 	                		break;
 	                	case 2: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
-            							System.out.println("\nKom vi in JOIN hostGame");
-            							hostGameLobbyController.joinedPlayer(msg.substring(5));
+            							if (!msg.substring(5).equals(hostName.substring(4)))
+            								hostGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
 	                		break;
 	                	case 3: Platform.runLater(new Runnable() {
             						@Override
             						public void run() {
-            							System.out.println("\nKom vi in JOIN playerGame");
-            							playerGameLobbyController.joinedPlayer(msg.substring(5));
+            							if (!msg.substring(5).equals(hostName.substring(4)))
+            								playerGameLobbyController.joinedPlayer(msg.substring(5));
             						}
             					});
 	                		break;
@@ -197,12 +195,14 @@ public class GameHandler {
     				@Override
     				public void run() {
 						Tab tab = new Tab("Ludo");
-						tab.setId(Main.IDGK + Main.userName);
+						tab.setId(hostName);
 					
 						FXMLLoader loader = new FXMLLoader();
 						try {
 							tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 							createGameLobbyController = (CreateGameLobbyController) loader.getController();
+							
+							createGameLobbyController.setHostPlayer(hostName);
 							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);
@@ -219,12 +219,14 @@ public class GameHandler {
 					@Override
 					public void run() {
 						Tab tab = new Tab("Ludo");
-						tab.setId(Main.IDGK + Main.userName);
+						tab.setId(hostName);
 						
 						FXMLLoader loader = new FXMLLoader();
 						try {
 							tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 							hostGameLobbyController = (HostGameLobbyController) loader.getController();
+							
+							hostGameLobbyController.setHostPlayer(hostName);
 							
 							hostGameLobbyController.setConnetion(output, input);
 							Main.gameTabs.getTabs().add(tab);
@@ -248,6 +250,8 @@ public class GameHandler {
 						try {
 							tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 							playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
+							
+							playerGameLobbyController.setHostPlayer(hostName);
 							
 							Main.gameTabs.getTabs().add(tab);
 							Main.gameTabs.getSelectionModel().select(tab);

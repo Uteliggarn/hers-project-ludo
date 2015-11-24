@@ -55,6 +55,7 @@ public class ClientMainUIController {
     void newGameButtonPressed(ActionEvent event) {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
     		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
+    			System.out.println("\nKom vi in i ++count?");
     			++count;
     		}
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
@@ -85,45 +86,6 @@ public class ClientMainUIController {
     		public void run() {
     			chatListView.getItems().add(name);	
     		}});
-    }
-    
-    public void newGameTab() {
-    	try {
-    		
-    		Main.sendText("createGame");
-    		
-    		int count = Main.input.read();
-    		
-    		System.out.println("\nHva er count:" + count);
-    		
-    		if (count != -1) {
-    		
-				Tab tmp = new Tab("Ludo");
-				
-				FXMLLoader loader = new FXMLLoader();
-				
-				tmp.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
-				
-				CreateGameLobbyController createLobbyWindowController = (CreateGameLobbyController) loader.getController();
-				
-				for (int i=0; i<1; i++) {
-					String msg = Main.input.readLine();
-					System.out.println("\nHva kommer in som msg: " + msg);
-					if (!msg.substring(7).equals(Main.userName))    ;
-						createLobbyWindowController.addNewPlayerToList(msg.substring(7));
-				}
-				
-				gameTabs.getTabs().add(tmp);
-				gameTabs.getSelectionModel().select(tmp);
-    		}
-    		else
-    			Main.showAlert("Error", "Could not create game. You're allready hosting a game");
-    	} catch (IOException ioe) {
-    		ioe.printStackTrace();
-    	}
-    	
-    	//gameTabs.getTabs().add(tab);
-    	//gameTabs.getSelectionModel().select(tab);
     }
     
 }

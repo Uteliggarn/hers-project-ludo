@@ -25,19 +25,26 @@ public class HostGameLobbyController {
 	private static BufferedReader input;
 	private static BufferedWriter output;
 	
+	private String hostName;
+	
 	public void initialize() {
-		startGameButton.setDisable(false);
+		startGameButton.setDisable(true);
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
 		playerFour.setText("");
 	}
 	
+	public void setHostPlayer(String hostName) {
+		playerOne.setText(hostName.substring(4));
+		this.hostName = hostName;
+	}
+	
 	public void joinedPlayer(String name) {
-		if (playerOne.getText() == "")
-			playerOne.setText(name);
-		else if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "") {
 			playerTwo.setText(name);
+			startGameButton.setDisable(false);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "")
@@ -46,7 +53,12 @@ public class HostGameLobbyController {
 	
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {
-		Tab tab = Main.gameTabs.getTabs().get(1);
+		for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+			if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
+				Tab tab = Main.gameTabs.getTabs().get(i);
+			}	
+		}
+		
 		
 		//FXMLLoader loader = new FXMLLoader();
 		
