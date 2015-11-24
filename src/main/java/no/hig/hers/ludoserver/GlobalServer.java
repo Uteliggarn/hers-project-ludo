@@ -208,9 +208,9 @@ public class GlobalServer extends JFrame{
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-				if(que.size() == 2) {
+				if(que.size() == 4) {
 					boolean hostFound = false;
-					for (int t=0; t<2; t++) {
+					for (int t=0; t<4; t++) {
 						
 						//que.get(t).sendText("HOST");
 						//System.out.println("Hva er que: "  );
