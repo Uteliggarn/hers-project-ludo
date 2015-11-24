@@ -67,7 +67,6 @@ public class ClientLoginUIController {
 			else Main.showAlert("User not found", 
 						"Wrong username and/or password.\nPlease try again, or register a new user.");
 			
-			//Main.connect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -30,9 +30,6 @@ public class Player {
     private final String DECLINED = "DECLINED";
     private final String SENDLOGIN = "SENDLOGIN:";
     private final String SENDREGISTER = "SENDREGISTER:";
-    
-	
-	//private boolean host = false;
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
