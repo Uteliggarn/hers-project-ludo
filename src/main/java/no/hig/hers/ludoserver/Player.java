@@ -105,48 +105,32 @@ public class Player {
 	 */
 	public boolean loginChecker(int serverPort) {
 		try {
-			System.out.println("\nHello everybody!");
-			
 			String tempName = input.readLine();	//reades the input
-
 			String tempPass = input.readLine();
-			
 			
 			if (!tempName.startsWith(SENDLOGIN) && !tempName.startsWith(SENDREGISTER))
 				return false;
 			
 			if (tempName.startsWith(SENDLOGIN) && tempPass.startsWith(SENDLOGIN)) {
 				int login = 0;
-				
 				name = tempName.substring(10);	//Saves the name in the player class
 							
 				login = DatabaseHandler.userLogin(name, tempPass.substring(10));
 				if(login > 0) {		// checks the value given by the database
-					
 					this.playerID = login;
 					this.serverPort = serverPort;
 					
-					String tmp = Integer.toString(login);
-					
-					sendText(tmp);
-					
-					tmp = Integer.toString(this.serverPort);
-								
-					sendText(tmp);	//Sends the given serverport
+					sendText(Integer.toString(login));				// Sends the Player ID
+					sendText(Integer.toString(this.serverPort));	// Sends the given serverport
 					
 					Iterator<String> i = GlobalServerMain.application.groupChatList.iterator();
 					i.next(); 		// Skip Global chat
 					while (i.hasNext()) {
 						String chatName = i.next();
 						sendText(Constants.NEWCHAT + chatName);
-					}			
+					}
 					
-					Iterator<Player> y = GlobalServerMain.application.player.iterator();
-					while (y.hasNext()) {
-						String playerName = y.next().returnName();
-						System.out.println("\nHva er playerName: " + Constants.GLOBALCHAT + playerName);
-						sendText(Constants.GLOBALCHAT + playerName);
-					}	
+					sendPlayerList();
 					
 					return true;
 				}
@@ -177,5 +161,19 @@ public class Player {
 			ioe.printStackTrace();
 		}
 		return false;
+	}
+	
+	public void sendPlayerList() {
+		Iterator<Player> y = GlobalServerMain.application.player.iterator();
+		while (y.hasNext()) {
+			String playerName = y.next().returnName();
+			System.out.println("\nHva er playerName: " + Constants.GLOBALCHAT + playerName);
+			try {
+				sendText(Constants.GLOBALCHAT + playerName);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
 	}
 }

@@ -5,9 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
-
-import javax.swing.SwingUtilities;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,9 +15,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import no.hig.hers.ludoshared.Constants;
 
+/**
+ * GameClientUICOntroller creates the LudoBoardFX class which stores all the game logic.
+ * It controls all the movement on the board through the LudoBoardFX class and communicate with the gameserver.
+ * It also controls all the GUI of the game scene.
+ *   
+ * @author Hauken
+ *
+ */
 public class GameClientUIController {
 	
 	LudoBoardFX board;
@@ -100,7 +104,7 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		turnOwner = 1;
+		turnOwner = 2;	//Red player starts
 		pawnToMove = 0;
 		diceRolls = 0;
 		gameOver = false;
@@ -154,8 +158,6 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 3;
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
-				System.out.println("test");
-				
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
@@ -168,10 +170,8 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				diceValue = 0;
 				diceRolls = 0;
-				
 				dieTextLabel.setText("");
 				dieLabel.setImage(null);
-			
 				setPawnMovesFalse();
 				setNotValid();
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
@@ -491,7 +491,7 @@ public class GameClientUIController {
 			else {
 				dieTextLabel.setText("Better luck next time");
 				String tmp;
-				tmp =("GAMELOST");
+				tmp =(Constants.GAMELOST);
 				Main.sendText(tmp);
 			}			
 		}
@@ -511,7 +511,7 @@ public class GameClientUIController {
 	
 	public void SendDiceValue(int diceVal, int playernr, int pawn) {
 		String tmp;
-		tmp = ("dicevalue:" + diceVal + playernr + pawn);
+		tmp = (Constants.DICEVALUE + diceVal + playernr + pawn);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
@@ -521,13 +521,13 @@ public class GameClientUIController {
 	
 	public void sendGameStatus() {
 		String tmp;
-		tmp = ("GAMEOVER");
+		tmp = (Constants.GAMEOVER);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
 			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
-		tmp =("GAMEWON");
+		tmp =(Constants.GAMEWON);
 		Main.sendText(tmp);
 	}
 	public void passChangeTurnOwner() {
@@ -535,7 +535,7 @@ public class GameClientUIController {
 		switch(turnOwner) {
 		case 1:	//Green
 			CheckForPlayersGreen();
-			break;
+			break; 
 		case 2:	//Red
 			CheckForPlayersRed();
 			break;

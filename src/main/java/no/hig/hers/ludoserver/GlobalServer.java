@@ -17,8 +17,11 @@ import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import no.hig.hers.ludoshared.Constants;
+import no.hig.hers.ludoshared.MyLogger;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -69,6 +72,8 @@ public class GlobalServer extends JFrame{
     
     private int tmpPort;
     private String tmpName;
+    
+    static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	public GlobalServer() {
 		super("GlobalServer");
@@ -76,6 +81,12 @@ public class GlobalServer extends JFrame{
 		groupChatList.add("Global");
 		
 		fileName = "Global" + fileNameEnd; //Placeholder so we can write to a file.
+		
+		try {
+			MyLogger.setupLogger();
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, "Couldn't create log files", e);
+		}
 		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));
@@ -97,7 +108,7 @@ public class GlobalServer extends JFrame{
 			executorService.shutdown();
 			
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot set the socket", ioe);
 			System.exit(1);
 		}
 		
@@ -124,9 +135,16 @@ public class GlobalServer extends JFrame{
 										i.remove();
 										que.remove(p.returnName());
 										gameList.remove(IDGK + p.returnName());
+
 										messages.put(LOGOUT + p.returnName());
-									} else if (msg.equals(TOP)) 
-										handleTopTenLists();
+										displayMessage("\n" + LOGOUT + p.returnName());
+									} else if (msg.equals(p.returnName() + TOP)) {
+										System.out.println(msg + "  TEST!");
+										handleTopTenLists(p);
+									}
+									else if (msg.equals("GETPLAYERLIST")){
+										p.sendPlayerList();
+									}
 									else {
 										//Sends the message to both listeners. One for game and one for chat.
 										handleGroupChatKeywords(p, msg);
@@ -137,25 +155,25 @@ public class GlobalServer extends JFrame{
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
 								messages.put(p.returnName() + " got lost in hyperspace");
+								GlobalServer.LOGGER.log(Level.WARNING, "Error with reading message", ioe);
 							}
 						}
 					}
 				} catch (InterruptedException ie) {
-					ie.printStackTrace();
+					GlobalServer.LOGGER.log(Level.SEVERE, "Problem with thread", ie);
 				}
 				
 				//The thread goes to sleep to save the CPU energy
 				try {
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
-					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
 			}
 		});
 	}
 	
-	private void handleTopTenLists() {
+	private void handleTopTenLists(Player p) {
 		try {
 			String toptenPlayedName = null;
 			int toptenPlayedCount;
@@ -168,19 +186,18 @@ public class GlobalServer extends JFrame{
 				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
 				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
 				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
-				messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+				p.sendText(Constants.TOPPLAYED + toptenPlayedName);	
 			}
 			while(resultSetWon.next()) {
 				String tmp;
 				toptenWonName = (String) resultSetWon.getObject(1);
 				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
 				tmp = (toptenWonName + "," + toptenWonCount);
-				messages.put("TOPLISTWON:" + tmp);
+				p.sendText(Constants.TOPWON + tmp);
 			}
 		}
 		catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
 		}
 	}
 	
@@ -223,7 +240,7 @@ public class GlobalServer extends JFrame{
 				}	
 			}
 		} catch (InterruptedException ie) {
-			ie.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", ie);
 		}
 	}
 	
@@ -251,7 +268,6 @@ public class GlobalServer extends JFrame{
 							t = 0;
 						}
 						else if (hostFound == true && que.get(t).returnName() != tmpName){
-							System.out.println("\nKom vi in i hotJoin sending");
 							que.get(t).sendText(HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}
@@ -261,32 +277,31 @@ public class GlobalServer extends JFrame{
 						que.remove(i);
 					}
 				}
-			}
-			else if (msg.equals(CREATEGAME)) {
-				displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
-				if (!gameList.contains(IDGK + p.returnName())) {
-					gameList.add(IDGK + p.returnName());
-					p.sendText(CREATEGAME);
-				}
-				else
-					p.sendText(ERROR);
-			}
-			else if (msg.startsWith(INVITE)) {
-				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-			
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(JOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+				else if (msg.equals(CREATEGAME)) {
+					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
+					if (!gameList.contains(IDGK + p.returnName())) {
+						gameList.add(IDGK + p.returnName());
+						p.sendText(CREATEGAME);
 					}
+					else
+						p.sendText(ERROR);
+				}
+				else if (msg.startsWith(INVITE)) {
+					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+				
+					for (int y=0; y<player.size(); y++)
+						if(msg.substring(7).equals(player.get(y).returnName())) {
+							player.get(y).sendText(JOIN + player.get(y).returnName());
+							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+						}
+				}
+				else if (msg.equals(GWON))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+				else if (msg.equals(GLOST))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			}
-			else if (msg.equals(GWON))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-			else if (msg.equals(GLOST))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
-		
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);
 		}
 	}
 	
@@ -298,7 +313,7 @@ public class GlobalServer extends JFrame{
 			while (!shutdown) {
 				try {
 					String message = messages.take();
-					displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
+					//displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
 					synchronized (player) {
 						Iterator<Player> i = player.iterator();
 						while (i.hasNext()) {
@@ -309,15 +324,16 @@ public class GlobalServer extends JFrame{
 								i.remove();
 								messages.add(LOGOUT + p.returnName());
 								messages.add(p.returnName() + " got lost in hyperspace");
+								GlobalServer.LOGGER.log(Level.WARNING, "Cannot send message", ioe);
 							}
 						}
 					}
-					Thread.sleep(250);
+				//	Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
-					ie.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong. (sleep error)
-					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
 
 			}
@@ -337,18 +353,22 @@ public class GlobalServer extends JFrame{
 						player.add(p);
 						int g = player.indexOf(p);
 						
-						if (p.loginChecker(++serverPorts))
+						if (p.loginChecker(++serverPorts)) {
 							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+							messages.put(Constants.GLOBALCHAT + p.returnName());
+						}
 						else {
 							--serverPorts;
 							player.remove(g);
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
+					GlobalServer.LOGGER.log(Level.SEVERE, "Connection Error", ioe);
 				} catch (Exception e) {
 					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Exception", e);
 				}
 			}
 		});
@@ -374,8 +394,7 @@ public class GlobalServer extends JFrame{
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 			writer.println(timeStamp + " " + data);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Error writing to file", e);
 		} finally {
 			if (writer != null) {
 				writer.close();

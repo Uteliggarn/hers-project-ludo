@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
 
 public class HostGameLobbyController {
@@ -24,7 +25,7 @@ public class HostGameLobbyController {
 	private String hostName;
 	
 	public void initialize() {
-		startGameButton.setDisable(true);
+		startGameButton.setDisable(false);
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -34,11 +35,13 @@ public class HostGameLobbyController {
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
+		Main.cHandler.addNewChat(this.hostName);
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "") {
 			playerTwo.setText(name);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "") {
@@ -47,10 +50,9 @@ public class HostGameLobbyController {
 		}
 	}
 	
-	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
-			String gamestart = "gamestart:";
+			String gamestart = Constants.GAMESTART;
 			sendText(gamestart);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);

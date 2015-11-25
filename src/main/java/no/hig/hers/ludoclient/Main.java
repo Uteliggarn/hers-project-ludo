@@ -66,7 +66,7 @@ public class Main extends Application {
 	static ExecutorService executorService;
 	private static String message;
 	
-	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
+	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -82,6 +82,12 @@ public class Main extends Application {
 		currentStage = primaryStage;
 		
 		connect();
+	}
+	
+	public static void getPlayers() {
+		for(int i = 0; i < playerList.size(); i++) {
+			System.out.println(playerList.get(i));
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -162,7 +168,7 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		sendText("TOP");
+		sendText(userName + "TOP");
 	}
 	
 	/**
@@ -262,7 +268,7 @@ public class Main extends Application {
 		                else if (message.startsWith(Constants.HOTJOIN)) {
 		                	int port = Integer.valueOf(Main.input.readLine());
 
-		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
+		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(8));
 		                	gameHandler.add(gh);
 		                }
 		                else if (message.startsWith(Constants.JOIN)) {
@@ -304,8 +310,6 @@ public class Main extends Application {
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
     	                 else cHandler.handleChatMessage(message);
 	                }
-	                
-	                Thread.sleep(250);
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
 	            }
