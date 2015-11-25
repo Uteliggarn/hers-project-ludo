@@ -127,7 +127,8 @@ public class GameHandler {
 	                			try {
 	                				System.out.print("Starter spill for " + n);
 		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-		                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
+		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+		                					System.out.println("\nYOLO");
 		                					Main.gameTabs.getTabs().get(i).setContent(
 		                							loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		                					gameClientUIController = loader.getController();
