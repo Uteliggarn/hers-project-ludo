@@ -148,8 +148,8 @@ public class Main extends Application {
 		cHandler = new ChatHandler(chatTabs);
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		executorService.shutdown();	// Dreper tråden når klassen dør
+		processConnection(); // Starter en ny evighets trï¿½d som tar seg av meldinger fra server
+		executorService.shutdown();	// Dreper trï¿½den nï¿½r klassen dï¿½r
 	}
 
 	public static void startGameServer() {
