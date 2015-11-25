@@ -19,12 +19,12 @@ import no.hig.hers.ludoclient.Main;
 
 public class ServerTest {
 	private ExecutorService executorService;
-	private BufferedReader input;
-	private BufferedWriter output;
 	private final String text = "This is a test";
 	
 	private class Server {
 		ServerSocket server;
+		private BufferedReader input;
+		private BufferedWriter output;
 		
 		public Server() {
 			
@@ -48,6 +48,8 @@ public class ServerTest {
 	
 	private class Client {
 		private Socket connection;
+		private BufferedReader input;
+		private BufferedWriter output;
 		
 		public Client() {
 			try {
