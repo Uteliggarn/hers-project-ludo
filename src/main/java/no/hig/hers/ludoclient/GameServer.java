@@ -76,10 +76,10 @@ public class GameServer {
 				                        		messages.put(tmp);
 				                        	}
 				                        }
-				                        if(msg.startsWith("dicevalue:")) {
+				                        if(msg.startsWith(Constants.DICEVALUE)) {
 				                        	messages.put(msg);
 				                        }
-				                        if(msg.startsWith("GAMEOVER")) {
+				                        if(msg.startsWith(Constants.GAMEOVER)) {
 				                        	messages.put(msg);
 				                        }
 			                        }
