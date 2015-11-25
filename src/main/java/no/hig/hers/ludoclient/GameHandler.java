@@ -18,6 +18,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
+import no.hig.hers.ludoshared.Constants;
 
 public class GameHandler {
 	
@@ -37,8 +38,6 @@ public class GameHandler {
 	private String hostName;
 	private int caseNr = 0;
 	
-	private final String JOIN = "JOIN:";
-	
 	public GameHandler(int serverPort, int caseNr, String hostName) {
 		this.serverPort = serverPort;
 		this.hostName = hostName;
@@ -52,7 +51,7 @@ public class GameHandler {
 		if (caseNr == 1)
 			addPlayersToList();
 		
-		//executorService.shutdown();	// Dreper tråden når klassen dør
+		//executorService.shutdown();	// Dreper trï¿½den nï¿½r klassen dï¿½r
 	}
 	
 	
@@ -77,8 +76,8 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
-			//connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -120,7 +119,7 @@ public class GameHandler {
 	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if (msg != null) {
-		                if(msg.startsWith("gamestart:")) {
+		                if(msg.startsWith(Constants.GAMESTART)) {
 		                	Platform.runLater(() -> {
 		                		int n = Integer.parseInt(msg.substring(10, 11));
 	                			
@@ -141,7 +140,7 @@ public class GameHandler {
 	                			}	
 		                	});
 		                }
-		                else if(msg.startsWith("gamename:")) {
+		                else if(msg.startsWith(Constants.GAMENAME)) {
 							Platform.runLater(() -> {
 								int n = Integer.parseInt(msg.substring(9, 10));
 	                			System.out.println("playernamenr " + n);
@@ -149,7 +148,7 @@ public class GameHandler {
 	                			gameClientUIController.setPlayerName(n, tmpNavn);    		
 							});
 		                }
-		                else if(msg.startsWith("dicevalue:")) {
+		                else if(msg.startsWith(Constants.DICEVALUE)) {
 							Platform.runLater(() -> {
 								int diceVal = Integer.parseInt(msg.substring(10,11));
 	                			int player = Integer.parseInt(msg.substring(11,12));
@@ -158,12 +157,12 @@ public class GameHandler {
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 		                	});
 		                }
-		                else if(msg.startsWith("GAMEOVER")) {
+		                else if(msg.startsWith(Constants.GAMEOVER)) {
 							Platform.runLater(() -> {
 								gameClientUIController.gameover();	
 		                	});
 		                }
-		                else if (msg.startsWith(JOIN)) {
+		                else if (msg.startsWith(Constants.JOIN)) {
 		                	if (!msg.substring(5).equals(hostName.substring(4))) {
 		                		Platform.runLater(() -> {
 				                	switch (caseNr) {

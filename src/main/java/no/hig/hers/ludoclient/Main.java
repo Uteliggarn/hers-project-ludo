@@ -94,9 +94,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			//connection = new Socket("127.0.0.1", 12344);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -148,8 +148,8 @@ public class Main extends Application {
 		cHandler = new ChatHandler(chatTabs);
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-		processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-		executorService.shutdown();	// Dreper tråden når klassen dør
+		processConnection(); // Starter en ny evighets trï¿½d som tar seg av meldinger fra server
+		executorService.shutdown();	// Dreper trï¿½den nï¿½r klassen dï¿½r
 	}
 
 	public static void startGameServer() {
@@ -185,6 +185,8 @@ public class Main extends Application {
 	 */
 	public static void changeScene(Scene newScene) {
 		currentStage.setScene(newScene);
+		
+		if (newScene.equals(mainScene)) requestTopTen();
 	}
 
 	/**
@@ -239,7 +241,7 @@ public class Main extends Application {
 		System.exit(0);
 	}
 	/**
-	 * Method for processing messages from the server,
+	 * Method for processing messages from the server,	
 	 * sending the messages to the GameHandler or ChatHandler
 	 */
 	private static void processConnection() {
@@ -269,21 +271,32 @@ public class Main extends Application {
 		                		inviteAccept(port);
 		                	});
 		                }
-		                else if (message.startsWith("TOPLISTPLAYED:")) {
-		                	String playedName;
-		                	String playedCount;
-		                	playedName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
-		                	playedCount = message.substring(message.lastIndexOf(",") + 1, message.length());
-		                	System.out.println(playedName + " " + playedCount);
-		                	//Sette disse strengene til en label og lag en topliste
+		                else if (message.equals(Constants.QUEOPEN)) {
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
 		                }
-		                else if (message.startsWith("TOPLISTWON:")) {
-		                	String wonName;
-		                	String wonCount;
-		                	wonName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
-		                	wonCount = message.substring(message.lastIndexOf(",") + 1, message.length());
-		                	System.out.println(wonName + " " + wonCount);
-		                	//Sette disse strengene til en label og lag en topliste
+		                else if (message.startsWith(Constants.TOPPLAYED)) {
+		                	String[][] played = new String[10][2];
+		                	played[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                	played[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	for (int i = 1; i < 10; i++) {
+		                		message = Main.input.readLine();
+		                		played[i][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                		played[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	}
+		                	mainController.setTopTenPlayed(played);
+		                }
+		                else if (message.startsWith(Constants.TOPWON)) {
+		                	String[][] won = new String[10][2];
+		                	won[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                	won[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	for (int i = 1; i < 10; i++) {
+		                		message = Main.input.readLine();
+		                		won[i][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
+		                		won[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	}
+		                	mainController.setTopTenWon(won);
 		                }		
 		                 else if (message.startsWith(Constants.NEWCHAT))  //Legger til ny chatTab
             				mainController.addChatToList(message.substring(13));

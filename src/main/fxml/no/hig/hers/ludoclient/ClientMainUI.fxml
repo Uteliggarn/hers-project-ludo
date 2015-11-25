@@ -17,7 +17,7 @@
                     <tabs>
                       <Tab id="main" closable="false" text="Main">
                            <content>
-                              <GridPane>
+                              <GridPane fx:id="gridPane">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
@@ -49,7 +49,7 @@
                                     <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameButtonPressed" prefHeight="70.0" prefWidth="300.0" text="New Game" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="14" GridPane.valignment="CENTER" />
                                     <Label fx:id="labelUserName" text="Temp" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                        <font>
-                                          <Font size="24.0" />
+                                          <Font name="System Bold" size="24.0" />
                                        </font>
                                     </Label>
                                     <Label prefHeight="105.0" text="Welcome" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -57,53 +57,25 @@
                                           <Font size="72.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Won" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-                                    <Label text="Played" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                                    <Label text="Won" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font></Label>
+                                    <Label text="Played" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font></Label>
                                     <Label text="0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                                     <Label text="0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                    <Label text="Top ten won matches" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
-                                    <Label text="Top ten played matches" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
-                                    <Label fx:id="player1NameWon" text="Player 1" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-                                    <Label fx:id="player2NameWon" text="Player 2" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-                                    <Label fx:id="player3NameWon" text="Player 3" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
-                                    <Label fx:id="player4NameWon" text="Player 4" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-                                    <Label fx:id="player5NameWon" text="Player 5" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
-                                    <Label fx:id="player6NameWon" text="Player 6" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="8" />
-                                    <Label fx:id="player7NameWon" text="Player 7" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9" />
-                                    <Label fx:id="player8NameWon" text="Player 8" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="10" />
-                                    <Label fx:id="player9NameWon" text="Player 9" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="11" />
-                                    <Label fx:id="player10NameWon" text="Player 10" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="12" />
-                                    <Label fx:id="player1ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                                    <Label fx:id="player2ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                                    <Label fx:id="player3ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-                                    <Label fx:id="player4ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
-                                    <Label fx:id="player5ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                                    <Label fx:id="player6ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
-                                    <Label fx:id="player7ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
-                                    <Label fx:id="player8ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                                    <Label fx:id="player9ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
-                                    <Label fx:id="player10ScoreWon" text="0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12" />
-                                    <Label fx:id="player1NamePlayed" text="Player 1" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-                                    <Label fx:id="player2NamePlayed" text="Player 2" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-                                    <Label fx:id="player3NamePlayed" text="Player 3" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
-                                    <Label fx:id="player4NamePlayed" text="Player 4" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-                                    <Label fx:id="player5NamePlayed" text="Player 5" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
-                                    <Label fx:id="player6NamePlayed" text="Player 6" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="8" />
-                                    <Label fx:id="player7NamePlayed" text="Player 7" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="9" />
-                                    <Label fx:id="player8NamePlayed" text="Player 8" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="10" />
-                                    <Label fx:id="player9NamePlayed" text="Player 9" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="11" />
-                                    <Label fx:id="player10NamePlayed" text="Player 10" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="12" />
-                                    <Label fx:id="player1ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                                    <Label fx:id="player2ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                                    <Label fx:id="player3ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-                                    <Label fx:id="player4ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
-                                    <Label fx:id="player5ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
-                                    <Label fx:id="player6ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="8" />
-                                    <Label fx:id="player7ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
-                                    <Label fx:id="player8ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="10" />
-                                    <Label fx:id="player9ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="11" />
-                                    <Label fx:id="player10ScorePlayed" text="0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="12" />
-                                 </children>
+                                    <Label text="Top ten won" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font></Label>
+                                    <Label text="Top ten played" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font></Label>
+                                    </children>
                               </GridPane>
                            </content>
                       </Tab>

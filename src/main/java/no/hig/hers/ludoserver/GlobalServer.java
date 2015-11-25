@@ -18,6 +18,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
+import no.hig.hers.ludoshared.Constants;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -31,7 +33,7 @@ public class GlobalServer extends JFrame{
 	
 	private JTextArea outputArea;
 	
-	private ArrayList<Player> player = new ArrayList<Player>();
+	ArrayList<Player> player = new ArrayList<Player>();
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
@@ -62,7 +64,6 @@ public class GlobalServer extends JFrame{
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
-    private Hashtable<String, String> hashtable;
     
     private int serverPorts = 10000;
     
@@ -118,44 +119,20 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
-								//Sends the message to both listeners. One for game and one for chat.
-								handleGroupChatKeywords(p, msg);
-								handleGameKeywords(p, msg);
-								
-								if (msg != null && msg.equals(CLOGOUT)) {
-									i.remove();
-									que.remove(p.returnName());
-									gameList.remove(IDGK + p.returnName());
-									messages.put(LOGOUT + p.returnName());
+								if (msg != null) {
+									if (msg.equals(CLOGOUT)) {
+										i.remove();
+										que.remove(p.returnName());
+										gameList.remove(IDGK + p.returnName());
+										messages.put(LOGOUT + p.returnName());
+									} else if (msg.equals(TOP)) 
+										handleTopTenLists();
+									else {
+										//Sends the message to both listeners. One for game and one for chat.
+										handleGroupChatKeywords(p, msg);
+										handleGameKeywords(p, msg);
+									}
 								}
-								if (msg != null && msg.equals(TOP)) {
-									try {
-										String toptenPlayedName = null;
-										int toptenPlayedCount;
-										String toptenWonName = null;
-										String toptenWonCount;
-										ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
-										ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
-										
-										while (resultSetPlayed.next()) {			
-											toptenPlayedName =  (String) resultSetPlayed.getObject(1);
-											toptenPlayedCount = (int) resultSetPlayed.getObject(2);
-											toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
-											messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
-										}
-										while(resultSetWon.next()) {
-											String tmp;
-											toptenWonName = (String) resultSetWon.getObject(1);
-											toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
-											tmp = (toptenWonName + "," + toptenWonCount);
-											messages.put("TOPLISTWON:" + tmp);
-										}
-									}
-									catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-									}
-								}	
 							} catch (IOException ioe) {
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
@@ -178,6 +155,35 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	private void handleTopTenLists() {
+		try {
+			String toptenPlayedName = null;
+			int toptenPlayedCount;
+			String toptenWonName = null;
+			String toptenWonCount;
+			ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+			ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
+			
+			while (resultSetPlayed.next()) {			
+				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
+				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
+				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+				messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+			}
+			while(resultSetWon.next()) {
+				String tmp;
+				toptenWonName = (String) resultSetWon.getObject(1);
+				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
+				tmp = (toptenWonName + "," + toptenWonCount);
+				messages.put("TOPLISTWON:" + tmp);
+			}
+		}
+		catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * All the chat messages / commands will be handled in this method.
 	 * @param p The active player
@@ -185,33 +191,34 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
-			
-			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
+			if (msg.startsWith(Constants.NEWCHAT)) {
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
-						p.sendText("ERRORCHAT");
+						p.sendText(Constants.ERRORCHAT);
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
 					}
 				else {
 					groupChatList.add(msg.substring(13));
-					messages.put("NEWGROUPCHAT:" + msg.substring(13));
+					messages.put(Constants.NEWCHAT + msg.substring(13));
 					displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
 				}
 			}
 			for (int i=0; i<groupChatList.size(); i++) {
 				
-				if (msg != null && msg.startsWith(groupChatList.get(i) + JOIN)) {
+				if (msg.startsWith(groupChatList.get(i) + JOIN)) {
 					messages.put(msg);
-					//Add filename get(i) if not exist, else use it
-					fileName = groupChatList.get(i) + fileNameEnd;
+					
+					//Writes to file
+					fileName = groupChatList.get(i) + "_" + fileNameEnd;
 					writeToFile(fileName, msg);
 				}
-				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
+				else if (msg.startsWith(groupChatList.get(i) + ":")) {
 					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
 					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
-					//Add filename get(i) if not exist, else use it
-					fileName = groupChatList.get(i) + fileNameEnd;
+					
+					//Writes to file
+					fileName = groupChatList.get(i) + "_" + fileNameEnd;
 					writeToFile(fileName, groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1));
 				}	
 			}
@@ -227,7 +234,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGameKeywords(Player p, String msg) {
 		try {
-			if (msg != null && msg.equals(QUEUE)){
+			if (msg.equals(QUEUE)){
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
@@ -235,26 +242,27 @@ public class GlobalServer extends JFrame{
 					boolean hostFound = false;
 					for (int t=0; t<4; t++) {
 						
-						//que.get(t).sendText("HOST");
-						//System.out.println("Hva er que: "  );
-						
-						if (!gameList.contains(IDGK + que.get(t).returnName()) && hostFound != true) {
-							//player.get(player.indexOf(que.get(t))).setHost(true);
-							gameList.add(IDGK + que.get(t));
+						if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
+							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
 							que.get(t).sendText(HOST);
 							tmpPort = que.get(t).returnServerPort();
 							tmpName = que.get(t).returnName();
+							t = 0;
 						}
-						else {
-							que.get(t).sendText(JOIN + tmpName);
+						else if (hostFound == true && que.get(t).returnName() != tmpName){
+							System.out.println("\nKom vi in i hotJoin sending");
+							que.get(t).sendText(HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
-						}	
-						
+						}
+					}
+					for (int i=0; i<que.size(); i++) {
+						que.get(i).sendText(Constants.QUEOPEN);
+						que.remove(i);
 					}
 				}
 			}
-			else if (msg != null && msg.equals(CREATEGAME)) {
+			else if (msg.equals(CREATEGAME)) {
 				displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
 				if (!gameList.contains(IDGK + p.returnName())) {
 					gameList.add(IDGK + p.returnName());
@@ -263,14 +271,7 @@ public class GlobalServer extends JFrame{
 				else
 					p.sendText(ERROR);
 			}
-			else if (msg != null && msg.startsWith(HOTJOIN)) {
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(HOTJOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
-					}
-			}
-			else if (msg != null && msg.startsWith(INVITE)) {
+			else if (msg.startsWith(INVITE)) {
 				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
 			
 				for (int y=0; y<player.size(); y++)
@@ -279,11 +280,11 @@ public class GlobalServer extends JFrame{
 						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
 					}
 			}
-			else if (msg != null && msg.equals(GWON))
+			else if (msg.equals(GWON))
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-			else if (msg != null && msg.equals(GLOST))
+			else if (msg.equals(GLOST))
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
-			
+		
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -311,17 +312,14 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
+					Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
-				}
-				
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
+					// Prints the stackTrace if anything goes wrong. (sleep error)
 					e.printStackTrace();
 				}
+
 			}
 		});
 	}
@@ -335,77 +333,21 @@ public class GlobalServer extends JFrame{
 				try {
 					Socket s = server.accept();
 					Player p = new Player(s);
-					
-						
-						/*
-						for (int i=0; i<groupChatList.size(); i++) {
-							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
-							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
-						}*/
-						
-					//player.add(p);
-					//int g = player.indexOf(p);
-					/*
 					synchronized (player) {
 						player.add(p);
 						int g = player.indexOf(p);
 						
-						if (p.loginChecker(++serverPorts)) {
-									
-							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
-							try {
-								messages.put(GLOBALCHAT + p.returnName());
-									
-								for (int t=0; t<player.size(); t++) {
-									if(!player.get(t).equals(p.returnName()))
-										p.sendText(GLOBALCHAT + player.get(t).returnName());
-								}
-							} catch (InterruptedException ie) {
-								ie.printStackTrace();
-							}	
-						}
+						if (p.loginChecker(++serverPorts))
+							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
 						else {
 							--serverPorts;
 							player.remove(g);
 						}
-							*/
-						synchronized (player) {
-							player.add(p);
-							int g = player.indexOf(p);
-							
-							if (p.loginChecker(++serverPorts)) {    	
-		                    	try {
-		                    		messages.put(GLOBALCHAT + p.returnName());
-		                    	} catch (InterruptedException ie) {
-		                    		ie.printStackTrace();
-		                    	}
-		                    	
-		                    	Iterator<Player> i = player.iterator();
-			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-			                        Player p1 = i.next();
-			                        if (p != p1)
-			                        	try {
-											p.sendText(GLOBALCHAT + p1.returnName());
-											//p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
-			                        	} catch (IOException ioelocal) {
-			                        		// Lost connection, but doesn't bother to handle it here
-			                        	}
-			                    }
-							}
-							else {
-								--serverPorts;
-								player.remove(g);
-							}
-						}
+					}
+					Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
-				}
-				
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
 				}
 			}
