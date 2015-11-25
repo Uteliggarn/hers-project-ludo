@@ -135,7 +135,7 @@ public class GlobalServer extends JFrame{
 										i.remove();
 										que.remove(p.returnName());
 										gameList.remove(IDGK + p.returnName());
-										messages.put(LOGOUT + p.returnName());
+										displayMessage("\n" + LOGOUT + p.returnName());
 									} else if (msg.equals(TOP)) 
 										handleTopTenLists();
 									else {
@@ -261,7 +261,6 @@ public class GlobalServer extends JFrame{
 							t = 0;
 						}
 						else if (hostFound == true && que.get(t).returnName() != tmpName){
-							System.out.println("\nKom vi in i hotJoin sending");
 							que.get(t).sendText(HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}
