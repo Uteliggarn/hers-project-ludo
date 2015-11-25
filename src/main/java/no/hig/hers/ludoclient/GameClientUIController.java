@@ -535,7 +535,7 @@ public class GameClientUIController {
 		}
 	}
 	public void CheckForPlayersYellow() {
-		yellowPlayer.setText("Yellow: " + playerName2);
+		yellowPlayer.setText("Yellow: " + playerName3);
 		if(player4) {
 			turnOwner ++;
 			bluePlayer.setText("Blue: " + playerName4 + " - Roll");

@@ -746,8 +746,8 @@ public class LudoBoardFX extends Pane {
 				}
 				else {
 					if(n == 6) {
-						knockOutOtherColors(pawnToMove, temp);
 						location = 4;
+						knockOutOtherColors(pawnToMove, location);
 						inHome = false;
 					} else System.out.println("Need to get a 6 to move the pawn from the homefield");
 				}
