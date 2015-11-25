@@ -51,5 +51,6 @@
          </children>
       </VBox>
       <Button fx:id="startGameButton" disable="true" layoutX="25.0" layoutY="329.0" mnemonicParsing="false" onAction="#startGameButtonPressed" text="Start Game" />
+      <Button fx:id="updateButton" layoutX="449.0" layoutY="338.0" mnemonicParsing="false" onAction="#updateButtonPressed" />
    </children>
 </AnchorPane>

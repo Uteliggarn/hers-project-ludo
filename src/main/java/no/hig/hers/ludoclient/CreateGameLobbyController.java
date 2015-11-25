@@ -3,6 +3,9 @@ package no.hig.hers.ludoclient;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,6 +22,7 @@ public class CreateGameLobbyController {
 	@FXML private ListView<String> playerList;
 	
 	@FXML private Button startGameButton;
+	@FXML private Button updateButton;
 
 	private static BufferedWriter output;
 	
@@ -26,15 +30,24 @@ public class CreateGameLobbyController {
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
+		updateButton.setText("Update");
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
 		playerFour.setText("");
 	}
 	
+	@FXML private void updateButtonPressed() {
+		playerList.getSelectionModel().clearSelection();
+		playerList.getItems().clear();
+		for (int i=0; i<Main.playerList.size(); i++) {
+			if (!Main.playerList.get(i).equals(Main.userName))
+				playerList.getItems().add(Main.playerList.get(i));
+		}
+	}
+	
 	public void addNewPlayerToList(String name) {
-		if (!playerList.getItems().contains(name))
-			playerList.getItems().add(name);
+		
 	}
 	
 	public void setHostPlayer(String hostName) {
@@ -61,8 +74,7 @@ public class CreateGameLobbyController {
 	
 	@FXML private void startGameButtonPressed() {
 		try {
-			String gamestart = Constants.GAMESTART;
-			sendText(gamestart);
+			sendText(Constants.GAMESTART);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.SEVERE, "Error trying to send text to server", ioe);
 		}

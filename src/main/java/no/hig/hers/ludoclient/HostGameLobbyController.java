@@ -52,8 +52,7 @@ public class HostGameLobbyController {
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
-			String gamestart = Constants.GAMESTART;
-			sendText(gamestart);
+			sendText(Constants.GAMESTART);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
