@@ -66,6 +66,7 @@ public class ChatHandler {
     				c.setID(name);
     				controllers.add(c);
     				chats.add(newTab);
+    				System.out.println("\nHåper vi er her inne først altså");
     				chatTabs.getTabs().add(newTab);
     				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
@@ -79,15 +80,19 @@ public class ChatHandler {
 	 * @param message Message to handle
 	 */
 	public void handleChatMessage(String message) {
+		System.out.println("\nHva er chats size: " + chats.size());
 		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
             if (message.startsWith(chats.get(i).getId() + Constants.JOINCHAT)){	// Sjekker om noen har lyst å joine
+            	Platform.runLater(() -> {
             	String username = message.substring(tab.getId().length() + 5);
+            	System.out.println("\nHva er tab iden: " + tab.getId());
             	if (!Main.playerList.contains(username) && message.startsWith("Global"))
 					Main.playerList.add(username);
             	c.addUserToList(username);
+            	});
             }
             else if (message.startsWith(Constants.QUITGAME)) { // Mottar melding om at noen har logget ut
             	String username = message.substring(Constants.QUITGAME.length());

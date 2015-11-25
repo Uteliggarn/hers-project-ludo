@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import no.hig.hers.ludoshared.Constants;
@@ -35,8 +37,6 @@ public class GameHandler {
 	
 	private String hostName;
 	private int caseNr = 0;
-	
-	private final String JOIN = "JOIN:";
 	
 	public GameHandler(int serverPort, int caseNr, String hostName) {
 		this.serverPort = serverPort;
@@ -76,8 +76,8 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
-			//connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -162,7 +162,7 @@ public class GameHandler {
 								gameClientUIController.gameover();	
 		                	});
 		                }
-		                else if (msg.startsWith(JOIN)) {
+		                else if (msg.startsWith(Constants.JOIN)) {
 		                	if (!msg.substring(5).equals(hostName.substring(4))) {
 		                		Platform.runLater(() -> {
 				                	switch (caseNr) {
@@ -203,9 +203,12 @@ public class GameHandler {
 		Tab tab = new Tab("Ludo");
 		tab.setId(hostName);
 		tab.setClosable(true);
-		//tab.setOnClosed(EventHandler<Event>() -> {
-			
-		//});
+		tab.setOnClosed(new EventHandler<Event>() {
+			@Override
+			public void handle(Event e) {
+				
+			}
+		});
 		
 		FXMLLoader loader = new FXMLLoader();
 	

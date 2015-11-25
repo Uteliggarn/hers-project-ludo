@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
+import no.hig.hers.ludoshared.Constants;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -30,7 +32,7 @@ public class GlobalServer extends JFrame{
 	
 	private JTextArea outputArea;
 	
-	private ArrayList<Player> player = new ArrayList<Player>();
+	ArrayList<Player> player = new ArrayList<Player>();
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
@@ -220,63 +222,66 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGameKeywords(Player p, String msg) {
 		try {
-			if (msg != null && msg.equals(QUEUE)){
-				Player tmp = p;
-				que.add(tmp);
-				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-				if(que.size() == 4) {
-					boolean hostFound = false;
-					for (int t=0; t<4; t++) {
-						
-						//que.get(t).sendText("HOST");
-						//System.out.println("Hva er que: "  );
-						
-						if (!gameList.contains(IDGK + que.get(t).returnName()) && hostFound != true) {
-							//player.get(player.indexOf(que.get(t))).setHost(true);
-							gameList.add(IDGK + que.get(t));
-							hostFound = true;
-							que.get(t).sendText(HOST);
-							tmpPort = que.get(t).returnServerPort();
-							tmpName = que.get(t).returnName();
+			if (msg != null) {
+				if (msg.equals(QUEUE)){
+					Player tmp = p;
+					que.add(tmp);
+					displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
+					if(que.size() == 4) {
+						boolean hostFound = false;
+						for (int t=0; t<4; t++) {
+							
+							if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
+								gameList.add(Constants.IDGK + que.get(t));
+								hostFound = true;
+								que.get(t).sendText(HOST);
+								tmpPort = que.get(t).returnServerPort();
+								tmpName = que.get(t).returnName();
+								t = 0;
+							}
+							else if (hostFound == true && que.get(t).returnName() != tmpName){
+								System.out.println("\nKom vi in i hotJoin sending");
+								que.get(t).sendText(HOTJOIN + tmpName);
+								que.get(t).sendText(Integer.toString(tmpPort));
+							}
 						}
-						else {
-							que.get(t).sendText(JOIN + tmpName);
-							que.get(t).sendText(Integer.toString(tmpPort));
-						}	
-						
+						for (int i=0; i<que.size(); i++) {
+							que.get(i).sendText(Constants.QUEOPEN);
+							que.remove(i);
+						}
 					}
 				}
-			}
-			else if (msg != null && msg.equals(CREATEGAME)) {
-				displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
-				if (!gameList.contains(IDGK + p.returnName())) {
-					gameList.add(IDGK + p.returnName());
-					p.sendText(CREATEGAME);
 				}
-				else
-					p.sendText(ERROR);
-			}
-			else if (msg != null && msg.startsWith(HOTJOIN)) {
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(HOTJOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+				else if (msg.equals(CREATEGAME)) {
+					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
+					if (!gameList.contains(IDGK + p.returnName())) {
+						gameList.add(IDGK + p.returnName());
+						p.sendText(CREATEGAME);
 					}
+					else
+						p.sendText(ERROR);
+				}/*
+				else if (msg != null && msg.startsWith(INVITE)) {
+					for (int y=0; y<player.size(); y++)
+						if(msg.substring(7).equals(player.get(y).returnName())) {
+							player.get(y).sendText(JOIN + player.get(y).returnName());
+							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+						}
+				}*/
+				else if (msg.startsWith(INVITE)) {
+					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+				
+					for (int y=0; y<player.size(); y++)
+						if(msg.substring(7).equals(player.get(y).returnName())) {
+							player.get(y).sendText(JOIN + player.get(y).returnName());
+							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+						}
+				}
+				else if (msg.equals(GWON))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+				else if (msg.equals(GLOST))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			}
-			else if (msg != null && msg.startsWith(INVITE)) {
-				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-			
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(JOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
-					}
-			}
-			else if (msg != null && msg.equals(GWON))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-			else if (msg != null && msg.equals(GLOST))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
-			
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -367,8 +372,9 @@ public class GlobalServer extends JFrame{
 							player.add(p);
 							int g = player.indexOf(p);
 							
-							if (p.loginChecker(++serverPorts)) {    	
-		                    	try {
+							if (p.loginChecker(++serverPorts)) {    
+								displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+		                    	/*try {
 		                    		messages.put(GLOBALCHAT + p.returnName());
 		                    	} catch (InterruptedException ie) {
 		                    		ie.printStackTrace();
@@ -384,7 +390,7 @@ public class GlobalServer extends JFrame{
 			                        	} catch (IOException ioelocal) {
 			                        		// Lost connection, but doesn't bother to handle it here
 			                        	}
-			                    }
+			                    }*/
 							}
 							else {
 								--serverPorts;

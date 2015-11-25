@@ -11,12 +11,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
+import no.hig.hers.ludoshared.Constants;
+
 public class GameServer {
 	
 	private ServerSocket server;
 	private ExecutorService executorService;
 	
-	private ArrayList<Player> player = new ArrayList<Player>();
+	ArrayList<Player> player = new ArrayList<Player>();
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
@@ -144,43 +146,15 @@ public class GameServer {
 	                    	
 		                    Player p = new Player(s, playerNr);
 		                    playerNr++;
-		                    
-		                    /*
-
-		                    try {
-								//displayMessage("GlobalJOIN:" + p.returnName() + "\n");
-	                    		for (int t=0; t<player.size(); t++) {
-									p.sendText(JOIN + player.get(t).returnName());
-								}
-	                    		
-								messages.put(JOIN + p.returnName());
-								
-							} catch (InterruptedException ie) {
-								ie.printStackTrace();
-							}
-		                    */
+		                   
 		                    synchronized (player) {
-		                    	player.add(p);     	
-		                    	
-		                    	try {
-		                    		messages.put(JOIN + p.returnName());
-		                    	} catch (InterruptedException ie) {
-		                    		Main.LOGGER.log(Level.SEVERE, "Synchronized function for player failed", ie);
-		                    	}
+		                    	player.add(p);
 		                    	
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-			                        Player p1 = i.next();
-			                        if (p != p1)
-			                        	try {
-			                        		System.out.println("\n Synchronized i loginMonitor: " + p1.returnName());
-			                        		p.sendText(JOIN + p1.returnName());
-			                        	} catch (IOException ioelocal) {
-			                        		// Lost connection, but doesn't bother to handle it here
-			                        		Main.LOGGER.log(Level.INFO, "Synchronized function for player failed", ioelocal);
-			                        	}
-			                    }
-			                    
+			                    	String playerName = i.next().returnName();
+			                    	p.sendText(Constants.JOIN + playerName);
+			                    } 
 		                    }
 	                    }
 	                } catch (IOException ioe) {

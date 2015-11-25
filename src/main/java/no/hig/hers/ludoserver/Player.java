@@ -16,6 +16,8 @@ import java.net.Socket;
 import java.util.Formatter;
 import java.util.Iterator;
 
+import no.hig.hers.ludoshared.Constants;
+
 public class Player {
 	
 	private Socket connection;
@@ -103,6 +105,8 @@ public class Player {
 	 */
 	public boolean loginChecker(int serverPort) {
 		try {
+			System.out.println("\nHello everybody!");
+			
 			String tempName = input.readLine();	//reades the input
 
 			String tempPass = input.readLine();
@@ -134,8 +138,16 @@ public class Player {
 					i.next(); 		// Skip Global chat
 					while (i.hasNext()) {
 						String chatName = i.next();
-						sendText("NEWGROUPCHAT:" + chatName);
+						sendText(Constants.NEWCHAT + chatName);
 					}			
+					
+					Iterator<Player> y = GlobalServerMain.application.player.iterator();
+					while (y.hasNext()) {
+						String playerName = y.next().returnName();
+						System.out.println("\nHva er playerName: " + Constants.GLOBALCHAT + playerName);
+						sendText(Constants.GLOBALCHAT + playerName);
+					}	
+					
 					return true;
 				}
 				else if (login == 0) {
