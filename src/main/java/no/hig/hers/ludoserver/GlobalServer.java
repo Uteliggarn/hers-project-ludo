@@ -187,16 +187,16 @@ public class GlobalServer extends JFrame{
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
 			
-			if (msg != null && msg.startsWith("NEWGROUPCHAT:")) {
+			if (msg != null && msg.startsWith(Constants.NEWCHAT)) {
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
-						p.sendText("ERRORCHAT");
+						p.sendText(Constants.ERRORCHAT);
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
 					}
 				else {
 					groupChatList.add(msg.substring(13));
-					messages.put("NEWGROUPCHAT:" + msg.substring(13));
+					messages.put(Constants.NEWCHAT + msg.substring(13));
 					displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.returnName() + "\n");
 				}
 			}
@@ -267,14 +267,7 @@ public class GlobalServer extends JFrame{
 					}
 					else
 						p.sendText(ERROR);
-				}/*
-				else if (msg != null && msg.startsWith(INVITE)) {
-					for (int y=0; y<player.size(); y++)
-						if(msg.substring(7).equals(player.get(y).returnName())) {
-							player.get(y).sendText(JOIN + player.get(y).returnName());
-							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
-						}
-				}*/
+				}
 				else if (msg.startsWith(INVITE)) {
 					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
 				
@@ -316,17 +309,14 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
+					Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
-				}
-				
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
+					// Prints the stackTrace if anything goes wrong. (sleep error)
 					e.printStackTrace();
 				}
+
 			}
 		});
 	}
@@ -340,78 +330,21 @@ public class GlobalServer extends JFrame{
 				try {
 					Socket s = server.accept();
 					Player p = new Player(s);
-					
-						
-						/*
-						for (int i=0; i<groupChatList.size(); i++) {
-							p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
-							writeToFile(fileName, groupChatList.get(i)+ "JOIN:" + p.returnName());
-						}*/
-						
-					//player.add(p);
-					//int g = player.indexOf(p);
-					/*
 					synchronized (player) {
 						player.add(p);
 						int g = player.indexOf(p);
 						
-						if (p.loginChecker(++serverPorts)) {
-									
-							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");						
-							try {
-								messages.put(GLOBALCHAT + p.returnName());
-									
-								for (int t=0; t<player.size(); t++) {
-									if(!player.get(t).equals(p.returnName()))
-										p.sendText(GLOBALCHAT + player.get(t).returnName());
-								}
-							} catch (InterruptedException ie) {
-								ie.printStackTrace();
-							}	
-						}
+						if (p.loginChecker(++serverPorts))
+							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
 						else {
 							--serverPorts;
 							player.remove(g);
 						}
-							*/
-						synchronized (player) {
-							player.add(p);
-							int g = player.indexOf(p);
-							
-							if (p.loginChecker(++serverPorts)) {    
-								displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
-		                    	/*try {
-		                    		messages.put(GLOBALCHAT + p.returnName());
-		                    	} catch (InterruptedException ie) {
-		                    		ie.printStackTrace();
-		                    	}
-		                    	
-		                    	Iterator<Player> i = player.iterator();
-			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-			                        Player p1 = i.next();
-			                        if (p != p1)
-			                        	try {
-											p.sendText(GLOBALCHAT + p1.returnName());
-											//p.sendText(groupChatList.get(i)+ "JOIN:" + p.returnName());
-			                        	} catch (IOException ioelocal) {
-			                        		// Lost connection, but doesn't bother to handle it here
-			                        	}
-			                    }*/
-							}
-							else {
-								--serverPorts;
-								player.remove(g);
-							}
-						}
+					}
+					Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
-				}
-				
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
 				}
 			}
