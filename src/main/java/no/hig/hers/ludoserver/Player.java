@@ -31,10 +31,19 @@ public class Player {
 	private int serverPort;
 	private int playerID;
 
+	private String IPaddress;
+
+
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
+	
+		this.IPaddress = connection.getRemoteSocketAddress().toString();
+		System.out.println("Hva er Inet adress: " + IPaddress);
+		int h = IPaddress.indexOf(":");
+		IPaddress = IPaddress.substring(1, h);
 		
-		System.out.println("Hva er Inet adress: " + connection.getRemoteSocketAddress().toString());
+		System.out.println("Hva er Inet adress: " + IPaddress);
+		
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
@@ -91,6 +100,10 @@ public class Player {
 		return playerID;
 	}
 	
+	public String returnIPaddress() {
+		return IPaddress;
+	}
+	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
 	 * to check what the message contains. If the message contains the correct keyword
@@ -105,9 +118,10 @@ public class Player {
 			String code = input.readLine();
 			String tempName = input.readLine();
 			String tempPass = input.readLine();
-			
+
 			if (code.equals(Constants.SENDLOGIN)) {
 				int ID = DatabaseHandler.userLogin(tempName, tempPass);
+
 				
 				if (ID == 0) {
 					sendText(Integer.toString(ID));

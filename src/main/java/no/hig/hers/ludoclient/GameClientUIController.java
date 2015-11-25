@@ -72,8 +72,6 @@ public class GameClientUIController {
 	@FXML
 	private Label greenPlayer;
 	@FXML
-	private Label nameLabel;
-	@FXML
 	private Button pawn1;
 	@FXML
 	private Button pawn2;
@@ -104,7 +102,7 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		turnOwner = 2;	//Red player starts
+		turnOwner = 1;	//Green player starts
 		pawnToMove = 0;
 		diceRolls = 0;
 		gameOver = false;
@@ -124,7 +122,6 @@ public class GameClientUIController {
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
-				dieLabel.setImage(null);
 				setPawnMovesFalse();
 				
 			}
@@ -137,7 +134,6 @@ public class GameClientUIController {
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
-				dieLabel.setImage(null);
 				setPawnMovesFalse();
 			}
 		});
@@ -149,7 +145,6 @@ public class GameClientUIController {
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
-				dieLabel.setImage(null);
 				setPawnMovesFalse();
 			}
 		});
@@ -161,7 +156,6 @@ public class GameClientUIController {
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
-				dieLabel.setImage(null);
 				setPawnMovesFalse();
 			}
 		});
@@ -170,8 +164,6 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				diceValue = 0;
 				diceRolls = 0;
-				dieTextLabel.setText("");
-				dieLabel.setImage(null);
 				setPawnMovesFalse();
 				setNotValid();
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
@@ -248,31 +240,7 @@ public class GameClientUIController {
 					}
 				}
 			}
-			
-			dieTextLabel.setText("You got a: ");
-			
-			switch (diceValue) {
-			case 1:
-				dieLabel.setImage(die1);
-				break;
-			case 2:
-				dieLabel.setImage(die2);
-				break;
-			case 3:
-				dieLabel.setImage(die3);
-				break;
-			case 4:
-				dieLabel.setImage(die4);
-				break;
-			case 5:
-				dieLabel.setImage(die5);
-				break;
-			case 6:
-				dieLabel.setImage(die6);
-				break;
-			default:
-				break;
-			}
+		setDiceImage(diceValue);
 		}
 		else {
 			dieRoller.setText("Pass");
@@ -285,7 +253,7 @@ public class GameClientUIController {
 		if ( turnOwner == 1 && diceValue !=0) {	//Green player
 			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.greenPawnsInGoal.size();
-			if (inGoal == 4) {
+			if (inGoal == 4 && player == 1) {
 				gameStatus = 1;
 				gameOver = true;
 			}
@@ -299,7 +267,7 @@ public class GameClientUIController {
 			try {
 				board.redPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 				inGoal = board.redPawnsInGoal.size();
-				if (inGoal == 4) {
+				if (inGoal == 4 && player == 2) {
 					gameStatus = 1;
 					gameOver = true;
 				}
@@ -308,9 +276,6 @@ public class GameClientUIController {
 				Main.LOGGER.log(Level.WARNING, "Goalerror", e);
 			}
 			if(diceValue !=6) {
-				//turnOwner ++;
-				//redPlayer.setText("Red: " + playerName2);
-				//yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
 				CheckForPlayersRed();
 			}
 			setNotValid();
@@ -319,7 +284,7 @@ public class GameClientUIController {
 		else if (turnOwner == 3 && diceValue !=0) { //Yellow player
 			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.yellowPawnsInGoal.size();
-			if (inGoal == 4) {
+			if (inGoal == 4 && player == 3) {
 				gameStatus = 1;
 				gameOver = true;
 			}
@@ -332,7 +297,7 @@ public class GameClientUIController {
 		else if (turnOwner == 4 && diceValue !=0) { //Blue player
 			board.bluePawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
 			inGoal = board.bluePawnsInGoal.size();
-			if (inGoal == 4) {
+			if (inGoal == 4 && player == 4) {
 				gameStatus = 1;
 				gameOver = true;
 			}
@@ -453,21 +418,6 @@ public class GameClientUIController {
 				break;
 			default: break;
 		}
-		switch (player) {
-			case 1:
-				nameLabel.setText("You are: " + playerName1);
-				break;
-			case 2:
-				nameLabel.setText("You are: " + playerName2);
-				break;
-			case 3:
-				nameLabel.setText("You are: " + playerName3);
-				break;
-			case 4:
-				nameLabel.setText("You are: " + playerName4);
-				break;
-			default: break;
-		}
 	}
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
 		output = write;
@@ -478,6 +428,7 @@ public class GameClientUIController {
 		turnOwner = playernr;
 		pawnToMove = pawn;
 		diceValue = diceV;
+		setDiceImage(diceValue);
 		processRoll();
 		if(gameOver) {
 			setNotValidPass();
@@ -555,15 +506,15 @@ public class GameClientUIController {
 		greenPlayer.setText("Green: " + playerName1);
 		if(player2) {
 			turnOwner ++;
-			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			redPlayer.setText("Red: " + playerName2 + " - Roll");
 		} else if(player3) {
 			turnOwner += 2;
-			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			yellowPlayer.setText("Yellow: " + playerName3 + " - Roll");
 		} else if(player4) {
 			turnOwner += 3;
-			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+			bluePlayer.setText("Blue: " + playerName4 + " - Roll");
 		} else {
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			greenPlayer.setText("Green: " + playerName1 + " - Roll");
 			turnOwner = 1;
 		}
 	}
@@ -571,30 +522,31 @@ public class GameClientUIController {
 		redPlayer.setText("Red: " + playerName2);
 		if(player3) {
 			turnOwner ++;
-			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			yellowPlayer.setText("Yellow: " + playerName3 + " - Roll");
 		} else if(player4) {
 			turnOwner += 2;
-			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+			bluePlayer.setText("Blue: " + playerName4 + " - Roll");
 		} else if(player1) {
 			turnOwner = 1;
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			greenPlayer.setText("Green: " + playerName1 + " - Roll");
 		} else {
-			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			redPlayer.setText("Red: " + playerName2 + " - Roll");
 			turnOwner = 2;
 		}
 	}
 	public void CheckForPlayersYellow() {
+		yellowPlayer.setText("Yellow: " + playerName3);
 		if(player4) {
 			turnOwner ++;
-			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+			bluePlayer.setText("Blue: " + playerName4 + " - Roll");
 		} else if(player1) {
 			turnOwner = 1;
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			greenPlayer.setText("Green: " + playerName1 + " - Roll");
 		} else if(player2) {
 			turnOwner = 2;
-			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			redPlayer.setText("Red: " + playerName2 + " - Roll");
 		} else {
-			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			yellowPlayer.setText("Yellow: " + playerName3 + " - Roll");
 			turnOwner = 3;
 		}
 	}
@@ -602,16 +554,16 @@ public class GameClientUIController {
 		bluePlayer.setText("Blue: " + playerName4);
 		if(player1) {
 			turnOwner = 1;
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			greenPlayer.setText("Green: " + playerName1 + " - Roll");
 		} else if(player2) {
 			turnOwner = 2;
-			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			redPlayer.setText("Red: " + playerName2 + " - Roll");
 		} else if(player3) {
 			turnOwner = 3;
-			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			yellowPlayer.setText("Yellow: " + playerName3 + " - Roll");
 		} else {
 			turnOwner = 4;
-			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+			bluePlayer.setText("Blue: " + playerName4 + " - Roll");
 		}
 	}
 		
@@ -631,6 +583,37 @@ public class GameClientUIController {
 				break;
 			default:
 				break;
+		}
+	}
+	
+	public void setDiceImage(int diceValue) {
+		
+		dieTextLabel.setText("You got a: ");
+		
+		switch (diceValue) {
+		case 0:
+			dieLabel.setImage(null);
+			break;
+		case 1:
+			dieLabel.setImage(die1);
+			break;
+		case 2:
+			dieLabel.setImage(die2);
+			break;
+		case 3:
+			dieLabel.setImage(die3);
+			break;
+		case 4:
+			dieLabel.setImage(die4);
+			break;
+		case 5:
+			dieLabel.setImage(die5);
+			break;
+		case 6:
+			dieLabel.setImage(die6);
+			break;
+		default:
+			break;
 		}
 	}
 }

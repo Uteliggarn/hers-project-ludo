@@ -37,11 +37,6 @@
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
-                  <Label fx:id="nameLabel" text="You are:" translateY="20.0">
-                     <font>
-                        <Font name="Arial Bold Italic" size="20.0" />
-                     </font>
-                  </Label>
                </children></VBox>
          </top>
          <center>
