@@ -64,7 +64,6 @@ public class CreateGameLobbyController {
 	}
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) {
-		
 		try {
 			String gamestart = "gamestart:";
 			sendText(gamestart);

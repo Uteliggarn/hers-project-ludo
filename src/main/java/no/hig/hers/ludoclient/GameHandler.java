@@ -51,24 +51,28 @@ public class GameHandler {
 			addPlayersToList();
 		
 		//executorService.shutdown();	// Dreper tråden når klassen dør
-		
 	}
 	
 	
-	private void addPlayersToList() {
+	private void addPlayersToList() {		// TODO: this needs fixing
 		executorService.execute(() -> {
 			while (true) {
-				for (int i=0; i<Main.playerList.size(); i++) {
-					if (Main.playerList.get(i) != Main.userName) {
-						createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+				synchronized (this) {
+					for (int i=0; i<Main.playerList.size(); i++) {
+						if (Main.playerList.get(i) != Main.userName) {
+							System.out.println("\nHvor stor er playerList: " + Main.playerList.size() + "\nHva er navnet: " + Main.playerList.get(i));
+							
+							createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+							
+						}
 					}
-				}
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(5000);
-				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
-					e.printStackTrace();
+					//The thread goes to sleep to save the CPU energy
+					try {
+						Thread.sleep(5000);
+					} catch (Exception e) {
+						// Prints the stackTrace if anything goes wrong.
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -76,7 +80,8 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -110,12 +115,6 @@ public class GameHandler {
         } catch (IOException ioe) {
         	Main.showAlert("Error", "Unable to send message to server");
         }
-    }
-	
-    public void startProcessConnection() {
-    	executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-    	processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-    	executorService.shutdown();	// Dreper tråden når klassen dør
     }
     
 	public void processConnection() {
@@ -192,8 +191,7 @@ public class GameHandler {
 	                		break;
 	                	default: break;
 	                	}
-	                }
-                    	        	                
+	                }	        	                
 	                
 	            } catch (IOException ioe) {
 	                ioe.printStackTrace();
@@ -212,80 +210,63 @@ public class GameHandler {
 	
 
 	public void createNewLobby() {
+		Platform.runLater(() -> {
+		Tab tab = new Tab("Ludo");
+		tab.setId(hostName);
+		tab.setClosable(true);
+		//tab.setOnClosed(EventHandler<Event>() -> {
+			
+		//});
+		
+		FXMLLoader loader = new FXMLLoader();
+		
 		switch (caseNr) {
 		case 1: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-			
-				FXMLLoader loader = new FXMLLoader();
+			//Platform.runLater(() -> {
 				try {
 					tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 					createGameLobbyController = (CreateGameLobbyController) loader.getController();
 					
 					createGameLobbyController.setHostPlayer(hostName);
 					createGameLobbyController.setConnetion(output);
-					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();				
-					
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-			});
+			//});
 			break;
 		case 2: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-				
-				FXMLLoader loader = new FXMLLoader();
+			//Platform.runLater(() -> {
 				try {
 					tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 					hostGameLobbyController = (HostGameLobbyController) loader.getController();
 					
 					hostGameLobbyController.setHostPlayer(hostName);
 					hostGameLobbyController.setConnetion(output);
-					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();
-					
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-			});
+			//});
 			break;
 		case 3: 
-			Platform.runLater(() -> {
-				Tab tab = new Tab("Ludo");
-				tab.setId(hostName);
-				tab.setClosable(true);
-				
-				FXMLLoader loader = new FXMLLoader();
+			//Platform.runLater(() -> {
 				try {
 					tab.setContent(loader.load(getClass().getResource("PlayerGameLobby.fxml").openStream()));
 					playerGameLobbyController = (PlayerGameLobbyController) loader.getController();
 					
-					playerGameLobbyController.setHostPlayer(hostName);
-					
-					Main.gameTabs.getTabs().add(tab);
-					Main.gameTabs.getSelectionModel().select(tab);
-					
-					processConnection();
-					
+					playerGameLobbyController.setHostPlayer(hostName);	
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-			});
+			//});
 			break;
 		default: break;
 		}
+		
+		Main.gameTabs.getTabs().add(tab);
+		Main.gameTabs.getSelectionModel().select(tab);
+		});
+		
+		processConnection();
 	}
 
 	public String read() throws IOException {

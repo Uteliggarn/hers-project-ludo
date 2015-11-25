@@ -68,6 +68,7 @@ public class Main extends Application {
 	final static String QUEUE = "QUEUE";	// Unique name
 	final static String JOIN = "JOIN:";	// Unique name
 	static final String QUITGAME = "LOGOUT:";
+	static final String HOTJOIN = "HOTJOIN:";
 	
 	
 
@@ -103,8 +104,8 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			//connection = new Socket("128.39.83.87", 12344);
-
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.80.117", 12344);	// Petter
 			connection = new Socket("127.0.0.1", 12344);
 
 			
@@ -269,11 +270,15 @@ public class Main extends Application {
 	                else if (message.equals(HOST)) {
 	                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
 	                	gameHandler.add(gh);
-	               
+	                }
+	                else if (message.startsWith(HOTJOIN)) {
+	                	int port = Integer.valueOf(Main.input.readLine());
+
+	                	GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+	                	gameHandler.add(gh);
 	                }
 	                else if (message.startsWith(JOIN)) {
 	                	int port = Integer.valueOf(Main.input.readLine());
-
 	                	Platform.runLater(() -> {
 	                		inviteAccept(port);
 	                	});
@@ -316,7 +321,7 @@ public class Main extends Application {
 		alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeDecline);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeAccept.OK){
+		if (result.get() == buttonTypeAccept){
 			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		} else {

@@ -34,6 +34,8 @@ public class Player {
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
 		
+		System.out.println("Hva er Inet adress: " + connection.getRemoteSocketAddress().toString());
+		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
 	}
