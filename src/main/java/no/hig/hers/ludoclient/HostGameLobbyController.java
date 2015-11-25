@@ -35,11 +35,13 @@ public class HostGameLobbyController {
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
+		Main.cHandler.addNewChat(this.hostName);
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "")
+		if (playerTwo.getText() == "") {
 			playerTwo.setText(name);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "") {

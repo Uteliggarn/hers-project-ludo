@@ -158,7 +158,7 @@ public class GlobalServer extends JFrame{
 				
 				//The thread goes to sleep to save the CPU energy
 				try {
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
@@ -321,7 +321,7 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
 				} catch (Exception e) {
@@ -352,7 +352,7 @@ public class GlobalServer extends JFrame{
 							player.remove(g);
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
 					GlobalServer.LOGGER.log(Level.SEVERE, "Connection Error", ioe);
