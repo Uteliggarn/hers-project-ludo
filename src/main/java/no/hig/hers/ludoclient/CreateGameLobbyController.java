@@ -1,16 +1,13 @@
 package no.hig.hers.ludoclient;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
+import no.hig.hers.ludoshared.Constants;
 
 public class CreateGameLobbyController {
 	
@@ -59,7 +56,7 @@ public class CreateGameLobbyController {
 	
 	@FXML private void invitePlayer() {
 		String item = playerList.getSelectionModel().getSelectedItem();
-		Main.sendText(Main.INVITE + item);
+		Main.sendText(Constants.INVITE + item);
 	}
 	
 	@FXML private void startGameButtonPressed() {
