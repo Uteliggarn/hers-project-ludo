@@ -5,10 +5,10 @@ public class Constants {
 	public final static String JOINCHAT = "JOIN:";
 	public final static String ERRORCHAT = "ERRORCHAT";
 	public final static String LEAVECHAT = "LEAVE:";
-	public final static String CREATEGAME = "CREATEGAME";
+	public final static String CREATEGAME = "CREATEGAME:";
 	public final static String IDGK = "IDGK";// Unique name
 	public final static String INVITE = "INVITE:";	
-	public final static String HOST = "HOST";	
+	public final static String HOST = "HOST:";	
 	public final static String QUEUE = "QUEUE";
 	public final static String JOIN = "JOIN:";	
 	public final static String QUITGAME = "LOGOUT:";

@@ -265,7 +265,7 @@ public class GlobalServer extends JFrame{
 						if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
 							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
-							que.get(t).sendText(Constants.HOST);
+							que.get(t).sendText(Constants.HOST + que.get(t).returnIPaddress());
 							tmpPort = que.get(t).returnServerPort();
 							tmpName = que.get(t).returnName();
 							t = 0;
@@ -285,7 +285,7 @@ public class GlobalServer extends JFrame{
 				displayMessage(p.returnName() + " created a new game: " + Constants.IDGK + p.returnName() + "\n");
 				if (!gameList.contains(Constants.IDGK + p.returnName())) {
 					gameList.add(Constants.IDGK + p.returnName());
-					p.sendText(Constants.CREATEGAME);
+					p.sendText(Constants.CREATEGAME + p.returnIPaddress());
 				}
 				else
 					p.sendText(Constants.ERROR);
@@ -295,8 +295,8 @@ public class GlobalServer extends JFrame{
 			
 				for (int y=0; y<player.size(); y++)
 					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(Constants.JOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+						player.get(y).sendText(Constants.JOIN + p.returnName());
+						player.get(y).sendText(Integer.toString(p.returnServerPort()) + p.returnIPaddress());
 					}
 			}
 			else if (msg.equals(GWON))
@@ -358,7 +358,7 @@ public class GlobalServer extends JFrame{
 						int g = player.indexOf(p);
 						
 						if (p.loginChecker(++serverPorts)) {
-							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+							displayMessage("\nPLAYER CONNECTED: " + p.returnName() + "\n");
 							messages.put(Constants.GLOBALCHAT + p.returnName());
 						}
 						else {
