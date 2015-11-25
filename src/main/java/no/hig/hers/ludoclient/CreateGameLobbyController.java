@@ -61,8 +61,7 @@ public class CreateGameLobbyController {
 	
 	@FXML private void startGameButtonPressed() {
 		try {
-			String gamestart = Constants.GAMESTART;
-			sendText(gamestart);
+			sendText(Constants.GAMESTART);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.SEVERE, "Error trying to send text to server", ioe);
 		}

@@ -64,7 +64,7 @@ public class GameHandler {
 				});
 				//The thread goes to sleep to save the CPU energy
 				try {
-					Thread.sleep(5000);
+					//Thread.sleep(5000);
 				} catch (Exception e) {
 					Main.LOGGER.log(Level.WARNING, "Error sleeping", e);
 				}

@@ -265,13 +265,13 @@ public class GlobalServer extends JFrame{
 						if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
 							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
-							que.get(t).sendText(HOST);
+							que.get(t).sendText(Constants.HOST);
 							tmpPort = que.get(t).returnServerPort();
 							tmpName = que.get(t).returnName();
 							t = 0;
 						}
 						else if (hostFound == true && que.get(t).returnName() != tmpName){
-							que.get(t).sendText(HOTJOIN + tmpName);
+							que.get(t).sendText(Constants.HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}
 					}
@@ -280,29 +280,30 @@ public class GlobalServer extends JFrame{
 						que.remove(i);
 					}
 				}
-				else if (msg.equals(CREATEGAME)) {
-					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
-					if (!gameList.contains(IDGK + p.returnName())) {
-						gameList.add(IDGK + p.returnName());
-						p.sendText(CREATEGAME);
-					}
-					else
-						p.sendText(ERROR);
-				}
-				else if (msg.startsWith(INVITE)) {
-					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-				
-					for (int y=0; y<player.size(); y++)
-						if(msg.substring(7).equals(player.get(y).returnName())) {
-							player.get(y).sendText(JOIN + player.get(y).returnName());
-							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
-						}
-				}
-				else if (msg.equals(GWON))
-					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-				else if (msg.equals(GLOST))
-					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			}
+			else if (msg.equals(Constants.CREATEGAME)) {
+				displayMessage(p.returnName() + " created a new game: " + Constants.IDGK + p.returnName() + "\n");
+				if (!gameList.contains(Constants.IDGK + p.returnName())) {
+					gameList.add(Constants.IDGK + p.returnName());
+					p.sendText(Constants.CREATEGAME);
+				}
+				else
+					p.sendText(Constants.ERROR);
+			}
+			else if (msg.startsWith(Constants.INVITE)) {
+				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+			
+				for (int y=0; y<player.size(); y++)
+					if(msg.substring(7).equals(player.get(y).returnName())) {
+						player.get(y).sendText(Constants.JOIN + player.get(y).returnName());
+						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+					}
+			}
+			else if (msg.equals(GWON))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+			else if (msg.equals(GLOST))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
+			
 		} catch (IOException ioe) {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);
 		}

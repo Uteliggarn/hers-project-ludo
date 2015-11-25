@@ -48,6 +48,7 @@ public class ClientMainUIController {
     @FXML
     void newGameButtonPressed() {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
+    		System.out.println("Inne i newGameButtonPressed for loop " + Main.gameTabs.getTabs().size());
     		if (Main.gameTabs.getTabs().get(i).getId().equals(Constants.IDGK + Main.userName)) 
     			++count;
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
