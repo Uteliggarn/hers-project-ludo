@@ -131,7 +131,7 @@ public class GlobalServer extends JFrame{
 										String toptenPlayedName = null;
 										int toptenPlayedCount;
 										String toptenWonName = null;
-										int toptenWonCount;
+										String toptenWonCount;
 										ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
 										ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
 										
@@ -140,14 +140,13 @@ public class GlobalServer extends JFrame{
 											toptenPlayedCount = (int) resultSetPlayed.getObject(2);
 											toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
 											messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
-											System.out.println("topplayed " + toptenPlayedName);
 										}
 										while(resultSetWon.next()) {
+											String tmp;
 											toptenWonName = (String) resultSetWon.getObject(1);
-											toptenWonCount = (int) resultSetWon.getObject(2) ;
-											toptenWonName = ( toptenPlayedName + "," + Integer.toString(toptenWonCount));
-											messages.put("TOPLISTWON:" + toptenWonName);
-											System.out.println("topwon " + toptenWonName);
+											toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
+											tmp = (toptenWonName + "," + toptenWonCount);
+											messages.put("TOPLISTWON:" + tmp);
 										}
 									}
 									catch (Exception e) {
