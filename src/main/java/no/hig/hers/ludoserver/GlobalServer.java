@@ -259,7 +259,6 @@ public class GlobalServer extends JFrame{
 						}
 					}
 				}
-				}
 				else if (msg.equals(CREATEGAME)) {
 					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
 					if (!gameList.contains(IDGK + p.returnName())) {
@@ -303,7 +302,7 @@ public class GlobalServer extends JFrame{
 			while (!shutdown) {
 				try {
 					String message = messages.take();
-					displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
+					//displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
 					synchronized (player) {
 						Iterator<Player> i = player.iterator();
 						while (i.hasNext()) {
