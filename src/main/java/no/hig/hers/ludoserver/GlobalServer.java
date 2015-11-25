@@ -119,44 +119,20 @@ public class GlobalServer extends JFrame{
 							try {
 								String msg = p.read();
 								
-								//Sends the message to both listeners. One for game and one for chat.
-								handleGroupChatKeywords(p, msg);
-								handleGameKeywords(p, msg);
-								
-								if (msg != null && msg.equals(CLOGOUT)) {
-									i.remove();
-									que.remove(p.returnName());
-									gameList.remove(IDGK + p.returnName());
-									messages.put(LOGOUT + p.returnName());
+								if (msg != null) {
+									if (msg.equals(CLOGOUT)) {
+										i.remove();
+										que.remove(p.returnName());
+										gameList.remove(IDGK + p.returnName());
+										messages.put(LOGOUT + p.returnName());
+									} else if (msg.equals(TOP)) 
+										handleTopTenLists();
+									else {
+										//Sends the message to both listeners. One for game and one for chat.
+										handleGroupChatKeywords(p, msg);
+										handleGameKeywords(p, msg);
+									}
 								}
-								if (msg != null && msg.equals(TOP)) {
-									try {
-										String toptenPlayedName = null;
-										int toptenPlayedCount;
-										String toptenWonName = null;
-										String toptenWonCount;
-										ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
-										ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
-										
-										while (resultSetPlayed.next()) {			
-											toptenPlayedName =  (String) resultSetPlayed.getObject(1);
-											toptenPlayedCount = (int) resultSetPlayed.getObject(2);
-											toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
-											messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
-										}
-										while(resultSetWon.next()) {
-											String tmp;
-											toptenWonName = (String) resultSetWon.getObject(1);
-											toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
-											tmp = (toptenWonName + "," + toptenWonCount);
-											messages.put("TOPLISTWON:" + tmp);
-										}
-									}
-									catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-									}
-								}	
 							} catch (IOException ioe) {
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
@@ -179,6 +155,35 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	private void handleTopTenLists() {
+		try {
+			String toptenPlayedName = null;
+			int toptenPlayedCount;
+			String toptenWonName = null;
+			String toptenWonCount;
+			ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+			ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
+			
+			while (resultSetPlayed.next()) {			
+				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
+				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
+				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+				messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+			}
+			while(resultSetWon.next()) {
+				String tmp;
+				toptenWonName = (String) resultSetWon.getObject(1);
+				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
+				tmp = (toptenWonName + "," + toptenWonCount);
+				messages.put("TOPLISTWON:" + tmp);
+			}
+		}
+		catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * All the chat messages / commands will be handled in this method.
 	 * @param p The active player
@@ -186,8 +191,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGroupChatKeywords(Player p, String msg) {
 		try {
-			
-			if (msg != null && msg.startsWith(Constants.NEWCHAT)) {
+			if (msg.startsWith(Constants.NEWCHAT)) {
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
 						p.sendText(Constants.ERRORCHAT);
@@ -202,14 +206,14 @@ public class GlobalServer extends JFrame{
 			}
 			for (int i=0; i<groupChatList.size(); i++) {
 				
-				if (msg != null && msg.startsWith(groupChatList.get(i) + JOIN)) {
+				if (msg.startsWith(groupChatList.get(i) + JOIN)) {
 					messages.put(msg);
 					
 					//Writes to file
 					fileName = groupChatList.get(i) + "_" + fileNameEnd;
 					writeToFile(fileName, msg);
 				}
-				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
+				else if (msg.startsWith(groupChatList.get(i) + ":")) {
 					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
 					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
 					
@@ -230,33 +234,31 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGameKeywords(Player p, String msg) {
 		try {
-			if (msg != null) {
-				if (msg.equals(QUEUE)){
-					Player tmp = p;
-					que.add(tmp);
-					displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
-					if(que.size() == 4) {
-						boolean hostFound = false;
-						for (int t=0; t<4; t++) {
-							
-							if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
-								gameList.add(Constants.IDGK + que.get(t));
-								hostFound = true;
-								que.get(t).sendText(HOST);
-								tmpPort = que.get(t).returnServerPort();
-								tmpName = que.get(t).returnName();
-								t = 0;
-							}
-							else if (hostFound == true && que.get(t).returnName() != tmpName){
-								System.out.println("\nKom vi in i hotJoin sending");
-								que.get(t).sendText(HOTJOIN + tmpName);
-								que.get(t).sendText(Integer.toString(tmpPort));
-							}
+			if (msg.equals(QUEUE)){
+				Player tmp = p;
+				que.add(tmp);
+				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
+				if(que.size() == 4) {
+					boolean hostFound = false;
+					for (int t=0; t<4; t++) {
+						
+						if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
+							gameList.add(Constants.IDGK + que.get(t));
+							hostFound = true;
+							que.get(t).sendText(HOST);
+							tmpPort = que.get(t).returnServerPort();
+							tmpName = que.get(t).returnName();
+							t = 0;
 						}
-						for (int i=0; i<que.size(); i++) {
-							que.get(i).sendText(Constants.QUEOPEN);
-							que.remove(i);
+						else if (hostFound == true && que.get(t).returnName() != tmpName){
+							System.out.println("\nKom vi in i hotJoin sending");
+							que.get(t).sendText(HOTJOIN + tmpName);
+							que.get(t).sendText(Integer.toString(tmpPort));
 						}
+					}
+					for (int i=0; i<que.size(); i++) {
+						que.get(i).sendText(Constants.QUEOPEN);
+						que.remove(i);
 					}
 				}
 			}

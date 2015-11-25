@@ -241,7 +241,7 @@ public class Main extends Application {
 		System.exit(0);
 	}
 	/**
-	 * Method for processing messages from the server,
+	 * Method for processing messages from the server,	
 	 * sending the messages to the GameHandler or ChatHandler
 	 */
 	private static void processConnection() {
