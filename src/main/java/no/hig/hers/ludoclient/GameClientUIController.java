@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import no.hig.hers.ludoshared.Constants;
 
 public class GameClientUIController {
 	
@@ -100,7 +101,7 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		turnOwner = 1;
+		turnOwner = 2;	//Red player starts
 		pawnToMove = 0;
 		diceRolls = 0;
 		gameOver = false;
@@ -154,8 +155,6 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 3;
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
-				System.out.println("test");
-				
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
@@ -168,10 +167,8 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				diceValue = 0;
 				diceRolls = 0;
-				
 				dieTextLabel.setText("");
 				dieLabel.setImage(null);
-			
 				setPawnMovesFalse();
 				setNotValid();
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
@@ -491,7 +488,7 @@ public class GameClientUIController {
 			else {
 				dieTextLabel.setText("Better luck next time");
 				String tmp;
-				tmp =("GAMELOST");
+				tmp =(Constants.GAMELOST);
 				Main.sendText(tmp);
 			}			
 		}
@@ -511,7 +508,7 @@ public class GameClientUIController {
 	
 	public void SendDiceValue(int diceVal, int playernr, int pawn) {
 		String tmp;
-		tmp = ("dicevalue:" + diceVal + playernr + pawn);
+		tmp = (Constants.DICEVALUE + diceVal + playernr + pawn);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
@@ -521,13 +518,13 @@ public class GameClientUIController {
 	
 	public void sendGameStatus() {
 		String tmp;
-		tmp = ("GAMEOVER");
+		tmp = (Constants.GAMEOVER);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
 			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
-		tmp =("GAMEWON");
+		tmp =(Constants.GAMEWON);
 		Main.sendText(tmp);
 	}
 	public void passChangeTurnOwner() {

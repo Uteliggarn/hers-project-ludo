@@ -135,7 +135,7 @@ public class GlobalServer extends JFrame{
 										i.remove();
 										que.remove(p.returnName());
 										gameList.remove(IDGK + p.returnName());
-										messages.put(LOGOUT + p.returnName());
+										displayMessage("\n" + LOGOUT + p.returnName());
 									} else if (msg.equals(TOP)) 
 										handleTopTenLists();
 									else {
@@ -158,7 +158,7 @@ public class GlobalServer extends JFrame{
 				
 				//The thread goes to sleep to save the CPU energy
 				try {
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
@@ -261,7 +261,6 @@ public class GlobalServer extends JFrame{
 							t = 0;
 						}
 						else if (hostFound == true && que.get(t).returnName() != tmpName){
-							System.out.println("\nKom vi in i hotJoin sending");
 							que.get(t).sendText(HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}
@@ -322,7 +321,7 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
 				} catch (Exception e) {
@@ -353,7 +352,7 @@ public class GlobalServer extends JFrame{
 							player.remove(g);
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
 					GlobalServer.LOGGER.log(Level.SEVERE, "Connection Error", ioe);
