@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
@@ -61,7 +62,7 @@ public class GlobalServer extends JFrame{
     private final String GWON = "GAMEWON";
     private final String GLOST = "GAMELOST";
     
-    private final String fileNameEnd = timeStamp() + "_" + "ChatLog.log"; //The end of the filename
+    private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
     
     private int serverPorts = 10000;
@@ -190,7 +191,6 @@ public class GlobalServer extends JFrame{
 				if(groupChatList.contains(msg.substring(13)) && groupChatList.contains(IDGK + p.returnName()))
 					try {
 						p.sendText("ERRORCHAT");
-						writeToFile(fileName, "ERRORCHAT");
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
 					}
@@ -203,11 +203,19 @@ public class GlobalServer extends JFrame{
 			for (int i=0; i<groupChatList.size(); i++) {
 				
 				if (msg != null && msg.startsWith(groupChatList.get(i) + JOIN)) {
-					messages.put(msg); 
+					messages.put(msg);
+					
+					//Writes to file
+					fileName = groupChatList.get(i) + "_" + fileNameEnd;
+					writeToFile(fileName, msg);
 				}
 				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
 					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
 					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
+					
+					//Writes to file
+					fileName = groupChatList.get(i) + "_" + fileNameEnd;
+					writeToFile(fileName, groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1));
 				}	
 			}
 		} catch (InterruptedException ie) {
@@ -302,7 +310,6 @@ public class GlobalServer extends JFrame{
 							Player p = i.next();
 							try {
 								p.sendText(message);
-								writeToFile(fileName, message);
 							} catch (IOException ioe) {
 								i.remove();
 								messages.add(LOGOUT + p.returnName());

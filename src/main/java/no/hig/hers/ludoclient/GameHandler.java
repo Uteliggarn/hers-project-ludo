@@ -51,7 +51,7 @@ public class GameHandler {
 		if (caseNr == 1)
 			addPlayersToList();
 		
-		//executorService.shutdown();	// Dreper tråden når klassen dør
+		//executorService.shutdown();	// Dreper trï¿½den nï¿½r klassen dï¿½r
 	}
 	
 	
