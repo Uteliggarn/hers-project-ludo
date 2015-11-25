@@ -60,27 +60,28 @@ public class GameServer {
 			                        String msg = p.read();
 			                        
 			                        //System.out.println("hva er msg " + msg);
-			                        
-			                        if(msg != null && msg.startsWith("gamestart:")) {
-			                        	//String tmp;
-			                        	//tmp = Integer.toString(p.returnPlayerNr());
-			                        	//System.out.println("Hvilken player:" + tmp);
-			                        	//messages.put(msg + tmp);
-			                        	for (int t=0; t<player.size(); t++) {
-			                    			System.out.println("\n" + t);
-			                    			player.get(t).sendText(msg + (t+1));
-										}
-			                        	for(int t=0; t < player.size(); t++) {
-			                        		String tmp;
-			                        		tmp = "gamename:" + (t+1) + player.get(t).returnName(); 
-			                        		messages.put(tmp);
-			                        	}
-			                        }
-			                        if(msg != null && msg.startsWith("dicevalue:")) {
-			                        	messages.put(msg);
-			                        }
-			                        if(msg != null && msg.startsWith("GAMEOVER")) {
-			                        	messages.put(msg);
+			                        if (msg != null) {
+				                        if(msg.startsWith(Constants.GAMESTART)) {
+				                        	//String tmp;
+				                        	//tmp = Integer.toString(p.returnPlayerNr());
+				                        	//System.out.println("Hvilken player:" + tmp);
+				                        	//messages.put(msg + tmp);
+				                        	for (int t=0; t<player.size(); t++) {
+				                    			System.out.println("\n" + t);
+				                    			player.get(t).sendText(msg + (t+1));
+											}
+				                        	for(int t=0; t < player.size(); t++) {
+				                        		String tmp;
+				                        		tmp = Constants.GAMENAME + (t+1) + player.get(t).returnName(); 
+				                        		messages.put(tmp);
+				                        	}
+				                        }
+				                        if(msg.startsWith(Constants.DICEVALUE)) {
+				                        	messages.put(msg);
+				                        }
+				                        if(msg.startsWith(Constants.GAMEOVER)) {
+				                        	messages.put(msg);
+				                        }
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();

@@ -217,7 +217,7 @@ public class GameHandler {
 				}
 				gameClientUIController.setPlayerDisconnect();
 				String tmp;
-				tmp =("GAMELOST");
+				tmp =(Constants.GAMELOST);
 				Main.sendText(tmp);
 			}
 		});

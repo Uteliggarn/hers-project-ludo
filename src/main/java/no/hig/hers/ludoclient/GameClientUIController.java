@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import no.hig.hers.ludoshared.Constants;
 
 public class GameClientUIController {
 	
@@ -487,7 +488,7 @@ public class GameClientUIController {
 			else {
 				dieTextLabel.setText("Better luck next time");
 				String tmp;
-				tmp =("GAMELOST");
+				tmp =(Constants.GAMELOST);
 				Main.sendText(tmp);
 			}			
 		}
@@ -507,7 +508,7 @@ public class GameClientUIController {
 	
 	public void SendDiceValue(int diceVal, int playernr, int pawn) {
 		String tmp;
-		tmp = ("dicevalue:" + diceVal + playernr + pawn);
+		tmp = (Constants.DICEVALUE + diceVal + playernr + pawn);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
@@ -517,13 +518,13 @@ public class GameClientUIController {
 	
 	public void sendGameStatus() {
 		String tmp;
-		tmp = ("GAMEOVER");
+		tmp = (Constants.GAMEOVER);
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
 			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
-		tmp =("GAMEWON");
+		tmp =(Constants.GAMEWON);
 		Main.sendText(tmp);
 	}
 	public void passChangeTurnOwner() {

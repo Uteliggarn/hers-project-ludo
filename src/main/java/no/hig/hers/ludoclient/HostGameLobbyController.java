@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
 
 public class HostGameLobbyController {
@@ -52,7 +53,7 @@ public class HostGameLobbyController {
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
-			String gamestart = "gamestart:";
+			String gamestart = Constants.GAMESTART;
 			sendText(gamestart);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
