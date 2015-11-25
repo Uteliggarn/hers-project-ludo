@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
+import no.hig.hers.ludoshared.Constants;
 
 public class GameHandler {
 	
@@ -118,7 +119,7 @@ public class GameHandler {
 	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if (msg != null) {
-		                if(msg.startsWith("gamestart:")) {
+		                if(msg.startsWith(Constants.GAMESTART)) {
 		                	Platform.runLater(() -> {
 		                		int n = Integer.parseInt(msg.substring(10, 11));
 	                			
@@ -139,7 +140,7 @@ public class GameHandler {
 	                			}	
 		                	});
 		                }
-		                else if(msg.startsWith("gamename:")) {
+		                else if(msg.startsWith(Constants.GAMENAME)) {
 							Platform.runLater(() -> {
 								int n = Integer.parseInt(msg.substring(9, 10));
 	                			System.out.println("playernamenr " + n);
@@ -147,7 +148,7 @@ public class GameHandler {
 	                			gameClientUIController.setPlayerName(n, tmpNavn);    		
 							});
 		                }
-		                else if(msg.startsWith("dicevalue:")) {
+		                else if(msg.startsWith(Constants.DICEVALUE)) {
 							Platform.runLater(() -> {
 								int diceVal = Integer.parseInt(msg.substring(10,11));
 	                			int player = Integer.parseInt(msg.substring(11,12));
@@ -156,7 +157,7 @@ public class GameHandler {
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 		                	});
 		                }
-		                else if(msg.startsWith("GAMEOVER")) {
+		                else if(msg.startsWith(Constants.GAMEOVER)) {
 							Platform.runLater(() -> {
 								gameClientUIController.gameover();	
 		                	});

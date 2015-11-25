@@ -314,7 +314,7 @@ public class Main extends Application {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeAccept){
-			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+			GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		}
 	}
