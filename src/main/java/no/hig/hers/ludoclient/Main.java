@@ -271,6 +271,11 @@ public class Main extends Application {
 		                		inviteAccept(port);
 		                	});
 		                }
+		                else if (message.equals(Constants.QUEOPEN)) {
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
+		                }
 		                else if (message.startsWith("TOPLISTPLAYED:")) {
 		                	String[][] played = new String[10][2];
 		                	played[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
