@@ -202,12 +202,14 @@ public class GlobalServer extends JFrame{
 				
 				if (msg != null && msg.startsWith(groupChatList.get(i) + JOIN)) {
 					messages.put(msg);
+					//Add filename get(i) if not exist, else use it
 					fileName = groupChatList.get(i) + fileNameEnd;
 					writeToFile(fileName, msg);
 				}
 				else if (msg != null && msg.startsWith(groupChatList.get(i) + ":")) {
 					displayMessage(groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1) + "\n");
 					messages.put(groupChatList.get(i) + ":" + p.returnName() +" > " + msg.substring(groupChatList.get(i).length()+1));
+					//Add filename get(i) if not exist, else use it
 					fileName = groupChatList.get(i) + fileNameEnd;
 					writeToFile(fileName, groupChatList.get(i) + ":" + msg.substring(groupChatList.get(i).length() + 1));
 				}	
