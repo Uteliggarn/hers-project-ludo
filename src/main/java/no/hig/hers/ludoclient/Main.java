@@ -66,7 +66,7 @@ public class Main extends Application {
 	static ExecutorService executorService;
 	private static String message;
 	
-	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
+	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -94,9 +94,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			//connection = new Socket("128.39.83.87", 12344);	// Henrik
+			connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			connection = new Socket("127.0.0.1", 12344);
+			//connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
