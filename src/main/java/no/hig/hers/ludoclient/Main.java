@@ -269,6 +269,11 @@ public class Main extends Application {
 		                		inviteAccept(port);
 		                	});
 		                }
+		                else if (message.equals(Constants.QUEOPEN)) {
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
+		                }
 		                else if (message.startsWith("TOPLISTPLAYED:")) {
 		                	String playedName;
 		                	String playedCount;

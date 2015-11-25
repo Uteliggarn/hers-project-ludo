@@ -90,5 +90,9 @@ public class ClientMainUIController {
 	public void setLabelUserName(String username) {
 		labelUserName.setText(username);
 	}
+	
+	public void openQueue() {
+		queueButton.setDisable(false);
+	}
     
 }
