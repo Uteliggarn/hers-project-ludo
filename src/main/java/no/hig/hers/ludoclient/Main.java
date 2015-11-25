@@ -84,6 +84,12 @@ public class Main extends Application {
 		connect();
 	}
 	
+	public static void getPlayers() {
+		for(int i = 0; i < playerList.size(); i++) {
+			System.out.println(playerList.get(i));
+		}
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -94,9 +100,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			//connection = new Socket("127.0.0.1", 12344);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -162,7 +168,7 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		sendText("TOP");
+		sendText(userName + "TOP");
 	}
 	
 	/**
@@ -304,8 +310,6 @@ public class Main extends Application {
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
     	                 else cHandler.handleChatMessage(message);
 	                }
-	                
-	                Thread.sleep(250);
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
 	            }

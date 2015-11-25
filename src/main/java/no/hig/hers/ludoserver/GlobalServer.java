@@ -134,10 +134,18 @@ public class GlobalServer extends JFrame{
 									if (msg.equals(Constants.CLOGOUT)) {
 										i.remove();
 										que.remove(p.returnName());
-										gameList.remove(Constants.IDGK + p.returnName());
-										displayMessage("\n" + Constants.LOGOUT + p.returnName());
-									} else if (msg.equals(Constants.TOP)) 
-										handleTopTenLists();
+
+										gameList.remove(IDGK + p.returnName());
+
+										messages.put(LOGOUT + p.returnName());
+										displayMessage("\n" + LOGOUT + p.returnName());
+									} else if (msg.equals(p.returnName() + Constants.TOP)) {
+										System.out.println(msg + "  TEST!");
+										handleTopTenLists(p);
+									}
+									else if (msg.equals("GETPLAYERLIST")){
+										p.sendPlayerList();
+									}
 									else {
 										//Sends the message to both listeners. One for game and one for chat.
 										handleGroupChatKeywords(p, msg);
@@ -166,7 +174,7 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
-	private void handleTopTenLists() {
+	private void handleTopTenLists(Player p) {
 		try {
 			String toptenPlayedName = null;
 			int toptenPlayedCount;
@@ -179,14 +187,16 @@ public class GlobalServer extends JFrame{
 				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
 				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
 				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
-				messages.put(Constants.TOPPLAYED + toptenPlayedName);	
+
+				p.sendText(Constants.TOPPLAYED + toptenPlayedName);	
 			}
 			while(resultSetWon.next()) {
 				String tmp;
 				toptenWonName = (String) resultSetWon.getObject(1);
 				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
 				tmp = (toptenWonName + "," + toptenWonCount);
-				messages.put(Constants.TOPWON + tmp);
+
+				p.sendText(Constants.TOPWON + tmp);
 			}
 		}
 		catch (Exception e) {
@@ -321,6 +331,7 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
+				//	Thread.sleep(250);
 					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
@@ -345,8 +356,10 @@ public class GlobalServer extends JFrame{
 						player.add(p);
 						int g = player.indexOf(p);
 						
-						if (p.loginChecker(++serverPorts))
+						if (p.loginChecker(++serverPorts)) {
 							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+							messages.put(Constants.GLOBALCHAT + p.returnName());
+						}
 						else {
 							--serverPorts;
 							player.remove(g);

@@ -66,11 +66,12 @@ public class ChatHandler {
     				c.setID(name);
     				controllers.add(c);
     				chats.add(newTab);
-    				System.out.println("\nHåper vi er her inne først altså");
     				chatTabs.getTabs().add(newTab);
     				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
-    				} else Main.sendText(name + Constants.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
+    					Main.sendText("GETPLAYERLIST");
+    				} else 
+    					Main.sendText(name + Constants.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}
@@ -80,16 +81,14 @@ public class ChatHandler {
 	 * @param message Message to handle
 	 */
 	public void handleChatMessage(String message) {
-		System.out.println("\nHva er chats size: " + chats.size());
 		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
-            if (message.startsWith(chats.get(i).getId() + Constants.JOINCHAT)){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(tab.getId() + Constants.JOINCHAT)){	// Sjekker om noen har lyst å joine
             	Platform.runLater(() -> {
             	String username = message.substring(tab.getId().length() + 5);
-            	System.out.println("\nHva er tab iden: " + tab.getId());
-            	if (!Main.playerList.contains(username) && message.startsWith("Global"))
+            	if (message.startsWith("Global") && !Main.playerList.contains(username))
 					Main.playerList.add(username);
             	c.addUserToList(username);
             	});
