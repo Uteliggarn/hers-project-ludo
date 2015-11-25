@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.shape.Rectangle;
+import no.hig.hers.ludoshared.Constants;
 /**
  * Class for handling chats.
  * This handles the chat tabs, and the chat-related messages.
@@ -53,7 +54,7 @@ public class ChatHandler {
 				newTab.setOnClosed(new EventHandler<Event>() {
 					@Override
 					public void handle(Event e) {
-						Main.sendText(Main.LEAVECHAT + newTab.getId());
+						Main.sendText(Constants.LEAVECHAT + newTab.getId());
 					}
 				});
 			} catch (IOException e) {
@@ -68,7 +69,7 @@ public class ChatHandler {
     				chatTabs.getTabs().add(newTab);
     				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
-    				} else Main.sendText(name + Main.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
+    				} else Main.sendText(name + Constants.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}
@@ -82,14 +83,14 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
-            if (message.startsWith(chats.get(i).getId() + Main.JOINCHAT)){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(chats.get(i).getId() + Constants.JOINCHAT)){	// Sjekker om noen har lyst å joine
             	String username = message.substring(tab.getId().length() + 5);
             	if (!Main.playerList.contains(username) && message.startsWith("Global"))
 					Main.playerList.add(username);
             	c.addUserToList(username);
             }
-            else if (message.startsWith(Main.QUITGAME)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(Main.QUITGAME.length());
+            else if (message.startsWith(Constants.QUITGAME)) { // Mottar melding om at noen har logget ut
+            	String username = message.substring(Constants.QUITGAME.length());
             	c.removeUserFromList(username);
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
