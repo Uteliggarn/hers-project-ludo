@@ -94,9 +94,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			//connection = new Socket("128.39.83.87", 12344);	// Henrik
+			connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			connection = new Socket("127.0.0.1", 12344);
+			//connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -271,7 +271,7 @@ public class Main extends Application {
 		                		inviteAccept(port);
 		                	});
 		                }
-		                else if (message.startsWith("TOPLISTPLAYED:")) {
+		                else if (message.startsWith(Constants.TOPPLAYED)) {
 		                	String[][] played = new String[10][2];
 		                	played[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	played[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
@@ -279,12 +279,10 @@ public class Main extends Application {
 		                		message = Main.input.readLine();
 		                		played[i][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                		played[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
-		                		System.out.println(played[i][0] + "  " + played[i][1]);
 		                	}
 		                	mainController.setTopTenPlayed(played);
-		                	//Sette disse strengene til en label og lag en topliste
 		                }
-		                else if (message.startsWith("TOPLISTWON:")) {
+		                else if (message.startsWith(Constants.TOPWON)) {
 		                	String[][] won = new String[10][2];
 		                	won[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	won[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());

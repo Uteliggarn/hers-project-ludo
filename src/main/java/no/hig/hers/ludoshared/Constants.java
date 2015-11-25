@@ -13,6 +13,8 @@ public class Constants {
 	public final static String JOIN = "JOIN:";	// Unique name
 	public final static String QUITGAME = "LOGOUT:";
 	public final static String HOTJOIN = "HOTJOIN:";
+	public static final String TOPPLAYED = "TOPLISTPLAYED:";
+	public static final String TOPWON = "TOPLISTWON:";
 	
 	private Constants() {}
 }
