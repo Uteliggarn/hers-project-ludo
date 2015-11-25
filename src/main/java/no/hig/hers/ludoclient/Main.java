@@ -66,7 +66,7 @@ public class Main extends Application {
 	static ExecutorService executorService;
 	private static String message;
 	
-	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
+	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 	@Override
 	public void start(Stage primaryStage) {

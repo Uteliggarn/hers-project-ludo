@@ -17,8 +17,11 @@ import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import no.hig.hers.ludoshared.Constants;
+import no.hig.hers.ludoshared.MyLogger;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -69,6 +72,8 @@ public class GlobalServer extends JFrame{
     
     private int tmpPort;
     private String tmpName;
+    
+    static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	public GlobalServer() {
 		super("GlobalServer");
@@ -76,6 +81,12 @@ public class GlobalServer extends JFrame{
 		groupChatList.add("Global");
 		
 		fileName = "Global" + fileNameEnd; //Placeholder so we can write to a file.
+		
+		try {
+			MyLogger.setupLogger();
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, "Couldn't create log files", e);
+		}
 		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));
@@ -97,7 +108,7 @@ public class GlobalServer extends JFrame{
 			executorService.shutdown();
 			
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot set the socket", ioe);
 			System.exit(1);
 		}
 		
@@ -137,19 +148,19 @@ public class GlobalServer extends JFrame{
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
 								messages.put(p.returnName() + " got lost in hyperspace");
+								GlobalServer.LOGGER.log(Level.WARNING, "Error with reading message", ioe);
 							}
 						}
 					}
 				} catch (InterruptedException ie) {
-					ie.printStackTrace();
+					GlobalServer.LOGGER.log(Level.SEVERE, "Problem with thread", ie);
 				}
 				
 				//The thread goes to sleep to save the CPU energy
 				try {
 					Thread.sleep(250);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong.
-					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
 			}
 		});
@@ -179,8 +190,7 @@ public class GlobalServer extends JFrame{
 			}
 		}
 		catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
 		}
 	}
 	
@@ -223,7 +233,7 @@ public class GlobalServer extends JFrame{
 				}	
 			}
 		} catch (InterruptedException ie) {
-			ie.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", ie);
 		}
 	}
 	
@@ -285,7 +295,7 @@ public class GlobalServer extends JFrame{
 					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			}
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);
 		}
 	}
 	
@@ -308,15 +318,15 @@ public class GlobalServer extends JFrame{
 								i.remove();
 								messages.add(LOGOUT + p.returnName());
 								messages.add(p.returnName() + " got lost in hyperspace");
+								GlobalServer.LOGGER.log(Level.WARNING, "Cannot send message", ioe);
 							}
 						}
 					}
 					Thread.sleep(250);
 				} catch (InterruptedException ie) {
-					ie.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
 				} catch (Exception e) {
-					// Prints the stackTrace if anything goes wrong. (sleep error)
-					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
 				}
 
 			}
@@ -346,8 +356,10 @@ public class GlobalServer extends JFrame{
 					Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
+					GlobalServer.LOGGER.log(Level.SEVERE, "Connection Error", ioe);
 				} catch (Exception e) {
 					e.printStackTrace();
+					GlobalServer.LOGGER.log(Level.WARNING, "Exception", e);
 				}
 			}
 		});
@@ -373,8 +385,7 @@ public class GlobalServer extends JFrame{
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 			writer.println(timeStamp + " " + data);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Error writing to file", e);
 		} finally {
 			if (writer != null) {
 				writer.close();
