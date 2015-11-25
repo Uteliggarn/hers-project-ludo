@@ -262,7 +262,7 @@ public class Main extends Application {
 		                else if (message.startsWith(Constants.HOTJOIN)) {
 		                	int port = Integer.valueOf(Main.input.readLine());
 
-		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
+		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(8));
 		                	gameHandler.add(gh);
 		                }
 		                else if (message.startsWith(Constants.JOIN)) {
