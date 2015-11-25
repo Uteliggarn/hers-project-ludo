@@ -156,6 +156,11 @@ public class ClientMainUIController {
 	public void openQueue() {
 		queueButton.setDisable(false);
 	}
-    
+
+	@FXML
+	void getPlayerList() {
+		Main.getPlayers();
+	}
+	
 }
 

@@ -84,6 +84,12 @@ public class Main extends Application {
 		connect();
 	}
 	
+	public static void getPlayers() {
+		for(int i = 0; i < playerList.size(); i++) {
+			System.out.println(playerList.get(i));
+		}
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -162,7 +168,7 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		sendText("TOP");
+		sendText(userName + "TOP");
 	}
 	
 	/**
@@ -304,8 +310,6 @@ public class Main extends Application {
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
     	                 else cHandler.handleChatMessage(message);
 	                }
-	                
-	                Thread.sleep(250);
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
 	            }
