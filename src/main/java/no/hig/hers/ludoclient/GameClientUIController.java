@@ -25,7 +25,7 @@ public class GameClientUIController {
 	
 	LudoBoardFX board;
 	
-	private int turnOwner = 2;
+	private int turnOwner;
 	private int player;
 	private int pawnToMove = 0;
 	private int diceRolls = 0;
@@ -35,6 +35,11 @@ public class GameClientUIController {
 	private String playerName2;
 	private String playerName3;
 	private String playerName4;
+	
+	private boolean player1;
+	private boolean player2;
+	private boolean player3;
+	private boolean player4;
 	
 	private int diceValue;
 	
@@ -95,7 +100,7 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		turnOwner = 2;
+		turnOwner = 1;
 		pawnToMove = 0;
 		diceRolls = 0;
 		gameOver = false;
@@ -285,9 +290,7 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-				turnOwner ++;
-				greenPlayer.setText("Green: " + playerName1);
-				redPlayer.setText("Red: " + playerName2 + "- Roll");
+				CheckForPlayersGreen();
 			}
 			setNotValid();
 			board.makePawns();
@@ -305,9 +308,10 @@ public class GameClientUIController {
 				Main.LOGGER.log(Level.WARNING, "Goalerror", e);
 			}
 			if(diceValue !=6) {
-				turnOwner ++;
-				redPlayer.setText("Red: " + playerName2);
-				yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+				//turnOwner ++;
+				//redPlayer.setText("Red: " + playerName2);
+				//yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+				CheckForPlayersRed();
 			}
 			setNotValid();
 			board.makePawns();
@@ -320,9 +324,7 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-				turnOwner ++;
-				yellowPlayer.setText("Yellow: " + playerName3);
-				bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+				CheckForPlayersYellow();
 			}
 			setNotValid();
 			board.makePawns();
@@ -335,9 +337,7 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-			bluePlayer.setText("Blue: " + playerName4);
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
-			turnOwner = 1;
+				CheckForPlayersBlue();
 			}
 			setNotValid();
 			board.makePawns();
@@ -432,18 +432,22 @@ public class GameClientUIController {
 	public void setPlayerName(int pnr, String name) {
 		switch (pnr) {
 			case 1:
+				player1 = true;
 				playerName1 = name;
 				greenPlayer.setText("Green: " + playerName1);
 				break;
 			case 2:
+				player2 = true;
 				playerName2 = name;
 				redPlayer.setText("Red: " + playerName2 + "-Roll");
 				break;
 			case 3: 
+				player3 = true;
 				playerName3 = name;
 				yellowPlayer.setText("Yellow: " + playerName3);
 				break;
 			case 4:
+				player4 = true;
 				playerName4 = name;
 				bluePlayer.setText("Blue: " + playerName4);
 				break;
@@ -528,28 +532,105 @@ public class GameClientUIController {
 	}
 	public void passChangeTurnOwner() {
 		
-		switch(turnOwner++) {
+		switch(turnOwner) {
 		case 1:	//Green
-			greenPlayer.setText("Green: " + playerName1);
-			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			CheckForPlayersGreen();
 			break;
 		case 2:	//Red
-			redPlayer.setText("Red: " + playerName2);
-			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			CheckForPlayersRed();
 			break;
 		case 3: //Yellow
-			yellowPlayer.setText("Yellow: " + playerName3);
-			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+			CheckForPlayersYellow();
 			break;
 		case 4: //Blue
-			turnOwner = 1;
-			bluePlayer.setText("Blue: " + playerName4);
-			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			CheckForPlayersBlue();
 			break;
 		default: break;
 		}
 	}
 	public void gameover() {
 		gameOver = true;
+	}
+	public void CheckForPlayersGreen() {
+		greenPlayer.setText("Green: " + playerName1);
+		if(player2) {
+			turnOwner ++;
+			redPlayer.setText("Red: " + playerName2 + "- Roll");
+		} else if(player3) {
+			turnOwner += 2;
+			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+		} else if(player4) {
+			turnOwner += 3;
+			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+		} else {
+			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+			turnOwner = 1;
+		}
+	}
+	public void CheckForPlayersRed() {
+		redPlayer.setText("Red: " + playerName2);
+		if(player3) {
+			turnOwner ++;
+			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+		} else if(player4) {
+			turnOwner += 2;
+			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+		} else if(player1) {
+			turnOwner = 1;
+			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+		} else {
+			redPlayer.setText("Red: " + playerName2 + "- Roll");
+			turnOwner = 2;
+		}
+	}
+	public void CheckForPlayersYellow() {
+		if(player4) {
+			turnOwner ++;
+			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+		} else if(player1) {
+			turnOwner = 1;
+			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+		} else if(player2) {
+			turnOwner = 2;
+			redPlayer.setText("Red: " + playerName2 + "- Roll");
+		} else {
+			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+			turnOwner = 3;
+		}
+	}
+	public void CheckForPlayersBlue() {
+		bluePlayer.setText("Blue: " + playerName4);
+		if(player1) {
+			turnOwner = 1;
+			greenPlayer.setText("Green: " + playerName1 + "- Roll");
+		} else if(player2) {
+			turnOwner = 2;
+			redPlayer.setText("Red: " + playerName2 + "- Roll");
+		} else if(player3) {
+			turnOwner = 3;
+			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
+		} else {
+			turnOwner = 4;
+			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
+		}
+	}
+		
+	public void setPlayerDisconnect() {
+		switch(player) {
+			case 1: 
+				player1 = false;
+				break;
+			case 2:
+				player2 = false;
+				break;
+			case 3:
+				player3 = false;
+				break;
+			case 4:
+				player4 = false;
+				break;
+			default:
+				break;
+		}
 	}
 }

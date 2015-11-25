@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 
@@ -202,9 +204,24 @@ public class GameHandler {
 		Tab tab = new Tab("Ludo");
 		tab.setId(hostName);
 		tab.setClosable(true);
-		//tab.setOnClosed(EventHandler<Event>() -> {
-			
-		//});
+		tab.setOnClosed(new EventHandler<Event>() {
+			@Override
+			public void handle(Event e) {
+				//hostname = taben. Mulig IDK
+				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
+					String tmp;
+					Tab tab = Main.gameTabs.getTabs().get(i);
+					tmp = tab.getId();
+					if(tmp == hostName) {
+						Main.gameTabs.getTabs().remove(i);
+					}
+				}
+				gameClientUIController.setPlayerDisconnect();
+				String tmp;
+				tmp =("GAMELOST");
+				Main.sendText(tmp);
+			}
+		});
 		
 		FXMLLoader loader = new FXMLLoader();
 	
