@@ -13,8 +13,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.sql.ResultSet;
 import java.util.Formatter;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import no.hig.hers.ludoshared.Constants;
 
@@ -28,11 +30,6 @@ public class Player {
 	private String name;
 	private int serverPort;
 	private int playerID;
-	
-	private final String ACCEPTED = "ACCEPTED";
-    private final String DECLINED = "DECLINED";
-    private final String SENDLOGIN = "SENDLOGIN:";
-    private final String SENDREGISTER = "SENDREGISTER:";
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
@@ -82,15 +79,15 @@ public class Player {
 	 * Returns the name of the Player
 	 * @return player name
 	 */
-	public String returnName() {
+	public String getName() {
 		return name;
 	}
 	
-	public int returnServerPort() {
+	public int getServerPort() {
 		return serverPort;
 	}
 	
-	public int returnPlayerID() {
+	public int getPlayerID() {
 		return playerID;
 	}
 	
@@ -105,75 +102,92 @@ public class Player {
 	 */
 	public boolean loginChecker(int serverPort) {
 		try {
-			String tempName = input.readLine();	//reades the input
+			String code = input.readLine();
+			String tempName = input.readLine();
 			String tempPass = input.readLine();
 			
-			if (!tempName.startsWith(SENDLOGIN) && !tempName.startsWith(SENDREGISTER))
-				return false;
-			
-			if (tempName.startsWith(SENDLOGIN) && tempPass.startsWith(SENDLOGIN)) {
-				int login = 0;
-				name = tempName.substring(10);	//Saves the name in the player class
-							
-				login = DatabaseHandler.userLogin(name, tempPass.substring(10));
-				if(login > 0) {		// checks the value given by the database
-					this.playerID = login;
-					this.serverPort = serverPort;
-					
-					sendText(Integer.toString(login));				// Sends the Player ID
-					sendText(Integer.toString(this.serverPort));	// Sends the given serverport
-					
-					Iterator<String> i = GlobalServerMain.application.groupChatList.iterator();
-					i.next(); 		// Skip Global chat
-					while (i.hasNext()) {
-						String chatName = i.next();
-						sendText(Constants.NEWCHAT + chatName);
-					}
-					
-					sendPlayerList();
-					
-					return true;
-				}
-				else if (login == 0) {
-
-					String tmp = Integer.toString(login);
-					
-					sendText(tmp);
-					
-					return false;
-				}
-			}
-			else if (tempName.startsWith(SENDREGISTER) && tempPass.startsWith(SENDREGISTER)){
-				boolean register = false; 
+			if (code.equals(Constants.SENDLOGIN)) {
+				int ID = DatabaseHandler.userLogin(tempName, tempPass);
 				
-				register = DatabaseHandler.registerNewUser(tempName.substring(13), tempPass.substring(13));
-			
-				if (register) {		// Checks the value given be the database
-					sendText(ACCEPTED); // Sends an accepted message back to client
+				if (ID == 0) {
+					sendText(Integer.toString(ID));
 					return false;
 				}
-				else {
-					sendText(DECLINED);	// sends an declined message back to client
-					return false;
-				}
+				this.name = tempName;
+				this.playerID = ID;
+				this.serverPort = serverPort;
+				
+				
+				sendText(Integer.toString(this.playerID));				// Sends the Player ID
+				sendText(Integer.toString(this.serverPort));	// Sends the given serverport
+				
+				sendChatList();
+				
+				return true;
+			} else if (code.equals(Constants.SENDREGISTER)) {
+				boolean register = DatabaseHandler.registerNewUser(tempName, tempPass);
+				
+				if (register) sendText(Constants.ACCEPTED);
+				else sendText(Constants.DECLINED);
 			}
+			
 		} catch (IOException ioe) { // catches any errors when trying to read from input
-			ioe.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Could not receive input", ioe);
 		}
 		return false;
 	}
 	
-	public void sendPlayerList() {
-		Iterator<Player> y = GlobalServerMain.application.player.iterator();
-		while (y.hasNext()) {
-			String playerName = y.next().returnName();
-			System.out.println("\nHva er playerName: " + Constants.GLOBALCHAT + playerName);
+	private void sendChatList() {
+		Iterator<Chat> i = GlobalServerMain.application.groupChatList.iterator();
+		i.next(); 		// Skip Global chat
+		while (i.hasNext()) {
+			String chatName = i.next().getName();
 			try {
-				sendText(Constants.GLOBALCHAT + playerName);
+				sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + chatName);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				GlobalServer.LOGGER.log(Level.INFO, "Couldn't send chatlist", e);
+			}
+		}
+	}
+	
+	public void sendPlayerList(Chat chat) {
+		Iterator<String> y = chat.getPlayerList().iterator();
+		while (y.hasNext()) {
+			String playerName = y.next();
+			if (!playerName.equals(this.name)) {
+				try {
+					sendText(Constants.CHATMESSAGE + Constants.JOIN + chat.getName() + ":" + playerName);
+				} catch (IOException e) {
+					GlobalServer.LOGGER.log(Level.INFO, "Couldn't send playerlist", e);
+				}
 			}
 		}	
+	}
+	public void sendTopTenLists() {
+		try {
+			String toptenPlayedName = null;
+			int toptenPlayedCount;
+			String toptenWonName = null;
+			String toptenWonCount;
+			ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+			ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
+			
+			while (resultSetPlayed.next()) {			
+				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
+				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
+				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+				sendText(Constants.TOPPLAYED + toptenPlayedName);	
+			}
+			while(resultSetWon.next()) {
+				String tmp;
+				toptenWonName = (String) resultSetWon.getObject(1);
+				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
+				tmp = (toptenWonName + "," + toptenWonCount);
+				sendText(Constants.TOPWON + tmp);
+			}
+		}
+		catch (Exception e) {
+			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
+		}
 	}
 }

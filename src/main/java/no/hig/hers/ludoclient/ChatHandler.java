@@ -67,11 +67,12 @@ public class ChatHandler {
     				controllers.add(c);
     				chats.add(newTab);
     				chatTabs.getTabs().add(newTab);
-    				if ("Global".equals(newTab.getId())) {
+    				
+    				if ("Global".equals(newTab.getId())) 
     					newTab.setClosable(false);
-    					Main.sendText("GETPLAYERLIST");
-    				} else 
-    					Main.sendText(name + Constants.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
+    				
+    				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern også vil joine chaten.
+    				Main.sendText(Constants.PLAYERMESSAGE + Constants.GETPLAYERLIST);
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}
@@ -85,7 +86,7 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
-            if (message.startsWith(tab.getId() + Constants.JOINCHAT)){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(tab.getId() + Constants.JOIN)){	// Sjekker om noen har lyst å joine
             	Platform.runLater(() -> {
             	String username = message.substring(tab.getId().length() + 5);
             	if (message.startsWith("Global") && !Main.playerList.contains(username))
@@ -97,6 +98,25 @@ public class ChatHandler {
             	String username = message.substring(Constants.QUITGAME.length());
             	c.removeUserFromList(username);
             } 
+            else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
+            	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
+            }
+        }
+	}
+	
+	public void handleChatMessage2(String message) {
+		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
+        	Tab tab = chats.get(i);
+        	ClientChatOverlayController c = controllers.get(i);
+
+            if (message.startsWith(Constants.JOIN + tab.getId())){	// Sjekker om noen har lyst å joine
+            	Platform.runLater(() -> {
+            	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
+            	if (message.startsWith("Global") && !Main.playerList.contains(username))
+					Main.playerList.add(username);
+            	c.addUserToList(username);
+            	});
+            }
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
             }

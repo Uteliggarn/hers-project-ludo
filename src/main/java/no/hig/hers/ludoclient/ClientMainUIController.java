@@ -72,8 +72,8 @@ public class ClientMainUIController {
     	dialog.setContentText("Please enter the name of the chatroom:");
 
     	Optional<String> result = dialog.showAndWait();
-    	result.ifPresent(name -> Main.sendText(Constants.NEWCHAT + name));
-    	result.ifPresent(name -> Main.sendText(name + Constants.JOINCHAT + Main.userName));
+    	result.ifPresent(name -> Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + name));
+    	result.ifPresent(name -> Main.cHandler.addNewChat(name));
     }
     
     @FXML
