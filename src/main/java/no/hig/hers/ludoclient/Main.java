@@ -48,7 +48,7 @@ public class Main extends Application {
 	static ChatHandler cHandler; 
 	static ArrayList<String> playerList = new ArrayList<>();
 	private static GameServer gameServer;
-	private static ArrayList<GameHandler> gameHandler = new ArrayList<>();
+	static ArrayList<GameHandler> gameHandler = new ArrayList<>();
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -257,24 +257,28 @@ public class Main extends Application {
 	                message = Main.input.readLine();
 	                
 	                if (message != null) {
-	                	if (message.equals(Constants.CREATEGAME)) {
-		                	GameHandler gh = new GameHandler(serverPort, 1, Constants.IDGK + Main.userName);
+	                	if (message.startsWith(Constants.CREATEGAME)) {
+	                		
+		                	GameHandler gh = new GameHandler(serverPort, message.substring(11), 1, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
 		                }
-		                else if (message.equals(Constants.HOST)) {
-		                	GameHandler gh = new GameHandler(serverPort, 2, Constants.IDGK + Main.userName);
+		                else if (message.startsWith(Constants.HOST)) {
+		                	GameHandler gh = new GameHandler(serverPort, message.substring(5), 2, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
 		                }
 		                else if (message.startsWith(Constants.HOTJOIN)) {
-		                	int port = Integer.valueOf(Main.input.readLine());
-
-		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(8));
+		                	String tmp = Main.input.readLine();
+		                	int port = Integer.valueOf(tmp.substring(0, 5));
+		                	String ip = tmp.substring(5);
+		                	GameHandler gh = new GameHandler(port, ip, 3, Constants.IDGK + message.substring(8));
 		                	gameHandler.add(gh);
 		                }
 		                else if (message.startsWith(Constants.JOIN)) {
-		                	int port = Integer.valueOf(Main.input.readLine());
+		                	String tmp = Main.input.readLine();
+		                	int port = Integer.valueOf(tmp.substring(0, 5));
+		                	String ip = tmp.substring(5);
 		                	Platform.runLater(() -> {
-		                		inviteAccept(port);
+		                		inviteAccept(port, ip);
 		                	});
 		                }
 		                else if (message.equals(Constants.QUEOPEN)) {
@@ -317,7 +321,7 @@ public class Main extends Application {
 		});
 	}
 	
-	private static void inviteAccept(int port) {
+	private static void inviteAccept(int port, String ip) {
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Game invite");
@@ -331,7 +335,7 @@ public class Main extends Application {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeAccept){
-			GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
+			GameHandler gh = new GameHandler(port, ip, 3, Constants.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		}
 	}

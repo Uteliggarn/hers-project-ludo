@@ -35,47 +35,33 @@ public class GameHandler {
 	
 	private String hostName;
 	private int caseNr = 0;
+	private String ip;
 	
-	public GameHandler(int serverPort, int caseNr, String hostName) {
+	public GameHandler(int serverPort, String ip, int caseNr, String hostName) {
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
+		this.ip = ip;
 		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		
 		connect();
 		createNewLobby();
-		
+		/*
 		if (caseNr == 1)
 			addPlayersToList();
-		
+		*/
 		//executorService.shutdown();	// Dreper tr�den n�r klassen d�r
 	}
 	
-	
-	private void addPlayersToList() {		// TODO: this needs fixing
-		executorService.execute(() -> {
-			while (true) {
-				Platform.runLater(() -> {
-					for (int i=0; i<Main.playerList.size(); i++) {
-						if (Main.playerList.get(i) != Main.userName)
-							createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
-					}
-				});
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(5000);
-				} catch (Exception e) {
-					Main.LOGGER.log(Level.WARNING, "Error sleeping", e);
-				}
-			}
-		});
-	}	
+	public String returnHostName() {
+		return hostName;
+	}
 	
 	public void connect() {
 		try {			
-			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
-			//connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket(ip, serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -207,6 +193,7 @@ public class GameHandler {
 			@Override
 			public void handle(Event e) {
 				//hostname = taben. Mulig IDK
+/*
 				String tmp;
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					Tab tab = Main.gameTabs.getTabs().get(i);
@@ -218,6 +205,20 @@ public class GameHandler {
 						Main.gameTabs.getTabs().remove(i);
 					}
 				}
+*/
+				Main.sendText(Constants.GAMELOST);
+				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
+					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+						Main.gameTabs.getTabs().remove(i);
+					}
+				}
+				
+				for (int i=0; i<Main.gameHandler.size(); i++) {
+					if(hostName.equals(Main.gameHandler.get(i).returnHostName())) {
+						Main.gameHandler.remove(i);
+					}
+				}
+				//gameClientUIController.setPlayerDisconnect();
 			}
 		});
 		
@@ -267,6 +268,7 @@ public class GameHandler {
 	
 	public void close() {
 		try {
+			executorService.shutdownNow();
 			output.close();
 			input.close();
 			connection.close();

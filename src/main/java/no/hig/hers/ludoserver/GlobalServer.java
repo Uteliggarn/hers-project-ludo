@@ -131,14 +131,15 @@ public class GlobalServer extends JFrame{
 								String msg = p.read();
 								
 								if (msg != null) {
-									if (msg.equals(CLOGOUT)) {
+									if (msg.equals(Constants.CLOGOUT)) {
 										i.remove();
 										que.remove(p.returnName());
+
 										gameList.remove(IDGK + p.returnName());
 
 										messages.put(LOGOUT + p.returnName());
 										displayMessage("\n" + LOGOUT + p.returnName());
-									} else if (msg.equals(p.returnName() + TOP)) {
+									} else if (msg.equals(p.returnName() + Constants.TOP)) {
 										System.out.println(msg + "  TEST!");
 										handleTopTenLists(p);
 									}
@@ -153,7 +154,7 @@ public class GlobalServer extends JFrame{
 								}
 							} catch (IOException ioe) {
 								i.remove();
-								messages.put(LOGOUT + p.returnName());
+								messages.put(Constants.LOGOUT + p.returnName());
 								messages.put(p.returnName() + " got lost in hyperspace");
 								GlobalServer.LOGGER.log(Level.WARNING, "Error with reading message", ioe);
 							}
@@ -186,6 +187,7 @@ public class GlobalServer extends JFrame{
 				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
 				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
 				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+
 				p.sendText(Constants.TOPPLAYED + toptenPlayedName);	
 			}
 			while(resultSetWon.next()) {
@@ -193,6 +195,7 @@ public class GlobalServer extends JFrame{
 				toptenWonName = (String) resultSetWon.getObject(1);
 				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
 				tmp = (toptenWonName + "," + toptenWonCount);
+
 				p.sendText(Constants.TOPWON + tmp);
 			}
 		}
@@ -262,13 +265,13 @@ public class GlobalServer extends JFrame{
 						if (!gameList.contains(Constants.IDGK + que.get(t).returnName()) && hostFound != true) {
 							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
-							que.get(t).sendText(HOST);
+							que.get(t).sendText(Constants.HOST + que.get(t).returnIPaddress());
 							tmpPort = que.get(t).returnServerPort();
 							tmpName = que.get(t).returnName();
 							t = 0;
 						}
 						else if (hostFound == true && que.get(t).returnName() != tmpName){
-							que.get(t).sendText(HOTJOIN + tmpName);
+							que.get(t).sendText(Constants.HOTJOIN + tmpName);
 							que.get(t).sendText(Integer.toString(tmpPort));
 						}
 					}
@@ -278,28 +281,29 @@ public class GlobalServer extends JFrame{
 					}
 				}
 			}
-				else if (msg.equals(CREATEGAME)) {
-					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
-					if (!gameList.contains(IDGK + p.returnName())) {
-						gameList.add(IDGK + p.returnName());
-						p.sendText(CREATEGAME);
+
+			else if (msg.equals(Constants.CREATEGAME)) {
+				displayMessage(p.returnName() + " created a new game: " + Constants.IDGK + p.returnName() + "\n");
+				if (!gameList.contains(Constants.IDGK + p.returnName())) {
+					gameList.add(Constants.IDGK + p.returnName());
+					p.sendText(Constants.CREATEGAME + p.returnIPaddress());
+				}
+				else
+					p.sendText(Constants.ERROR);
+			}
+			else if (msg.startsWith(Constants.INVITE)) {
+				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+			
+				for (int y=0; y<player.size(); y++)
+					if(msg.substring(7).equals(player.get(y).returnName())) {
+						player.get(y).sendText(Constants.JOIN + p.returnName());
+						player.get(y).sendText(Integer.toString(p.returnServerPort()) + p.returnIPaddress());
 					}
-					else
-						p.sendText(ERROR);
-				}
-				else if (msg.startsWith(INVITE)) {
-					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-				
-					for (int y=0; y<player.size(); y++)
-						if(msg.substring(7).equals(player.get(y).returnName())) {
-							player.get(y).sendText(JOIN + player.get(y).returnName());
-							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
-						}
-				}
-				else if (msg.equals(GWON))
-					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-				else if (msg.equals(GLOST))
-					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
+			}
+			else if (msg.equals(GWON))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+			else if (msg.equals(GLOST))
+				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 		} catch (IOException ioe) {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);
 		}
@@ -354,7 +358,7 @@ public class GlobalServer extends JFrame{
 						int g = player.indexOf(p);
 						
 						if (p.loginChecker(++serverPorts)) {
-							displayMessage("PLAYER CONNECTED: " + p.returnName() + "\n");
+							displayMessage("\nPLAYER CONNECTED: " + p.returnName() + "\n");
 							messages.put(Constants.GLOBALCHAT + p.returnName());
 						}
 						else {
