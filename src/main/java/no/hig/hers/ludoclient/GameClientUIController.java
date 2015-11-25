@@ -5,9 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
-
-import javax.swing.SwingUtilities;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,10 +15,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * GameClientUICOntroller creates the LudoBoardFX class which stores all the game logic.
+ * It controls all the movement on the board through the LudoBoardFX class and communicate with the gameserver.
+ * It also controls all the GUI of the game scene.
+ *   
+ * @author Hauken
+ *
+ */
 public class GameClientUIController {
 	
 	LudoBoardFX board;
@@ -532,7 +535,7 @@ public class GameClientUIController {
 		switch(turnOwner) {
 		case 1:	//Green
 			CheckForPlayersGreen();
-			break;
+			break; 
 		case 2:	//Red
 			CheckForPlayersRed();
 			break;

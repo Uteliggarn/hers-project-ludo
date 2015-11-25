@@ -50,7 +50,6 @@ public class HostGameLobbyController {
 		}
 	}
 	
-	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
 			String gamestart = Constants.GAMESTART;
