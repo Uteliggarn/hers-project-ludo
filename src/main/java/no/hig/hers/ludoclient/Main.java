@@ -276,7 +276,7 @@ public class Main extends Application {
 		                		mainController.openQueue();
 		                	});
 		                }
-		                else if (message.startsWith("TOPLISTPLAYED:")) {
+		                else if (message.startsWith(Constants.TOPPLAYED)) {
 		                	String[][] played = new String[10][2];
 		                	played[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	played[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
@@ -284,12 +284,10 @@ public class Main extends Application {
 		                		message = Main.input.readLine();
 		                		played[i][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                		played[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
-		                		System.out.println(played[i][0] + "  " + played[i][1]);
 		                	}
 		                	mainController.setTopTenPlayed(played);
-		                	//Sette disse strengene til en label og lag en topliste
 		                }
-		                else if (message.startsWith("TOPLISTWON:")) {
+		                else if (message.startsWith(Constants.TOPWON)) {
 		                	String[][] won = new String[10][2];
 		                	won[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	won[0][1] = message.substring(message.lastIndexOf(",") + 1, message.length());

@@ -31,34 +31,6 @@ public class DatabaseHandler {
 		connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 	}
 	
-	private void readAllUsers() {
-		String testquery = "SELECT * FROM users";
-		Statement statement;
-		
-		try {
-			connectToDatabase();
-			statement = connection.createStatement();
-
-			ResultSet resultSet = statement.executeQuery(testquery);
-			ResultSetMetaData metaData = resultSet.getMetaData();
-			int noColumns = metaData.getColumnCount();
-			
-			for (int i = 1; i <= noColumns; i++) {
-				System.out.printf("%-8s\t", metaData.getColumnName(i));
-			} System.out.println();
-			
-			while (resultSet.next()) {
-				for (int i = 1; i <= noColumns; i++) {
-					System.out.printf("%-8s\t", resultSet.getObject(i));
-				} System.out.println();
-			}
-			
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println(CONNECTION_FAILED);
-			e.printStackTrace();
-		}
-	}
 	/**
 	 * Method for querying the database, and retrieving a ResultSet.
 	 * @param query The query to perform
