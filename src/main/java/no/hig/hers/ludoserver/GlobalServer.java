@@ -43,6 +43,7 @@ public class GlobalServer extends JFrame{
 	private boolean shutdown = false;
     
     private final String JOIN = "JOIN:";
+    private final String HOTJOIN = "HOTJOIN:";
     private final String HOST = "HOST";
     private final String INVITE = "INVITE:";	// invite: +7
     private final String LOGOUT = "LOGOUT:";
@@ -261,6 +262,13 @@ public class GlobalServer extends JFrame{
 				}
 				else
 					p.sendText(ERROR);
+			}
+			else if (msg != null && msg.startsWith(HOTJOIN)) {
+				for (int y=0; y<player.size(); y++)
+					if(msg.substring(7).equals(player.get(y).returnName())) {
+						player.get(y).sendText(HOTJOIN + player.get(y).returnName());
+						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+					}
 			}
 			else if (msg != null && msg.startsWith(INVITE)) {
 				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
