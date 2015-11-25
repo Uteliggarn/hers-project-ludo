@@ -16,3 +16,6 @@ hs_err_pid*
 # Chatfiles
 *ChatLog.log
 *ChatLog.txt
+
+# Logging files
+Logging.txt*
