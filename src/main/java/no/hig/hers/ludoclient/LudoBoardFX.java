@@ -640,7 +640,6 @@ public class LudoBoardFX extends Pane {
 		private int color;		
 		private boolean inHome;
 		private boolean isTower;
-		private int pointWorth;
 		private boolean visible;
 		private boolean canBeMoved;
 		
@@ -656,7 +655,6 @@ public class LudoBoardFX extends Pane {
 			inHome = true;
 			isTower = false;
 			visible = true;
-			pointWorth = 1;
 			canBeMoved = false;
 		}
 		/**
@@ -711,7 +709,7 @@ public class LudoBoardFX extends Pane {
 						case 1:	//Green
 							for(int i = 0; i < greenPawns.size(); i++) {
 								l = greenPawns.get(i).returnLocation();
-								if ( temp == l && greenPawns.get(i).getVisible()) {	//Lik farge står på samme felt
+								if ( temp == l && greenPawns.get(i).getVisible()) {	//Same color on same position
 									makeGreenTower(i, pawnToMove);
 								}		
 							}
@@ -719,7 +717,7 @@ public class LudoBoardFX extends Pane {
 						case 2:	//Yellow
 							for(int i = 0; i < yellowPawns.size(); i++) {
 								l = yellowPawns.get(i).returnLocation();
-								if ( temp == l && yellowPawns.get(i).getVisible()) {	//Lik farge står på samme felt
+								if ( temp == l && yellowPawns.get(i).getVisible()) {	//Same color on same position
 									makeYellowTower(i, pawnToMove);
 								}
 							}
@@ -727,7 +725,7 @@ public class LudoBoardFX extends Pane {
 						case 3:	//Red
 							for(int i = 0; i < redPawns.size(); i++) {
 								l = redPawns.get(i).returnLocation();
-								if ( temp == l && redPawns.get(i).getVisible()) {	//Lik farge står på samme felt
+								if ( temp == l && redPawns.get(i).getVisible()) {	//Same color on same position
 									makeRedTower(i, pawnToMove);
 								}
 							}
@@ -735,7 +733,7 @@ public class LudoBoardFX extends Pane {
 						case 4:	//Blue
 							for(int i = 0; i < bluePawns.size(); i++) {
 								l = bluePawns.get(i).returnLocation();
-								if ( temp == l && bluePawns.get(i).getVisible()) {	//Lik farge står på samme felt
+								if ( temp == l && bluePawns.get(i).getVisible()) {	//Same color on same position
 									makeBlueTower(i, pawnToMove);
 								}
 							}
@@ -748,6 +746,7 @@ public class LudoBoardFX extends Pane {
 				}
 				else {
 					if(n == 6) {
+						knockOutOtherColors(pawnToMove, temp);
 						location = 4;
 						inHome = false;
 					} else System.out.println("Need to get a 6 to move the pawn from the homefield");
@@ -792,9 +791,7 @@ public class LudoBoardFX extends Pane {
 					j = getpawnInGoalLocation(color);
 					if (j < 5) {
 						temp = redPawns.get(j);
-						for(int i = 1; i <= redPawns.get(j).returnPointWorth(); i++ ) {
-							redPawnsInGoal.add(new Pawned(0, 0));
-						}
+							redPawnsInGoal.add(temp);
 						redPawns.remove(j);
 					}
 				}
@@ -841,7 +838,6 @@ public class LudoBoardFX extends Pane {
 		
 		public void setTower() {
 			isTower = true;
-			//pointWorth++; Not used anymore. Cant move towers
 		}
 		
 		public boolean getTower() {
@@ -849,10 +845,6 @@ public class LudoBoardFX extends Pane {
 		}
 		public void setNotTower() {
 			isTower = false;
-		}
-		
-		public int returnPointWorth() {
-			return pointWorth;
 		}
 		
 		public void setNotVisible() {
@@ -1058,7 +1050,7 @@ public class LudoBoardFX extends Pane {
 					for (int j=0; j < yellowPawns.size(); j++ ) {
 						if(yellowPawns.get(j).getTower()) {
 							l = yellowPawns.get(j).returnLocation();
-							if(location + i == l+39) {
+							if(location + i == l+39) {	//Could be wrong number. 
 								return i;
 							}
 						}	

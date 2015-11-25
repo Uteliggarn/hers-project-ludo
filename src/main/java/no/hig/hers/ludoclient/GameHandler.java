@@ -207,18 +207,17 @@ public class GameHandler {
 			@Override
 			public void handle(Event e) {
 				//hostname = taben. Mulig IDK
+				String tmp;
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
-					String tmp;
 					Tab tab = Main.gameTabs.getTabs().get(i);
 					tmp = tab.getId();
-					if(tmp == hostName) {
+					if(tmp.equals(hostName)) {
+						gameClientUIController.setPlayerDisconnect();
+						tmp =(Constants.GAMELOST);
+						Main.sendText(tmp);
 						Main.gameTabs.getTabs().remove(i);
 					}
 				}
-				gameClientUIController.setPlayerDisconnect();
-				String tmp;
-				tmp =(Constants.GAMELOST);
-				Main.sendText(tmp);
 			}
 		});
 		
