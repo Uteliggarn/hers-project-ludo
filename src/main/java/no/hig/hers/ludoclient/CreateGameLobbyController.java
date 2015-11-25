@@ -25,7 +25,7 @@ public class CreateGameLobbyController {
 	private String hostName;
 	
 	public void initialize() {
-		startGameButton.setDisable(true);
+		startGameButton.setDisable(false);
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
