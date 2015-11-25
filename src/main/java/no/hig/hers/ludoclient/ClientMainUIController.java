@@ -34,16 +34,14 @@ public class ClientMainUIController {
     @FXML
     void newGameButtonPressed() {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-    		if (Main.gameTabs.getTabs().get(i).getId() == Constants.IDGK + Main.userName) {
-    			System.out.println("\nKom vi in i ++count?");
+    		if (Main.gameTabs.getTabs().get(i).getId().equals(Constants.IDGK + Main.userName)) 
     			++count;
-    		}
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
     			Main.sendText(Constants.CREATEGAME);
     			count = 0;
     		}
-    		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
-    			Main.showAlert("Error", "You have already created a game.");
+    		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
+    			Main.showAlert("Error", "You're allready hosting a game.");
     	}
     }
     /**

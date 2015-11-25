@@ -66,7 +66,6 @@ public class Main extends Application {
 	static ExecutorService executorService;
 	private static String message;
 	
-	
 	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
 
 	@Override
@@ -95,10 +94,10 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.80.117", 12344);	// Petter
+			connection = new Socket("127.0.0.1", 12344);
 			
-			connection = new Socket(/*"127.0.0.1"*/"128.39.83.87", 12344);
-
-			//connection = new Socket("128.39.83.87", 12344);			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
@@ -248,16 +247,24 @@ public class Main extends Application {
 			while (true) {
 				try {
 	                message = Main.input.readLine();
-
+	                
 	                if (message != null) {
-		                if (message.equals(Constants.CREATEGAME)) {
+	                	if (message.equals(Constants.CREATEGAME)) {
 		                	GameHandler gh = new GameHandler(serverPort, 1, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
-		                } else if (message.equals(Constants.HOST)) {
+		                }
+		                else if (message.equals(Constants.HOST)) {
 		                	GameHandler gh = new GameHandler(serverPort, 2, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
-		                } else if (message.startsWith(Constants.JOIN)) {
-		                	int port = Integer.parseInt(Main.input.readLine());
+		                }
+		                else if (message.startsWith(Constants.HOTJOIN)) {
+		                	int port = Integer.valueOf(Main.input.readLine());
+
+		                	GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
+		                	gameHandler.add(gh);
+		                }
+		                else if (message.startsWith(Constants.JOIN)) {
+		                	int port = Integer.valueOf(Main.input.readLine());
 		                	Platform.runLater(() -> {
 		                		inviteAccept(port);
 		                	});
@@ -306,8 +313,8 @@ public class Main extends Application {
 		alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeDecline);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeAccept.OK){
-			GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
+		if (result.get() == buttonTypeAccept){
+			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		}
 	}

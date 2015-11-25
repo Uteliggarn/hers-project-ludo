@@ -51,11 +51,10 @@ public class GameHandler {
 			addPlayersToList();
 		
 		//executorService.shutdown();	// Dreper tråden når klassen dør
-		
 	}
 	
 	
-	private void addPlayersToList() {
+	private void addPlayersToList() {		// TODO: this needs fixing
 		executorService.execute(() -> {
 			while (true) {
 				Platform.runLater(() -> {
@@ -76,7 +75,8 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -108,12 +108,6 @@ public class GameHandler {
         } catch (IOException ioe) {
         	Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
         }
-    }
-	
-    public void startProcessConnection() {
-    	executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
-    	processConnection(); // Starter en ny evighets tråd som tar seg av meldinger fra server
-    	executorService.shutdown();	// Dreper tråden når klassen dør
     }
     
 	public void processConnection() {
@@ -183,10 +177,10 @@ public class GameHandler {
 				                	default: break;
 				                	}
 		                		});
+
 		                	}
 		                }
 	                }
-                    	        	                
 	                
 	            } catch (IOException ioe) {
 	            	Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", ioe);
@@ -204,22 +198,26 @@ public class GameHandler {
 	
 
 	public void createNewLobby() {
+		Platform.runLater(() -> {
 		Tab tab = new Tab("Ludo");
 		tab.setId(hostName);
 		tab.setClosable(true);
-	
+		//tab.setOnClosed(EventHandler<Event>() -> {
+			
+		//});
+		
 		FXMLLoader loader = new FXMLLoader();
-		Platform.runLater(() -> {
+	
 			try {
 				switch (caseNr) {
-				case 1: 
+				case 1:
 					tab.setContent(loader.load(getClass().getResource("CreateGameLobby.fxml").openStream()));
 					createGameLobbyController = (CreateGameLobbyController) loader.getController();
 					createGameLobbyController.setHostPlayer(hostName);
 					createGameLobbyController.setConnetion(output);
 					break;
-					
-				case 2: 
+	
+				case 2:
 					tab.setContent(loader.load(getClass().getResource("HostGameLobby.fxml").openStream()));
 					hostGameLobbyController = (HostGameLobbyController) loader.getController();
 					hostGameLobbyController.setHostPlayer(hostName);
