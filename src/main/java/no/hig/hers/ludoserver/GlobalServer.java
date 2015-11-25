@@ -261,30 +261,29 @@ public class GlobalServer extends JFrame{
 						que.remove(i);
 					}
 				}
-			}
-			else if (msg.equals(CREATEGAME)) {
-				displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
-				if (!gameList.contains(IDGK + p.returnName())) {
-					gameList.add(IDGK + p.returnName());
-					p.sendText(CREATEGAME);
-				}
-				else
-					p.sendText(ERROR);
-			}
-			else if (msg.startsWith(INVITE)) {
-				displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
-			
-				for (int y=0; y<player.size(); y++)
-					if(msg.substring(7).equals(player.get(y).returnName())) {
-						player.get(y).sendText(JOIN + player.get(y).returnName());
-						player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+				else if (msg.equals(CREATEGAME)) {
+					displayMessage(p.returnName() + " created a new game: " + IDGK + p.returnName() + "\n");
+					if (!gameList.contains(IDGK + p.returnName())) {
+						gameList.add(IDGK + p.returnName());
+						p.sendText(CREATEGAME);
 					}
+					else
+						p.sendText(ERROR);
+				}
+				else if (msg.startsWith(INVITE)) {
+					displayMessage(p.returnName() + " invited " + msg.substring(7) + " to play a game\n");
+				
+					for (int y=0; y<player.size(); y++)
+						if(msg.substring(7).equals(player.get(y).returnName())) {
+							player.get(y).sendText(JOIN + player.get(y).returnName());
+							player.get(y).sendText(Integer.toString(player.get(y).returnServerPort()));
+						}
+				}
+				else if (msg.equals(GWON))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
+				else if (msg.equals(GLOST))
+					DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			}
-			else if (msg.equals(GWON))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-			else if (msg.equals(GLOST))
-				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
-		
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -298,7 +297,7 @@ public class GlobalServer extends JFrame{
 			while (!shutdown) {
 				try {
 					String message = messages.take();
-					displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
+					//displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
 					synchronized (player) {
 						Iterator<Player> i = player.iterator();
 						while (i.hasNext()) {
