@@ -34,7 +34,7 @@ public class GlobalServer extends JFrame{
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
-	private ArrayList<String> groupChatList = new ArrayList<String>();
+	ArrayList<String> groupChatList = new ArrayList<String>();
 	private ArrayList<String> gameList = new ArrayList<String>();
 	
 	private ArrayList<Player> que = new ArrayList<Player>();
@@ -127,26 +127,27 @@ public class GlobalServer extends JFrame{
 								}
 								if (msg != null && msg.equals(TOP)) {
 									try {
-										String[][] topten = null;
-										int rad = 0;
-										ResultSet resultSet = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
-										ResultSetMetaData metaData;
+										String toptenPlayedName = null;
+										int toptenPlayedCount;
+										String toptenWonName = null;
+										int toptenWonCount;
+										ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+										ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
 										
-										metaData = resultSet.getMetaData();
-								
-										int noColumns = metaData.getColumnCount();
-							
-										while (resultSet.next()) {
-											rad++;
-											String tmp = Integer.toString(rad);
-											topten[rad][0] = tmp; 	
-											for (int ii = 1; ii <= noColumns; ii++) {
-												topten[rad][ii] = (String) resultSet.getObject(ii);
-												//System.out.printf("%-8s\t", resultSet.getObject(ii));
-											} 
+										while (resultSetPlayed.next()) {			
+											toptenPlayedName =  (String) resultSetPlayed.getObject(1);
+											toptenPlayedCount = (int) resultSetPlayed.getObject(2);
+											toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+											messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+											System.out.println("topplayed " + toptenPlayedName);
 										}
-										//for ( int j =0; j < topten[]. )
-										
+										while(resultSetWon.next()) {
+											toptenWonName = (String) resultSetWon.getObject(1);
+											toptenWonCount = (int) resultSetWon.getObject(2) ;
+											toptenWonName = ( toptenPlayedName + "," + Integer.toString(toptenWonCount));
+											messages.put("TOPLISTWON:" + toptenWonName);
+											System.out.println("topwon " + toptenWonName);
+										}
 									}
 									catch (Exception e) {
 									// TODO Auto-generated catch block

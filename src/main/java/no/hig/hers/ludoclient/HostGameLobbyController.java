@@ -2,6 +2,7 @@ package no.hig.hers.ludoclient;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class HostGameLobbyController {
 			String gamestart = "gamestart:";
 			sendText(gamestart);
 		} catch (Exception ioe) {
-			ioe.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
 	}
 	
@@ -78,7 +79,7 @@ public class HostGameLobbyController {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
         }
     }
 

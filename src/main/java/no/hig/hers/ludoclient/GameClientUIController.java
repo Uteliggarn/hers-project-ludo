@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
@@ -44,8 +45,8 @@ public class GameClientUIController {
 	private Image die5;
 	private Image die6;
 	
-	public static BufferedWriter output;
-	public static BufferedReader input;
+	private static BufferedWriter output;
+	private static BufferedReader input;
 	
 	@FXML
 	private BorderPane gameClientPane;
@@ -87,7 +88,7 @@ public class GameClientUIController {
 			board = new LudoBoardFX();
 			gameClientPane.setCenter(board);
 		} catch (Exception e) {
-			System.out.println("Error while trying to add gameboard");
+			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
 	}
@@ -119,7 +120,7 @@ public class GameClientUIController {
 				
 			}
 		});
-		
+
 		pawn2.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 1;
@@ -242,33 +243,31 @@ public class GameClientUIController {
 					}
 				}
 			}
-				
+			
+			dieTextLabel.setText("You got a: ");
+			
 			switch (diceValue) {
 			case 1:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die1);
 				break;
 			case 2:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die2);
 				break;
 			case 3:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die3);
 				break;
 			case 4:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die4);
 				break;
 			case 5:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die5);
 				break;
 			case 6:
-				dieTextLabel.setText("You got a: ");
 				dieLabel.setImage(die6);
 				break;
-			}	
+			default:
+				break;
+			}
 		}
 		else {
 			dieRoller.setText("Pass");
@@ -283,8 +282,7 @@ public class GameClientUIController {
 			inGoal = board.greenPawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -300,12 +298,11 @@ public class GameClientUIController {
 				inGoal = board.redPawnsInGoal.size();
 				if (inGoal == 4) {
 					gameStatus = 1;
-					sendGameStatus();
-					System.out.println(("You won"));
+					gameOver = true;
 				}
 				pawnToMove = 0;
-			} catch (Exception e ) {
-				System.out.println("Goalerror");
+			} catch (Exception e) {
+				Main.LOGGER.log(Level.WARNING, "Goalerror", e);
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -320,8 +317,7 @@ public class GameClientUIController {
 			inGoal = board.yellowPawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 				turnOwner ++;
@@ -336,8 +332,7 @@ public class GameClientUIController {
 			inGoal = board.bluePawnsInGoal.size();
 			if (inGoal == 4) {
 				gameStatus = 1;
-				sendGameStatus();
-				System.out.println(("You won"));
+				gameOver = true;
 			}
 			if(diceValue !=6) {
 			bluePlayer.setText("Blue: " + playerName4);
@@ -452,6 +447,7 @@ public class GameClientUIController {
 				playerName4 = name;
 				bluePlayer.setText("Blue: " + playerName4);
 				break;
+			default: break;
 		}
 		switch (player) {
 			case 1:
@@ -466,6 +462,7 @@ public class GameClientUIController {
 			case 4:
 				nameLabel.setText("You are: " + playerName4);
 				break;
+			default: break;
 		}
 	}
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
@@ -483,9 +480,16 @@ public class GameClientUIController {
 			setPawnMovesFalse();
 			dieRoller.setDisable(true);
 			dieRoller.setText("GG");
-			if(gameStatus == 1) 
-			dieTextLabel.setText("You won");
-			else dieTextLabel.setText("Better luck next time");
+			if(gameStatus == 1) {
+				dieTextLabel.setText("You won");
+				sendGameStatus();
+			}
+			else {
+				dieTextLabel.setText("Better luck next time");
+				String tmp;
+				tmp =("GAMELOST");
+				Main.sendText(tmp);
+			}			
 		}
 	}
 	
@@ -507,38 +511,33 @@ public class GameClientUIController {
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
 	}
 	
 	public void sendGameStatus() {
 		String tmp;
-		tmp =("gamewon");
-		Main.sendText(tmp);
-		
-		tmp = "gameover";
+		tmp = ("GAMEOVER");
 		try {
 			sendText(tmp);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
+		tmp =("GAMEWON");
+		Main.sendText(tmp);
 	}
 	public void passChangeTurnOwner() {
 		
-		switch(turnOwner) {
+		switch(turnOwner++) {
 		case 1:	//Green
-			turnOwner ++;
 			greenPlayer.setText("Green: " + playerName1);
 			redPlayer.setText("Red: " + playerName2 + "- Roll");
 			break;
 		case 2:	//Red
-			turnOwner ++;
 			redPlayer.setText("Red: " + playerName2);
 			yellowPlayer.setText("Yellow: " + playerName3 + "- Roll");
 			break;
 		case 3: //Yellow
-			turnOwner ++;
 			yellowPlayer.setText("Yellow: " + playerName3);
 			bluePlayer.setText("Blue: " + playerName4 + "- Roll");
 			break;
@@ -546,7 +545,8 @@ public class GameClientUIController {
 			turnOwner = 1;
 			bluePlayer.setText("Blue: " + playerName4);
 			greenPlayer.setText("Green: " + playerName1 + "- Roll");
-			break;	
+			break;
+		default: break;
 		}
 	}
 	public void gameover() {

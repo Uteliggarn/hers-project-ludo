@@ -23,15 +23,8 @@ public class ClientChatOverlayController {
     @FXML
     private TextArea chatTextArea;
     
-    @FXML
-    private BorderPane chatPane;
-    
     private String ID;
 
-
-	@FXML
-	public void initialize() {
-	}
     /**
      * 
      * @param event
@@ -40,7 +33,6 @@ public class ClientChatOverlayController {
     void sendChat(KeyEvent event) {
     	if (event.getCode() == KeyCode.ENTER && chatTextField.getText() != null) {
     		Main.sendText(this.ID + ":" + chatTextField.getText().toString());
-    		System.out.println("Hva har vi i sendChat: " + this.ID + ":" + chatTextField.getText().toString());
     		chatTextField.setText(null);
     	}
     }
@@ -61,9 +53,8 @@ public class ClientChatOverlayController {
 	public void removeUserFromList(String username) {
 		Platform.runLater(() -> {
 			for (int i = 0; i < playerListView.getItems().size(); i++) {
-				if (playerListView.getItems().get(i).equals(username)) {
+				if (playerListView.getItems().get(i).equals(username))
 					playerListView.getItems().remove(i);
-				}
 			}
     	});
 	}

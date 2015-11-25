@@ -59,6 +59,19 @@ public class DatabaseHandler {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Method for querying the database, and retrieving a ResultSet.
+	 * @param query The query to perform
+	 * @return Returns the ResultSet gotten from the database
+	 * @throws SQLException If not able to connect to the database
+	 */
+	private static ResultSet getResult(String query) throws SQLException {
+		Statement stmt;
+		connectToDatabase();
+		stmt = connection.createStatement();
+		
+		return stmt.executeQuery(query);
+	}
 	
 	/**
 	 * Method for retrieving the top ten players, either by matches played, or matches won.
@@ -68,18 +81,12 @@ public class DatabaseHandler {
 	 */
 	public static ResultSet retrieveTopTen(String matchestype) {
 		String query = "SELECT username, " + matchestype + " FROM users ORDER BY " + matchestype + " DESC LIMIT 10";
-		Statement stmt;
-		
 		try {
-			connectToDatabase();
-			stmt = connection.createStatement();
-			
-			return stmt.executeQuery(query);
+			return getResult(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 
@@ -92,17 +99,10 @@ public class DatabaseHandler {
 	 */
 	public static int retrievePlayersMatches(int userID, String matchtype) {
 		String query = "SELECT " + matchtype + " FROM users WHERE _ID=\'" + userID + "\'";
-		Statement stmt;
-		
 		try {
-			connectToDatabase();
-			stmt = connection.createStatement();
-			
-			ResultSet resultSet = stmt.executeQuery(query);
-			
-			if (resultSet.next()) {
+			ResultSet resultSet = getResult(query);
+			if (resultSet.next()) 
 				return (int) resultSet.getObject(1);
-			}	
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -157,11 +157,7 @@ public class DatabaseHandler {
 				connection.close();
 				return true;
 			}
-			else {
-				connection.close();
-				return false;
-			}
-			
+			else connection.close();
 		} catch (SQLException e) {
 			System.out.println(CONNECTION_FAILED);
 			e.printStackTrace();
@@ -175,22 +171,17 @@ public class DatabaseHandler {
 	 */
 	private static boolean checkIfUserAlreadyExists(String username) {
 		String query = "SELECT * FROM users WHERE username=\'" + username +"\'";
-		Statement stmt;
-		
 		try {
-			stmt = connection.createStatement();
-			
-			ResultSet resultSet = stmt.executeQuery(query);
-			if (resultSet.next()) 		
+			ResultSet resultSet = getResult(query);
+			if (resultSet.next()) 
 				return true;
-			
 		} catch (SQLException e) {
-			System.out.println(CONNECTION_FAILED);
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return false;
 	}
+
 	
 	/**
 	 * Method for logging in a user with the specified username and password.
@@ -201,22 +192,14 @@ public class DatabaseHandler {
 	 */
 	public static int userLogin(String username, String password) {
 		String query = "SELECT _ID FROM users WHERE username=\'" + username + "\' AND password =\'" + hasher(password) +"\'";
-		Statement stmt;
-		
 		try {
-			connectToDatabase();
-			stmt = connection.createStatement();
-			
-			ResultSet resultSet = stmt.executeQuery(query);
-			
-			if (resultSet.next()) {
+			ResultSet resultSet = getResult(query);
+			if (resultSet.next()) 
 				return (int) resultSet.getObject(1);
-			} else return 0;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
 		return 0;
 	}
 	/**
@@ -227,10 +210,10 @@ public class DatabaseHandler {
 	 * @return Returns the hashed String.
 	 */
 	private static String hasher(String base) {
+		StringBuilder hexString = new StringBuilder();
 	    try{
 	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
 	        byte[] hash = digest.digest(base.getBytes("UTF-8"));
-	        StringBuffer hexString = new StringBuffer();
 
 	        for (int i = 0; i < hash.length; i++) {
 	            String hex = Integer.toHexString(0xff & hash[i]);
@@ -238,9 +221,9 @@ public class DatabaseHandler {
 	            hexString.append(hex);
 	        }
 
-	        return hexString.toString();
 	    } catch(Exception ex){
-	       throw new RuntimeException(ex);
+	       // Log this
 	    }
+	    return hexString.toString();
 	}
 }
