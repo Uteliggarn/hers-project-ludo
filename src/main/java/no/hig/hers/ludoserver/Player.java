@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.Formatter;
+import java.util.Iterator;
 
 public class Player {
 	
@@ -129,6 +130,12 @@ public class Player {
 								
 					sendText(tmp);	//Sends the given serverport
 					
+					Iterator<String> i = GlobalServerMain.application.groupChatList.iterator();
+					i.next(); 		// Skip Global chat
+					while (i.hasNext()) {
+						String chatName = i.next();
+						sendText("NEWGROUPCHAT:" + chatName);
+					}			
 					return true;
 				}
 				else if (login == 0) {
