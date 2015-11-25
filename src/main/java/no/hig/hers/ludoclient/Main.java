@@ -95,11 +95,10 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			//connection = new Socket("128.39.83.87", 12344);
-
-			connection = new Socket("127.0.0.1", 12344);
-
 			
+			connection = new Socket(/*"127.0.0.1"*/"128.39.83.87", 12344);
+
+			//connection = new Socket("128.39.83.87", 12344);			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
 			input = new BufferedReader(new InputStreamReader(
@@ -268,6 +267,7 @@ public class Main extends Application {
 		                	String playedCount;
 		                	playedName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	playedCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	System.out.println(playedName + " " + playedCount);
 		                	//Sette disse strengene til en label og lag en topliste
 		                }
 		                else if (message.startsWith("TOPLISTWON:")) {
@@ -275,6 +275,7 @@ public class Main extends Application {
 		                	String wonCount;
 		                	wonName = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
 		                	wonCount = message.substring(message.lastIndexOf(",") + 1, message.length());
+		                	System.out.println(wonName + " " + wonCount);
 		                	//Sette disse strengene til en label og lag en topliste
 		                }		
 		                 else if (message.startsWith(Constants.NEWCHAT))  //Legger til ny chatTab
