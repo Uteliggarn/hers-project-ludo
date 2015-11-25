@@ -3,10 +3,11 @@ package no.hig.hers.ludoserver;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.List;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,14 +16,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import no.hig.hers.ludoserver.Player;
 
 public class GlobalServer extends JFrame{
 	
@@ -35,7 +34,7 @@ public class GlobalServer extends JFrame{
 	
 	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
-	private ArrayList<String> groupChatList = new ArrayList<String>();
+	ArrayList<String> groupChatList = new ArrayList<String>();
 	private ArrayList<String> gameList = new ArrayList<String>();
 	
 	private ArrayList<Player> que = new ArrayList<Player>();
@@ -54,6 +53,7 @@ public class GlobalServer extends JFrame{
     private final String IDGK = "IDGK";
     private final String CREATEGAME = "CREATEGAME";
     private final String ERROR = "ERROR";
+    private final String TOP = "TOP";
     
     private final String GWON = "GAMEWON";
     private final String GLOST = "GAMELOST";
@@ -67,7 +67,6 @@ public class GlobalServer extends JFrame{
     private String tmpName;
 	
 	public GlobalServer() {
-		
 		super("GlobalServer");
 		
 		groupChatList.add("Global");
@@ -126,6 +125,35 @@ public class GlobalServer extends JFrame{
 									gameList.remove(IDGK + p.returnName());
 									messages.put(LOGOUT + p.returnName());
 								}
+								if (msg != null && msg.equals(TOP)) {
+									try {
+										String toptenPlayedName = null;
+										int toptenPlayedCount;
+										String toptenWonName = null;
+										int toptenWonCount;
+										ResultSet resultSetPlayed = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESPLAYED);
+										ResultSet resultSetWon = DatabaseHandler.retrieveTopTen(DatabaseHandler.MATCHESWON);
+										
+										while (resultSetPlayed.next()) {			
+											toptenPlayedName =  (String) resultSetPlayed.getObject(1);
+											toptenPlayedCount = (int) resultSetPlayed.getObject(2);
+											toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
+											messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+											System.out.println("topplayed " + toptenPlayedName);
+										}
+										while(resultSetWon.next()) {
+											toptenWonName = (String) resultSetWon.getObject(1);
+											toptenWonCount = (int) resultSetWon.getObject(2) ;
+											toptenWonName = ( toptenPlayedName + "," + Integer.toString(toptenWonCount));
+											messages.put("TOPLISTWON:" + toptenWonName);
+											System.out.println("topwon " + toptenWonName);
+										}
+									}
+									catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+									}
+								}	
 							} catch (IOException ioe) {
 								i.remove();
 								messages.put(LOGOUT + p.returnName());
@@ -303,7 +331,7 @@ public class GlobalServer extends JFrame{
 						}*/
 						
 					//player.add(p);
-					int g = player.indexOf(p);
+					//int g = player.indexOf(p);
 					/*
 					synchronized (player) {
 						player.add(p);
@@ -329,11 +357,10 @@ public class GlobalServer extends JFrame{
 						}
 							*/
 						synchronized (player) {
-							//player.add(p);
-							//int g = player.indexOf(p);
+							player.add(p);
+							int g = player.indexOf(p);
 							
 							if (p.loginChecker(++serverPorts)) {    	
-	                    	
 		                    	try {
 		                    		messages.put(GLOBALCHAT + p.returnName());
 		                    	} catch (InterruptedException ie) {

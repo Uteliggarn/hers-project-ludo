@@ -3,10 +3,10 @@ package no.hig.hers.ludoserver;
 import javax.swing.JFrame;
 
 public class GlobalServerMain {
-
+	static GlobalServer application;
 	  public static void main( String[] args )
 	    {
-	        GlobalServer application = new GlobalServer();
+	        application = new GlobalServer();
 	        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    }
 }

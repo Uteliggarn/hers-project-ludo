@@ -23,57 +23,40 @@ public class ClientChatOverlayController {
     @FXML
     private TextArea chatTextArea;
     
-    @FXML
-    private BorderPane chatPane;
-    
     private String ID;
 
-
-	@FXML
-	public void initialize() {
-	}
-    
+    /**
+     * 
+     * @param event
+     */
     @FXML
     void sendChat(KeyEvent event) {
-    	if (event.getCode() == KeyCode.ENTER) {
+    	if (event.getCode() == KeyCode.ENTER && chatTextField.getText() != null) {
     		Main.sendText(this.ID + ":" + chatTextField.getText().toString());
-    		System.out.println("Hva har vi i sendChat: " + this.ID + ":" + chatTextField.getText().toString());
     		chatTextField.setText(null);
     	}
     }
     
     public void receiveChatMessage(String msg) {
-    	Platform.runLater(new Runnable() {
-    		@Override
-    		public void run() {
-    	    	chatTextArea.setWrapText(true);
-    	    	chatTextArea.appendText(msg + "\n");	
-    		}});
-
+    	Platform.runLater(() -> {
+    		chatTextArea.setWrapText(true);
+	    	chatTextArea.appendText(msg + "\n");	
+    	});
     }
     
     public void addUserToList(String name) {
-    	Platform.runLater(new Runnable() {
-    		@Override
-    		public void run() {
-		    	playerListView.getItems().add(name);
-			}
+    	Platform.runLater(() -> {
+    		playerListView.getItems().add(name);	
     	});
-    	
     }
 
 	public void removeUserFromList(String username) {
-    	Platform.runLater(new Runnable() {
-    		@Override
-    		public void run() {
-    			for (int i = 0; i < playerListView.getItems().size(); i++) {
-    				if (playerListView.getItems().get(i).equals(username)) {
-    					playerListView.getItems().remove(i);
-    				}
-    			}
-    		}
+		Platform.runLater(() -> {
+			for (int i = 0; i < playerListView.getItems().size(); i++) {
+				if (playerListView.getItems().get(i).equals(username))
+					playerListView.getItems().remove(i);
+			}
     	});
-
 	}
 	
 	public void setID(String id) {

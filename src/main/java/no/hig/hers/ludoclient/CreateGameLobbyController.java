@@ -3,16 +3,14 @@ package no.hig.hers.ludoclient;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
 
 public class CreateGameLobbyController {
 	
@@ -25,11 +23,9 @@ public class CreateGameLobbyController {
 	
 	@FXML private Button startGameButton;
 
-	@FXML private MenuItem invite;
+	private static BufferedWriter output;
 	
 	private String hostName;
-	
-	private static BufferedWriter output;
 	
 	public void initialize() {
 		startGameButton.setDisable(true);
@@ -61,18 +57,17 @@ public class CreateGameLobbyController {
 	}
 	
 	
-	@FXML private void invitePlayer(ActionEvent e) {
+	@FXML private void invitePlayer() {
 		String item = playerList.getSelectionModel().getSelectedItem();
 		Main.sendText(Main.INVITE + item);
 	}
 	
-	@FXML private void startGameButtonPressed(ActionEvent e) {
-		
+	@FXML private void startGameButtonPressed() {
 		try {
 			String gamestart = "gamestart:";
 			sendText(gamestart);
 		} catch (Exception ioe) {
-			ioe.printStackTrace();
+			Main.LOGGER.log(Level.SEVERE, "Error trying to send text to server", ioe);
 		}
 	}
 	
@@ -94,7 +89,7 @@ public class CreateGameLobbyController {
             output.newLine();
             output.flush();
         } catch (IOException ioe) {
-        	Main.showAlert("Error", "Unable to send message to server");
+        	Main.LOGGER.log(Level.SEVERE, "Can't send message to server", ioe);
         }
     }
 }
