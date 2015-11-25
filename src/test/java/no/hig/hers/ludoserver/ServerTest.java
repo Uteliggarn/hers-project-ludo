@@ -15,8 +15,6 @@ import java.util.concurrent.Executors;
 
 import org.junit.Test;
 
-import no.hig.hers.ludoclient.Main;
-
 public class ServerTest {
 	private ExecutorService executorService;
 	private final String text = "This is a test";
@@ -34,6 +32,10 @@ public class ServerTest {
 				server.setReuseAddress(true);
 				server.bind(new InetSocketAddress(12345));
 				
+				/*output = new BufferedWriter(new OutputStreamWriter(
+	                    connection.getOutputStream()));
+				input = new BufferedReader(new InputStreamReader(
+	                    connection.getInputStream()));*/
 				
 			} catch (IOException io) {
 				io.printStackTrace();
