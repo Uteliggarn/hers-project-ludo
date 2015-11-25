@@ -20,9 +20,10 @@ import no.hig.hers.ludoclient.Main;
 public class ServerTest {
 	private ExecutorService executorService;
 	private final String text = "This is a test";
+	private boolean noMatch;
 	
 	private class Server {
-		ServerSocket server;
+		private ServerSocket server;
 		private BufferedReader input;
 		private BufferedWriter output;
 		
@@ -37,6 +38,31 @@ public class ServerTest {
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
+			
+			executorService = Executors.newCachedThreadPool();
+			startListener();
+			executorService.shutdown();
+		}
+		
+		public void startListener() {
+			noMatch = true;
+			executorService.execute(() -> {
+				while (noMatch) {
+					
+					try {
+						String str = read();
+						if (str != null && str.equals(text)) {
+							noMatch = false;
+						}
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			});
+			
 		}
 		
 		public String read() throws IOException {
@@ -63,12 +89,16 @@ public class ServerTest {
 				io.printStackTrace();
 			}
 			
-			executorService = Executors.newCachedThreadPool();
+			try {
+				sendText(text);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			executorService.shutdown();
 		}
 		
-		private void sendText(String text) throws IOException {
+		public void sendText(String text) throws IOException {
 			output.write(text);
 			output.newLine();
 			output.flush();
@@ -77,6 +107,9 @@ public class ServerTest {
 
 	@Test
 	public void test() {
+		Server server = new Server();
+		Client client = new Client();
 		
+		assertFalse(noMatch);
 	}
 }
