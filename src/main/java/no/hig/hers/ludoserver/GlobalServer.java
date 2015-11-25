@@ -131,12 +131,12 @@ public class GlobalServer extends JFrame{
 								String msg = p.read();
 								
 								if (msg != null) {
-									if (msg.equals(CLOGOUT)) {
+									if (msg.equals(Constants.CLOGOUT)) {
 										i.remove();
 										que.remove(p.returnName());
-										gameList.remove(IDGK + p.returnName());
-										displayMessage("\n" + LOGOUT + p.returnName());
-									} else if (msg.equals(TOP)) 
+										gameList.remove(Constants.IDGK + p.returnName());
+										displayMessage("\n" + Constants.LOGOUT + p.returnName());
+									} else if (msg.equals(Constants.TOP)) 
 										handleTopTenLists();
 									else {
 										//Sends the message to both listeners. One for game and one for chat.
@@ -146,7 +146,7 @@ public class GlobalServer extends JFrame{
 								}
 							} catch (IOException ioe) {
 								i.remove();
-								messages.put(LOGOUT + p.returnName());
+								messages.put(Constants.LOGOUT + p.returnName());
 								messages.put(p.returnName() + " got lost in hyperspace");
 								GlobalServer.LOGGER.log(Level.WARNING, "Error with reading message", ioe);
 							}
@@ -179,14 +179,14 @@ public class GlobalServer extends JFrame{
 				toptenPlayedName =  (String) resultSetPlayed.getObject(1);
 				toptenPlayedCount = (int) resultSetPlayed.getObject(2);
 				toptenPlayedName = ( toptenPlayedName + "," + Integer.toString(toptenPlayedCount));
-				messages.put("TOPLISTPLAYED:" + toptenPlayedName);	
+				messages.put(Constants.TOPPLAYED + toptenPlayedName);	
 			}
 			while(resultSetWon.next()) {
 				String tmp;
 				toptenWonName = (String) resultSetWon.getObject(1);
 				toptenWonCount = Integer.toString((int)resultSetWon.getObject(2));
 				tmp = (toptenWonName + "," + toptenWonCount);
-				messages.put("TOPLISTWON:" + tmp);
+				messages.put(Constants.TOPWON + tmp);
 			}
 		}
 		catch (Exception e) {
