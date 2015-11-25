@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
 
@@ -60,6 +61,7 @@ public class GlobalServer extends JFrame{
     
     private final String fileNameEnd = "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
+    private Hashtable<String, String> hashtable;
     
     private int serverPorts = 10000;
     
