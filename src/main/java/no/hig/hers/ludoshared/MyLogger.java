@@ -1,6 +1,8 @@
 package no.hig.hers.ludoshared;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -23,11 +25,17 @@ public class MyLogger {
 		}
 		
 		LOGGER.setLevel(Level.INFO);
-		fileHandler = new FileHandler("Logging.txt");
+		fileHandler = new FileHandler("Errorlog_" + timeStamp() + ".log");
 
 	    // create a TXT formatter
 	    formatterTxt = new SimpleFormatter();
 	    fileHandler.setFormatter(formatterTxt);
 	    LOGGER.addHandler(fileHandler);
 	}
+	
+	private static String timeStamp() {
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+		return timeStamp;
+	}
+	
 }
