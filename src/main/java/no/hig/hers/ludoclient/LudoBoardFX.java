@@ -16,6 +16,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Paint;
 
+/**
+ * Class that keeps track of the Ludogame. 
+ * It holds all the game logic and stores information about every pawn. 
+ * It also draws the game board and the pawns onto the board. 
+ * @author Hauken
+ *
+ */
 public class LudoBoardFX extends Pane {
 	
 	Canvas gameBoard;
@@ -43,6 +50,11 @@ public class LudoBoardFX extends Pane {
 	final ArrayList<Pawned> redPawnsInGoal = new ArrayList<Pawned>();
 	final ArrayList<Pawned> bluePawnsInGoal = new ArrayList<Pawned>();
 	
+	/**
+	 * Constructor of the ludoBoardFX class.
+	 * Makes all the possible coordinates for the pawns, adds pawns to each player and draws them, 
+	 * and makes the gameboard.
+	 */
 	LudoBoardFX() {
 		
 		try {
@@ -74,15 +86,20 @@ public class LudoBoardFX extends Pane {
 		setMinSize(900, 900);
 
 	}
-	
+	/**
+	 * Draws the game board on a canvas and adds it to the pane of the class. 
+	 */
 	private void drawGameBoard() {
-		board = new Image("ludo_board.png", 800, 800, true, true);
+		board = new Image("images/ludo_board.png", 800, 800, true, true);
 		gameBoard = new Canvas(800, 800);
 		GraphicsContext gb = gameBoard.getGraphicsContext2D();
 		gb.drawImage(board, 0, 0);
 		getChildren().add(gameBoard);
 	}
-	
+	/**
+	 * Makes all the coordinates that the green pawns can move to.
+	 * Makes the coordinates as points and add them to a Vector.
+	 */
 	private void makeGreenCoordinates() {
 		
 		//Green home:
@@ -167,7 +184,10 @@ public class LudoBoardFX extends Pane {
 		//Green Goal
 		coordinatesGreen.add(new Point(335,385));	//Location 62	
 	}
-	
+	/**
+	 * Makes all the coordinates that the red pawns can move to.
+	 * Makes the coordinates as points and add them to a Vector.
+	 */
 	private void makeRedCoordinates() {
 		//Red home coordinates
 		coordinatesRed.add(new Point(610, 110));
@@ -252,7 +272,10 @@ public class LudoBoardFX extends Pane {
 		coordinatesRed.add(new Point(385, 335));
 		
 	}
-	
+	/**
+	 * Makes all the coordinates that the yellow pawns can move to. 
+	 * Makes the coordinates as points and add them to a Vector.
+	 */
 	private void makeYellowCoordinates() {
 		//Yellow home coordinates
 		coordinatesYellow.add(new Point(160, 560));
@@ -337,7 +360,10 @@ public class LudoBoardFX extends Pane {
 		coordinatesYellow.add(new Point(385, 435));
 	
 	}
-	
+	/**
+	 * Makes all the coordinates that the blue pawns can move to. 
+	 * Makes the coordinates as points and add them to a Vector.
+	 */
 	private void makeBlueCoordinates() {
 		//Blue Home
 		coordinatesBlue.add(new Point(610, 560));
@@ -421,7 +447,13 @@ public class LudoBoardFX extends Pane {
 		//Blue Goal
 		coordinatesBlue.add(new Point(435, 385));	
 	}
-	
+	/**
+	 * Method that goes through the color of the paramter and checks if a pawn is on the 
+	 * goal location. If it is, the pawn nr will be returned and added to a goal array, to keep track
+	 * of all the pawns in goal.
+	 * @param col Holds the color of the pawns that is to be checked.
+	 * @return Returns the pawn nr if the methods finds a pawn on the goal location, or returns 5 to deny it.
+	 */
 	public int getpawnInGoalLocation(int col) {
 		switch (col) {
 		case 1:
@@ -459,26 +491,46 @@ public class LudoBoardFX extends Pane {
 		}
 		return 5;
 	}
-	
+	/**
+	 * Add 4 pawns for the player with the spesific color and adds them to the arrayList of that color.
+	 * @param pawns Holds the spesific arrayList of the spesific player color. The pawns are added to this. 
+	 * @param color Holds what color of the pawns that is being made.
+	 */
 	public void addPawns(final ArrayList<Pawned> pawns, int color) {
 		for(int i = 0; i < 4; i++) {
 				Pawned newPawn = new Pawned(i, color);
 				pawns.add(newPawn);	
 		}
 	}
-	
+	/**
+	 * Returns the point at the element @param i in the Vector of the green color.
+	 * @param i Holds what point is to be returned
+	 * @return Return the point that is requested.
+	 */
 	public Point getGreenCoordinates(int i) {
 		return coordinatesGreen.elementAt(i);
 	}
-	
+	/**
+	 * Returns the point at the element @param i in the Vector of the yellow color.
+	 * @param i Holds what point is to be returned.
+	 * @return Return the point that is requested.
+	 */
 	public Point getYellowCoordinates(int i) {
 		return coordinatesYellow.elementAt(i);
 	}
-	
+	/**
+	 * Returns the point at the element @param i in the Vector of the red color.
+	 * @param i Holds wehat point is to be returned.
+	 * @return Returns the point that is requested.
+	 */
 	public Point getRedCoordinates(int i) {
 		return coordinatesRed.elementAt(i);
 	}
-	
+	/**
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public Point getBlueCoordinates(int i) {
 		return coordinatesBlue.elementAt(i);
 	}
