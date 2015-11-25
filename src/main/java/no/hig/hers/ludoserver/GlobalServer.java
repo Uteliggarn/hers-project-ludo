@@ -58,7 +58,7 @@ public class GlobalServer extends JFrame{
     private final String GWON = "GAMEWON";
     private final String GLOST = "GAMELOST";
     
-    private final String fileNameEnd = "ChatLog.log"; //The end of the filename
+    private final String fileNameEnd = timeStamp() + "_" + "ChatLog.log"; //The end of the filename
     private String fileName; //The whole filename
     
     private int serverPorts = 10000;
@@ -408,16 +408,13 @@ public class GlobalServer extends JFrame{
 	 * http://stackoverflow.com/questions/2885173/
 	 * http://stackoverflow.com/questions/1625234/
 	 * 
-	 * Code for the timestamp:
-	 * http://stackoverflow.com/questions/5175728/ 
-	 * 
 	 * This is the logging system for the GlobalServer.
 	 * @param fileName The name of the file that will be written to
 	 * @param data The data that will be written
 	 */
 	private void writeToFile(String fileName, String data) {
 		PrintWriter writer = null;
-		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		String timeStamp = timeStamp();
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
 			writer.println(timeStamp + " " + data);
@@ -429,5 +426,15 @@ public class GlobalServer extends JFrame{
 				writer.close();
 			}
 		}
+	}
+	
+	/**
+	 * http://stackoverflow.com/questions/5175728/
+	 * Used to create the timestamp when writing to file.
+	 * @return The timestamp
+	 */
+	private String timeStamp() {
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		return timeStamp;
 	}
 }
