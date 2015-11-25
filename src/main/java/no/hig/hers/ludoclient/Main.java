@@ -23,6 +23,8 @@ import java.util.logging.SimpleFormatter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import no.hig.hers.ludoshared.Constants;
+import no.hig.hers.ludoshared.MyLogger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -63,24 +65,14 @@ public class Main extends Application {
 	
 	static ExecutorService executorService;
 	private static String message;
-	final static String NEWCHAT = "NEWGROUPCHAT:";
-	final static String JOINCHAT = "JOIN:";
-	final static String ERRORCHAT = "ERRORCHAT";
-	final static String LEAVECHAT = "LEAVE:";
-	final static String CREATEGAME = "CREATEGAME";
-	final static String IDGK = "IDGK";	// Unique name
-	final static String INVITE = "INVITE:";	// Unique name
-	final static String HOST = "HOST";	// Unique name
-	final static String QUEUE = "QUEUE";	// Unique name
-	final static String JOIN = "JOIN:";	// Unique name
-	static final String QUITGAME = "LOGOUT:";
+	
 	
 	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			setupLogger();
+			MyLogger.setupLogger();
 		} catch (IOException e) {
 			LOGGER.log(Level.WARNING, "Couldn't create log files", e);
 		}
@@ -258,13 +250,13 @@ public class Main extends Application {
 	                message = Main.input.readLine();
 
 	                if (message != null) {
-		                if (message.equals(CREATEGAME)) {
-		                	GameHandler gh = new GameHandler(serverPort, 1, Main.IDGK + Main.userName);
+		                if (message.equals(Constants.CREATEGAME)) {
+		                	GameHandler gh = new GameHandler(serverPort, 1, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
-		                } else if (message.equals(HOST)) {
-		                	GameHandler gh = new GameHandler(serverPort, 2, Main.IDGK + Main.userName);
+		                } else if (message.equals(Constants.HOST)) {
+		                	GameHandler gh = new GameHandler(serverPort, 2, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
-		                } else if (message.startsWith(JOIN)) {
+		                } else if (message.startsWith(Constants.JOIN)) {
 		                	int port = Integer.parseInt(Main.input.readLine());
 		                	Platform.runLater(() -> {
 		                		inviteAccept(port);
@@ -286,9 +278,9 @@ public class Main extends Application {
 		                	System.out.println(wonName + " " + wonCount);
 		                	//Sette disse strengene til en label og lag en topliste
 		                }		
-		                 else if (message.startsWith(NEWCHAT))  //Legger til ny chatTab
+		                 else if (message.startsWith(Constants.NEWCHAT))  //Legger til ny chatTab
             				mainController.addChatToList(message.substring(13));
-    	                 else if (message.equals(ERRORCHAT)) 	// Forteller at chaten finnes allerede
+    	                 else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
     	                 else cHandler.handleChatMessage(message);
 	                }
@@ -315,26 +307,10 @@ public class Main extends Application {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeAccept.OK){
-			GameHandler gh = new GameHandler(port, 3, Main.IDGK + message.substring(5));
+			GameHandler gh = new GameHandler(port, 3, Constants.IDGK + message.substring(5));
         	gameHandler.add(gh);
 		}
 	}
 	
-	private static void setupLogger() throws IOException {	
-		LOGGER.setLevel(Level.WARNING);
-		
-		Logger rootLogger = Logger.getLogger("");
-		Handler[] handlers = rootLogger.getHandlers();
-		if (handlers[0] instanceof ConsoleHandler) {
-			rootLogger.removeHandler(handlers[0]);
-		}
-		
-		LOGGER.setLevel(Level.INFO);
-		FileHandler fileTxt = new FileHandler("Logging.txt");
 
-	    // create a TXT formatter
-	    SimpleFormatter formatterTxt = new SimpleFormatter();
-	    fileTxt.setFormatter(formatterTxt);
-	    LOGGER.addHandler(fileTxt);
-	}
 }

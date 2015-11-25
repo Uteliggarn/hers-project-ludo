@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
+import no.hig.hers.ludoshared.Constants;
 
 public class ClientMainUIController {
 	@FXML
@@ -33,12 +34,12 @@ public class ClientMainUIController {
     @FXML
     void newGameButtonPressed() {
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-    		if (Main.gameTabs.getTabs().get(i).getId() == Main.IDGK + Main.userName) {
+    		if (Main.gameTabs.getTabs().get(i).getId() == Constants.IDGK + Main.userName) {
     			System.out.println("\nKom vi in i ++count?");
     			++count;
     		}
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
-    			Main.sendText(Main.CREATEGAME);
+    			Main.sendText(Constants.CREATEGAME);
     			count = 0;
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count != 0)
@@ -59,13 +60,13 @@ public class ClientMainUIController {
     	dialog.setContentText("Please enter the name of the chatroom:");
 
     	Optional<String> result = dialog.showAndWait();
-    	result.ifPresent(name -> Main.sendText(Main.NEWCHAT + name));
-    	result.ifPresent(name -> Main.sendText(name + Main.JOINCHAT + Main.userName));
+    	result.ifPresent(name -> Main.sendText(Constants.NEWCHAT + name));
+    	result.ifPresent(name -> Main.sendText(name + Constants.JOINCHAT + Main.userName));
     }
     
     @FXML
     void queueButtonPressed() {
-    	Main.sendText(Main.QUEUE);
+    	Main.sendText(Constants.QUEUE);
     	queueButton.setDisable(true);
     }
     
