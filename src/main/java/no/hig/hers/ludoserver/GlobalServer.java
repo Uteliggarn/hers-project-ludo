@@ -146,7 +146,7 @@ public class GlobalServer extends JFrame{
 				
 				//The thread goes to sleep to save the CPU energy
 				try {
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (Exception e) {
 					// Prints the stackTrace if anything goes wrong.
 					e.printStackTrace();
@@ -311,7 +311,7 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				} catch (Exception e) {
@@ -343,7 +343,7 @@ public class GlobalServer extends JFrame{
 							player.remove(g);
 						}
 					}
-					Thread.sleep(250);
+					//Thread.sleep(250);
 				} catch (IOException ioe) {
 					displayMessage("CONNECTION ERROR: " + ioe + "\n");
 				} catch (Exception e) {

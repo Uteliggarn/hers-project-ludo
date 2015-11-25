@@ -100,7 +100,7 @@ public class GameClientUIController {
 	
 	public void setUpGUI() {
 		
-		turnOwner = 1;
+		turnOwner = 2;	//Red player starts
 		pawnToMove = 0;
 		diceRolls = 0;
 		gameOver = false;
@@ -154,8 +154,6 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 3;
 				SendDiceValue(diceValue, turnOwner, pawnToMove);
-				System.out.println("test");
-				
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText("Roll dice");
@@ -168,10 +166,8 @@ public class GameClientUIController {
 			@Override public void handle(ActionEvent event) {
 				diceValue = 0;
 				diceRolls = 0;
-				
 				dieTextLabel.setText("");
 				dieLabel.setImage(null);
-			
 				setPawnMovesFalse();
 				setNotValid();
 				SendDiceValue(diceValue, turnOwner, pawnToMove);

@@ -95,7 +95,7 @@ public class GameServer {
 	                } 
 	              //The thread goes to sleep to save the CPU energy
 					try {
-						Thread.sleep(250);
+						//Thread.sleep(250);
 					} catch (Exception e) {
 						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}
@@ -128,7 +128,7 @@ public class GameServer {
 	                }
 	              //The thread goes to sleep to save the CPU energy
 					try {
-						Thread.sleep(250);
+						//Thread.sleep(250);
 					} catch (Exception e) {
 						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}
@@ -163,7 +163,7 @@ public class GameServer {
 	                
 	              //The thread goes to sleep to save the CPU energy
 					try {
-						Thread.sleep(250);
+						//Thread.sleep(250);
 					} catch (Exception e) {
 						Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 					}

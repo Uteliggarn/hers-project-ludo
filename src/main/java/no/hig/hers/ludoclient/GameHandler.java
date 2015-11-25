@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
-
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -76,8 +74,8 @@ public class GameHandler {
 	
 	public void connect() {
 		try {			
-			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
-			connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
+			connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+			//connection = new Socket("127.0.0.1", serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -127,13 +125,15 @@ public class GameHandler {
 	                			try {
 	                				System.out.print("Starter spill for " + n);
 		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-		                				if (Main.gameTabs.getTabs().get(i).getId() == hostName) {
+		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
 		                					Main.gameTabs.getTabs().get(i).setContent(
 		                							loader.load(getClass().getResource("GameClient.fxml").openStream()));
 		                					gameClientUIController = loader.getController();
 			                				gameClientUIController.setConnetion(output, input);
 			                				gameClientUIController.setPlayer(n);
-		                				}	
+			                				System.out.println("inne");
+		                				}
+		                				System.out.println("ute");
 		                			}
 	                			} catch (IOException e) {
 	                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
