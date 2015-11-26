@@ -158,7 +158,6 @@ public class GlobalServer extends JFrame{
 									
 									else {
 										//Sends the message to both listeners. One for game and one for chat.
-										handleGroupChatKeywords(p, msg);
 										handleGameKeywords(p, msg);
 									}
 								}
@@ -191,7 +190,7 @@ public class GlobalServer extends JFrame{
 			
 		});
 	}
-	/**
+	/**	
 	 * Method for handling chat-related messages.
 	 * Creates a new thread that handles the message.
 	 * @param msg The message to handle
@@ -204,6 +203,9 @@ public class GlobalServer extends JFrame{
 				playerJoinChat(p, msg.substring(Constants.JOIN.length()));
 			else if (msg.startsWith(Constants.NEWCHAT))
 				createNewChat(p, msg);
+			else if (msg.startsWith(Constants.LEAVECHAT))
+				for (int i = 0; i < groupChatList.size(); i++)
+					groupChatList.get(i).removePlayer(p.getName());
 
 			else sendChatMessage(p, msg);
 			//handleGroupChatKeywords(p, msg);
@@ -214,10 +216,21 @@ public class GlobalServer extends JFrame{
 			
 		});
 	}
+	/**
+	 * Method for handling a player logging out / exiting game.
+	 * Removes the player from the game queues and lists,
+	 * then removing it from the chats.
+	 * Finally, sends a message that the player has logged out to all players.
+	 * 
+	 * @param p The quitter.
+	 */
 	private void handleLogout(Player p) {
 		executorService.execute(() -> {
 			que.remove(p.getName());
 			gameList.remove(Constants.IDGK + p.getName());
+			
+			for (int i = 0; i < groupChatList.size(); i++)
+				groupChatList.get(i).removePlayer(p.getName());
 
 			try {
 				messages.put(Constants.LOGOUT + p.getName());
@@ -228,6 +241,13 @@ public class GlobalServer extends JFrame{
 		});
 	}
 
+	/**
+	 * Method for handling all player-related messages.
+	 * Creates a new thread for handling the message.
+	 * 
+	 * @param msg The message to handle
+	 * @param p The player that sent the message, and will receive the answer.
+	 */
 	private void handlePlayerMessages(String msg, Player p) {
 		executorService.execute(() -> {
 			if (msg.equals(Constants.TOP))
@@ -235,24 +255,43 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
+	/**
+	 * Method handles a player joining a chat,
+	 * first finding the Chat, then sending a message to all players in that chat
+	 * then adding the player to the playerlist of that chat,
+	 * finally sending the player the list of players in that chat.
+	 * 
+	 * @param p The player joining the chat
+	 * @param msg The chatname
+	 */
 	private void playerJoinChat(Player p, String msg) {
 		for (int i = 0; i < groupChatList.size(); i++) {
 			if (msg.equals(groupChatList.get(i).getName())) {
 				try {
-					messages.put(Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
-					groupChatList.get(i).addPlayer(p.getName());
-					p.sendPlayerList(groupChatList.get(i));
-					
-					//Writes to file
-					fileName = msg + "_" + fileNameEnd;
-					writeToFile(fileName, msg);
-				} catch (InterruptedException e) {
+					for (int j = 0; j < players.size(); j++) {
+						if (groupChatList.get(i).playerExists(players.get(j).getName()))
+								players.get(j).sendText(Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
+					}
+				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 				}
+				groupChatList.get(i).addPlayer(p.getName());
+				p.sendPlayerList(groupChatList.get(i));
+				
+				//Writes to file
+				fileName = msg + "_" + fileNameEnd;
+				writeToFile(fileName, msg);
+
 			}
 		}
 	}
-	
+	/**
+	 * Method handling chat messages.
+	 * Sends the chat message to all players that's in the Chat.
+	 * 
+	 * @param p The player that sent the message.
+	 * @param msg The message to send.
+	 */
 	private void sendChatMessage(Player p, String msg) {
 		for (int i = 0; i < groupChatList.size(); i++) {
 			if (msg.startsWith(groupChatList.get(i).getName() + ":")) {
@@ -260,20 +299,29 @@ public class GlobalServer extends JFrame{
 				msg = msg.substring(groupChatList.get(i).getName().length() + 1);
 				
 				try {
-					messages.put(Constants.CHATMESSAGE + groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
-					
-				//	messages.put(groupChatList.get(i) + ":" + p.getName() +" > " + msg.substring(groupChatList.get(i).length()+1));
-					
-					//Writes to file
-					fileName = groupChatList.get(i).getName() + "_" + fileNameEnd;
-					writeToFile(fileName, groupChatList.get(i).getName() + ":" + msg);
-				} catch (InterruptedException e) {
+					for (int j = 0; j < players.size(); j++) {
+					if (groupChatList.get(i).playerExists(players.get(j).getName()))
+						players.get(j).sendText(Constants.CHATMESSAGE + groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
+					}
+				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 				}
+			//Writes to file
+			fileName = groupChatList.get(i).getName() + "_" + fileNameEnd;
+			writeToFile(fileName, groupChatList.get(i).getName() + ":" + msg);
 			}	
 		}
 	}
 	
+	/**
+	 * Method for handling the creation of a new chat.
+	 * If the chat already exists, send ERRORCHAT to the 
+	 * user that created the chat.
+	 * If not, add the chat to the list, and send the new chat to all players.
+	 * 
+	 * @param p The Player that created the chat.
+	 * @param msg Constants.NEWCHAT followed by the new chatname.
+	 */
 	private void createNewChat(Player p, String msg) {
 		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
 		if(groupChatList.contains(newChat) 
@@ -295,13 +343,7 @@ public class GlobalServer extends JFrame{
 
 	}
 
-	/**
-	 * All the chat messages / commands will be handled in this method.
-	 * @param p The active player
-	 * @param msg The message that was read
-	 */
-	private void handleGroupChatKeywords(Player p, String msg) {
-	}
+
 	
 	/**
 	 * All the commands concerning the game will be handled here.

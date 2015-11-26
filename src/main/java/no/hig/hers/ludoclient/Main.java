@@ -305,9 +305,6 @@ public class Main extends Application {
 		                		played[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
 		                	}
 		                	mainController.setTopTenPlayed(played);
-		                	
-		                	System.out.println("Received top ten");
-		                	
 		                }
 		                else if (message.startsWith(Constants.TOPWON)) {
 		                	String[][] won = new String[10][2];
