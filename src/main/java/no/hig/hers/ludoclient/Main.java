@@ -131,31 +131,22 @@ public class Main extends Application {
 			StackPane mainRoot = (StackPane)loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
+
 			mainController = (ClientMainUIController) loader.getController();
 			
-			setUpTabs(mainRoot);
+			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+					
+			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+			
+			gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
+				if (newTab.getId().equals("main"))  
+					requestTopTen();
+			});
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
 		}	
-	}
-	
-	/**
-	 * Method for setting up the tabs,
-	 * and adding a listener to the Main tab.
-	 * @param mainRoot The root of the mainScene
-	 */
-	private void setUpTabs(StackPane mainRoot) {
-		chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-				
-		gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-		
-		gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
-			if (newTab.getId().equals("main"))  
-				requestTopTen();
-		});
 	}
 	
 	/**
@@ -340,7 +331,7 @@ public class Main extends Application {
 	                	
 		                else if (message.startsWith(Constants.CHATMESSAGE)) {
 		                	String msg = message.substring(Constants.CHATMESSAGE.length());
-		                	if (msg.startsWith(Constants.NEWCHAT)) 
+		                	if (msg.startsWith(Constants.NEWCHAT) && !msg.contains(Constants.GAMECHAT)) 
 		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
 		                	else cHandler.handleChatMessage(msg);
 		                }
