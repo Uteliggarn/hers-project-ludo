@@ -28,7 +28,7 @@ public class CreateGameLobbyController {
 	private String hostName;
 	
 	public void initialize() {
-		startGameButton.setDisable(false);
+		startGameButton.setDisable(true);
 		updateButton.setText("Update");
 		playerOne.setText("");
 		playerTwo.setText("");
@@ -72,8 +72,10 @@ public class CreateGameLobbyController {
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "") 
-			playerTwo.setText(name);	
+		if (playerTwo.getText() == "") {
+			playerTwo.setText(name);
+			startGameButton.setDisable(false);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "") 
