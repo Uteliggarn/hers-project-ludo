@@ -33,9 +33,13 @@ public class HostGameLobbyController {
 	}
 	
 	public void setHostPlayer(String hostName) {
+		String tmp;
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
-		Main.cHandler.addNewChat(this.hostName);
+		tmp = ("Gamechat: " + hostName.substring(4, hostName.length()));
+		Main.sendText(Constants.NEWCHAT + tmp);
+		//Main.sendText(tmp + Constants.JOINCHAT + Main.userName);
+		Main.cHandler.addNewChat(tmp);
 	}
 	
 	public void joinedPlayer(String name) {

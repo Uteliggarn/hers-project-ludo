@@ -82,6 +82,9 @@ public class GameServer {
 				                        if(msg.startsWith(Constants.GAMEOVER)) {
 				                        	messages.put(msg);
 				                        }
+				                        if(msg.startsWith(Constants.DISCONNECT)) {
+				                        	messages.put(msg);
+				                        }
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();

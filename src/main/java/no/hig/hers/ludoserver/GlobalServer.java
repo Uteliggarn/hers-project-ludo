@@ -280,6 +280,7 @@ public class GlobalServer extends JFrame{
 					}
 				}
 			}
+
 			else if (msg.equals(Constants.CREATEGAME)) {
 				displayMessage(p.returnName() + " created a new game: " + Constants.IDGK + p.returnName() + "\n");
 				if (!gameList.contains(Constants.IDGK + p.returnName())) {
@@ -302,7 +303,6 @@ public class GlobalServer extends JFrame{
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
 			else if (msg.equals(Constants.GAMELOST))
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
-			
 		} catch (IOException ioe) {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);
 		}
