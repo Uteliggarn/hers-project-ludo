@@ -47,11 +47,6 @@ public class GameHandler {
 		
 		connect();
 		createNewLobby();
-		/*
-		if (caseNr == 1)
-			addPlayersToList();
-		*/
-		//executorService.shutdown();	// Dreper tr�den n�r klassen d�r
 	}
 	
 
@@ -219,16 +214,18 @@ public class GameHandler {
 		tab.setOnClosed(new EventHandler<Event>() {
 			@Override
 			public void handle(Event e) {
-				//hostname = taben. Mulig IDK
-				
 				String dcPlayer;
 				if (gameClientUIController != null) {
 					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
 					sendText(Constants.DISCONNECT + dcPlayer);
 					Main.sendText(Constants.GAMELOST);
 				}
-				if (Constants.IDGK + Main.userName == hostName)
+				
+				String tmp = Constants.IDGK + Main.userName;
+				if (tmp.equals(hostName)) {
 					Main.sendText(Constants.REMOVEHOST + hostName);
+					Main.mainController.openNewGameButton();
+				}
 				
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {

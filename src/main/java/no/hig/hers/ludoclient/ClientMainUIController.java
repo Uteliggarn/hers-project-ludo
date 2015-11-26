@@ -21,6 +21,8 @@ public class ClientMainUIController {
 
     @FXML
     private Button queueButton;
+    
+    @FXML private Button newGameButton;
 
     @FXML
     private TabPane chatTabPane;
@@ -46,16 +48,26 @@ public class ClientMainUIController {
     
     @FXML
     void newGameButtonPressed() {
+    	Main.sendText(Constants.CREATEGAME);
+		count = 0;
+		newGameButton.setDisable(true);
+    	/*
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
     		if (Main.gameTabs.getTabs().get(i).getId().equals(Constants.IDGK + Main.userName)) 
     			++count;
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
     			Main.sendText(Constants.CREATEGAME);
     			count = 0;
+    			newGameButton.setDisable(true);
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
     			Main.showAlert("Error", "You're already hosting a game.");
     	}
+    	*/
+    }
+    
+    public void openNewGameButton() {
+    	newGameButton.setDisable(false);
     }
     /**
      * Creates a TextInputDialog, asking the user to type a name for the new chat room.

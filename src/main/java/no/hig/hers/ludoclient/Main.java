@@ -54,7 +54,7 @@ public class Main extends Application {
 	
 	static TabPane gameTabs;
 	private static TabPane chatTabs;
-	private static ClientMainUIController mainController;
+	static ClientMainUIController mainController;
 	
 	static ExecutorService executorService;
 	private static String message;
@@ -290,6 +290,11 @@ public class Main extends Application {
 		                		inviteAccept(port, ip);
 		                	});
 		                }
+		                else if (message.equals(Constants.QUEOPEN)) {
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
+		                }
 		                else if (message.startsWith(Constants.TOPPLAYED)) {
 		                	String[][] played = new String[10][2];
 		                	played[0][0] = message.substring(message.lastIndexOf(":") + 1, message.lastIndexOf(","));
@@ -325,10 +330,9 @@ public class Main extends Application {
 		                else if (message.startsWith(Constants.PLAYERMESSAGE)) {
 		                	
 		                }
-
-    	                 else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
+    	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
-    	                 else cHandler.handleChatMessage(message);
+    	                else cHandler.handleChatMessage(message);
 	                }
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
