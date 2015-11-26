@@ -277,12 +277,10 @@ public class GameHandler {
 	}
 	
 	public void removePlayer(String name) {
-		System.out.println("\nGameHandler->removePlayer->Er vi her");
 		createGameLobbyController.removePlayerFromList(name);
 	}
 	
 	public void addPlayer(String name) {
-		System.out.println("\nGameHandler->addPlayer->Er vi her");
 		createGameLobbyController.addPlayerToList(name);
 	}
 }
