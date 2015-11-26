@@ -533,6 +533,10 @@ public class LudoBoardFX extends Pane {
 	
 	//Is called istead of repaint() from swing project.
 	//
+	/**
+	 * Method that repaints the pawns onto the gameboard.
+	 * If a pawn is a tower it will make a tower pawn instead.
+	 */
 	void makePawns() {
 		
 		//Used to clear the canvas
@@ -628,8 +632,21 @@ public class LudoBoardFX extends Pane {
 		} catch (IndexOutOfBoundsException e) {
 			Main.LOGGER.log(Level.SEVERE, "Error while trying to paint pawn", e);
 		}	
-}
-	
+	}
+	/**
+	 * Class that holds information about every pawn and the gamelogic.
+	 * It checks where the pawns homelocation is, where is it located on the board,
+	 * what color is it, is it a tower, should it be drawn onto the gameboard and if it can be moved.
+	 * Each pawn got methods to create towers, knock out pawns of other colors if it
+	 * lands on it, adding themself to goal if it is reached (landed on), and check for towers 
+	 * that other colors has created so that that it will bounce away from it if it are trying to pass
+	 * them.
+	 * Towers should not be able to move, therefore should a pawn that is a tower, make itself not a tower
+	 * before it moves.
+	 * 
+	 * @author Hauken
+	 *
+	 */
 	public class Pawned {
 		private int location; //location 0-3 is homelocation.
 		private int homelocation;	//Used so that each pawn knows where it should be places if knocked out
@@ -677,10 +694,13 @@ public class LudoBoardFX extends Pane {
 			return inHome;
 		}
 		/**
-		 * Method that changes a pawns location
-		 * @param n holds the location that the pawns should change with. The diceValue.
+		 * Method that changes a location of a pawn. This is where most of the gamelogic happens. 
+		 * This methods call other methods that create tower, leave towers, knock out other pawns, and
+		 * tests for towers of other colors that cannot be passed. It also tries to add the pawn to goal.
+		 * @param n The dicevalue that a player has got 
+		 * @param pawnToMove what pawn that is being moving
 		 */
-		public void changeLocation(int n, int turnOwner, int pawnToMove) {
+		public void changeLocation(int n, int pawnToMove) {
 			int l;
 			int t;
 			int loc = location;
@@ -707,19 +727,24 @@ public class LudoBoardFX extends Pane {
 						tryAddToGoal();
 					} else {
 						bounceFromTower(t, n);
-						knockOutOtherColors(pawnToMove, location);
+						//makeTowers(location, pawnToMove);
+						//knockOutOtherColors(pawnToMove, location);
 					}
 				}
 				else {
 					if(n == 6) {
 						location = 4;
-						knockOutOtherColors(pawnToMove, location);
 						inHome = false;
 					} else System.out.println("Need to get a 6 to move the pawn from the homefield");
 				}
 			}
 		}
 		
+		/**
+		 * Method that make towers of all colors. This method is called if a 
+		 * @param temp location of other pawns
+		 * @param pawnToMove the pawn currently being moved
+		 */
 		public void makeTowers(int temp, int pawnToMove) {
 			int l;
 			switch(color) {
@@ -759,7 +784,10 @@ public class LudoBoardFX extends Pane {
 				break;
 			}	
 		}
-		
+		/**
+		 * Tries to add a pawn to goal. If the pawn is in the goal location, add it to the goal array and
+		 * remove it from the array that is used to draw them on the board and in gamelogic.
+		 */
 		public void tryAddToGoal() {
 			int n;
 			switch (color){
@@ -817,52 +845,91 @@ public class LudoBoardFX extends Pane {
 				break;
 			}
 		}
-		
+		/**
+		 * Make a green tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeGreenTower(int i, int pawnToMove) {
 			greenPawns.get(i).setNotVisible();
 			greenPawns.get(i).setTower();
 			greenPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a yellow tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeYellowTower(int i, int pawnToMove) {
 			yellowPawns.get(i).setNotVisible();
 			yellowPawns.get(i).setTower();
 			yellowPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a red tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeRedTower(int i, int pawnToMove) {
 			redPawns.get(i).setNotVisible();
 			redPawns.get(i).setTower();
 			redPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a blue tower out of two pawned that is on the same location.
+		 * @param i the pawn that already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeBlueTower(int i, int pawnToMove) {
 			bluePawns.get(i).setNotVisible();
 			bluePawns.get(i).setTower();
 			bluePawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Set a pawn to be a tower
+		 */
 		public void setTower() {
 			isTower = true;
 		}
-		
+		/**
+		 * Return if a pawn is a tower or not.
+		 * @return return the tower value
+		 */
 		public boolean getTower() {
 			return isTower;
 		}
+		/**
+		 * Set the pawn to no longer be a tower
+		 */
 		public void setNotTower() {
 			isTower = false;
 		}
-		
+		/**
+		 * Sets the pawn to be not visible so that it wont be drawn on the gameboard.
+		 * This is used so that towers will only draw one pawn instead of two. 
+		 */
 		public void setNotVisible() {
 			visible = false;
 		}
+		/**
+		 * Sets the pawn to be visible. This is used when a pawn is 
+		 * moving from a tower. 
+		 */
 		public void setVisible() {
 			visible = true;
 		}
-		
+		/**
+		 *  Returns if the pawn should be drawn or not.
+		 * @return if the pawn is visible or not. 
+		 */
 		public boolean getVisible() {
 			return visible;
 		}
+		/**
+		 * Sets if the pawn can be moved or not. 
+		 * @param diceValue The dicevalue rolled by a player
+		 * @return
+		 */
 		public boolean validMove(int diceValue){
 			if(inHome && diceValue == 6) {
 				canBeMoved = true;
@@ -875,14 +942,24 @@ public class LudoBoardFX extends Pane {
 			canBeMoved = false; 
 			return false;	
 		}
+		/**
+		 * Returns if the pawn can be moved.
+		 * Used so a player can only move pawns that is valid. 
+		 * @return if the pawn can be moved or not. 
+		 */
 		public boolean isValid() {
 			return canBeMoved;
 		}
-		
+		/**
+		 * Sets the pawn to be not able to move. 
+		 */
 		public void setNotValid() {
 			canBeMoved = false;
 		}
-		
+		/**
+		 * Method that sets the 
+		 * @param pawn
+		 */
 		public void moveFromTower(int pawn) {
 			int l;
 			setNotTower();
