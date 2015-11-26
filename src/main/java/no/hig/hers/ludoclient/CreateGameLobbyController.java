@@ -23,7 +23,6 @@ public class CreateGameLobbyController {
 	@FXML private ListView<String> playerList;
 	
 	@FXML private Button startGameButton;
-	@FXML private Button updateButton;
 	
 	private static BufferedWriter output;
 	
@@ -43,20 +42,10 @@ public class CreateGameLobbyController {
 		}
 	}
 	
-	@FXML private void updateButtonPressed() {
-		playerList.getSelectionModel().clearSelection();
-		playerList.getItems().clear();
-		for (int i=0; i<Main.playerList.size(); i++) {
-			if (!Main.playerList.get(i).equals(Main.userName))
-				playerList.getItems().add(Main.playerList.get(i));
-		}
-	}
-	
 	public void setLabelText() {
 		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
 		hostLabel.setText(Main.messages.getString("HOST"));
 		startGameButton.setText(Main.messages.getString("STARTGAME"));
-		updateButton.setText(Main.messages.getString("UPDATE"));
 	}
 	
 	public void addPlayerToList(String name) {

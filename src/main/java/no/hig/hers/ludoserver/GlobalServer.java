@@ -278,15 +278,13 @@ public class GlobalServer extends JFrame{
 				p.sendText(Constants.CREATEGAME + p.getIPaddress());
 			}
 			else if (msg.startsWith(Constants.INVITE)) {
-				if (!gameList.contains(Constants.IDGK + msg.substring(7))) {
-					GUI.displayMessage(p.getName() + " invited " + msg.substring(7) + " to play a game\n");
+				GUI.displayMessage(p.getName() + " invited " + msg.substring(7) + " to play a game\n");
 				
-					for (int y=0; y<players.size(); y++)
-						if(msg.substring(7).equals(players.get(y).getName())) {
-							players.get(y).sendText(Constants.JOIN + p.getName());
-							players.get(y).sendText(Integer.toString(p.getServerPort()) + p.getIPaddress());
-						}
-				}
+				for (int y=0; y<players.size(); y++)
+					if(msg.substring(7).equals(players.get(y).getName())) {
+						players.get(y).sendText(Constants.JOIN + p.getName());
+						players.get(y).sendText(Integer.toString(p.getServerPort()) + p.getIPaddress());
+					}
 			}
 
 			else if (msg.equals(Constants.GAMEWON))
