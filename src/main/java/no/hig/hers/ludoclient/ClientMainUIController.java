@@ -55,7 +55,7 @@ public class ClientMainUIController {
     			count = 0;
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
-    			Main.showAlert("Error", "You're allready hosting a game.");
+    			Main.showAlert("Error", "You're already hosting a game.");
     	}
     }
     /**
@@ -72,8 +72,8 @@ public class ClientMainUIController {
     	dialog.setContentText("Please enter the name of the chatroom:");
 
     	Optional<String> result = dialog.showAndWait();
-    	result.ifPresent(name -> Main.sendText(Constants.NEWCHAT + name));
-    	result.ifPresent(name -> Main.sendText(name + Constants.JOINCHAT + Main.userName));
+    	result.ifPresent(name -> Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + name));
+    	result.ifPresent(name -> Main.cHandler.addNewChat(name));
     }
     
     @FXML
@@ -155,11 +155,6 @@ public class ClientMainUIController {
 	
 	public void openQueue() {
 		queueButton.setDisable(false);
-	}
-
-	@FXML
-	void getPlayerList() {
-		Main.getPlayers();
 	}
 	
 }
