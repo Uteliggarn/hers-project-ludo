@@ -96,22 +96,21 @@ public class ChatHandler {
             	});
             }
             else if (message.startsWith(Constants.LEAVECHAT + tab.getId() + ":")) {
-            	System.out.println("\nChatHandler->handleChatMessage->Kom vi in her?");
             	Platform.runLater(() -> {
                 	String username = message.substring(Constants.LEAVECHAT.length() + tab.getId().length() + 1);
                 	c.removeUserFromList(username);
-                	Main.playerList.remove(username);
-                	if (tab.getId().equals("Global"))
-	                	for (int y=0; y<Main.gameHandler.size(); y++) {
-	                		if (Main.gameHandler.get(y).getCaseNr())
-	                			Main.gameHandler.get(y).removePlayer(username);
-	                	}
                 });
             }
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(Constants.LOGOUT.length());
-            	//Main.playerList.remove(username);
-            	c.removeUserFromList(username);
+            	Platform.runLater(() -> {
+	            	String username = message.substring(Constants.LOGOUT.length());
+	            	for (int y=0; y<Main.gameHandler.size(); y++) {
+	            		if (Main.gameHandler.get(y).getCaseNr())
+	            			Main.gameHandler.get(y).removePlayer(username);
+	            	}
+	            	Main.playerList.remove(username);
+	            	c.removeUserFromList(username);
+            	});
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
