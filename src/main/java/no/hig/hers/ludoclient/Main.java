@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import no.hig.hers.ludoshared.Constants;
+import no.hig.hers.ludoshared.Internationalization;
 import no.hig.hers.ludoshared.MyLogger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -60,9 +62,11 @@ public class Main extends Application {
 	private static String message;
 	
 	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
+	static ResourceBundle messages;
+	
 	@Override
 	public void start(Stage primaryStage) {
+		messages = Internationalization.getMessages();
 		try {
 			MyLogger.setupLogger();
 		} catch (IOException e) {
