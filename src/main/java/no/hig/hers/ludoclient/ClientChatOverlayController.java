@@ -9,6 +9,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * Class for handling the Chat Overlays.
+ * @author daniel on 07.11.2015
+ */
 public class ClientChatOverlayController {
 
     @FXML
@@ -23,8 +27,9 @@ public class ClientChatOverlayController {
     private String ID;
 
     /**
-     * 
-     * @param event
+     * Method for sending a text message.
+     * Takes the text from the TextField when 'Enter' is pressed.
+     * @param event The Keyboard event.
      */
     @FXML
     void sendChat(KeyEvent event) {
@@ -34,6 +39,10 @@ public class ClientChatOverlayController {
     	}
     }
     
+    /**
+     * Method for adding a message to the TextArea in the chat.
+     * @param msg The message to add
+     */
     public void receiveChatMessage(String msg) {
     	Platform.runLater(() -> {
     		chatTextArea.setWrapText(true);
@@ -41,6 +50,10 @@ public class ClientChatOverlayController {
     	});
     }
     
+    /**
+     * Method for adding a user to the playerlist in a chat.
+     * @param name The username to add.
+     */
     public void addUserToList(String name) {
     	Platform.runLater(() -> {
     		if (!playerListView.getItems().contains(name))
@@ -48,6 +61,10 @@ public class ClientChatOverlayController {
     	});
     }
 
+    /**
+     * Method for removing a user from the playerlist in a chat.
+     * @param username the username to remove.
+     */
 	public void removeUserFromList(String username) {
 		Platform.runLater(() -> {
 			for (int i = 0; i < playerListView.getItems().size(); i++) {
@@ -56,7 +73,10 @@ public class ClientChatOverlayController {
 			}
     	});
 	}
-	
+	/**
+	 * Method for setting ID
+	 * @param id the ID to set.
+	 */
 	public void setID(String id) {
 		this.ID = id;
 	}

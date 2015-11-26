@@ -23,6 +23,11 @@ public class ChatHandler {
 	private TabPane chatTabs;
 	private List<ClientChatOverlayController> controllers;
 	
+	/**
+	 * Default constructor.
+	 * Sets up chats, and adding the global chat.
+	 * @param chatTabs The chattabs that the ChatHandler will handle.
+	 */
 	public ChatHandler(TabPane chatTabs) {
 		this.chatTabs = chatTabs;
 	
