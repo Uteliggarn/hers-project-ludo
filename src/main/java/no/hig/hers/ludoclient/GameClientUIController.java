@@ -408,6 +408,10 @@ public class GameClientUIController {
 		return player;
 	}
 	
+	public int getTurnOwner() {
+		return turnOwner;
+	}
+	
 	public void setPlayerName(int pnr, String name) {
 		switch (pnr) {
 			case 1:
