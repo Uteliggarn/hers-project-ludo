@@ -35,7 +35,7 @@ public class GlobalServer extends JFrame{
 	
 	ArrayList<Player> players = new ArrayList<Player>();
 	
-	private ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
+	ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
 	ArrayList<Chat> groupChatList = new ArrayList<Chat>();
 	private ArrayList<String> gameList = new ArrayList<String>();
@@ -152,12 +152,9 @@ public class GlobalServer extends JFrame{
 										handleChatMessages(msg.substring(Constants.CHATMESSAGE.length()), p);
 									else if (msg.startsWith(Constants.PLAYERMESSAGE)) // player-related (only to one)
 										handlePlayerMessages(msg.substring(Constants.PLAYERMESSAGE.length()), p);
-									else if (msg.startsWith(Constants.GENERALMESSAGE))// player-related (all)	
-										handleGeneralMessages(msg.substring(Constants.GENERALMESSAGE.length()), p);
-										
 									
 									else {
-										//Sends the message to both listeners. One for game and one for chat.
+										//Sends the message to game listener.
 										handleGameKeywords(p, msg);
 									}
 								}
@@ -183,7 +180,6 @@ public class GlobalServer extends JFrame{
 			}
 		});
 	}
-	
 
 	private void handleGameMessages(String msg, Player p) {
 		executorService.execute(() -> {
@@ -200,22 +196,18 @@ public class GlobalServer extends JFrame{
 		executorService.execute(() -> {
 			displayMessage("handleChatMessages: " + msg + " \n");
 			if (msg.startsWith(Constants.JOIN))
-				playerJoinChat(p, msg.substring(Constants.JOIN.length()));
+				ChatHandler.playerJoinChat(p, msg.substring(Constants.JOIN.length()));
 			else if (msg.startsWith(Constants.NEWCHAT))
-				createNewChat(p, msg);
+				ChatHandler.createNewChat(p, msg);
 			else if (msg.startsWith(Constants.LEAVECHAT))
 				for (int i = 0; i < groupChatList.size(); i++)
 					groupChatList.get(i).removePlayer(p.getName());
 
-			else sendChatMessage(p, msg);
+			else ChatHandler.sendChatMessage(p, msg);
 			//handleGroupChatKeywords(p, msg);
 		});
 	}
-	private void handleGeneralMessages(String msg, Player p) {
-		executorService.execute(() -> {
-			
-		});
-	}
+
 	/**
 	 * Method for handling a player logging out / exiting game.
 	 * Removes the player from the game queues and lists,
@@ -255,95 +247,6 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
-	/**
-	 * Method handles a player joining a chat,
-	 * first finding the Chat, then sending a message to all players in that chat
-	 * then adding the player to the playerlist of that chat,
-	 * finally sending the player the list of players in that chat.
-	 * 
-	 * @param p The player joining the chat
-	 * @param msg The chatname
-	 */
-	private void playerJoinChat(Player p, String msg) {
-		for (int i = 0; i < groupChatList.size(); i++) {
-			if (msg.equals(groupChatList.get(i).getName())) {
-				try {
-					for (int j = 0; j < players.size(); j++) {
-						if (groupChatList.get(i).playerExists(players.get(j).getName()))
-								players.get(j).sendText(Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
-					}
-				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
-				}
-				groupChatList.get(i).addPlayer(p.getName());
-				p.sendPlayerList(groupChatList.get(i));
-				
-				//Writes to file
-				fileName = msg + "_" + fileNameEnd;
-				writeToFile(fileName, msg);
-
-			}
-		}
-	}
-	/**
-	 * Method handling chat messages.
-	 * Sends the chat message to all players that's in the Chat.
-	 * 
-	 * @param p The player that sent the message.
-	 * @param msg The message to send.
-	 */
-	private void sendChatMessage(Player p, String msg) {
-		for (int i = 0; i < groupChatList.size(); i++) {
-			if (msg.startsWith(groupChatList.get(i).getName() + ":")) {
-				displayMessage(msg + "\n");
-				msg = msg.substring(groupChatList.get(i).getName().length() + 1);
-				
-				try {
-					for (int j = 0; j < players.size(); j++) {
-					if (groupChatList.get(i).playerExists(players.get(j).getName()))
-						players.get(j).sendText(Constants.CHATMESSAGE + groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
-					}
-				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
-				}
-			//Writes to file
-			fileName = groupChatList.get(i).getName() + "_" + fileNameEnd;
-			writeToFile(fileName, groupChatList.get(i).getName() + ":" + msg);
-			}	
-		}
-	}
-	
-	/**
-	 * Method for handling the creation of a new chat.
-	 * If the chat already exists, send ERRORCHAT to the 
-	 * user that created the chat.
-	 * If not, add the chat to the list, and send the new chat to all players.
-	 * 
-	 * @param p The Player that created the chat.
-	 * @param msg Constants.NEWCHAT followed by the new chatname.
-	 */
-	private void createNewChat(Player p, String msg) {
-		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
-		if(groupChatList.contains(newChat) 
-				&& groupChatList.contains(new Chat(Constants.IDGK + p.getName())))
-			try {
-				p.sendText(Constants.ERRORCHAT);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		else {
-			groupChatList.add(newChat);
-			try {
-				messages.put(Constants.CHATMESSAGE + msg);
-			} catch (InterruptedException e) {
-				GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
-			}
-			displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.getName() + "\n");
-		}
-
-	}
-
-
 	
 	/**
 	 * All the commands concerning the game will be handled here.
@@ -363,7 +266,7 @@ public class GlobalServer extends JFrame{
 						if (!gameList.contains(Constants.IDGK + que.get(t).getName()) && hostFound != true) {
 							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
-
+							
 							que.get(t).sendText(Constants.HOST  + que.get(t).getIPaddress());
 							tmpPort = que.get(t).getServerPort();
 							tmpName = que.get(t).getName();
@@ -442,7 +345,7 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
-	private void displayMessage(String text) {
+	void displayMessage(String text) {
 		SwingUtilities.invokeLater(() -> outputArea.append(text));
 	}
 	
