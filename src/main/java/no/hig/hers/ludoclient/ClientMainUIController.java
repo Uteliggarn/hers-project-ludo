@@ -36,10 +36,16 @@ public class ClientMainUIController {
 
     @FXML
     private Label labelPlayerWon;
+    
+    @FXML
+    private Label labelPlayerWonScore;
 
     @FXML
     private Label labelPlayerPlayed;
-
+    
+    @FXML
+    private Label labelPlayerPlayedScore;
+    
     @FXML
     private Label labelTopWon;
 
@@ -188,6 +194,12 @@ public class ClientMainUIController {
 	
 	public void openQueue() {
 		queueButton.setDisable(false);
+	}
+	public void setScores(String won, String played) {
+		Platform.runLater(() -> {
+		    labelPlayerWonScore.setText(won);
+		    labelPlayerPlayedScore.setText(played);
+		});
 	}
 	
 }
