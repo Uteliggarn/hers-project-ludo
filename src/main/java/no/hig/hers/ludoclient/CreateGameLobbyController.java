@@ -75,10 +75,8 @@ public class CreateGameLobbyController {
 			playerTwo.setText(name);	
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.getText() == "") {
+		else if (playerFour.getText() == "") 
 			playerFour.setText(name);
-			startGameButton.setDisable(false);
-		}
 	}
 	
 	
