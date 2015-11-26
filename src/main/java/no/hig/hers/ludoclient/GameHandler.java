@@ -49,7 +49,7 @@ public class GameHandler {
 		
 		connect();
 		createNewLobby();
-	}	
+	}
 
 	public String getHostName() {
 		return hostName;
@@ -203,6 +203,7 @@ public class GameHandler {
 					Main.sendText(Constants.GAMELOST);
 				}
 				
+				Main.cHandler.leaveGameChat(hostName);
 				String tmp = Constants.IDGK + Main.userName;
 				if (tmp.equals(hostName)) {
 					Main.sendText(Constants.REMOVEHOST + hostName);

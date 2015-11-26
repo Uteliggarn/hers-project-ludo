@@ -78,9 +78,11 @@ public class GameServer {
 				                        	messages.put(msg);
 				                        }
 				                        if(msg.startsWith(Constants.GAMEOVER)) {
+				                        	i.remove();
 				                        	messages.put(msg);
 				                        }
 				                        if(msg.startsWith(Constants.DISCONNECT)) {
+				                        	i.remove();
 				                        	messages.put(msg);
 				                        }
 			                        }

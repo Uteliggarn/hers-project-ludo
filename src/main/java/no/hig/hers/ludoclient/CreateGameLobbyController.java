@@ -17,19 +17,21 @@ public class CreateGameLobbyController {
 	@FXML private Label playerTwo;
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
+	@FXML private Label playerLabel;
+	@FXML private Label hostLabel;
 	
 	@FXML private ListView<String> playerList;
 	
 	@FXML private Button startGameButton;
 	@FXML private Button updateButton;
-
+	
 	private static BufferedWriter output;
 	
 	private String hostName;
 	
 	public void initialize() {
-		startGameButton.setDisable(true);
-		updateButton.setText("Update");
+		startGameButton.setDisable(false);
+		setLabelText();	
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -48,6 +50,13 @@ public class CreateGameLobbyController {
 			if (!Main.playerList.get(i).equals(Main.userName))
 				playerList.getItems().add(Main.playerList.get(i));
 		}
+	}
+	
+	public void setLabelText() {
+		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
+		hostLabel.setText(Main.messages.getString("HOST"));
+		startGameButton.setText(Main.messages.getString("STARTGAME"));
+		updateButton.setText(Main.messages.getString("UPDATE"));
 	}
 	
 	public void addPlayerToList(String name) {
