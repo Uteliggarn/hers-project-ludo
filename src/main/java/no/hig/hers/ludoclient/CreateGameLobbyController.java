@@ -64,7 +64,7 @@ public class CreateGameLobbyController {
 		String tmp;
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
-		tmp = ("Gamechat-" + hostName.substring(4, hostName.length()));
+		tmp = ("Gamechat-" + hostName.substring(4));
 		Main.cHandler.addNewChat(tmp);
 		
 	}
