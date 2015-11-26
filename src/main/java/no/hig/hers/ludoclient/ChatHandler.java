@@ -119,8 +119,17 @@ public class ChatHandler {
         }
 	}
 
+	/**
+	 * Function for leaving the gamechat,
+	 * closing the tab and removing it from the list
+	 * @param hostName The gamechat to leave.
+	 */
 	public void leaveGameChat(String hostName) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < chats.size(); i++) {
+			if (chats.get(i).equals(Constants.GAMECHAT + hostName)) {
+				chatTabs.getTabs().remove(i);
+				chats.remove(i);
+			}
+		}
 	}
 }
