@@ -357,12 +357,11 @@ public class Main extends Application {
 	                }
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
-	            	serverOnline = false;
-	            	Platform.runLater(() -> {
-	            		showAlert(messages.getString("COULDNOTCONNECTSERVERTITLE"), messages.getString("COULDNOTCONNECTSERVERCONTENT"));
-	            		System.exit(1);
-	            	});
-	            	
+	            	try {
+						Thread.sleep(10);
+					} catch (Exception e1) {
+						LOGGER.log(Level.SEVERE, "Unable to wake from sleep after server down", e);
+					}
 	            }
 			}
 		});

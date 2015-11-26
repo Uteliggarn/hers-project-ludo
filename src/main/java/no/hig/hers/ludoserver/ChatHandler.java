@@ -82,14 +82,23 @@ public class ChatHandler {
 	 * @param msg Constants.NEWCHAT followed by the new chatname.
 	 */
 	static void createNewChat(Player p, String msg) {
-		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
-		if(GlobalServer.groupChatList.contains(newChat))
+		boolean exists = false;
+		int i = 0;
+		
+		while (exists == false && i < GlobalServer.groupChatList.size()) {
+			if(GlobalServer.groupChatList.get(i).getName().equals(msg.substring(Constants.NEWCHAT.length())))
+				exists = true;
+			i++;
+		}
+		
+		if (exists)
 			try {
 				p.sendText(Constants.ERRORCHAT);
 			} catch (IOException ioe) {
 				GlobalServer.LOGGER.log(Level.INFO, "Couldn't send message to player", ioe);
 			}
 		else {
+			Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
 			GlobalServer.groupChatList.add(newChat);
 			try {
 				GlobalServer.messages.put(Constants.CHATMESSAGE + msg);
