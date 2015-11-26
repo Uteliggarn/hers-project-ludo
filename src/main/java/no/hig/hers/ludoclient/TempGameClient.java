@@ -1,18 +1,11 @@
 package no.hig.hers.ludoclient;
 
-import java.awt.BorderLayout;
-
-import javax.swing.SwingUtilities;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.*;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 
 public class TempGameClient extends Application {
