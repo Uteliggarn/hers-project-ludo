@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import no.hig.hers.ludoshared.Constants;
+
 /**
  * Class for handling chats, clientside
  * This handles the chat tabs, and the chat-related messages.
@@ -23,6 +24,10 @@ public class ChatHandler {
 	private TabPane chatTabs;
 	private List<ClientChatOverlayController> controllers;
 	
+	/**
+	 * Global chat room tab is created when constructor is called
+	 * @param chatTabs TabPane object to be used in the class
+	 */
 	public ChatHandler(TabPane chatTabs) {
 		this.chatTabs = chatTabs;
 	
@@ -104,7 +109,7 @@ public class ChatHandler {
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
             	Platform.runLater(() -> {
 	            	String username = message.substring(Constants.LOGOUT.length());
-	            	for (int y=0; y<Main.gameHandler.size(); y++) {
+	            	for (int y=0; y<Main.gameHandler.size(); y++) { //Finds the 
 	            		if (Main.gameHandler.get(y).getCaseNr())
 	            			Main.gameHandler.get(y).removePlayer(username);
 	            	}

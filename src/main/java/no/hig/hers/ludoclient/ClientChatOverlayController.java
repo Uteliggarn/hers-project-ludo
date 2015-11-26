@@ -9,6 +9,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * Handles messages sent and received from a user
+ * and the controls that only players in the chat
+ * are shown in the playerListView
+ *
+ */
 public class ClientChatOverlayController {
 
     @FXML
@@ -23,8 +29,8 @@ public class ClientChatOverlayController {
     private String ID;
 
     /**
-     * 
-     * @param event
+     * Sends the message written in the TextField
+     * @param event for when "Enter" is pressed
      */
     @FXML
     void sendChat(KeyEvent event) {
@@ -34,6 +40,10 @@ public class ClientChatOverlayController {
     	}
     }
     
+    /**
+     * Appends too the TextArea
+     * @param msg contains the new message to be appended
+     */
     public void receiveChatMessage(String msg) {
     	Platform.runLater(() -> {
     		chatTextArea.setWrapText(true);
@@ -41,6 +51,10 @@ public class ClientChatOverlayController {
     	});
     }
     
+    /**
+     * Adds a new user too playerListView
+     * @param name of the user to be added
+     */
     public void addUserToList(String name) {
     	Platform.runLater(() -> {
     		if (!playerListView.getItems().contains(name))
@@ -48,6 +62,10 @@ public class ClientChatOverlayController {
     	});
     }
 
+    /**
+     * Removes the given name from playerListView
+     * @param username too be removed
+     */
 	public void removeUserFromList(String username) {
 		Platform.runLater(() -> {
 			for (int i = 0; i < playerListView.getItems().size(); i++) {
@@ -57,6 +75,10 @@ public class ClientChatOverlayController {
     	});
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 */
 	public void setID(String id) {
 		this.ID = id;
 	}
