@@ -358,25 +358,25 @@ public class GlobalServer extends JFrame{
 				displayMessage("Player: " + p.getName() + " joined the queue. Queue size: " + que.size() + "\n");
 				if(que.size() == 4) {
 					boolean hostFound = false;
-					for (int t=0; t<4; t++) {
-						
-						if (!gameList.contains(Constants.IDGK + que.get(t).getName()) && hostFound != true) {
-							gameList.add(Constants.IDGK + que.get(t));
+					for (int i=0; i<4; i++) {
+						if (!gameList.contains(Constants.IDGK + que.get(i).getName()) && hostFound != true) {
+							gameList.add(Constants.IDGK + que.get(i));
 							hostFound = true;
 
-							que.get(t).sendText(Constants.HOST  + que.get(t).getIPaddress());
-							tmpPort = que.get(t).getServerPort();
-							tmpName = que.get(t).getName();
-							t = 0;
+							que.get(i).sendText(Constants.HOST  + que.get(i).getIPaddress());
+							tmpPort = que.get(i).getServerPort();
+							tmpName = que.get(i).getName();
+							i = 0;
 						}
-						else if (hostFound == true && que.get(t).getName() != tmpName){
-							que.get(t).sendText(Constants.HOTJOIN + tmpName);
-							que.get(t).sendText(Integer.toString(tmpPort));
+						else if (hostFound == true && que.get(i).getName() != tmpName){
+							que.get(i).sendText(Constants.HOTJOIN + tmpName);
+							que.get(i).sendText(Integer.toString(tmpPort));
 						}
 					}
-					for (int i=0; i<que.size(); i++) {
-						que.remove(i);
-					}
+					if (hostFound == false)
+						for (int i=0; i<que.size(); i++)
+							que.get(i).sendText(Constants.QUEOPEN);
+					que.clear();
 				}
 			}
 
