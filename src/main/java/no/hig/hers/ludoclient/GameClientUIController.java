@@ -88,6 +88,10 @@ public class GameClientUIController {
 	@FXML
     private Label dieTextLabel;
 	
+	/**
+	 * Method that is called when the game starts.
+	 * Adds the gameboard, make the gamelogic and setup the GUI
+ 	 */
 	@FXML
 	public void initialize() {
 		
@@ -98,11 +102,20 @@ public class GameClientUIController {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
-		
+		/*
 		String tmp = (Constants.GAMECHAT + Main.userName);
 		Main.cHandler.addNewChat(tmp);
+		*/
 	}
-	
+	/**
+	 * Sets up most of the GAMEGUI
+	 * Sets buttons to be disabled until it is your turn.
+	 * Also set up the on action for the game buttons except the dice roller. 
+	 * All the on acions will send the values to the game server
+	 * and then to all the players when pressed. 
+	 * The values will not be process before it is received. 
+	 *  
+	 */
 	public void setUpGUI() {
 		
 		turnOwner = 2;	//Red player starts
@@ -178,12 +191,17 @@ public class GameClientUIController {
 		dieRoller.setDisable(true);
 	}
 	
-	
+	/**
+	 * Starts the function that rolls the dice and sets for 
+	 * @param even Button pressed
+	 */
 	@FXML
 	private void rollDice(ActionEvent even) {
 		rollDiceActionListener();
 	}
-	
+	/**
+	 * Sets the correct text for the pawn buttons
+	 */
 	public void setTextOnLabels() {
 		pawn1.setText(Main.messages.getString("PAWN1"));
 		pawn2.setText(Main.messages.getString("PAWN2"));
@@ -191,7 +209,14 @@ public class GameClientUIController {
 		pawn4.setText(Main.messages.getString("PAWN4"));
 		pass.setText(Main.messages.getString("PASS"));
 	}
-	
+	/**
+	 * Methods that started when the roll dice button is pressed.
+	 * You will get three rolls as long as you dont got a valid move. 
+	 * You get a extra roll if you get a six. 
+	 * You need to pass if you dont got a valid move after three rolls.
+	 * Make the valid buttons available when you got a valid move.
+	 * Also show what value you get with a image.
+	 */
 	private void rollDiceActionListener() {
 		diceRolls++;
 		if (diceRolls < 3) {
@@ -258,7 +283,14 @@ public class GameClientUIController {
 			dieRoller.setDisable(true);
 		}
 	}
-	
+	/**
+	 * Method that process the roll of the player that last moved a pawn or passed. 
+	 * Changes the location of the chosen pawn by the value of the dicevalue. 
+	 * The next method called, will test for towers, knock out other colors or try to make a
+	 * tower.
+	 * Also changes the GUI elements to be correct and set to valid as long as it 
+	 * is your turn. 
+	 */
 	private void processRoll() {
 		int inGoal;
 		if ( turnOwner == 1 && diceValue !=0) {	//Green player
@@ -339,19 +371,33 @@ public class GameClientUIController {
 			setNotValidPass();
 		}
 	}
-	
+	/**
+	 * Sets the pawn buttons to disabled so the player cant use them
+	 * as long as you dont got a valid move.
+	 */
 	public void setPawnMovesFalse() {
 		pawn1.setDisable(true);
 		pawn2.setDisable(true);
 		pawn3.setDisable(true);
 		pawn4.setDisable(true);
 	}
+	/**
+	 * Sets the pass button to not usable.
+	 */
 	public void setNotValidPass() {
 		pass.setDisable(true);
 	}
+	/**
+	 * Sets the pass button to usable.
+	 */
 	public void setValidPass() {
 		pass.setDisable(false);
 	}
+	/**
+	 * If there is a valid move on a pawn, the pawn button is set to 
+	 * usable.
+	 * @param val the value of the valid pawn.
+	 */
 	public void setPawnMovesTrue(int val) {
 		switch(val) {
 		case 0:
@@ -368,7 +414,9 @@ public class GameClientUIController {
 			break;
 		}
 	}
-	
+	/**
+	 * Sets all the pawns of the current player to not valid.
+	 */
 	public void setNotValid() {
 		switch (turnOwner) {
 		case 1:	//Green
@@ -393,7 +441,10 @@ public class GameClientUIController {
 			break;
 		}
 	}
-	
+	/**
+	 * Sets a player to a color. If the player is player two, he/she starts to roll the dice.
+	 * @param n the player number
+	 */
 	public void setPlayer(int n) {
 		player = n;
 		if(player == turnOwner) {
@@ -401,17 +452,28 @@ public class GameClientUIController {
 			dieRoller.setDisable(false);
 			dieRoller.setText(Main.messages.getString("ROLL"));
 			dieTextLabel.setText(Main.messages.getString("YOURTURN"));
-		} else dieTextLabel.setText(Main.messages.getString("WAITFORYOURTURN"));
-		
+		} else dieTextLabel.setText(Main.messages.getString("WAITFORYOURTURN"));	
 	}
+	/**
+	 * Returns the chosen player. Used to handle disconnects.
+	 * @return returns the player, or the color in this case. 
+	 */
 	public int getPlayer() {
 		return player;
 	}
-	
+	/**
+	 * Returns the current turn owner. This is used to check if the 
+	 * player disconnected is the player that is currently rolling.
+	 * @return returns the turn owner. 
+	 */
 	public int getTurnOwner() {
 		return turnOwner;
 	}
-	
+	/**
+	 * Sets the correct player to the correct color/player label.
+	 * @param pnr player number/color of the player
+	 * @param name the name to be set to the label of that color
+	 */
 	public void setPlayerName(int pnr, String name) {
 		switch (pnr) {
 			case 1:
@@ -437,11 +499,24 @@ public class GameClientUIController {
 			default: break;
 		}
 	}
+	/**
+	 * Sets the connection so the controller can communicate with the game server.
+	 * @param write output
+	 * @param read input Not used. Is handled by the Gamehandler
+	 */
 	public void setConnetion(BufferedWriter write, BufferedReader read) {
 		output = write;
 		input = read;
 	}
-	
+	/**
+	 * Gets the dicevalue, the player that rolled/passed and what pawn that player moved. 
+	 * This is called by the gamehandler and the values is received from the game server.
+	 * The last player that played sent these values to the game server and this method 
+	 * process them when they return to the players.
+	 * @param diceV the dice value
+	 * @param playernr the player that moved/passed
+	 * @param pawn the pawn that that the player moved. Is 0 if passed.
+	 */
 	public void getDiceValue(int diceV, int playernr, int pawn) {
 		turnOwner = playernr;
 		pawnToMove = pawn;
@@ -477,7 +552,13 @@ public class GameClientUIController {
 		output.newLine();
 		output.flush();
 	}
-	
+	/**
+	 * Sends the dicevalue, the player number of the current player and 
+	 * what pawn that is moved to the game server.
+	 * @param diceVal the dice value
+	 * @param playernr turn owner
+	 * @param pawn Pawned that is moved. 0 if passed
+	 */
 	public void SendDiceValue(int diceVal, int playernr, int pawn) {
 		String tmp;
 		tmp = (Constants.DICEVALUE + diceVal + playernr + pawn);
@@ -487,7 +568,10 @@ public class GameClientUIController {
 			Main.LOGGER.log(Level.WARNING, "Error sending message to server", e);
 		}
 	}
-	
+	/**
+	 * Sends that the game is over to the other players
+	 * and that this player won to the database.
+	 */
 	public void sendGameStatus() {
 		String tmp;
 		tmp = (Constants.GAMEOVER);
@@ -499,6 +583,9 @@ public class GameClientUIController {
 		tmp =(Constants.GAMEWON);
 		Main.sendText(tmp);
 	}
+	/**
+	 * Changes the labels when the turn is passed.
+	 */
 	public void passChangeTurnOwner() {
 		
 		switch(turnOwner) {
@@ -517,9 +604,16 @@ public class GameClientUIController {
 		default: break;
 		}
 	}
+	/**
+	 * Sets the game to be over
+	 */
 	public void gameover() {
 		gameOver = true;
 	}
+	/**
+	 * Sets the correct labels for the green player.
+	 * If this player is the last man standing, the game is over and that player won.
+	 */
 	public void CheckForPlayersGreen() {
 		greenPlayer.setText(Main.messages.getString("GREEN") + " " + playerName1);
 		if(player2) {
@@ -541,6 +635,10 @@ public class GameClientUIController {
 			gameOver = true;
 		}
 	}
+	/**
+	 * Sets the correct labels for the red player and changes turn owner.
+	 * If this player is the last man standing, the game is over and that player won. 
+	 */
 	public void CheckForPlayersRed() {
 		redPlayer.setText(Main.messages.getString("RED") + " " + playerName2);
 		if(player3) {
@@ -563,6 +661,10 @@ public class GameClientUIController {
 			gameOver = true;
 		}
 	}
+	/**
+	 * Sets the correct labels for the yellow player.
+	 * If this player is the last man standing, the game is over and that player won.
+	 */
 	public void CheckForPlayersYellow() {
 		yellowPlayer.setText(Main.messages.getString("YELLOW") + " " + playerName3);
 		if(player4) {
@@ -585,6 +687,10 @@ public class GameClientUIController {
 			gameOver = true;
 		}
 	}
+	/**
+	 * Sets the correct labels for the blue player. 
+	 * If this player is the last man standing, the game is over and that player won.
+	 */
 	public void CheckForPlayersBlue() {
 		bluePlayer.setText(Main.messages.getString("BLUE") + " " + playerName4);
 		if(player1) {
@@ -607,7 +713,11 @@ public class GameClientUIController {
 			gameOver = true;
 		}
 	}
-		
+	/**
+	 * Sets the player that is disconnect to not playing
+	 * It also sets all the pawns of that color back to home.
+	 * @param dced the disconnected player
+	 */
 	public void setPlayerDisconnect(int dced) {
 		switch(dced) {
 			case 1: 
@@ -638,7 +748,10 @@ public class GameClientUIController {
 				break;
 		}
 	}
-	
+	/**
+	 * Sets a image showing the dice value that is received. 
+	 * @param diceValue the dice value
+	 */
 	public void setDiceImage(int diceValue) {
 		
 		dieTextLabel.setText(Main.messages.getString("YOUGOTA"));

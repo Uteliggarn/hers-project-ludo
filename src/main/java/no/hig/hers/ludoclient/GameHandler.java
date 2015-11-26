@@ -142,9 +142,7 @@ public class GameHandler {
 		                					gameClientUIController = loader.getController();
 			                				gameClientUIController.setConnetion(output, input);
 			                				gameClientUIController.setPlayer(n);
-			                				System.out.println("inne");
 		                				}
-		                				System.out.println("ute");
 		                			}
 	                			} catch (IOException e) {
 	                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
