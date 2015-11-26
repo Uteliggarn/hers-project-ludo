@@ -96,6 +96,7 @@ public class ChatHandler {
             	});
             }
             else if (message.startsWith(Constants.LEAVECHAT + tab.getId() + ":")) {
+            	System.out.println("\nChatHandler->handleChatMessage->Kom vi in her?");
             	Platform.runLater(() -> {
                 	String username = message.substring(Constants.LEAVECHAT.length() + tab.getId().length() + 1);
                 	c.removeUserFromList(username);
@@ -109,7 +110,7 @@ public class ChatHandler {
             }
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
             	String username = message.substring(Constants.LOGOUT.length());
-            	Main.playerList.remove(username);
+            	//Main.playerList.remove(username);
             	c.removeUserFromList(username);
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
