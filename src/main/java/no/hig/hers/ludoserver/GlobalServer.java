@@ -334,8 +334,6 @@ public class GlobalServer extends JFrame{
 		});
 	}
 	
-
-	
 	/**
 	 * Code for writing to file:
 	 * http://stackoverflow.com/questions/2885173/
