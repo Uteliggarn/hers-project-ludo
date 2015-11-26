@@ -74,7 +74,7 @@ public class Main extends Application {
 		}
 		setUpScenes();	
 		primaryStage.setScene(loginScene);
-		primaryStage.setTitle("Ludo");
+		primaryStage.setTitle(messages.getString("LUDONAME"));
 		primaryStage.show();
 		currentStage = primaryStage;
 		
@@ -97,9 +97,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			//connection = new Socket("127.0.0.1", 12344);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -108,7 +108,7 @@ public class Main extends Application {
 			
 		} catch (UnknownHostException e) {
 			Main.LOGGER.log(Level.SEVERE, "Error connecting to server", e);
-			showAlert("Server down", "The server is currently down for maintenance");
+			showAlert(messages.getString("SERVERISDOWNTITLE"), messages.getString("SERVERISDOWNCONTENT"));
 		} catch (IOException e) {
 			LOGGER.log(Level.SEVERE, "Could not connect to server", e);
 		}
@@ -348,13 +348,13 @@ public class Main extends Application {
 		                	
 		                }
     	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
-    	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
+    	                	Main.showAlert(messages.getString("CHATROOMEXISTSTITLE"), messages.getString("CHATROOMEXISTSCONTENT"));
 	                }
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
 	            	serverOnline = false;
 	            	Platform.runLater(() -> {
-	            		showAlert("Server is down", "The server is currently down.\nPlease try again later");
+	            		showAlert(messages.getString("SERVERISDOWNTITLE"), messages.getString("SERVERISDOWNCONTENT"));
 	            		System.exit(1);
 	            	});
 	            	
@@ -366,12 +366,12 @@ public class Main extends Application {
 	private static void inviteAccept(int port, String ip) {
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Game invite");
+		alert.setTitle(messages.getString("GAMEINVITETITLE"));
 		alert.setHeaderText(null);
-		alert.setContentText("Accept the invite or decline it");
+		alert.setContentText(messages.getString("GAMEINVITECONTENT"));
 		
-		ButtonType buttonTypeAccept = new ButtonType("Accept");
-		ButtonType buttonTypeDecline = new ButtonType("Decline", ButtonData.CANCEL_CLOSE);
+		ButtonType buttonTypeAccept = new ButtonType(messages.getString("BUTTONACCEPT"));
+		ButtonType buttonTypeDecline = new ButtonType(messages.getString("BUTTONDECLINE"), ButtonData.CANCEL_CLOSE);
 		
 		alert.getButtonTypes().setAll(buttonTypeAccept, buttonTypeDecline);
 

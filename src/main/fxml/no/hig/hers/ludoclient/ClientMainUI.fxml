@@ -52,26 +52,26 @@
                                           <Font name="System Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label prefHeight="105.0" text="Welcome" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <Label fx:id="labelWelcome" prefHeight="105.0" text="Welcome" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <font>
                                           <Font size="72.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Won" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                    <Label fx:id="labelPlayerWon" text="Won" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
                                        <font>
                                           <Font size="18.0" />
                                        </font></Label>
-                                    <Label text="Played" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                                    <Label fx:id="labelPlayerPlayed" text="Played" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
                                        <font>
                                           <Font size="18.0" />
                                        </font></Label>
                                     <Label text="0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                                     <Label text="0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                                    <Label text="Top ten won" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                    <Label fx:id="labelTopWon" text="Top ten won" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font></Label>
-                                    <Label text="Top ten played" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                                    <Label fx:id="labelTopPlayed" text="Top ten played" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font></Label>

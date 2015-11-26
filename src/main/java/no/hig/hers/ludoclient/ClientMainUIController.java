@@ -16,27 +16,48 @@ import javafx.scene.layout.GridPane;
 import no.hig.hers.ludoshared.Constants;
 
 public class ClientMainUIController {
-	@FXML
-	private Label labelUserName;
+    @FXML
+    private TabPane gameTabs;
+
+    @FXML
+    private GridPane gridPane;
 
     @FXML
     private Button queueButton;
-    
-    @FXML private Button newGameButton;
+
+    @FXML
+    private Button newGameButton;
+
+    @FXML
+    private Label labelUserName;
+
+    @FXML
+    private Label labelWelcome;
+
+    @FXML
+    private Label labelPlayerWon;
+
+    @FXML
+    private Label labelPlayerPlayed;
+
+    @FXML
+    private Label labelTopWon;
+
+    @FXML
+    private Label labelTopPlayed;
 
     @FXML
     private TabPane chatTabPane;
-    
+
     @FXML
     private CheckBox checkBoxHideChat;
 
     @FXML
-    private GridPane gridPane;
-    
-    private int count = 0;
+    private ListView<String> chatListView;
     
     @FXML
-    private ListView<String> chatListView;
+    private Button buttonCreateChat;
+
     
 	private final Label[][] topTenWonLabels = new Label[10][2];
 	private final Label[][] topTenPlayedLabels = new Label[10][2];
@@ -44,26 +65,28 @@ public class ClientMainUIController {
 	@FXML
 	public void initialize() {
 		createLabels();
+		
+		setLabelText();
+	}
+	/**
+	 * Function for setting the internationalized texts. 
+	 */
+	private void setLabelText() {
+	    queueButton.setText(Main.messages.getString("BUTTONQUEUETEXT"));
+	    newGameButton.setText(Main.messages.getString("BUTTONNEWGAMETEXT"));
+	    buttonCreateChat.setText(Main.messages.getString("BUTTONCREATECHATTEXT"));
+	    labelWelcome.setText(Main.messages.getString("WELCOMETEXT"));
+	    labelPlayerWon.setText(Main.messages.getString("PLAYERWONTEXT"));
+	    labelPlayerPlayed.setText(Main.messages.getString("PLAYERPLAYEDTEXT"));
+	    labelTopWon.setText(Main.messages.getString("TOPWONTEXT"));
+	    labelTopPlayed.setText(Main.messages.getString("TOPPLAYEDTEXT"));
+	    checkBoxHideChat.setText(Main.messages.getString("HIDECHATTEXT"));
 	}
     
     @FXML
     void newGameButtonPressed() {
     	Main.sendText(Constants.CREATEGAME);
-		count = 0;
 		newGameButton.setDisable(true);
-    	/*
-    	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
-    		if (Main.gameTabs.getTabs().get(i).getId().equals(Constants.IDGK + Main.userName)) 
-    			++count;
-    		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
-    			Main.sendText(Constants.CREATEGAME);
-    			count = 0;
-    			newGameButton.setDisable(true);
-    		}
-    		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
-    			Main.showAlert("Error", "You're already hosting a game.");
-    	}
-    	*/
     }
     
     public void openNewGameButton() {
@@ -73,14 +96,13 @@ public class ClientMainUIController {
      * Creates a TextInputDialog, asking the user to type a name for the new chat room.
      * It then creates the new chat room by sending a message to the server with the name.
      * Lastly, joins the new chat.
-     * @param event
      */
     @FXML
     void createChatButtonPressed() {
     	TextInputDialog dialog = new TextInputDialog("");
-    	dialog.setTitle("Create a new chatroom");
+    	dialog.setTitle(Main.messages.getString("CHATROMCREATETITLE"));
     	dialog.setHeaderText(null);
-    	dialog.setContentText("Please enter the name of the chatroom:");
+    	dialog.setContentText(Main.messages.getString("CHATROMCREATECONTENT"));
 
     	Optional<String> result = dialog.showAndWait();
     	result.ifPresent(name -> Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + name));
