@@ -37,13 +37,10 @@ public class Player {
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
-	
 		this.IPaddress = connection.getRemoteSocketAddress().toString();
-		System.out.println("Hva er Inet adress: " + IPaddress);
+		
 		int h = IPaddress.indexOf(":");
 		IPaddress = IPaddress.substring(1, h);
-		
-		System.out.println("Hva er Inet adress: " + IPaddress);
 		
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -131,8 +128,6 @@ public class Player {
 					this.playerID = login;
 					this.serverPort = serverPort;
 					
-					System.out.println("\nHva er serverPort i Player classen i ludoServer: " + serverPort);
-					
 					sendText(Integer.toString(login));				// Sends the Player ID
 					sendText(Integer.toString(this.serverPort));	// Sends the given serverport
 					
@@ -177,9 +172,30 @@ public class Player {
 	}
 	
 	public void sendPlayerList() {
-		Iterator<Player> y = GlobalServerMain.application.player.iterator();
-		while (y.hasNext()) {
-			String playerName = y.next().returnName();
+		/*
+		Iterator<Player> i = GlobalServerMain.application.player.iterator();
+		while (i.hasNext()) {
+			Player t = i.next();
+			try {
+				sendText(Constants.GLOBALCHAT + t.returnName());
+				t.sendText(Constants.GLOBALCHAT + returnName());
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+		}
+		
+		
+		Iterator<Player> i = player.iterator();
+        while (i.hasNext()) {		// Send message to all clients that a new person has joined
+        	Player t = i.next();
+        	p.sendText(Constants.JOIN + t.returnName());
+        	t.sendText(Constants.JOIN + p.returnName());
+        } 
+		*/
+		
+		Iterator<Player> i = GlobalServerMain.application.player.iterator();
+		while (i.hasNext()) {
+			String playerName = i.next().returnName();
 			System.out.println("\nHva er playerName: " + Constants.GLOBALCHAT + playerName);
 			try {
 				sendText(Constants.GLOBALCHAT + playerName);
@@ -188,5 +204,6 @@ public class Player {
 				e.printStackTrace();
 			}
 		}	
+		
 	}
 }
