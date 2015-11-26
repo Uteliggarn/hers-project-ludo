@@ -110,8 +110,12 @@ public class ChatHandler {
             if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst � joine
             	Platform.runLater(() -> {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
-            	if (message.startsWith("Global") && !Main.playerList.contains(username))
-					Main.playerList.add(username);
+            	Main.playerList.add(username);
+            	if (tab.getId().equals("Global"))
+            		for (int y=0; y<Main.gameHandler.size(); y++) {
+                		if (Main.gameHandler.get(y).getCaseNr())
+                			Main.gameHandler.get(y).addPlayer(username);
+                	}
             	c.addUserToList(username);
             	});
             }
@@ -119,6 +123,12 @@ public class ChatHandler {
             	Platform.runLater(() -> {
                 	String username = message.substring(Constants.LEAVECHAT.length() + tab.getId().length() + 1);
                 	c.removeUserFromList(username);
+                	Main.playerList.remove(username);
+                	if (tab.getId().equals("Global"))
+	                	for (int y=0; y<Main.gameHandler.size(); y++) {
+	                		if (Main.gameHandler.get(y).getCaseNr())
+	                			Main.gameHandler.get(y).removePlayer(username);
+	                	}
                 });
             }
             
