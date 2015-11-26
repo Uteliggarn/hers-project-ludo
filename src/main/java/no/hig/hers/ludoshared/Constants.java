@@ -2,7 +2,6 @@ package no.hig.hers.ludoshared;
 
 public class Constants {
 	public final static String NEWCHAT = "NEWGROUPCHAT:";
-	public final static String JOINCHAT = "JOIN:";
 	public final static String ERRORCHAT = "ERRORCHAT";
 	public final static String LEAVECHAT = "LEAVE:";
 	public final static String CREATEGAME = "CREATEGAME:";
@@ -23,16 +22,26 @@ public class Constants {
 	public final static String QUEOPEN = "QUEOPEN";	
 	public final static String GAMEWON = "GAMEWON";	
 	public final static String GAMELOST = "GAMELOST";	
-	public final static String ACCEPTED = "ACCEPTED";
-	public final static String DECLINED = "DECLINED";
-	public final static String SENDLOGIN = "SENDLOGIN:";
-	public final static String SENDREGISTER = "SENDREGISTER:";
+
 	public final static String LOGOUT = "LOGOUT:";
 	public final static String CLOGOUT = ">>>LOGOUT<<<";
 	public final static String ERROR = "ERROR";
 	public final static String TOP = "TOP";
+
+	public final static String GWON = "GAMEWON";
+	public final static String GLOST = "GAMELOST";
+	public final static String ACCEPTED = "ACCEPTED";
+	public final static String DECLINED = "DECLINED";
+	public final static String SENDLOGIN = "SENDLOGIN:";
+    public final static String SENDREGISTER = "SENDREGISTER:";
+
 	public final static String GETPLAYERLIST = "GETPLAYERLIST";
 	public final static String DISCONNECT = "DISCONNECT:";
 	
+	public final static String GAMEMESSAGE = "GAMEMESSAGE:";
+	public final static String CHATMESSAGE = "CHATMESSAGE:";
+	public final static String PLAYERMESSAGE = "PLAYERMESSAGE:";
+	public final static String GENERALMESSAGE = "GENERALMESSAGE:";
+
 	private Constants() {}
 }
