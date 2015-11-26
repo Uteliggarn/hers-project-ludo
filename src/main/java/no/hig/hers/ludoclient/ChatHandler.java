@@ -109,7 +109,7 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
 
-            if (message.startsWith(Constants.JOIN + tab.getId())){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst å joine
             	Platform.runLater(() -> {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
             	if (message.startsWith("Global") && !Main.playerList.contains(username))

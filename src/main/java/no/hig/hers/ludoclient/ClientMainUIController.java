@@ -55,7 +55,7 @@ public class ClientMainUIController {
     			count = 0;
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
-    			Main.showAlert("Error", "You're allready hosting a game.");
+    			Main.showAlert("Error", "You're already hosting a game.");
     	}
     }
     /**
@@ -155,11 +155,6 @@ public class ClientMainUIController {
 	
 	public void openQueue() {
 		queueButton.setDisable(false);
-	}
-
-	@FXML
-	void getPlayerList() {
-		Main.getPlayers();
 	}
 	
 }

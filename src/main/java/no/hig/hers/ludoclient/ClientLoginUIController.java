@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
+import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -32,7 +33,7 @@ public class ClientLoginUIController {
 
     	int ID;
  
-    	Main.sendLogin("SENDLOGIN:", username, password);
+    	Main.sendLogin(Constants.SENDLOGIN, username, password);
     	try {
     		ID = Integer.valueOf(Main.input.readLine());
     		

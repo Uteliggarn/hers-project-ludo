@@ -236,7 +236,7 @@ public class GlobalServer extends JFrame{
 		for (int i = 0; i < groupChatList.size(); i++) {
 			if (msg.equals(groupChatList.get(i).getName())) {
 				try {
-					messages.put(Constants.CHATMESSAGE + Constants.JOIN + msg + p.getName());
+					messages.put(Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
 					groupChatList.get(i).addPlayer(p.getName());
 					p.sendPlayerList(groupChatList.get(i));
 					
@@ -252,7 +252,7 @@ public class GlobalServer extends JFrame{
 	
 	private void sendChatMessage(Player p, String msg) {
 		for (int i = 0; i < groupChatList.size(); i++) {
-			if (msg.startsWith(groupChatList.get(i).getName())) {
+			if (msg.startsWith(groupChatList.get(i).getName() + ":")) {
 				displayMessage(msg + "\n");
 				msg = msg.substring(groupChatList.get(i).getName().length() + 1);
 				
@@ -281,7 +281,6 @@ public class GlobalServer extends JFrame{
 				ioe.printStackTrace();
 			}
 		else {
-			newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
 			groupChatList.add(newChat);
 			try {
 				messages.put(Constants.CHATMESSAGE + msg);

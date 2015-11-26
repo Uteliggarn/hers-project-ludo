@@ -54,8 +54,7 @@ public class GameHandler {
 		//executorService.shutdown();	// Dreper tr�den n�r klassen d�r
 	}
 	
-<<<<<<< HEAD
-	
+
 	private void addPlayersToList() {		// TODO: this needs fixing
 		executorService.execute(() -> {
 			while (true) {
@@ -74,11 +73,11 @@ public class GameHandler {
 			}
 		});
 	}	
-=======
-	public String returnHostName() {
+
+	public String getHostName() {
 		return hostName;
 	}
->>>>>>> 49c358c882fbaa921148b1128821a78bc8ca5e91
+
 	
 	public void connect() {
 		try {			
@@ -236,7 +235,7 @@ public class GameHandler {
 				}
 				
 				for (int i=0; i<Main.gameHandler.size(); i++) {
-					if(hostName.equals(Main.gameHandler.get(i).returnHostName())) {
+					if(hostName.equals(Main.gameHandler.get(i).getHostName())) {
 						Main.gameHandler.remove(i);
 					}
 				}

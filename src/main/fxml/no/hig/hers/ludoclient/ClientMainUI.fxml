@@ -75,7 +75,6 @@
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font></Label>
-                                    <Button mnemonicParsing="false" onAction="#getPlayerList" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     </children>
                               </GridPane>
                            </content>
