@@ -9,6 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 
+/**
+ * Class for handling the Database,
+ * including connecting and retrieving data.
+ * @author daniel on 03.11.2015
+ */
 public class DatabaseHandler {
 
 	private static final String URL = "jdbc:mysql://mysql.stud.hig.no/s130443";

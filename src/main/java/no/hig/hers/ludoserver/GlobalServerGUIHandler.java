@@ -8,10 +8,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+/**
+ * Class for handling the GUI for the GlobalServer.
+ * @author daniel on 26.11.2015
+ *
+ */
 public class GlobalServerGUIHandler extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextArea outputArea;
 	
+	/**
+	 * Constructor, sets the Title and EXIT_ON_CLOSE
+	 */
 	public GlobalServerGUIHandler() {
 		super("Global Server");
 		
@@ -34,6 +42,11 @@ public class GlobalServerGUIHandler extends JFrame {
 		
 	}
 	
+	/**
+	 * Method for displaying messages in the
+	 * servers textArea.
+	 * @param text The text to display
+	 */
 	void displayMessage(String text) {
 		SwingUtilities.invokeLater(() -> outputArea.append(text));
 	}

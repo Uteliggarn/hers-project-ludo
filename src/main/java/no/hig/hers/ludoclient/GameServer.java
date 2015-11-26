@@ -44,6 +44,9 @@ public class GameServer {
 		} catch (IOException ioe) {
 			Main.LOGGER.log(Level.SEVERE, "Unable to create gameserver", ioe);
 		}
+		
+		String tmp = (Constants.GAMECHAT + Main.userName);
+		Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + tmp);
 	}
 	
 	 private void startMessageListener() {

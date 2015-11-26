@@ -98,6 +98,9 @@ public class GameClientUIController {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
+		
+		String tmp = (Constants.GAMECHAT + Main.userName);
+		Main.cHandler.addNewChat(tmp);
 	}
 	
 	public void setUpGUI() {
