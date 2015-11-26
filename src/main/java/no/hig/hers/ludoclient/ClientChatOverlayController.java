@@ -10,10 +10,8 @@ import javafx.scene.input.KeyEvent;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * Handles messages sent and received from a user
- * and the controls that only players in the chat
- * are shown in the playerListView
- *
+ * Class for handling the Chat Overlays.
+ * @author daniel on 07.11.2015
  */
 public class ClientChatOverlayController {
 
@@ -29,8 +27,9 @@ public class ClientChatOverlayController {
     private String ID;
 
     /**
-     * Sends the message written in the TextField
-     * @param event for when "Enter" is pressed
+     * Method for sending a text message.
+     * Takes the text from the TextField when 'Enter' is pressed.
+     * @param event The Keyboard event.
      */
     @FXML
     void sendChat(KeyEvent event) {
@@ -41,8 +40,8 @@ public class ClientChatOverlayController {
     }
     
     /**
-     * Appends too the TextArea
-     * @param msg contains the new message to be appended
+     * Method for adding a message to the TextArea in the chat.
+     * @param msg The message to add
      */
     public void receiveChatMessage(String msg) {
     	Platform.runLater(() -> {
@@ -52,8 +51,8 @@ public class ClientChatOverlayController {
     }
     
     /**
-     * Adds a new user too playerListView
-     * @param name of the user to be added
+     * Method for adding a user to the playerlist in a chat.
+     * @param name The username to add.
      */
     public void addUserToList(String name) {
     	Platform.runLater(() -> {
@@ -63,8 +62,8 @@ public class ClientChatOverlayController {
     }
 
     /**
-     * Removes the given name from playerListView
-     * @param username too be removed
+     * Method for removing a user from the playerlist in a chat.
+     * @param username the username to remove.
      */
 	public void removeUserFromList(String username) {
 		Platform.runLater(() -> {
@@ -76,8 +75,8 @@ public class ClientChatOverlayController {
 	}
 	
 	/**
-	 * Sets the id
-	 * @param id sets the id to object ID
+	 * Method for setting ID
+	 * @param id the ID to set.
 	 */
 	public void setID(String id) {
 		this.ID = id;

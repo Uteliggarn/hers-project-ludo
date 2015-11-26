@@ -98,6 +98,9 @@ public class GameClientUIController {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
+		
+		String tmp = (Constants.GAMECHAT + Main.userName);
+		Main.cHandler.addNewChat(tmp);
 	}
 	
 	public void setUpGUI() {
@@ -259,7 +262,7 @@ public class GameClientUIController {
 	private void processRoll() {
 		int inGoal;
 		if ( turnOwner == 1 && diceValue !=0) {	//Green player
-			board.greenPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			board.greenPawns.get(pawnToMove).changeLocation(diceValue, pawnToMove);
 			inGoal = board.greenPawnsInGoal.size();
 			if (inGoal == 4 && player == 1) {
 				gameStatus = 1;
@@ -273,7 +276,7 @@ public class GameClientUIController {
 			}
 		else if(turnOwner == 2 && diceValue !=0) { //Red player
 			try {
-				board.redPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+				board.redPawns.get(pawnToMove).changeLocation(diceValue, pawnToMove);
 				inGoal = board.redPawnsInGoal.size();
 				if (inGoal == 4 && player == 2) {
 					gameStatus = 1;
@@ -290,7 +293,7 @@ public class GameClientUIController {
 			board.makePawns();
 		}
 		else if (turnOwner == 3 && diceValue !=0) { //Yellow player
-			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			board.yellowPawns.get(pawnToMove).changeLocation(diceValue, pawnToMove);
 			inGoal = board.yellowPawnsInGoal.size();
 			if (inGoal == 4 && player == 3) {
 				gameStatus = 1;
@@ -303,7 +306,7 @@ public class GameClientUIController {
 			board.makePawns();
 		}
 		else if (turnOwner == 4 && diceValue !=0) { //Blue player
-			board.bluePawns.get(pawnToMove).changeLocation(diceValue, turnOwner, pawnToMove);
+			board.bluePawns.get(pawnToMove).changeLocation(diceValue, pawnToMove);
 			inGoal = board.bluePawnsInGoal.size();
 			if (inGoal == 4 && player == 4) {
 				gameStatus = 1;
@@ -403,6 +406,10 @@ public class GameClientUIController {
 	}
 	public int getPlayer() {
 		return player;
+	}
+	
+	public int getTurnOwner() {
+		return turnOwner;
 	}
 	
 	public void setPlayerName(int pnr, String name) {
@@ -530,6 +537,8 @@ public class GameClientUIController {
 		} else {
 			greenPlayer.setText(Main.messages.getString("GREEN") + " " + playerName1 + " - " + Main.messages.getString("ROLL"));
 			turnOwner = 1;
+			gameStatus = 1;
+			gameOver = true;
 		}
 	}
 	public void CheckForPlayersRed() {
@@ -550,6 +559,8 @@ public class GameClientUIController {
 			redPlayer.setText(Main.messages.getString("RED") 
 					+ " " + playerName2 + " - " + Main.messages.getString("ROLL"));
 			turnOwner = 2;
+			gameStatus = 1;
+			gameOver = true;
 		}
 	}
 	public void CheckForPlayersYellow() {
@@ -570,6 +581,8 @@ public class GameClientUIController {
 			yellowPlayer.setText(Main.messages.getString("YELLOW") 
 					+ " " + playerName3 + " - " + Main.messages.getString("ROLL"));
 			turnOwner = 3;
+			gameStatus = 1;
+			gameOver = true;
 		}
 	}
 	public void CheckForPlayersBlue() {
@@ -590,6 +603,8 @@ public class GameClientUIController {
 			turnOwner = 4;
 			bluePlayer.setText(Main.messages.getString("BLUE") 
 					+ " " + playerName4 + " - " + Main.messages.getString("ROLL"));
+			gameStatus = 1;
+			gameOver = true;
 		}
 	}
 		

@@ -227,10 +227,17 @@ public class GameHandler {
 			@Override
 			public void handle(Event e) {
 				String dcPlayer;
+				int p, turnowner;
 				if (gameClientUIController != null) {
+					p = gameClientUIController.getPlayer();
+					turnowner = gameClientUIController.getTurnOwner();
 					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
-					sendText(Constants.DISCONNECT + dcPlayer);
-					Main.sendText(Constants.GAMELOST);
+					if(p == turnowner) { //Check if player disconnected on his/her own turn
+						sendText(Constants.DICEVALUE + 0 + p + 0);
+					}
+					sendText(Constants.DISCONNECT + dcPlayer);	//Disconnect the player and remove the player from the server
+					Main.sendText(Constants.GAMELOST); 
+						
 				}
 				
 				Main.cHandler.leaveGameChat(hostName);

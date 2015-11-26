@@ -359,7 +359,7 @@ public class Main extends Application {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
 	            	serverOnline = false;
 	            	Platform.runLater(() -> {
-	            		showAlert(messages.getString("SERVERISDOWNTITLE"), messages.getString("SERVERISDOWNCONTENT"));
+	            		showAlert(messages.getString("COULDNOTCONNECTSERVERTITLE"), messages.getString("COULDNOTCONNECTSERVERCONTENT"));
 	            		System.exit(1);
 	            	});
 	            	

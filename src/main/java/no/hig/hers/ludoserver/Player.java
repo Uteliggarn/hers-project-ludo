@@ -138,7 +138,10 @@ public class Player {
 		return false;
 	}
 	
-
+	/**
+	 * Method for sending a player the list of chats.
+	 * This is run when the player first logs in.
+	 */
 	private void sendChatList() {
 		Iterator<Chat> i = GlobalServer.groupChatList.iterator();
 		i.next(); 		// Skip Global chat
@@ -151,7 +154,11 @@ public class Player {
 			}
 		}
 	}
-	
+	/**
+	 * Method for sending a player the playerlist
+	 * for a specific chat.
+	 * @param chat The chat to get the playerlist from.
+	 */
 	public void sendPlayerList(Chat chat) {
 		Iterator<String> y = chat.getPlayerList().iterator();
 		while (y.hasNext()) {
@@ -166,6 +173,13 @@ public class Player {
 		}	
 		
 	}
+	
+	/**
+	 * Method for sending a player the top ten
+	 * played and won lists.
+	 * First retrieves it from the server,
+	 * then sends the lists one by one line.
+	 */
 	public void sendTopTenLists() {
 		try {
 			String toptenPlayedName = null;
@@ -190,10 +204,15 @@ public class Player {
 			}
 		}
 		catch (Exception e) {
-			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
+			GlobalServer.LOGGER.log(Level.INFO, "Could not send top ten list to player", e);
 		}
 	}
 
+	/**
+	 * Method for sending a player his win and played scores.
+	 * First retrieves it from the DatabaseHandler,
+	 * then sends it.
+	 */
 	public void sendPlayerScores() {
 		int won = DatabaseHandler.retrievePlayersMatches(playerID, DatabaseHandler.MATCHESWON);
 		int played = DatabaseHandler.retrievePlayersMatches(playerID, DatabaseHandler.MATCHESPLAYED);
@@ -202,43 +221,8 @@ public class Player {
 			sendText(Constants.PLAYERSCORES + Integer.toString(won));
 			sendText(Constants.PLAYERSCORES + Integer.toString(played));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.INFO, "Could not send playerscores to player", e);
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	Iterator<Player> i = GlobalServerMain.application.player.iterator();
-	while (i.hasNext()) {
-		Player t = i.next();
-		try {
-			sendText(Constants.GLOBALCHAT + t.returnName());
-			t.sendText(Constants.GLOBALCHAT + returnName());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
-	
-	
-	Iterator<Player> i = player.iterator();
-    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-    	Player t = i.next();
-    	p.sendText(Constants.JOIN + t.returnName());
-    	t.sendText(Constants.JOIN + p.returnName());
-    } 
-	*/
-	
-	
 }

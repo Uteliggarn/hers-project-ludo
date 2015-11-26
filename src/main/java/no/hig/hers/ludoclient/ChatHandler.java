@@ -25,8 +25,9 @@ public class ChatHandler {
 	private List<ClientChatOverlayController> controllers;
 	
 	/**
-	 * Global chat room tab is created when constructor is called
-	 * @param chatTabs TabPane object to be used in the class
+	 * Default constructor.
+	 * Sets up chats, and adding the global chat.
+	 * @param chatTabs The chattabs that the ChatHandler will handle.
 	 */
 	public ChatHandler(TabPane chatTabs) {
 		this.chatTabs = chatTabs;
@@ -130,10 +131,14 @@ public class ChatHandler {
 	 * @param hostName The gamechat to leave.
 	 */
 	public void leaveGameChat(String hostName) {
+		String chatName = Constants.GAMECHAT + hostName.substring(Constants.IDGK.length());
+		
 		for (int i = 0; i < chats.size(); i++) {
-			if (chats.get(i).equals(Constants.GAMECHAT + hostName)) {
-				chatTabs.getTabs().remove(i);
+			if (chats.get(i).getId().equals(chatName))
 				chats.remove(i);
+			if (chatTabs.getTabs().get(i).getId().equals(chatName)) {
+				chatTabs.getTabs().remove(i);
+				Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + chatName);
 			}
 		}
 	}
