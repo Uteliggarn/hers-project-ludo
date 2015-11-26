@@ -26,11 +26,12 @@ public class ServerTest {
 	private boolean noMatch;
 	
 	/**
-	 * The server class listens to the socket for the message
+	 * The server class listens to the socket for the message. When the message is read
+	 * it gets compared to see if it is the same.
 	 * @author bne9988
 	 *
 	 */
-	private class Server {
+	private class Server implements Runnable{
 		private ServerSocket serverSocket;
 		private Socket socket;
 		private BufferedReader input;
@@ -50,33 +51,27 @@ public class ServerTest {
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
-			
-			executorService = Executors.newCachedThreadPool();
-			startListener();
-			executorService.shutdown();
 		}
 		
 		/**
 		 * Continues to loop until the message is noticed
 		 */
-		public void startListener() {
+		public void run() {
 			noMatch = true;
-			executorService.execute(() -> {
-				while (noMatch) {
-					
-					try {
-						String str = read();
-						if (str != null && str.equals(text)) {
-							noMatch = false;
-						}
-						
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+			while (noMatch) {
+				
+				try {
+					String str = read();
+					if (str != null && str.equals(text)) {
+						noMatch = false;
 					}
 					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			});
+				
+			}
 		}
 		
 		public String read() throws IOException {
@@ -104,14 +99,6 @@ public class ServerTest {
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
-			
-			try {
-				sendText(text);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 		}
 		
 		public void sendText(String text) throws IOException {
@@ -123,9 +110,16 @@ public class ServerTest {
 
 	@Test
 	public void test() {
-		while (noMatch) {
-			new Server();
-			new Client();
+		//Server server = new Server();
+		(new Thread(new Server())).start();
+		
+		Client client = new Client();
+			
+		try {
+			client.sendText(text);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		assertFalse(noMatch);

@@ -642,7 +642,7 @@ public class LudoBoardFX extends Pane {
 		/**
 		 * Class constructor that makes every pawn and set their starting location
 		 * @param loc holds the start location of the current pawn
-		 * @param col holds the same nuber as location, but this is to verify the color
+		 * @param col holds the same number as location, but this is to verify the color
 		 */
 		public Pawned(int loc, int col){
 			homelocation = loc;

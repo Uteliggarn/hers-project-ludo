@@ -35,4 +35,8 @@ public class Chat {
 		return false;
 	}
 	
+	public boolean noPlayers() {
+		return playerList.isEmpty();
+	}
+	
 }
