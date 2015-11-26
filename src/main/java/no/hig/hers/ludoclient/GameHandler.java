@@ -43,6 +43,8 @@ public class GameHandler {
 		this.caseNr = caseNr;
 		this.ip = ip;
 		
+		System.out.println("\nHva er ipen min: " + ip);
+		
 		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
 		
 		connect();
