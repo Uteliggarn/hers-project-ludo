@@ -118,4 +118,9 @@ public class ChatHandler {
             
         }
 	}
+
+	public void leaveGameChat(String hostName) {
+		// TODO Auto-generated method stub
+		
+	}
 }
