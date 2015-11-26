@@ -10,8 +10,6 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.junit.Test;
 
@@ -21,7 +19,6 @@ import org.junit.Test;
  *
  */
 public class ServerTest {
-	private ExecutorService executorService;
 	private final String text = "This is a test";
 	private boolean noMatch;
 	
@@ -70,7 +67,6 @@ public class ServerTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 		}
 		
@@ -114,7 +110,7 @@ public class ServerTest {
 		(new Thread(new Server())).start();
 		
 		Client client = new Client();
-			
+		
 		try {
 			client.sendText(text);
 			

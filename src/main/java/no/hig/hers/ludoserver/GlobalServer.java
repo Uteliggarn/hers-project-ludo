@@ -83,8 +83,6 @@ public class GlobalServer extends JFrame{
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot set the socket", ioe);
 			System.exit(1);
 		}
-		
-		
 	}
 	
 
