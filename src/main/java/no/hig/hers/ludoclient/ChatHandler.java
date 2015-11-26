@@ -13,7 +13,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import no.hig.hers.ludoshared.Constants;
 /**
- * Class for handling chats.
+ * Class for handling chats, clientside
  * This handles the chat tabs, and the chat-related messages.
  * @author Daniel Rosland on 13.11.2015
  */
@@ -82,30 +82,6 @@ public class ChatHandler {
 		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
-        	
-            if (message.startsWith(tab.getId() + Constants.JOIN)){	// Sjekker om noen har lyst � joine
-            	Platform.runLater(() -> {
-            	String username = message.substring(tab.getId().length() + 5);
-            	if (message.startsWith("Global") && !Main.playerList.contains(username))
-					Main.playerList.add(username);
-            	c.addUserToList(username);
-            	});
-            }
-            else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(Constants.LOGOUT.length());
-            	Main.playerList.remove(username);
-            	c.removeUserFromList(username);
-            } 
-            else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
-            	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
-            }
-        }
-	}
-	
-	public void handleChatMessage2(String message) {
-		for (int i = 0; i < chats.size(); i++) { // Looper igjen alle groupChatene som finnes i listen
-        	Tab tab = chats.get(i);
-        	ClientChatOverlayController c = controllers.get(i);
 
             if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst � joine
             	Platform.runLater(() -> {
@@ -131,10 +107,15 @@ public class ChatHandler {
 	                	}
                 });
             }
-            
+            else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
+            	String username = message.substring(Constants.LOGOUT.length());
+            	Main.playerList.remove(username);
+            	c.removeUserFromList(username);
+            } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
             }
+            
         }
 	}
 }

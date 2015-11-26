@@ -148,7 +148,7 @@ public class GlobalServer extends JFrame{
 							} catch (IOException ioe) {
 								i.remove();
 								
-								messages.put(Constants.LOGOUT + p.getName());
+								messages.put(Constants.CHATMESSAGE + Constants.LOGOUT + p.getName());
 								messages.put(p.getName() + " got lost in hyperspace");
 								GlobalServer.LOGGER.log(Level.WARNING, "Error with reading message", ioe);
 							}
@@ -212,7 +212,7 @@ public class GlobalServer extends JFrame{
 				groupChatList.get(i).removePlayer(p.getName());
 
 			try {
-				messages.put(Constants.LOGOUT + p.getName());
+				messages.put(Constants.CHATMESSAGE + Constants.LOGOUT + p.getName());
 			} catch (Exception e) {
 				GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 			}
@@ -318,7 +318,7 @@ public class GlobalServer extends JFrame{
 								p.sendText(message);
 							} catch (IOException ioe) {
 								i.remove();
-								messages.add(Constants.LOGOUT + p.getName());
+								messages.add(Constants.CHATMESSAGE + Constants.LOGOUT + p.getName());
 								messages.add(p.getName() + " got lost in hyperspace");
 								GlobalServer.LOGGER.log(Level.WARNING, "Cannot send message", ioe);
 							}

@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -63,7 +64,7 @@ public class CreateGameLobbyController {
 		String tmp;
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
-		tmp = ("Gamechat: " + hostName.substring(4, hostName.length()));
+		tmp = ("Gamechat-" + hostName.substring(4, hostName.length()));
 		Main.sendText(Constants.NEWCHAT + tmp);
 		//Main.sendText(tmp + Constants.JOINCHAT + Main.userName);
 		Main.cHandler.addNewChat(tmp);

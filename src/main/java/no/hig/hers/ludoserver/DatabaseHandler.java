@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 
 public class DatabaseHandler {
 
@@ -55,8 +56,7 @@ public class DatabaseHandler {
 		try {
 			return getResult(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't get result from database", e);
 		}
 		return null;
 	}
@@ -75,8 +75,7 @@ public class DatabaseHandler {
 			if (resultSet.next()) 
 				return (int) resultSet.getObject(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't get result from database", e);
 		}
 
 		return 0;
@@ -102,8 +101,7 @@ public class DatabaseHandler {
 			
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't connect to database", e);
 		}
 	}
 	
@@ -130,8 +128,7 @@ public class DatabaseHandler {
 			}
 			else connection.close();
 		} catch (SQLException e) {
-			System.out.println(CONNECTION_FAILED);
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't connect to database", e);
 		}
 		return false;
 	}
@@ -147,8 +144,7 @@ public class DatabaseHandler {
 			if (resultSet.next()) 
 				return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't retrieve result from database", e);
 		}
 		return false;
 	}
@@ -168,8 +164,7 @@ public class DatabaseHandler {
 			if (resultSet.next()) 
 				return (int) resultSet.getObject(1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't get result from database", e);
 		}
 		return 0;
 	}
@@ -193,7 +188,7 @@ public class DatabaseHandler {
 	        }
 
 	    } catch(Exception ex){
-	       // Log this
+	    	GlobalServer.LOGGER.log(Level.SEVERE, "Couldn't hash password", ex);
 	    }
 	    return hexString.toString();
 	}

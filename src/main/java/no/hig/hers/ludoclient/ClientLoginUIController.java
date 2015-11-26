@@ -20,8 +20,8 @@ public class ClientLoginUIController {
     @FXML
 	public void initialize() {
 		try {
-			usernameTextField.setPromptText("Username");
-			passwordTextField.setPromptText("Password");	
+			usernameTextField.setPromptText(Main.messages.getString("USER"));
+			passwordTextField.setPromptText(Main.messages.getString("PASSWORD"));	
 		} catch (Exception e) {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to make ClientLoginUI", e);
 		}
