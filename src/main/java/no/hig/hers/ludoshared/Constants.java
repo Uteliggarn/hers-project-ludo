@@ -5,7 +5,6 @@ public class Constants {
 	public final static String GAMEMESSAGE = "GAMEMESSAGE:";	// Every game command starts with this keyword
 	public final static String CHATMESSAGE = "CHATMESSAGE:";	// Every chat command starts with this keyword
 	public final static String PLAYERMESSAGE = "PLAYERMESSAGE:";	// Every player message starts with this keyword
-	public final static String GENERALMESSAGE = "GENERALMESSAGE:";	// Every general message starts with this keyword
 	
 	// General messages:
 	public final static String JOIN = "JOIN:";					// Joining game or chat
