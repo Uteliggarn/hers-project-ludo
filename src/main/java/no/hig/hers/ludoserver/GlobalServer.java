@@ -42,9 +42,11 @@ public class GlobalServer extends JFrame{
 	
 	private static String tmpName;
 	private static int tmpPort;
+	private static String tmpIP;
 	
     final static String fileNameEnd = "ChatLog.log"; //The end of the filename
     static String fileName; //The whole filename
+
     static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
     public static void main( String[] args ) {
@@ -254,12 +256,13 @@ public class GlobalServer extends JFrame{
 							que.get(i).sendText(Constants.HOST  + que.get(i).getIPaddress());
 							tmpPort = que.get(i).getServerPort();
 							tmpName = que.get(i).getName();
+							tmpIP = que.get(i).getIPaddress();
 							i = 0;
 
 						}
 						else if (hostFound == true && que.get(i).getName() != tmpName){
 							que.get(i).sendText(Constants.HOTJOIN + tmpName);
-							que.get(i).sendText(Integer.toString(tmpPort));
+							que.get(i).sendText(Integer.toString(tmpPort) + tmpIP);
 						}
 					}
 					if (hostFound == false)
