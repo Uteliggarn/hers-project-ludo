@@ -2,12 +2,8 @@ package no.hig.hers.ludoclient;
 
 import java.io.IOException;
 import java.util.logging.Level;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -17,7 +13,17 @@ public class ClientLoginUIController {
 
     @FXML
     private TextField usernameTextField;
-
+    
+    @FXML
+	public void initialize() {
+		try {
+			usernameTextField.setPromptText("Username");
+			passwordTextField.setPromptText("Password");	
+		} catch (Exception e) {
+			Main.LOGGER.log(Level.WARNING, "Error while trying to make ClientLoginUI", e);
+		}
+	}
+    
     /**
      * Method that logs in the user, and stores the ID
      * and username for further use.
