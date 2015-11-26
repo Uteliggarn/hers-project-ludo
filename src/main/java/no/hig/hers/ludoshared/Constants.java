@@ -33,6 +33,7 @@ public class Constants {
 	public final static String DISCONNECT = "DISCONNECT:";		// A player leaves the game tab
 	public final static String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
 	public final static String QUEOPEN = "QUEOPEN";				// Reopen the que button if noone could host a game
+	public final static String GAMECHAT = "Gamechat-";
 	
 	
 	// Login/Register-related type messages:
@@ -45,6 +46,7 @@ public class Constants {
 	public final static String GETPLAYERLIST = "GETPLAYERLIST";	// Client asks for the list
     public final static String TOPPLAYED = "TOPLISTPLAYED:";	// Returns top played from server
 	public final static String TOPWON = "TOPLISTWON:";			// Returns top won from server
+	
 	
 	private Constants() {}
 }

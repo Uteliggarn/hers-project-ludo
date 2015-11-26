@@ -50,25 +50,6 @@ public class GameHandler {
 		connect();
 		createNewLobby();
 	}
-	
-	private void addPlayersToList() {		// TODO: this needs fixing
-		executorService.execute(() -> {
-			while (true) {
-				Platform.runLater(() -> {
-					for (int i=0; i<Main.playerList.size(); i++) {
-						if (Main.playerList.get(i) != Main.userName)
-							createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
-					}
-				});
-				//The thread goes to sleep to save the CPU energy
-				try {
-				//	Thread.sleep(5000);
-				} catch (Exception e) {
-					Main.LOGGER.log(Level.WARNING, "Error sleeping", e);
-				}
-			}
-		});
-	}	
 
 	public String getHostName() {
 		return hostName;
@@ -291,4 +272,15 @@ public class GameHandler {
 		} 
 	}
 	
+	public boolean getCaseNr() {
+		return caseNr == 1? true : false;
+	}
+	
+	public void removePlayer(String name) {
+		createGameLobbyController.removePlayerFromList(name);
+	}
+	
+	public void addPlayer(String name) {
+		createGameLobbyController.addPlayerToList(name);
+	}
 }

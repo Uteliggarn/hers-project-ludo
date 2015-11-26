@@ -74,15 +74,15 @@ public class CreateGameLobbyController {
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
 		tmp = ("Gamechat-" + hostName.substring(4, hostName.length()));
-		Main.sendText(Constants.NEWCHAT + tmp);
-		//Main.sendText(tmp + Constants.JOINCHAT + Main.userName);
 		Main.cHandler.addNewChat(tmp);
 		
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "") 
-			playerTwo.setText(name);	
+		if (playerTwo.getText() == "") {
+			playerTwo.setText(name);
+			startGameButton.setDisable(false);
+		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
 		else if (playerFour.getText() == "") 
