@@ -18,6 +18,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * GameHandler creates all the different lobbyController objects and game object and controller
+ * createGameLobby, hostGameLobby and playerGameLobby
+ * gameClientUI
+ * The connection too gameserver is also set aswell as the connection loop
+ * for proccessing messages from the gameserver
+ */
 public class GameHandler {
 	
 	private int serverPort;
@@ -37,25 +44,40 @@ public class GameHandler {
 	private int caseNr = 0;
 	private String ip;
 	
+	/**
+	 * Makes the thread for proccessConnection
+	 * And sets the connection information and who is hosting
+	 * and the type iof lobby to be created
+	 * @param serverPort Of the game host.
+	 * @param ip Of the game host.
+	 * @param caseNr Witch lobby type to be created.
+	 * @param hostName Name of the hosting player.
+	 */
 	public GameHandler(int serverPort, String ip, int caseNr, String hostName) {
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
 		this.ip = ip;
 		
-		System.out.println("\nHva er ipen min: " + ip);
-		
-		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		executorService = Executors.newFixedThreadPool(1); // Lager et pool av threads for bruk
 		
 		connect();
 		createNewLobby();
 	}
 
+	/**
+	 * Gives the hostName of the user that is hosting the game
+	 * @return hostName
+	 */
 	public String getHostName() {
 		return hostName;
 	}
 
-	
+	/**
+	 * Connects to the gameserver with the given ip and serverPort set in the
+	 * constructor and sends if the user is the host and the userName from when
+	 * you login
+	 */
 	public void connect() {
 		try {
 			connection = new Socket(ip, serverPort); // 128.39.83.87 // 127.0.0.1
@@ -95,6 +117,9 @@ public class GameHandler {
         }
     }
     
+    /**
+     * Starts an infinite loop to proccess all messages from the gameserver
+     */
 	public void processConnection() {
 		executorService.execute(() -> {
 			while (true) {
@@ -103,10 +128,10 @@ public class GameHandler {
 	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if (msg != null) {
-		                if(msg.startsWith(Constants.GAMESTART)) {
-		                	Platform.runLater(() -> {
-		                		int n = Integer.parseInt(msg.substring(10, 11));
-	                			
+		                if(msg.startsWith(Constants.GAMESTART)) {					// Makes the gameClientUIController if the message
+		                	Platform.runLater(() -> {								// "gamestart" is recived from the gameserver.
+		                		int n = Integer.parseInt(msg.substring(10, 11));	// and sets the connection to the game controller
+	                															
 	                			FXMLLoader loader = new FXMLLoader();
 	                			try {
 	                				System.out.print("Starter spill for " + n);
@@ -187,7 +212,12 @@ public class GameHandler {
 		});
 	}
 	
-
+	/**
+	 * Makes an new tab to be added to the gameTabs in Main
+	 * and setOnClosed on the tab to remove every object that is 
+	 * in the tab, and sends gamelost to globalserver
+	 * and disconnet to gameserver
+	 */
 	public void createNewLobby() {
 		Platform.runLater(() -> {
 		Tab tab = new Tab("Ludo");

@@ -76,8 +76,8 @@ public class ClientChatOverlayController {
 	}
 	
 	/**
-	 * 
-	 * @param id
+	 * Sets the id
+	 * @param id sets the id to object ID
 	 */
 	public void setID(String id) {
 		this.ID = id;

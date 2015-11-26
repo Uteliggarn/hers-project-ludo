@@ -2,12 +2,16 @@ package no.hig.hers.ludoclient;
 
 import java.util.logging.Level;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * Handles the controls of the register GUI
+ * Where the new username and passord is sent
+ * and the stage change back to login GUI
+ */
 public class ClientRegisterUIController {
     @FXML
     private PasswordField passwordTextField;
@@ -18,11 +22,20 @@ public class ClientRegisterUIController {
     @FXML
     private TextField usernameTextField;
 
+    /**
+     * Sends the user back to the login stage GUI
+     */
     @FXML
-    void cancelRegistration(ActionEvent event) {
+    void cancelRegistration() {
     	Main.changeScene(Main.loginScene);
     }
 
+    /**
+     * promts the user to type in a username and passord and sends
+     * it to the server to be confirmed
+     * and return the user back to the login GUI if the server
+     * accpets the new user request
+     */
     @FXML
     void registerUser() {
     	String username = usernameTextField.getText();
