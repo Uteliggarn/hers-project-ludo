@@ -18,7 +18,7 @@
          </contextMenu></ListView>
       <VBox layoutX="25.0" layoutY="71.0" prefHeight="200.0" prefWidth="275.0" spacing="4.0">
          <children>
-            <Label text="Host">
+            <Label fx:id="hostLabel" text="Host">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -28,7 +28,7 @@
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
-            <Label text="Invited Players">
+            <Label fx:id="playerLabel" text="Invited Players">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

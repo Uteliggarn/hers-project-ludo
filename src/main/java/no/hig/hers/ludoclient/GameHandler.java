@@ -49,7 +49,7 @@ public class GameHandler {
 		
 		connect();
 		createNewLobby();
-	}	
+	}
 
 	public String getHostName() {
 		return hostName;

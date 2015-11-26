@@ -11,7 +11,7 @@
    <children>
       <VBox layoutX="14.0" layoutY="94.0" prefHeight="200.0" prefWidth="225.0" spacing="8.0">
          <children>
-            <Label text="Host">
+            <Label fx:id="hostLabel" text="Host">
                <font>
                   <Font name="System Bold" size="21.0" />
                </font>
@@ -21,7 +21,7 @@
                   <Insets left="50.0" />
                </VBox.margin>
             </Label>
-            <Label text="Players">
+            <Label fx:id="playerLabel" text="Players">
                <font>
                   <Font name="System Bold" size="21.0" />
                </font>

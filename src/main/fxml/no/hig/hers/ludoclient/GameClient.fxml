@@ -15,25 +15,25 @@
          <top>
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="redPlayer" alignment="CENTER" contentDisplay="CENTER" text="Red player:" textFill="#fc0707" underline="true">
+                  <Label fx:id="redPlayer" alignment="CENTER" contentDisplay="CENTER" text="" textFill="#fc0707" underline="true">
                      <font>
                         <Font name="Arial" size="20.0" />
                      </font></Label>
-                  <Label fx:id="yellowPlayer" text="Yellow player:" textFill="#e1e117" underline="true">
+                  <Label fx:id="yellowPlayer" text="" textFill="#e1e117" underline="true">
                      <VBox.margin>
                         <Insets bottom="10.0" top="10.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
-                  <Label fx:id="bluePlayer" text="Blue player:" textFill="#0c2ccd" underline="true">
+                  <Label fx:id="bluePlayer" text="" textFill="#0c2ccd" underline="true">
                      <VBox.margin>
                         <Insets bottom="10.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
-                  <Label fx:id="greenPlayer" text="Green player:" textFill="#0be12b" underline="true">
+                  <Label fx:id="greenPlayer" text="" textFill="#0be12b" underline="true">
                      <font>
                         <Font name="Arial Italic" size="20.0" />
                      </font></Label>
