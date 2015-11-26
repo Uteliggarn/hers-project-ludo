@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 public class GlobalServerGUIHandler extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextArea outputArea;
 	
 	public GlobalServerGUIHandler() {
@@ -17,10 +18,10 @@ public class GlobalServerGUIHandler extends JFrame {
 		setUpGUI();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
 	/**
 	 * Method for setting up the server GUI.
 	 */
-	
 	private void setUpGUI() {
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Ariel", Font.PLAIN, 14));

@@ -6,10 +6,8 @@ import java.util.logging.Level;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * Class for handling chat messages,
- * serverside.
+ * Class for handling chat messages, serverside.
  * @author daniel on 26.11.2015
- *
  */
 
 public class ChatHandler {
@@ -90,7 +88,7 @@ public class ChatHandler {
 			try {
 				p.sendText(Constants.ERRORCHAT);
 			} catch (IOException ioe) {
-				ioe.printStackTrace();
+				GlobalServer.LOGGER.log(Level.INFO, "Couldn't send message to player", ioe);
 			}
 		else {
 			GlobalServer.groupChatList.add(newChat);
@@ -101,8 +99,17 @@ public class ChatHandler {
 			}
 			GlobalServer.GUI.displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.getName() + "\n");
 		}
-
 	}
+	
+	/**
+	 * Method for handling a player leaving a chat.
+	 * 
+	 * First finds the chat the player is trying to leave,
+	 * then removing the player from it.
+	 * Lastly, sends a message to all remaining players that the player has left.
+	 * @param p The leaving player
+	 * @param msg The chat the player is leaving
+	 */
 	static void playerLeaveChat(Player p, String msg) {
 		for (int i = 0; i < GlobalServer.groupChatList.size(); i++)
 			if (msg.equals(GlobalServer.groupChatList.get(i).getName())) {
