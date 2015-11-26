@@ -50,6 +50,7 @@ public class GlobalServer extends JFrame{
     
     private int tmpPort;
     private String tmpName;
+    private String tmpIP;
     
     static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
@@ -366,11 +367,12 @@ public class GlobalServer extends JFrame{
 							que.get(i).sendText(Constants.HOST  + que.get(i).getIPaddress());
 							tmpPort = que.get(i).getServerPort();
 							tmpName = que.get(i).getName();
+							tmpIP = que.get(i).getIPaddress();
 							i = 0;
 						}
 						else if (hostFound == true && que.get(i).getName() != tmpName){
 							que.get(i).sendText(Constants.HOTJOIN + tmpName);
-							que.get(i).sendText(Integer.toString(tmpPort));
+							que.get(i).sendText(Integer.toString(tmpPort) + tmpIP);
 						}
 					}
 					if (hostFound == false)

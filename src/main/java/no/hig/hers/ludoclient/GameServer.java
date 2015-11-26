@@ -159,7 +159,7 @@ public class GameServer {
 			                    	Player t = i.next();
 			                    	try {
 			                    		if(!t.getHost())
-			                    			t.sendText(t.getName());
+			                    			p.sendText(t.getName());
 			                    	} catch (IOException ioe) {
 			                    		ioe.printStackTrace();
 			                    	}
