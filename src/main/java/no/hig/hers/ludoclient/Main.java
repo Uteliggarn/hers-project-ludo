@@ -266,6 +266,10 @@ public class Main extends Application {
 		                else if (message.startsWith(Constants.HOST)) {
 		                	GameHandler gh = new GameHandler(serverPort, message.substring(5), 2, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
+		                	
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
 		                }
 		                else if (message.startsWith(Constants.HOTJOIN)) {
 		                	String tmp = Main.input.readLine();

@@ -222,9 +222,14 @@ public class GameHandler {
 				//hostname = taben. Mulig IDK
 				
 				String dcPlayer;
-				dcPlayer = Integer.toString(gameClientUIController.getPlayer());
-				sendText(Constants.DISCONNECT + dcPlayer);
-				Main.sendText(Constants.GAMELOST);
+				if (gameClientUIController != null) {
+					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
+					sendText(Constants.DISCONNECT + dcPlayer);
+					Main.sendText(Constants.GAMELOST);
+				}
+				if (Constants.IDGK + Main.userName == hostName)
+					Main.sendText(Constants.REMOVEHOST + hostName);
+				
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
 						Main.gameTabs.getTabs().remove(i);

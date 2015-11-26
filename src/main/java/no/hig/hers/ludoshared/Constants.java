@@ -41,12 +41,6 @@ public class Constants {
 
 	// Player-related type messages:
 	public final static String GETPLAYERLIST = "GETPLAYERLIST"; //Client asks for the list
-    public final static String TOPPLAYED = "TOPLISTPLAYED:"; //Returns top played from server
-	public final static String TOPWON = "TOPLISTWON:"; //Returns top won from server
-
-	
-	// TEMP (REMOVE?)
-	public final static String ERROR = "ERROR"; // Something went wrong
 	
 	private Constants() {}
 }
