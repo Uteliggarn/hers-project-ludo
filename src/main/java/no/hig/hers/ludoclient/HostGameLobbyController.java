@@ -16,6 +16,8 @@ public class HostGameLobbyController {
 	@FXML private Label playerTwo;
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
+	@FXML private Label playerLabel;
+	@FXML private Label hostLabel;
 	
 	@FXML private Button startGameButton;
 	
@@ -26,6 +28,7 @@ public class HostGameLobbyController {
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
+		setLabelText();
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -36,9 +39,10 @@ public class HostGameLobbyController {
 		String tmp;
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
-		tmp = ("Gamechat-" + hostName.substring(4, hostName.length()));
-		Main.sendText(Constants.NEWCHAT + tmp);
-		//Main.sendText(tmp + Constants.JOINCHAT + Main.userName);
+		
+		tmp = (Constants.GAMECHAT + hostName.substring(4, hostName.length()));
+		
+		Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + tmp);
 		Main.cHandler.addNewChat(tmp);
 	}
 	
@@ -51,6 +55,11 @@ public class HostGameLobbyController {
 			playerFour.setText(name);
 	}
 	
+	public void setLabelText() {
+		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
+		hostLabel.setText(Main.messages.getString("HOST"));
+		startGameButton.setText(Main.messages.getString("STARTGAME"));
+	}
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
 		try {
 			sendText(Constants.GAMESTART);

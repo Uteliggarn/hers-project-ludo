@@ -231,6 +231,8 @@ public class GlobalServer extends JFrame{
 		executorService.execute(() -> {
 			if (msg.equals(Constants.TOP))
 				p.sendTopTenLists();
+			else if (msg.equals(Constants.PLAYERSCORES))
+				p.sendPlayerScores();
 		});
 	}
 	
@@ -279,7 +281,7 @@ public class GlobalServer extends JFrame{
 			}
 			else if (msg.startsWith(Constants.INVITE)) {
 				GUI.displayMessage(p.getName() + " invited " + msg.substring(7) + " to play a game\n");
-			
+				
 				for (int y=0; y<players.size(); y++)
 					if(msg.substring(7).equals(players.get(y).getName())) {
 						players.get(y).sendText(Constants.JOIN + p.getName());

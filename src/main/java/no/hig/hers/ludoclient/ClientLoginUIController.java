@@ -7,6 +7,7 @@ import no.hig.hers.ludoclient.Main;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
 import no.hig.hers.ludoshared.Constants;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -18,10 +19,19 @@ public class ClientLoginUIController {
     private TextField usernameTextField;
     
     @FXML
+    private Button registerButton;
+    
+    @FXML
+    private Button loginButton;
+    
+    @FXML
 	public void initialize() {
 		try {
 			usernameTextField.setPromptText(Main.messages.getString("USER"));
-			passwordTextField.setPromptText(Main.messages.getString("PASSWORD"));	
+			passwordTextField.setPromptText(Main.messages.getString("PASSWORD"));
+			registerButton.setText(Main.messages.getString("REGISTERBUTTON"));
+			loginButton.setText(Main.messages.getString("LOGINBUTTON"));
+			
 		} catch (Exception e) {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to make ClientLoginUI", e);
 		}

@@ -97,9 +97,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			//connection = new Socket("128.39.83.87", 12344);	// Henrik
+			connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			connection = new Socket("127.0.0.1", 12344);
+			//connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -131,31 +131,24 @@ public class Main extends Application {
 			StackPane mainRoot = (StackPane)loader.load(getClass().getResource("ClientMainUI.fxml").openStream());
 			mainScene = new Scene(mainRoot);
 			mainScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
+
 			mainController = (ClientMainUIController) loader.getController();
 			
-			setUpTabs(mainRoot);
+			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+					
+			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+			
+			gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
+				if (newTab.getId().equals("main")) {
+					requestTopTen();
+					requestPlayerScores();
+				}
+			});
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
 		}	
-	}
-	
-	/**
-	 * Method for setting up the tabs,
-	 * and adding a listener to the Main tab.
-	 * @param mainRoot The root of the mainScene
-	 */
-	private void setUpTabs(StackPane mainRoot) {
-		chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-				
-		gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
-		
-		gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
-			if (newTab.getId().equals("main"))  
-				requestTopTen();
-		});
 	}
 	
 	/**
@@ -185,6 +178,10 @@ public class Main extends Application {
 		sendText(Constants.PLAYERMESSAGE + Constants.TOP);
 	}
 	
+	public static void requestPlayerScores() {
+		sendText(Constants.PLAYERMESSAGE + Constants.PLAYERSCORES);
+	}
+	
 	/**
 	 * Method for showing alerts to the user.
 	 * Just for simple error messages.
@@ -208,6 +205,7 @@ public class Main extends Application {
 		
 		if (newScene.equals(mainScene)) {
 			currentStage.setMaximized(true);
+			requestPlayerScores();
 			requestTopTen();
 		}
 	}
@@ -337,16 +335,23 @@ public class Main extends Application {
 		                	}
 		                	mainController.setTopTenWon(won);
 		                }
+		                else if (message.startsWith(Constants.PLAYERSCORES)) {
+		                	String won = message.substring(Constants.PLAYERSCORES.length());
+		                	message = Main.input.readLine();
+		                	String played = message.substring(Constants.PLAYERSCORES.length());
+		                	
+		                	mainController.setScores(won, played);
+		                }
 	                	
 		                else if (message.startsWith(Constants.CHATMESSAGE)) {
 		                	String msg = message.substring(Constants.CHATMESSAGE.length());
-		                	if (msg.startsWith(Constants.NEWCHAT)) 
+		                	if (msg.startsWith(Constants.NEWCHAT) && !msg.contains(Constants.GAMECHAT)) 
 		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
+		                	else if (msg.startsWith(Constants.REMOVECHAT) && !msg.contains(Constants.GAMECHAT))
+		                		mainController.removeChatFromList(msg.substring(Constants.REMOVECHAT.length()));
 		                	else cHandler.handleChatMessage(msg);
 		                }
-		                else if (message.startsWith(Constants.PLAYERMESSAGE)) {
-		                	
-		                }
+
     	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert(messages.getString("CHATROOMEXISTSTITLE"), messages.getString("CHATROOMEXISTSCONTENT"));
 	                }

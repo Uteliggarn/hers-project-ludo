@@ -60,15 +60,15 @@ public class ChatHandler {
 			}
 
 			Platform.runLater(() -> {
-    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-    				c.setID(name);
-    				controllers.add(c);
-    				chats.add(newTab);
-    				chatTabs.getTabs().add(newTab);
-    				
-    				if ("Global".equals(newTab.getId())) 
-    					newTab.setClosable(false);
-    				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogs� vil joine chaten.
+				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
+				c.setID(name);
+				controllers.add(c);
+				chats.add(newTab);
+				chatTabs.getTabs().add(newTab);
+				
+				if ("Global".equals(newTab.getId())) 
+					newTab.setClosable(false);
+				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogs� vil joine chaten.
 
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
@@ -86,8 +86,12 @@ public class ChatHandler {
             if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst � joine
             	Platform.runLater(() -> {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
-            	if (message.startsWith("Global") && !Main.playerList.contains(username))
-					Main.playerList.add(username);
+            	Main.playerList.add(username);
+            	if (tab.getId().equals("Global"))
+            		for (int y=0; y<Main.gameHandler.size(); y++) {
+                		if (Main.gameHandler.get(y).getCaseNr())
+                			Main.gameHandler.get(y).addPlayer(username);
+                	}
             	c.addUserToList(username);
             	});
             }
@@ -98,14 +102,25 @@ public class ChatHandler {
                 });
             }
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(Constants.LOGOUT.length());
-            	Main.playerList.remove(username);
-            	c.removeUserFromList(username);
+            	Platform.runLater(() -> {
+	            	String username = message.substring(Constants.LOGOUT.length());
+	            	for (int y=0; y<Main.gameHandler.size(); y++) {
+	            		if (Main.gameHandler.get(y).getCaseNr())
+	            			Main.gameHandler.get(y).removePlayer(username);
+	            	}
+	            	Main.playerList.remove(username);
+	            	c.removeUserFromList(username);
+            	});
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
             }
             
         }
+	}
+
+	public void leaveGameChat(String hostName) {
+		// TODO Auto-generated method stub
+		
 	}
 }

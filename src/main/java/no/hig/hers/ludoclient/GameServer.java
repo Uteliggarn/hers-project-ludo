@@ -78,9 +78,11 @@ public class GameServer {
 				                        	messages.put(msg);
 				                        }
 				                        if(msg.startsWith(Constants.GAMEOVER)) {
+				                        	i.remove();
 				                        	messages.put(msg);
 				                        }
 				                        if(msg.startsWith(Constants.DISCONNECT)) {
+				                        	i.remove();
 				                        	messages.put(msg);
 				                        }
 			                        }
@@ -152,12 +154,24 @@ public class GameServer {
 		                    synchronized (player) {
 		                    	player.add(p);
 		                    	
+		                    	int count = 0;
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
+			                    	++count;
 			                    	Player t = i.next();
 			                    	try {
-			                    		if(!t.getHost())
-			                    			p.sendText(t.getName());
+			                    		if(!t.getHost()) {
+			                    			p.sendText(Constants.JOIN + t.getName());
+			                    			if (!t.getName().equals(p.getName()) && !p.getHost()) {
+			                    				t.sendText(Constants.JOIN + p.getName());
+			                    			}
+			                    		}
+			                    		if (count == 4) {
+			                    			for (int y=0; y<player.size(); y++) {
+			                    				if (player.get(y).getHost())
+			                    					t.sendText(Constants.JOIN + p.getName());
+			                    			}
+			                    		}
 			                    	} catch (IOException ioe) {
 			                    		Main.LOGGER.log(Level.INFO, "Couldn't send gameserver messages", ioe);
 			                    	}

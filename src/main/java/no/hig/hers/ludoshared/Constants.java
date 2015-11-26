@@ -11,9 +11,11 @@ public class Constants {
 	public final static String LOGOUT = "LOGOUT:";				// Closing chat rooms
 	public final static String CLOGOUT = ">>>LOGOUT<<<";		// Closing the chat windows
 	public final static String TOP = "TOP";						// The client asks for top lists
+	public final static String PLAYERSCORES = "PLAYERSCORES";	// The client asks for his scores
 	
 	// Chat-related type messages:
 	public final static String NEWCHAT = "NEWGROUPCHAT:";		// Creates a new chat
+	public final static String REMOVECHAT = "REMOVECHAT:";		// Removes a chat
 	public final static String ERRORCHAT = "ERRORCHAT";			// An error in the chat
 	public final static String LEAVECHAT = "LEAVE:";			// Player leaves the chat
 	
@@ -33,7 +35,7 @@ public class Constants {
 	public final static String DISCONNECT = "DISCONNECT:";		// A player leaves the game tab
 	public final static String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
 	public final static String QUEOPEN = "QUEOPEN";				// Reopen the que button if noone could host a game
-	
+	public final static String GAMECHAT = "Gamechat-";
 	
 	// Login/Register-related type messages:
 	public final static String ACCEPTED = "ACCEPTED";			// Registration accepted
