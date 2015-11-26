@@ -21,7 +21,8 @@ public class Constants {
 	public final static String GLOBALCHAT = "GlobalJOIN:";	// Global chat name
 	public final static String QUEOPEN = "QUEOPEN";	
 	public final static String GAMEWON = "GAMEWON";	
-	public final static String GAMELOST = "GAMELOST";	
+	public final static String GAMELOST = "GAMELOST";
+	public final static String REMOVEHOST = "REMOVEHOST:";
 
 	public final static String LOGOUT = "LOGOUT:";
 	public final static String CLOGOUT = ">>>LOGOUT<<<";

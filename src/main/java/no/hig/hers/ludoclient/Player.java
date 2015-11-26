@@ -61,7 +61,7 @@ public class Player {
 	 * Returns the name of the Player
 	 * @return player name
 	 */
-	public String returnName() {
+	public String getName() {
 		return name;
 	}
 	
@@ -69,7 +69,7 @@ public class Player {
 		this.name = name;
 	}
 	
-	public int returnPlayerNr() {
+	public int getPlayerNr() {
 		return playerNr;
 	}
 	

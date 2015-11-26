@@ -97,7 +97,7 @@ public class Player {
 		return playerID;
 	}
 	
-	public String returnIPaddress() {
+	public String getIPaddress() {
 		return IPaddress;
 	}
 	

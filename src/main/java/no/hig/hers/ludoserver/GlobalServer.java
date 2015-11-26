@@ -319,14 +319,7 @@ public class GlobalServer extends JFrame{
 							gameList.add(Constants.IDGK + que.get(t));
 							hostFound = true;
 
-							que.get(t).sendText(Constants.HOST);
-							tmpPort = que.get(t).getServerPort();
-							tmpName = que.get(t).getName();
-							t = 0;
-						}
-						else if (hostFound == true && que.get(t).getName() != tmpName){
-
-							que.get(t).sendText(Constants.HOST + que.get(t).returnIPaddress());
+							que.get(t).sendText(Constants.HOST  + que.get(t).getIPaddress());
 							tmpPort = que.get(t).getServerPort();
 							tmpName = que.get(t).getName();
 							t = 0;
@@ -337,7 +330,6 @@ public class GlobalServer extends JFrame{
 						}
 					}
 					for (int i=0; i<que.size(); i++) {
-						que.get(i).sendText(Constants.QUEOPEN);	//TODO 
 						que.remove(i);
 					}
 				}
@@ -345,12 +337,8 @@ public class GlobalServer extends JFrame{
 
 			else if (msg.equals(Constants.CREATEGAME)) {
 				displayMessage(p.getName() + " created a new game: " + Constants.IDGK + p.getName() + "\n");
-				if (!gameList.contains(Constants.IDGK + p.getName())) {
-					gameList.add(Constants.IDGK + p.getName());
-					p.sendText(Constants.CREATEGAME + p.returnIPaddress());
-				}
-				else
-					p.sendText(Constants.ERROR);
+				gameList.add(Constants.IDGK + p.getName());
+				p.sendText(Constants.CREATEGAME + p.getIPaddress());
 			}
 			else if (msg.startsWith(Constants.INVITE)) {
 				displayMessage(p.getName() + " invited " + msg.substring(7) + " to play a game\n");
@@ -358,14 +346,16 @@ public class GlobalServer extends JFrame{
 				for (int y=0; y<players.size(); y++)
 					if(msg.substring(7).equals(players.get(y).getName())) {
 						players.get(y).sendText(Constants.JOIN + p.getName());
-						players.get(y).sendText(Integer.toString(p.getServerPort()) + p.returnIPaddress());
+						players.get(y).sendText(Integer.toString(p.getServerPort()) + p.getIPaddress());
 					}
 			}
 
 			else if (msg.equals(Constants.GAMEWON))
 				DatabaseHandler.updatePlayersMatches(p.getPlayerID(), true);
 			else if (msg.equals(Constants.GAMELOST))
-				DatabaseHandler.updatePlayersMatches(p.getPlayerID(), false);			
+				DatabaseHandler.updatePlayersMatches(p.getPlayerID(), false);
+			else if (msg.startsWith(Constants.REMOVEHOST))
+				gameList.remove(msg.substring(11));
 
 		} catch (IOException ioe) {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot send message", ioe);

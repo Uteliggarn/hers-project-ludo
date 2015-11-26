@@ -72,7 +72,7 @@ public class GameServer {
 											}
 				                        	for(int t=0; t < player.size(); t++) {
 				                        		String tmp;
-				                        		tmp = Constants.GAMENAME + (t+1) + player.get(t).returnName(); 
+				                        		tmp = Constants.GAMENAME + (t+1) + player.get(t).getName(); 
 				                        		messages.put(tmp);
 				                        	}
 				                        }
@@ -88,8 +88,8 @@ public class GameServer {
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                            messages.put(LOGOUT+p.returnName());
-		                            messages.put(p.returnName()+" got lost in hyperspace");
+		                            messages.put(LOGOUT+p.getName());
+		                            messages.put(p.getName()+" got lost in hyperspace");
 		                            Main.LOGGER.log(Level.WARNING, "Disconnected from server", ioe);
 		                        }
 		                    }
@@ -121,9 +121,9 @@ public class GameServer {
 		                        	p.sendText(message);
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                        	messages.add(LOGOUT+p.returnName());
-		                        	messages.add(p.returnName()+" got lost in hyperspace");
-		                        	Main.LOGGER.log(Level.WARNING, p.returnName() + " disconnected from server", ioe);
+		                        	messages.add(LOGOUT+p.getName());
+		                        	messages.add(p.getName()+" got lost in hyperspace");
+		                        	Main.LOGGER.log(Level.WARNING, p.getName() + " disconnected from server", ioe);
 		                        }
 		                    }
 	                    }
@@ -158,8 +158,8 @@ public class GameServer {
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
 			                    	Player t = i.next();
 			                    	try {
-				                    	p.sendText(Constants.JOIN + t.returnName());
-				                    	t.sendText(Constants.JOIN + p.returnName());
+				                    	p.sendText(Constants.JOIN + t.getName());
+				                    	t.sendText(Constants.JOIN + p.getName());
 			                    	} catch (IOException ioe) {
 			                    		ioe.printStackTrace();
 			                    	}
