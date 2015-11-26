@@ -143,6 +143,12 @@ public class GameHandler {
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 		                	});
 		                }
+		                else if(msg.startsWith(Constants.DISCONNECT)) {
+		                	Platform.runLater(() -> {
+		                		int player = Integer.parseInt(msg.substring(11,12));
+		                		gameClientUIController.setPlayerDisconnect(player);
+		                	});
+		                }
 		                else if(msg.startsWith(Constants.GAMEOVER)) {
 							Platform.runLater(() -> {
 								gameClientUIController.gameover();	
@@ -193,19 +199,10 @@ public class GameHandler {
 			@Override
 			public void handle(Event e) {
 				//hostname = taben. Mulig IDK
-/*
-				String tmp;
-				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
-					Tab tab = Main.gameTabs.getTabs().get(i);
-					tmp = tab.getId();
-					if(tmp.equals(hostName)) {
-						gameClientUIController.setPlayerDisconnect();
-						tmp =(Constants.GAMELOST);
-						Main.sendText(tmp);
-						Main.gameTabs.getTabs().remove(i);
-					}
-				}
-*/
+				
+				String dcPlayer;
+				dcPlayer = Integer.toString(gameClientUIController.getPlayer());
+				sendText(Constants.DISCONNECT + dcPlayer);
 				Main.sendText(Constants.GAMELOST);
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
@@ -218,7 +215,6 @@ public class GameHandler {
 						Main.gameHandler.remove(i);
 					}
 				}
-				//gameClientUIController.setPlayerDisconnect();
 			}
 		});
 		

@@ -31,6 +31,7 @@ public class Constants {
 	public final static String CLOGOUT = ">>>LOGOUT<<<";
 	public final static String ERROR = "ERROR";
 	public final static String TOP = "TOP";
+	public final static String DISCONNECT = "DISCONNECT:";
 	
 	private Constants() {}
 }
