@@ -29,4 +29,10 @@ public class Chat {
 			playerList.add(name);
 	}
 	
+	public boolean playerExists(String name) {
+		if (playerList.contains(name))
+			return true;
+		return false;
+	}
+	
 }

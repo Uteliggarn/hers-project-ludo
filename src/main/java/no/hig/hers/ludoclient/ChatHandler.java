@@ -52,7 +52,7 @@ public class ChatHandler {
 				newTab.setOnClosed(new EventHandler<Event>() {
 					@Override
 					public void handle(Event e) {
-						Main.sendText(Constants.LEAVECHAT + newTab.getId());
+						Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + newTab.getId());
 					}
 				});
 			} catch (IOException e) {
@@ -69,7 +69,7 @@ public class ChatHandler {
     				if ("Global".equals(newTab.getId())) 
     					newTab.setClosable(false);
     				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogs� vil joine chaten.
-    				Main.sendText(Constants.PLAYERMESSAGE + Constants.GETPLAYERLIST);
+
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
 	}
