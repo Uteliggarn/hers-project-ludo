@@ -10,11 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.paint.Paint;
 
 /**
  * Class that keeps track of the Ludogame. 
@@ -785,7 +781,7 @@ public class LudoBoardFX extends Pane {
 				break;
 			case 3: //Red pawn
 				n = coordinatesRed.size() - 1;
-				if (n == location) {	//Sjekker om den er i mål
+				if (n == location) {	//Sjekker om den er i mï¿½l
 					int j;
 					Pawned temp;
 					j = getpawnInGoalLocation(color);

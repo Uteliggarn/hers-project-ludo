@@ -9,10 +9,8 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.shape.Rectangle;
 import no.hig.hers.ludoshared.Constants;
 /**
  * Class for handling chats.
@@ -70,7 +68,7 @@ public class ChatHandler {
     				
     				if ("Global".equals(newTab.getId())) 
     					newTab.setClosable(false);
-    				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern også vil joine chaten.
+    				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogsï¿½ vil joine chaten.
     				Main.sendText(Constants.PLAYERMESSAGE + Constants.GETPLAYERLIST);
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");
@@ -85,7 +83,7 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
         	
-            if (message.startsWith(tab.getId() + Constants.JOIN)){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(tab.getId() + Constants.JOIN)){	// Sjekker om noen har lyst ï¿½ joine
             	Platform.runLater(() -> {
             	String username = message.substring(tab.getId().length() + 5);
             	if (message.startsWith("Global") && !Main.playerList.contains(username))
@@ -109,7 +107,7 @@ public class ChatHandler {
         	Tab tab = chats.get(i);
         	ClientChatOverlayController c = controllers.get(i);
 
-            if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst å joine
+            if (message.startsWith(Constants.JOIN + tab.getId() + ":")){	// Sjekker om noen har lyst ï¿½ joine
             	Platform.runLater(() -> {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
             	if (message.startsWith("Global") && !Main.playerList.contains(username))

@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
