@@ -10,10 +10,14 @@ public class PlayerGameLobbyController {
 	@FXML private Label playerTwo;
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
+	@FXML private Label playerLabel;
+	@FXML private Label hostLabel;
+	
 	
 	String host;
 	
 	public void initialize() {
+		setLabelText();
 		playerOne.setText("");
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -24,6 +28,11 @@ public class PlayerGameLobbyController {
 		playerOne.setText(hostName.substring(4));
 		host = hostName;
 		joinGameChat();
+	}
+	
+	public void setLabelText() {
+		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
+		hostLabel.setText(Main.messages.getString("HOST"));
 	}
 	
 	public void joinedPlayer(String name) {

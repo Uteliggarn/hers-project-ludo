@@ -38,12 +38,12 @@
                </GridPane.margin>
             </TextField>
             <PasswordField fx:id="passwordTextField" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#userLogin" text="Login" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#userLogin" text="Login" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font name="Arial" size="18.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#userRegister" text="Register" GridPane.rowIndex="3">
+            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#userRegister" text="Register" GridPane.rowIndex="3">
                <font>
                   <Font name="Arial Italic" size="18.0" />
                </font>

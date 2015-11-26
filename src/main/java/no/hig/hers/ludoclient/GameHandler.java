@@ -51,7 +51,6 @@ public class GameHandler {
 		createNewLobby();
 	}
 	
-
 	private void addPlayersToList() {		// TODO: this needs fixing
 		executorService.execute(() -> {
 			while (true) {
