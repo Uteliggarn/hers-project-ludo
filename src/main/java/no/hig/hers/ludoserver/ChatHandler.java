@@ -83,8 +83,7 @@ public class ChatHandler {
 	 */
 	static void createNewChat(Player p, String msg) {
 		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
-		if(GlobalServer.groupChatList.contains(newChat) 
-				&& GlobalServer.groupChatList.contains(new Chat(Constants.IDGK + p.getName())))
+		if(GlobalServer.groupChatList.contains(newChat))
 			try {
 				p.sendText(Constants.ERRORCHAT);
 			} catch (IOException ioe) {
