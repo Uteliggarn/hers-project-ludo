@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import no.hig.hers.ludoshared.Constants;
+
 /**
  * Class for handling chats, clientside
  * This handles the chat tabs, and the chat-related messages.
@@ -93,9 +94,9 @@ public class ChatHandler {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
             	Main.playerList.add(username);
             	if (tab.getId().equals("Global"))
-            		for (int y=0; y<Main.gameHandler.size(); y++) {
-                		if (Main.gameHandler.get(y).getCaseNr())
-                			Main.gameHandler.get(y).addPlayer(username);
+            		for (int y=0; y<Main.gameHandler.size(); y++) {		//Finds the gameHandler object that
+                		if (Main.gameHandler.get(y).getCaseNr())		//is a createGameLobby
+                			Main.gameHandler.get(y).addPlayer(username);	//and removes the the player from the invite list
                 	}
             	c.addUserToList(username);
             	});
@@ -109,9 +110,9 @@ public class ChatHandler {
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
             	Platform.runLater(() -> {
 	            	String username = message.substring(Constants.LOGOUT.length());
-	            	for (int y=0; y<Main.gameHandler.size(); y++) {
-	            		if (Main.gameHandler.get(y).getCaseNr())
-	            			Main.gameHandler.get(y).removePlayer(username);
+	            	for (int y=0; y<Main.gameHandler.size(); y++) { //Finds the gameHandler object that
+	            		if (Main.gameHandler.get(y).getCaseNr())	//is a createGameLobby
+	            			Main.gameHandler.get(y).removePlayer(username);	//and removes the the player from the invite list
 	            	}
 	            	Main.playerList.remove(username);
 	            	c.removeUserFromList(username);

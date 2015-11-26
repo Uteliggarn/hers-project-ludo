@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
-import javafx.fxml.FXML;
-import no.hig.hers.ludoclient.Main;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+/**
+ * Handles the controls for the login GUI
+ * Where the username and passord is sent to the server
+ * And the Stage is changed too ClientMain
+ */
 public class ClientLoginUIController {
     @FXML
     private PasswordField passwordTextField;
@@ -24,6 +27,10 @@ public class ClientLoginUIController {
     @FXML
     private Button loginButton;
     
+    /**
+     * Internationalization of the TextFields and buttons is set.
+     * Function starts when the controller is made
+     */
     @FXML
 	public void initialize() {
 		try {
@@ -41,8 +48,7 @@ public class ClientLoginUIController {
      * Method that logs in the user, and stores the ID
      * and username for further use.
      * If successful, starts the connection, chat handler,
-     * and prepares a gameserver. 
-     * @param event
+     * and prepares a gameserver.
      */
     @FXML
     void userLogin() {
@@ -75,6 +81,9 @@ public class ClientLoginUIController {
 		}
     }
     
+    /**
+     * Changes the stage to the register stage
+     */
     @FXML
     void userRegister() {
     	Main.changeScene(Main.registerScene);	
