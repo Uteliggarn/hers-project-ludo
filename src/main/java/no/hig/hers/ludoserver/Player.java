@@ -193,6 +193,20 @@ public class Player {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
 		}
 	}
+
+	public void sendPlayerScores() {
+		int won = DatabaseHandler.retrievePlayersMatches(playerID, DatabaseHandler.MATCHESWON);
+		int played = DatabaseHandler.retrievePlayersMatches(playerID, DatabaseHandler.MATCHESPLAYED);
+		
+		try {
+			sendText(Constants.PLAYERSCORES + Integer.toString(won));
+			sendText(Constants.PLAYERSCORES + Integer.toString(played));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	
 	

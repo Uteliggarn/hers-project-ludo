@@ -141,8 +141,10 @@ public class Main extends Application {
 					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
 			
 			gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
-				if (newTab.getId().equals("main"))  
+				if (newTab.getId().equals("main")) {
 					requestTopTen();
+					requestPlayerScores();
+				}
 			});
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
@@ -176,6 +178,10 @@ public class Main extends Application {
 		sendText(Constants.PLAYERMESSAGE + Constants.TOP);
 	}
 	
+	public static void requestPlayerScores() {
+		sendText(Constants.PLAYERMESSAGE + Constants.PLAYERSCORES);
+	}
+	
 	/**
 	 * Method for showing alerts to the user.
 	 * Just for simple error messages.
@@ -199,6 +205,7 @@ public class Main extends Application {
 		
 		if (newScene.equals(mainScene)) {
 			currentStage.setMaximized(true);
+			requestPlayerScores();
 			requestTopTen();
 		}
 	}
@@ -328,6 +335,13 @@ public class Main extends Application {
 		                	}
 		                	mainController.setTopTenWon(won);
 		                }
+		                else if (message.startsWith(Constants.PLAYERSCORES)) {
+		                	String won = message.substring(Constants.PLAYERSCORES.length());
+		                	message = Main.input.readLine();
+		                	String played = message.substring(Constants.PLAYERSCORES.length());
+		                	
+		                	mainController.setScores(won, played);
+		                }
 	                	
 		                else if (message.startsWith(Constants.CHATMESSAGE)) {
 		                	String msg = message.substring(Constants.CHATMESSAGE.length());
@@ -335,9 +349,7 @@ public class Main extends Application {
 		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
 		                	else cHandler.handleChatMessage(msg);
 		                }
-		                else if (message.startsWith(Constants.PLAYERMESSAGE)) {
-		                	
-		                }
+
     	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert(messages.getString("CHATROOMEXISTSTITLE"), messages.getString("CHATROOMEXISTSCONTENT"));
 	                }

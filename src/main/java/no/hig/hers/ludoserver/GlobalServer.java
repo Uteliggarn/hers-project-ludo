@@ -231,6 +231,8 @@ public class GlobalServer extends JFrame{
 		executorService.execute(() -> {
 			if (msg.equals(Constants.TOP))
 				p.sendTopTenLists();
+			else if (msg.equals(Constants.PLAYERSCORES))
+				p.sendPlayerScores();
 		});
 	}
 	
