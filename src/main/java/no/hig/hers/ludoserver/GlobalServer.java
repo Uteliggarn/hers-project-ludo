@@ -194,6 +194,12 @@ public class GlobalServer extends JFrame{
 			
 		});
 	}
+	/**
+	 * Method for handling chat-related messages.
+	 * Creates a new thread that handles the message.
+	 * @param msg The message to handle
+	 * @param p The player that sent the message.
+	 */
 	private void handleChatMessages(String msg, Player p) {
 		executorService.execute(() -> {
 			displayMessage("handleChatMessages: " + msg + " \n");
