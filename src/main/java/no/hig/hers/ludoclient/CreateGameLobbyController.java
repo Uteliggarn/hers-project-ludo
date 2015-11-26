@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,6 +33,11 @@ public class CreateGameLobbyController {
 		playerTwo.setText("");
 		playerThree.setText("");
 		playerFour.setText("");
+		
+		for (int i=0; i<Main.playerList.size(); i++) {
+			if (!Main.playerList.get(i).equals(Main.userName))
+				playerList.getItems().add(Main.playerList.get(i));
+		}
 	}
 	
 	@FXML private void updateButtonPressed() {
@@ -46,8 +49,14 @@ public class CreateGameLobbyController {
 		}
 	}
 	
-	public void addNewPlayerToList(String name) {
-		
+	public void addPlayerToList(String name) {
+		if (!name.equals(Main.userName))
+			playerList.getItems().add(name);
+	}
+	
+	public void removePlayerFromList(String name) {
+		playerList.getSelectionModel().clearSelection();
+		playerList.getItems().remove(name);
 	}
 	
 	public void setHostPlayer(String hostName) {
@@ -66,10 +75,8 @@ public class CreateGameLobbyController {
 			playerTwo.setText(name);	
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.getText() == "") {
+		else if (playerFour.getText() == "") 
 			playerFour.setText(name);
-			startGameButton.setDisable(false);
-		}
 	}
 	
 	

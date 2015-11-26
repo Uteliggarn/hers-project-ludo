@@ -11,15 +11,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -61,7 +54,7 @@ public class Main extends Application {
 	
 	static TabPane gameTabs;
 	private static TabPane chatTabs;
-	private static ClientMainUIController mainController;
+	static ClientMainUIController mainController;
 	
 	static ExecutorService executorService;
 	private static String message;
@@ -100,9 +93,9 @@ public class Main extends Application {
 	 */
 	public static void connect() {
 		try {
-			connection = new Socket("128.39.83.87", 12344);	// Henrik
+			//connection = new Socket("128.39.83.87", 12344);	// Henrik
 			//connection = new Socket("128.39.80.117", 12344);	// Petter
-			//connection = new Socket("127.0.0.1", 12344);
+			connection = new Socket("127.0.0.1", 12344);
 			
 			output = new BufferedWriter(new OutputStreamWriter(
                     connection.getOutputStream()));
@@ -168,7 +161,8 @@ public class Main extends Application {
 	}
 	
 	public static void requestTopTen() {
-		sendText(userName + "TOP");
+		sendText(Constants.PLAYERMESSAGE + Constants.TOP);
+		// + userName + 
 	}
 	
 	/**
@@ -205,10 +199,15 @@ public class Main extends Application {
 	public static void sendLogin(String code, String username, String password) {
 		try {
 			mainController.setLabelUserName(username);
-	        Main.output.write(code + username);
+			
+			Main.output.write(code);
+			Main.output.newLine();
+	        Main.output.flush();
+	        
+	        Main.output.write(username);
 	        Main.output.newLine();
 	        Main.output.flush();
-	        Main.output.write(code + password);
+	        Main.output.write(password);
 	        Main.output.newLine();
 	        Main.output.flush(); 
 	    } catch (IOException ioe) {
@@ -226,6 +225,7 @@ public class Main extends Application {
      */
     public static void sendText(String textToSend) {
         try {
+        	System.out.println("SENT " + textToSend);
             output.write(textToSend);
             output.newLine();
             output.flush();
@@ -252,7 +252,8 @@ public class Main extends Application {
 	 */
 	private static void processConnection() {
 		executorService.execute(() -> {
-			while (true) {
+			boolean serverOnline = true;
+			while (serverOnline) {
 				try {
 	                message = Main.input.readLine();
 	                
@@ -265,6 +266,10 @@ public class Main extends Application {
 		                else if (message.startsWith(Constants.HOST)) {
 		                	GameHandler gh = new GameHandler(serverPort, message.substring(5), 2, Constants.IDGK + Main.userName);
 		                	gameHandler.add(gh);
+		                	
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
 		                }
 		                else if (message.startsWith(Constants.HOTJOIN)) {
 		                	String tmp = Main.input.readLine();
@@ -272,6 +277,10 @@ public class Main extends Application {
 		                	String ip = tmp.substring(5);
 		                	GameHandler gh = new GameHandler(port, ip, 3, Constants.IDGK + message.substring(8));
 		                	gameHandler.add(gh);
+
+		                	Platform.runLater(() -> {
+		                		mainController.openQueue();
+		                	});
 		                }
 		                else if (message.startsWith(Constants.JOIN)) {
 		                	String tmp = Main.input.readLine();
@@ -307,15 +316,29 @@ public class Main extends Application {
 		                		won[i][1] = message.substring(message.lastIndexOf(",") + 1, message.length());
 		                	}
 		                	mainController.setTopTenWon(won);
-		                }		
-		                 else if (message.startsWith(Constants.NEWCHAT))  //Legger til ny chatTab
-            				mainController.addChatToList(message.substring(13));
-    	                 else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
+		                }
+	                	
+		                else if (message.startsWith(Constants.CHATMESSAGE)) {
+		                	String msg = message.substring(Constants.CHATMESSAGE.length());
+		                	if (msg.startsWith(Constants.NEWCHAT)) 
+		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
+		                	else cHandler.handleChatMessage2(msg);
+		                }
+		                else if (message.startsWith(Constants.PLAYERMESSAGE)) {
+		                	
+		                }
+    	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
-    	                 else cHandler.handleChatMessage(message);
+    	                else cHandler.handleChatMessage(message);
 	                }
 	            } catch (Exception e) {
-	            	LOGGER.log(Level.WARNING, "Unable to receive message", e);	
+	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
+	            	serverOnline = false;
+	            	Platform.runLater(() -> {
+	            		showAlert("Server is down", "The server is currently down.\nPlease try again later");
+	            		System.exit(1);
+	            	});
+	            	
 	            }
 			}
 		});

@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 

@@ -3,7 +3,6 @@ package no.hig.hers.ludoclient;
 import java.util.Optional;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -22,6 +21,8 @@ public class ClientMainUIController {
 
     @FXML
     private Button queueButton;
+    
+    @FXML private Button newGameButton;
 
     @FXML
     private TabPane chatTabPane;
@@ -47,16 +48,26 @@ public class ClientMainUIController {
     
     @FXML
     void newGameButtonPressed() {
+    	Main.sendText(Constants.CREATEGAME);
+		count = 0;
+		newGameButton.setDisable(true);
+    	/*
     	for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
     		if (Main.gameTabs.getTabs().get(i).getId().equals(Constants.IDGK + Main.userName)) 
     			++count;
     		if (i+1 == Main.gameTabs.getTabs().size() && count == 0) {
     			Main.sendText(Constants.CREATEGAME);
     			count = 0;
+    			newGameButton.setDisable(true);
     		}
     		else if (i+1 == Main.gameTabs.getTabs().size() && count > 0)
-    			Main.showAlert("Error", "You're allready hosting a game.");
+    			Main.showAlert("Error", "You're already hosting a game.");
     	}
+    	*/
+    }
+    
+    public void openNewGameButton() {
+    	newGameButton.setDisable(false);
     }
     /**
      * Creates a TextInputDialog, asking the user to type a name for the new chat room.
@@ -72,8 +83,8 @@ public class ClientMainUIController {
     	dialog.setContentText("Please enter the name of the chatroom:");
 
     	Optional<String> result = dialog.showAndWait();
-    	result.ifPresent(name -> Main.sendText(Constants.NEWCHAT + name));
-    	result.ifPresent(name -> Main.sendText(name + Constants.JOINCHAT + Main.userName));
+    	result.ifPresent(name -> Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + name));
+    	result.ifPresent(name -> Main.cHandler.addNewChat(name));
     }
     
     @FXML
@@ -155,11 +166,6 @@ public class ClientMainUIController {
 	
 	public void openQueue() {
 		queueButton.setDisable(false);
-	}
-
-	@FXML
-	void getPlayerList() {
-		Main.getPlayers();
 	}
 	
 }

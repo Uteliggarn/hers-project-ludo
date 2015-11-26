@@ -1,16 +1,13 @@
 package no.hig.hers.ludoclient;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
+import no.hig.hers.ludoshared.Constants;
 
 public class ClientChatOverlayController {
 
@@ -32,7 +29,7 @@ public class ClientChatOverlayController {
     @FXML
     void sendChat(KeyEvent event) {
     	if (event.getCode() == KeyCode.ENTER && chatTextField.getText() != null) {
-    		Main.sendText(this.ID + ":" + chatTextField.getText().toString());
+    		Main.sendText(Constants.CHATMESSAGE + this.ID + ":" + chatTextField.getText().toString());
     		chatTextField.setText(null);
     	}
     }
@@ -46,7 +43,8 @@ public class ClientChatOverlayController {
     
     public void addUserToList(String name) {
     	Platform.runLater(() -> {
-    		playerListView.getItems().add(name);	
+    		if (!playerListView.getItems().contains(name))
+    			playerListView.getItems().add(name);	
     	});
     }
 

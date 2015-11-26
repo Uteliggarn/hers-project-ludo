@@ -43,15 +43,12 @@ public class HostGameLobbyController {
 	}
 	
 	public void joinedPlayer(String name) {
-		if (playerTwo.getText() == "") {
+		if (playerTwo.getText() == "")
 			playerTwo.setText(name);
-		}
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.getText() == "") {
+		else if (playerFour.getText() == "")
 			playerFour.setText(name);
-			startGameButton.setDisable(false);
-		}
 	}
 	
 	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	

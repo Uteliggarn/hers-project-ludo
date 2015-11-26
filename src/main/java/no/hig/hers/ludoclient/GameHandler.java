@@ -47,16 +47,32 @@ public class GameHandler {
 		
 		connect();
 		createNewLobby();
-		/*
-		if (caseNr == 1)
-			addPlayersToList();
-		*/
-		//executorService.shutdown();	// Dreper tr�den n�r klassen d�r
 	}
 	
-	public String returnHostName() {
+
+	private void addPlayersToList() {		// TODO: this needs fixing
+		executorService.execute(() -> {
+			while (true) {
+				Platform.runLater(() -> {
+					for (int i=0; i<Main.playerList.size(); i++) {
+						if (Main.playerList.get(i) != Main.userName)
+							createGameLobbyController.addNewPlayerToList(Main.playerList.get(i));
+					}
+				});
+				//The thread goes to sleep to save the CPU energy
+				try {
+				//	Thread.sleep(5000);
+				} catch (Exception e) {
+					Main.LOGGER.log(Level.WARNING, "Error sleeping", e);
+				}
+			}
+		});
+	}	
+
+	public String getHostName() {
 		return hostName;
 	}
+
 	
 	public void connect() {
 		try {			
@@ -198,12 +214,19 @@ public class GameHandler {
 		tab.setOnClosed(new EventHandler<Event>() {
 			@Override
 			public void handle(Event e) {
-				//hostname = taben. Mulig IDK
-				
 				String dcPlayer;
-				dcPlayer = Integer.toString(gameClientUIController.getPlayer());
-				sendText(Constants.DISCONNECT + dcPlayer);
-				Main.sendText(Constants.GAMELOST);
+				if (gameClientUIController != null) {
+					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
+					sendText(Constants.DISCONNECT + dcPlayer);
+					Main.sendText(Constants.GAMELOST);
+				}
+				
+				String tmp = Constants.IDGK + Main.userName;
+				if (tmp.equals(hostName)) {
+					Main.sendText(Constants.REMOVEHOST + hostName);
+					Main.mainController.openNewGameButton();
+				}
+				
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
 						Main.gameTabs.getTabs().remove(i);
@@ -211,7 +234,7 @@ public class GameHandler {
 				}
 				
 				for (int i=0; i<Main.gameHandler.size(); i++) {
-					if(hostName.equals(Main.gameHandler.get(i).returnHostName())) {
+					if(hostName.equals(Main.gameHandler.get(i).getHostName())) {
 						Main.gameHandler.remove(i);
 					}
 				}

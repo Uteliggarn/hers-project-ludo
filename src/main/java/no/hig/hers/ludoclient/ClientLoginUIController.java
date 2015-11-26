@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
+import javafx.fxml.FXML;
+import no.hig.hers.ludoclient.Main;
+import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -38,7 +41,7 @@ public class ClientLoginUIController {
 
     	int ID;
  
-    	Main.sendLogin("SENDLOGIN:", username, password);
+    	Main.sendLogin(Constants.SENDLOGIN, username, password);
     	try {
     		ID = Integer.valueOf(Main.input.readLine());
     		
