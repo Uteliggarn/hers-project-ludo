@@ -15,6 +15,7 @@ public class Player {
 	private BufferedWriter output;
 	
 	private String name;
+	private boolean host;
 	private int playerNr;
 
 	public Player(Socket connection, int nr) throws IOException {
@@ -23,7 +24,13 @@ public class Player {
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
 		
-		name = input.readLine();
+		String msg = input.readLine();
+		
+		if (msg.startsWith("1"))
+			host = true;
+		else if (msg.startsWith("2"))
+			host = false;
+		name = msg.substring(1);
 	}
 	
 	/**
@@ -68,6 +75,10 @@ public class Player {
 	
 	public int getPlayerNr() {
 		return playerNr;
+	}
+	
+	public boolean getHost() {
+		return  host;
 	}
 	
 }
