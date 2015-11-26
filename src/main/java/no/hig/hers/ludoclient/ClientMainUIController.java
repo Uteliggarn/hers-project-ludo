@@ -3,7 +3,6 @@ package no.hig.hers.ludoclient;
 import java.util.Optional;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;

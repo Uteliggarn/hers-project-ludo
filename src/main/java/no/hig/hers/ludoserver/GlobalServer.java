@@ -3,8 +3,6 @@ package no.hig.hers.ludoserver;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.*;
 import java.util.logging.Level;
@@ -194,6 +191,12 @@ public class GlobalServer extends JFrame{
 			
 		});
 	}
+	/**
+	 * Method for handling chat-related messages.
+	 * Creates a new thread that handles the message.
+	 * @param msg The message to handle
+	 * @param p The player that sent the message.
+	 */
 	private void handleChatMessages(String msg, Player p) {
 		executorService.execute(() -> {
 			displayMessage("handleChatMessages: " + msg + " \n");
