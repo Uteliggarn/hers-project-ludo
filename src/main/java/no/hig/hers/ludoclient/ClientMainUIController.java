@@ -106,9 +106,9 @@ public class ClientMainUIController {
     @FXML
     void createChatButtonPressed() {
     	TextInputDialog dialog = new TextInputDialog("");
-    	dialog.setTitle(Main.messages.getString("CHATROMCREATETITLE"));
+    	dialog.setTitle(Main.messages.getString("CHATROOMCREATETITLE"));
     	dialog.setHeaderText(null);
-    	dialog.setContentText(Main.messages.getString("CHATROMCREATECONTENT"));
+    	dialog.setContentText(Main.messages.getString("CHATROOMCREATECONTENT"));
 
     	Optional<String> result = dialog.showAndWait();
     	result.ifPresent(name -> Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + name));
@@ -181,13 +181,20 @@ public class ClientMainUIController {
 	    	}
     	});
     }
-
+    /**
+     * Method for adding a chat to the list
+     * @param name The chatname to add
+     */
     public void addChatToList(String name) {
        	Platform.runLater(() -> {
     			chatListView.getItems().add(name);	
     	});
     }
-    
+    /**
+     * Method for setting the labelUserName.
+     * This is run on login
+     * @param username The username to set
+     */
 	public void setLabelUserName(String username) {
 		labelUserName.setText(username);
 	}
@@ -199,6 +206,15 @@ public class ClientMainUIController {
 		Platform.runLater(() -> {
 		    labelPlayerWonScore.setText(won);
 		    labelPlayerPlayedScore.setText(played);
+		});
+	}
+	/**
+	 * Method for removing a chat from the list.
+ 	 * @param name The chatname to remove.
+	 */
+	public void removeChatFromList(String name) {
+		Platform.runLater(() -> {
+			chatListView.getItems().remove(name);
 		});
 	}
 	

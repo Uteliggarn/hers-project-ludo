@@ -347,6 +347,8 @@ public class Main extends Application {
 		                	String msg = message.substring(Constants.CHATMESSAGE.length());
 		                	if (msg.startsWith(Constants.NEWCHAT) && !msg.contains(Constants.GAMECHAT)) 
 		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
+		                	else if (msg.startsWith(Constants.REMOVECHAT) && !msg.contains(Constants.GAMECHAT))
+		                		mainController.removeChatFromList(msg.substring(Constants.REMOVECHAT.length()));
 		                	else cHandler.handleChatMessage(msg);
 		                }
 

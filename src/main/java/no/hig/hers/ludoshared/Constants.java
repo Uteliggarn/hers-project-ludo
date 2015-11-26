@@ -15,6 +15,7 @@ public class Constants {
 	
 	// Chat-related type messages:
 	public final static String NEWCHAT = "NEWGROUPCHAT:";		// Creates a new chat
+	public final static String REMOVECHAT = "REMOVECHAT:";		// Removes a chat
 	public final static String ERRORCHAT = "ERRORCHAT";			// An error in the chat
 	public final static String LEAVECHAT = "LEAVE:";			// Player leaves the chat
 	

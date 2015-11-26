@@ -106,6 +106,10 @@ public class ChatHandler {
 	 * 
 	 * First finds the chat the player is trying to leave,
 	 * then removing the player from it.
+	 * 
+	 * If the chat then is empty, sends a message to all players
+	 * to remove the chat from their chat list, then removing it from the servers list.
+	 * 
 	 * Lastly, sends a message to all remaining players that the player has left.
 	 * @param p The leaving player
 	 * @param msg The chat the player is leaving
@@ -114,15 +118,25 @@ public class ChatHandler {
 		for (int i = 0; i < GlobalServer.groupChatList.size(); i++)
 			if (msg.equals(GlobalServer.groupChatList.get(i).getName())) {
 				GlobalServer.groupChatList.get(i).removePlayer(p.getName());
-				try {
-					for (int j = 0; j < GlobalServer.players.size(); j++) {
-					if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
-						GlobalServer.players.get(j).sendText(
-								Constants.CHATMESSAGE + Constants.LEAVECHAT + 
-								GlobalServer.groupChatList.get(i).getName() + ":" + p.getName());
+				if (GlobalServer.groupChatList.get(i).noPlayers()) {
+					try {
+						GlobalServer.messages.put(Constants.CHATMESSAGE + Constants.REMOVECHAT + 
+								GlobalServer.groupChatList.get(i).getName());
+					} catch (InterruptedException e) {
+						GlobalServer.LOGGER.log(Level.INFO, "Could not send message to players", e);
 					}
-				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
+					GlobalServer.groupChatList.remove(i);
+				} else {
+					try {
+						for (int j = 0; j < GlobalServer.players.size(); j++) {
+						if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
+							GlobalServer.players.get(j).sendText(
+									Constants.CHATMESSAGE + Constants.LEAVECHAT + 
+									GlobalServer.groupChatList.get(i).getName() + ":" + p.getName());
+						}
+					} catch (Exception e) {
+						GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
+					}
 				}
 			}
 	}
