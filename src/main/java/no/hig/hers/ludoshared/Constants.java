@@ -32,6 +32,7 @@ public class Constants {
 	public final static String GAMEWON = "GAMEWON";				// Only the winner sends winning message
 	public final static String GAMELOST = "GAMELOST";			// Everybody that is not the winner send loosing message
 	public final static String DISCONNECT = "DISCONNECT:";		// A player leaves the game tab
+	public final static String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
 	
 	// Login/Register-related type messages:
 	public final static String ACCEPTED = "ACCEPTED";			// Registration accepted
