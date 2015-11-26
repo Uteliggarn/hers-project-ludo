@@ -158,9 +158,8 @@ public class GameServer {
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
 			                    	Player t = i.next();
 			                    	try {
-			                    		System.out.println("\nGameServer->startLoginMonitor->Hva er name: " + t.getName());
-				                    	p.sendText(Constants.JOIN + t.getName());
-				                    	t.sendText(Constants.JOIN + p.getName());
+			                    		if(!t.getHost())
+			                    			t.sendText(t.getName());
 			                    	} catch (IOException ioe) {
 			                    		ioe.printStackTrace();
 			                    	}

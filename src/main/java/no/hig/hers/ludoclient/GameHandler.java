@@ -75,8 +75,7 @@ public class GameHandler {
 
 	
 	public void connect() {
-		try {			
-			//connection = new Socket("128.39.83.87", serverPort); // 128.39.83.87 // 127.0.0.1
+		try {
 			connection = new Socket(ip, serverPort); // 128.39.83.87 // 127.0.0.1
 			
 			output = new BufferedWriter(new OutputStreamWriter(
@@ -84,7 +83,10 @@ public class GameHandler {
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
 			
-			sendText(Main.userName);
+			if (Main.userName.equals(hostName))
+				sendText("1" + Main.userName);
+			else
+				sendText("2" + Main.userName);
 			
 		} catch (UnknownHostException e) {
 			Main.LOGGER.log(Level.SEVERE, "Error connecting server", e);
@@ -186,11 +188,9 @@ public class GameHandler {
 				                	default: break;
 				                	}
 		                		});
-
 		                	}
 		                }
-	                }
-	                
+	                }   
 	            } catch (IOException ioe) {
 	            	Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", ioe);
 	            }
@@ -277,12 +277,6 @@ public class GameHandler {
 				Main.LOGGER.log(Level.SEVERE, "Unable to find fxml file", ioe);
 			}
 		});
-	}
-
-	public String read() throws IOException {
-		if (input.ready())
-			return input.readLine();
-		return null;
 	}
 	
 	public void close() {
