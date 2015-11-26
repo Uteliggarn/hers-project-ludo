@@ -60,15 +60,15 @@ public class ChatHandler {
 			}
 
 			Platform.runLater(() -> {
-    				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
-    				c.setID(name);
-    				controllers.add(c);
-    				chats.add(newTab);
-    				chatTabs.getTabs().add(newTab);
-    				
-    				if ("Global".equals(newTab.getId())) 
-    					newTab.setClosable(false);
-    				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogs� vil joine chaten.
+				ClientChatOverlayController c = (ClientChatOverlayController) loader.getController();
+				c.setID(name);
+				controllers.add(c);
+				chats.add(newTab);
+				chatTabs.getTabs().add(newTab);
+				
+				if ("Global".equals(newTab.getId())) 
+					newTab.setClosable(false);
+				Main.sendText(Constants.CHATMESSAGE + Constants.JOIN + name); // Sender ut at brukern ogs� vil joine chaten.
 
 			});	
 		} else Main.showAlert("Already joined chat", "You are already a member of this chat");

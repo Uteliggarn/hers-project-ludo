@@ -39,7 +39,7 @@ public class PlayerGameLobbyController {
 	public void joinGameChat() {
 		String tmp;
 		tmp = ("Gamechat-" + host.substring(4, host.length()));
-		Main.sendText(tmp + Constants.JOIN + Main.userName);
+		
 		Main.cHandler.addNewChat(tmp);
 	}
 	
