@@ -24,8 +24,6 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
-	private final String LOGOUT = "LOGOUT:";
-	private final String JOIN = "JOIN:";
 	private int playerNr = 1; 
 	
 	public GameServer(int socket) {
@@ -88,7 +86,7 @@ public class GameServer {
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                            messages.put(LOGOUT+p.getName());
+		                            messages.put(Constants.CHATMESSAGE + Constants.LOGOUT+p.getName());
 		                            messages.put(p.getName()+" got lost in hyperspace");
 		                            Main.LOGGER.log(Level.WARNING, "Disconnected from server", ioe);
 		                        }
@@ -121,7 +119,7 @@ public class GameServer {
 		                        	p.sendText(message);
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
 		                        	i.remove();
-		                        	messages.add(LOGOUT+p.getName());
+		                        	messages.add(Constants.CHATMESSAGE + Constants.LOGOUT+p.getName());
 		                        	messages.add(p.getName()+" got lost in hyperspace");
 		                        	Main.LOGGER.log(Level.WARNING, p.getName() + " disconnected from server", ioe);
 		                        }
@@ -162,7 +160,7 @@ public class GameServer {
 				                    	p.sendText(Constants.JOIN + t.getName());
 				                    	t.sendText(Constants.JOIN + p.getName());
 			                    	} catch (IOException ioe) {
-			                    		ioe.printStackTrace();
+			                    		Main.LOGGER.log(Level.INFO, "Couldn't send gameserver messages", ioe);
 			                    	}
 			                    } 
 		                    }

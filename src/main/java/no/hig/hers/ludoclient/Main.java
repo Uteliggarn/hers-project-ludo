@@ -63,6 +63,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		
 		try {
 			MyLogger.setupLogger();
 		} catch (IOException e) {
@@ -130,15 +131,30 @@ public class Main extends Application {
 			
 			mainController = (ClientMainUIController) loader.getController();
 			
-			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-					
-			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+			setUpTabs(mainRoot);
 		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE, "Unable to load scene files", e);
 		}	
 	}
+	
+	/**
+	 * Method for setting up the tabs,
+	 * and adding a listener to the Main tab.
+	 * @param mainRoot The root of the mainScene
+	 */
+	private void setUpTabs(StackPane mainRoot) {
+		chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+				
+		gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
+				mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+		
+		gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
+			if (newTab.getId().equals("main"))  
+				requestTopTen();
+		});
+	}
+	
 	/**
 	 * Method for creating a new ChatHandler,
 	 * and start to listen for messages.
@@ -150,19 +166,20 @@ public class Main extends Application {
 		processConnection(); // Starter en ny evighets tr�d som tar seg av meldinger fra server
 		executorService.shutdown();	// Dreper tr�den n�r klassen d�r
 	}
-
+	
+	/**
+	 * Method for creating a new GameServer,
+	 * with a port
+	 */
 	public static void startGameServer() {
 		gameServer = new GameServer(serverPort);
-		
-		gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
-			if (newTab.getId().equals("main"))  
-				requestTopTen();
-		});
 	}
 	
+	/**
+	 * Method for requesting the top ten lists.
+	 */
 	public static void requestTopTen() {
 		sendText(Constants.PLAYERMESSAGE + Constants.TOP);
-		// + userName + 
 	}
 	
 	/**
@@ -186,7 +203,10 @@ public class Main extends Application {
 	public static void changeScene(Scene newScene) {
 		currentStage.setScene(newScene);
 		
-		if (newScene.equals(mainScene)) requestTopTen();
+		if (newScene.equals(mainScene)) {
+			currentStage.setMaximized(true);
+			requestTopTen();
+		}
 	}
 
 	/**
@@ -240,12 +260,9 @@ public class Main extends Application {
 	@Override
 	public void stop() {
 		sendText(">>>LOGOUT<<<");	//Sender melding til serveren om logout
-		close();
-	}
-	
-	public void close() {
 		System.exit(0);
 	}
+
 	/**
 	 * Method for processing messages from the server,	
 	 * sending the messages to the GameHandler or ChatHandler
@@ -322,14 +339,13 @@ public class Main extends Application {
 		                	String msg = message.substring(Constants.CHATMESSAGE.length());
 		                	if (msg.startsWith(Constants.NEWCHAT)) 
 		                		mainController.addChatToList(msg.substring(Constants.NEWCHAT.length()));
-		                	else cHandler.handleChatMessage2(msg);
+		                	else cHandler.handleChatMessage(msg);
 		                }
 		                else if (message.startsWith(Constants.PLAYERMESSAGE)) {
 		                	
 		                }
     	                else if (message.equals(Constants.ERRORCHAT)) 	// Forteller at chaten finnes allerede
     	                	Main.showAlert("Chat-room already exists", "Chat-room already exits");
-    	                else cHandler.handleChatMessage(message);
 	                }
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
