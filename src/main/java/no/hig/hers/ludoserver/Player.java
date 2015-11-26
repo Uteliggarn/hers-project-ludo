@@ -28,6 +28,7 @@ public class Player {
 	private String name;
 	private int serverPort;
 	private int playerID;
+	private String IPaddress;
 	
 	private final String ACCEPTED = "ACCEPTED";
     private final String DECLINED = "DECLINED";
@@ -36,8 +37,14 @@ public class Player {
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
+	
+		this.IPaddress = connection.getRemoteSocketAddress().toString();
+		System.out.println("Hva er Inet adress: " + IPaddress);
+		int h = IPaddress.indexOf(":");
+		IPaddress = IPaddress.substring(1, h);
 		
-		System.out.println("Hva er Inet adress: " + connection.getRemoteSocketAddress().toString());
+		System.out.println("Hva er Inet adress: " + IPaddress);
+		
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));	
@@ -94,6 +101,10 @@ public class Player {
 		return playerID;
 	}
 	
+	public String returnIPaddress() {
+		return IPaddress;
+	}
+	
 	/**
 	 * The function read from the input two messages. Then it goes threw several if, else if's
 	 * to check what the message contains. If the message contains the correct keyword
@@ -119,6 +130,8 @@ public class Player {
 				if(login > 0) {		// checks the value given by the database
 					this.playerID = login;
 					this.serverPort = serverPort;
+					
+					System.out.println("\nHva er serverPort i Player classen i ludoServer: " + serverPort);
 					
 					sendText(Integer.toString(login));				// Sends the Player ID
 					sendText(Integer.toString(this.serverPort));	// Sends the given serverport
