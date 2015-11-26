@@ -34,12 +34,12 @@ public class Constants {
 	public final static String SENDLOGIN = "SENDLOGIN:";
     public final static String SENDREGISTER = "SENDREGISTER:";
 	public final static String GETPLAYERLIST = "GETPLAYERLIST";
+	public final static String DISCONNECT = "DISCONNECT:";
 	
 	public final static String GAMEMESSAGE = "GAMEMESSAGE:";
 	public final static String CHATMESSAGE = "CHATMESSAGE:";
 	public final static String PLAYERMESSAGE = "PLAYERMESSAGE:";
 	public final static String GENERALMESSAGE = "GENERALMESSAGE:";
-	public final static String PLAYERJOINED = "PLAYERJOINED:";
 
 	private Constants() {}
 }

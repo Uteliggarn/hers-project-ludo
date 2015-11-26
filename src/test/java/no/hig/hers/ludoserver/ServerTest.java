@@ -15,28 +15,68 @@ import java.util.concurrent.Executors;
 
 import org.junit.Test;
 
-import no.hig.hers.ludoclient.Main;
-
+/**
+ * Testing the communication between server and client
+ * @author bne9988
+ *
+ */
 public class ServerTest {
 	private ExecutorService executorService;
 	private final String text = "This is a test";
+	private boolean noMatch;
 	
+	/**
+	 * The server class listens to the socket for the message
+	 * @author bne9988
+	 *
+	 */
 	private class Server {
-		ServerSocket server;
+		private ServerSocket serverSocket;
+		private Socket socket;
 		private BufferedReader input;
-		private BufferedWriter output;
 		
 		public Server() {
 			
 			try {
-				server = new ServerSocket();
-				server.setReuseAddress(true);
-				server.bind(new InetSocketAddress(12345));
+				serverSocket = new ServerSocket();
+				serverSocket.setReuseAddress(true);
+				serverSocket.bind(new InetSocketAddress(12345));
 				
+				socket = new Socket("127.0.0.1", 12345);
+				
+				input = new BufferedReader(new InputStreamReader(
+	                    socket.getInputStream()));
 				
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
+			
+			executorService = Executors.newCachedThreadPool();
+			startListener();
+			executorService.shutdown();
+		}
+		
+		/**
+		 * Continues to loop until the message is noticed
+		 */
+		public void startListener() {
+			noMatch = true;
+			executorService.execute(() -> {
+				while (noMatch) {
+					
+					try {
+						String str = read();
+						if (str != null && str.equals(text)) {
+							noMatch = false;
+						}
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			});
 		}
 		
 		public String read() throws IOException {
@@ -46,9 +86,13 @@ public class ServerTest {
 		}
 	}
 	
+	/**
+	 * The client sends a message to the server
+	 * @author bne9988
+	 *
+	 */
 	private class Client {
 		private Socket connection;
-		private BufferedReader input;
 		private BufferedWriter output;
 		
 		public Client() {
@@ -57,18 +101,20 @@ public class ServerTest {
 				
 				output = new BufferedWriter(new OutputStreamWriter(
 	                    connection.getOutputStream()));
-				input = new BufferedReader(new InputStreamReader(
-	                    connection.getInputStream()));
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
 			
-			executorService = Executors.newCachedThreadPool();
+			try {
+				sendText(text);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			executorService.shutdown();
 		}
 		
-		private void sendText(String text) throws IOException {
+		public void sendText(String text) throws IOException {
 			output.write(text);
 			output.newLine();
 			output.flush();
@@ -77,6 +123,11 @@ public class ServerTest {
 
 	@Test
 	public void test() {
+		while (noMatch) {
+			new Server();
+			new Client();
+		}
 		
+		assertFalse(noMatch);
 	}
 }

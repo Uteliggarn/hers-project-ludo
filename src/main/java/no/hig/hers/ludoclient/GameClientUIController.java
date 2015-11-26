@@ -393,6 +393,9 @@ public class GameClientUIController {
 		} else dieTextLabel.setText("Wait for your turn");
 		
 	}
+	public int getPlayer() {
+		return player;
+	}
 	
 	public void setPlayerName(int pnr, String name) {
 		switch (pnr) {
@@ -567,18 +570,30 @@ public class GameClientUIController {
 		}
 	}
 		
-	public void setPlayerDisconnect() {
-		switch(player) {
+	public void setPlayerDisconnect(int dced) {
+		switch(dced) {
 			case 1: 
 				player1 = false;
+				for(int i=0; i < board.greenPawns.size(); i++) {
+					board.greenPawns.get(i).KnockedOut();
+				}
 				break;
 			case 2:
 				player2 = false;
+				for(int i=0; i < board.redPawns.size(); i++) {
+					board.redPawns.get(i).KnockedOut();
+				}
 				break;
 			case 3:
+				for(int i=0; i < board.yellowPawns.size(); i++) {
+					board.yellowPawns.get(i).KnockedOut();
+				}
 				player3 = false;
 				break;
 			case 4:
+				for(int i=0; i < board.bluePawns.size(); i++) {
+					board.bluePawns.get(i).KnockedOut();
+				}
 				player4 = false;
 				break;
 			default:
