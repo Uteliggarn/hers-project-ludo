@@ -115,6 +115,13 @@ public class ChatHandler {
             	c.addUserToList(username);
             	});
             }
+            else if (message.startsWith(Constants.LEAVECHAT + tab.getId() + ":")) {
+            	Platform.runLater(() -> {
+                	String username = message.substring(Constants.LEAVECHAT.length() + tab.getId().length() + 1);
+                	c.removeUserFromList(username);
+                });
+            }
+            
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger
             	c.receiveChatMessage(message.substring(tab.getId().length() + 1));
             }

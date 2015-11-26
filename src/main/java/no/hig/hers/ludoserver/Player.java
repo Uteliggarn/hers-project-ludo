@@ -140,7 +140,7 @@ public class Player {
 	
 
 	private void sendChatList() {
-		Iterator<Chat> i = GlobalServerMain.application.groupChatList.iterator();
+		Iterator<Chat> i = GlobalServer.groupChatList.iterator();
 		i.next(); 		// Skip Global chat
 		while (i.hasNext()) {
 			String chatName = i.next().getName();

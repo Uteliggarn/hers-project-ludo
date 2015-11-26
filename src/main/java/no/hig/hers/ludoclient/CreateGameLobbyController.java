@@ -34,11 +34,9 @@ public class CreateGameLobbyController {
 		playerThree.setText("");
 		playerFour.setText("");
 		
-		if (playerList.getItems().isEmpty()) {
-			for (int i=0; i<Main.playerList.size(); i++) {
-				if (!Main.playerList.get(i).equals(Main.userName))
-					playerList.getItems().add(Main.playerList.get(i));
-			}
+		for (int i=0; i<Main.playerList.size(); i++) {
+			if (!Main.playerList.get(i).equals(Main.userName))
+				playerList.getItems().add(Main.playerList.get(i));
 		}
 	}
 	
@@ -51,8 +49,14 @@ public class CreateGameLobbyController {
 		}
 	}
 	
-	public void addNewPlayerToList(String name) {
-		
+	public void addPlayerToList(String name) {
+		if (!name.equals(Main.userName))
+			playerList.getItems().add(name);
+	}
+	
+	public void removePlayerFromList(String name) {
+		playerList.getSelectionModel().clearSelection();
+		playerList.getItems().remove(name);
 	}
 	
 	public void setHostPlayer(String hostName) {
@@ -71,10 +75,8 @@ public class CreateGameLobbyController {
 			playerTwo.setText(name);	
 		else if (playerThree.getText() == "")
 			playerThree.setText(name);
-		else if (playerFour.getText() == "") {
+		else if (playerFour.getText() == "") 
 			playerFour.setText(name);
-			startGameButton.setDisable(false);
-		}
 	}
 	
 	

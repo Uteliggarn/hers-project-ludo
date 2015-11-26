@@ -11,6 +11,7 @@ import no.hig.hers.ludoshared.Constants;
  * @author daniel on 26.11.2015
  *
  */
+
 public class ChatHandler {
 
 	/**
@@ -23,22 +24,24 @@ public class ChatHandler {
 	 * @param msg The chatname
 	 */
 	static void playerJoinChat(Player p, String msg) {
-		for (int i = 0; i < groupChatList.size(); i++) {
-			if (msg.equals(groupChatList.get(i).getName())) {
+		for (int i = 0; i < GlobalServer.groupChatList.size(); i++) {
+			if (msg.equals(GlobalServer.groupChatList.get(i).getName())) {
+				GlobalServer.groupChatList.get(i).addPlayer(p.getName());
+				p.sendPlayerList(GlobalServer.groupChatList.get(i));
+				
 				try {
-					for (int j = 0; j < players.size(); j++) {
-						if (groupChatList.get(i).playerExists(players.get(j).getName()))
-								players.get(j).sendText(Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
+					for (int j = 0; j < GlobalServer.players.size(); j++) {
+						if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
+							GlobalServer.players.get(j).sendText(
+									Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
 					}
 				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 				}
-				groupChatList.get(i).addPlayer(p.getName());
-				p.sendPlayerList(groupChatList.get(i));
 				
 				//Writes to file
-				fileName = msg + "_" + fileNameEnd;
-				writeToFile(fileName, msg);
+				GlobalServer.fileName = msg + "_" + GlobalServer.fileNameEnd;
+				GlobalServer.writeToFile(GlobalServer.fileName, msg);
 
 			}
 		}
@@ -51,22 +54,22 @@ public class ChatHandler {
 	 * @param msg The message to send.
 	 */
 	static void sendChatMessage(Player p, String msg) {
-		for (int i = 0; i < groupChatList.size(); i++) {
-			if (msg.startsWith(groupChatList.get(i).getName() + ":")) {
-				displayMessage(msg + "\n");
-				msg = msg.substring(groupChatList.get(i).getName().length() + 1);
+		for (int i = 0; i < GlobalServer.groupChatList.size(); i++) {
+			if (msg.startsWith(GlobalServer.groupChatList.get(i).getName() + ":")) {
+				GlobalServer.GUI.displayMessage(msg + "\n");
+				msg = msg.substring(GlobalServer.groupChatList.get(i).getName().length() + 1);
 				
 				try {
-					for (int j = 0; j < players.size(); j++) {
-					if (groupChatList.get(i).playerExists(players.get(j).getName()))
-						players.get(j).sendText(Constants.CHATMESSAGE + groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
+					for (int j = 0; j < GlobalServer.players.size(); j++) {
+					if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
+						GlobalServer.players.get(j).sendText(Constants.CHATMESSAGE + GlobalServer.groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
 					}
 				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 				}
 			//Writes to file
-			fileName = groupChatList.get(i).getName() + "_" + fileNameEnd;
-			writeToFile(fileName, groupChatList.get(i).getName() + ":" + msg);
+			GlobalServer.fileName = GlobalServer.groupChatList.get(i).getName() + "_" + GlobalServer.fileNameEnd;
+			GlobalServer.writeToFile(GlobalServer.fileName, GlobalServer.groupChatList.get(i).getName() + ":" + msg);
 			}	
 		}
 	}
@@ -82,23 +85,39 @@ public class ChatHandler {
 	 */
 	static void createNewChat(Player p, String msg) {
 		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
-		if(GlobalServerMain.application.groupChatList.contains(newChat) 
-				&& GlobalServerMain.application.groupChatList.contains(new Chat(Constants.IDGK + p.getName())))
+		if(GlobalServer.groupChatList.contains(newChat) 
+				&& GlobalServer.groupChatList.contains(new Chat(Constants.IDGK + p.getName())))
 			try {
 				p.sendText(Constants.ERRORCHAT);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
 		else {
-			GlobalServerMain.application.groupChatList.add(newChat);
+			GlobalServer.groupChatList.add(newChat);
 			try {
-				GlobalServerMain.application.messages.put(Constants.CHATMESSAGE + msg);
+				GlobalServer.messages.put(Constants.CHATMESSAGE + msg);
 			} catch (InterruptedException e) {
 				GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 			}
-			GlobalServerMain.application.displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.getName() + "\n");
+			GlobalServer.GUI.displayMessage("New chat room: " + msg.substring(13) + " made by: " + p.getName() + "\n");
 		}
 
+	}
+	static void playerLeaveChat(Player p, String msg) {
+		for (int i = 0; i < GlobalServer.groupChatList.size(); i++)
+			if (msg.equals(GlobalServer.groupChatList.get(i).getName())) {
+				GlobalServer.groupChatList.get(i).removePlayer(p.getName());
+				try {
+					for (int j = 0; j < GlobalServer.players.size(); j++) {
+					if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
+						GlobalServer.players.get(j).sendText(
+								Constants.CHATMESSAGE + Constants.LEAVECHAT + 
+								GlobalServer.groupChatList.get(i).getName() + ":" + p.getName());
+					}
+				} catch (Exception e) {
+					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
+				}
+			}
 	}
 
 
