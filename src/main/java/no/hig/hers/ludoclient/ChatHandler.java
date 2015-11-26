@@ -69,7 +69,7 @@ public class ChatHandler {
     				chatTabs.getTabs().add(newTab);
     				if ("Global".equals(newTab.getId())) {
     					newTab.setClosable(false);
-    					Main.sendText("GETPLAYERLIST");
+    					Main.sendText(Constants.GETPLAYERLIST);
     				} else 
     					Main.sendText(name + Constants.JOINCHAT + Main.userName); // Sender ut at brukern også vil joine chaten. 
 			});	
@@ -93,8 +93,9 @@ public class ChatHandler {
             	c.addUserToList(username);
             	});
             }
-            else if (message.startsWith(Constants.QUITGAME)) { // Mottar melding om at noen har logget ut
-            	String username = message.substring(Constants.QUITGAME.length());
+            else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
+            	String username = message.substring(Constants.LOGOUT.length());
+            	Main.playerList.remove(username);
             	c.removeUserFromList(username);
             } 
             else if (message.startsWith(chats.get(i).getId() + ":")) { // Tar alle andre meldinger

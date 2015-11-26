@@ -35,6 +35,13 @@ public class CreateGameLobbyController {
 		playerTwo.setText("");
 		playerThree.setText("");
 		playerFour.setText("");
+		
+		if (playerList.getItems().isEmpty()) {
+			for (int i=0; i<Main.playerList.size(); i++) {
+				if (!Main.playerList.get(i).equals(Main.userName))
+					playerList.getItems().add(Main.playerList.get(i));
+			}
+		}
 	}
 	
 	@FXML private void updateButtonPressed() {

@@ -135,15 +135,14 @@ public class GlobalServer extends JFrame{
 										i.remove();
 										que.remove(p.returnName());
 
-										gameList.remove(IDGK + p.returnName());
+										gameList.remove(Constants.IDGK + p.returnName());
 
-										messages.put(LOGOUT + p.returnName());
-										displayMessage("\n" + LOGOUT + p.returnName());
+										messages.put(Constants.LOGOUT + p.returnName());
+										displayMessage("\n" + Constants.LOGOUT + p.returnName());
 									} else if (msg.equals(p.returnName() + Constants.TOP)) {
-										System.out.println(msg + "  TEST!");
 										handleTopTenLists(p);
 									}
-									else if (msg.equals("GETPLAYERLIST")){
+									else if (msg.equals(Constants.GETPLAYERLIST)){
 										p.sendPlayerList();
 									}
 									else {
@@ -254,7 +253,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private void handleGameKeywords(Player p, String msg) {
 		try {
-			if (msg.equals(QUEUE)){
+			if (msg.equals(Constants.QUEUE)){
 				Player tmp = p;
 				que.add(tmp);
 				displayMessage("Player: " + p.returnName() + " joined the queue. Queue size: " + que.size() + "\n");
@@ -276,7 +275,7 @@ public class GlobalServer extends JFrame{
 						}
 					}
 					for (int i=0; i<que.size(); i++) {
-						que.get(i).sendText(Constants.QUEOPEN);
+						que.get(i).sendText(Constants.QUEOPEN);	//TODO 
 						que.remove(i);
 					}
 				}
@@ -299,9 +298,9 @@ public class GlobalServer extends JFrame{
 						player.get(y).sendText(Integer.toString(p.returnServerPort()) + p.returnIPaddress());
 					}
 			}
-			else if (msg.equals(GWON))
+			else if (msg.equals(Constants.GAMEWON))
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), true);
-			else if (msg.equals(GLOST))
+			else if (msg.equals(Constants.GAMELOST))
 				DatabaseHandler.updatePlayersMatches(p.returnPlayerID(), false);
 			
 		} catch (IOException ioe) {
@@ -326,7 +325,7 @@ public class GlobalServer extends JFrame{
 								p.sendText(message);
 							} catch (IOException ioe) {
 								i.remove();
-								messages.add(LOGOUT + p.returnName());
+								messages.add(Constants.LOGOUT + p.returnName());
 								messages.add(p.returnName() + " got lost in hyperspace");
 								GlobalServer.LOGGER.log(Level.WARNING, "Cannot send message", ioe);
 							}

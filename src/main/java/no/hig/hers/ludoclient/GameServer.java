@@ -153,9 +153,13 @@ public class GameServer {
 		                    	
 		                    	Iterator<Player> i = player.iterator();
 			                    while (i.hasNext()) {		// Send message to all clients that a new person has joined
-			                    	String playerName = i.next().returnName();
-			                    	System.out.println("Hva er playerName i GameServer: " + playerName);
-			                    	p.sendText(Constants.JOIN + playerName);
+			                    	Player t = i.next();
+			                    	try {
+				                    	p.sendText(Constants.JOIN + t.returnName());
+				                    	t.sendText(Constants.JOIN + p.returnName());
+			                    	} catch (IOException ioe) {
+			                    		ioe.printStackTrace();
+			                    	}
 			                    } 
 		                    }
 	                    }
