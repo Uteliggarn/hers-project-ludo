@@ -10,7 +10,7 @@ public class Constants {
 	public final static String HOST = "HOST:";	
 	public final static String QUEUE = "QUEUE";
 	public final static String JOIN = "JOIN:";	
-	public final static String QUITGAME = "LOGOUT:";
+	//public final static String QUITGAME = "LOGOUT:";
 	public final static String HOTJOIN = "HOTJOIN:";
 	public final static String TOPPLAYED = "TOPLISTPLAYED:";
 	public final static String TOPWON = "TOPLISTWON:";
@@ -27,12 +27,14 @@ public class Constants {
 	public final static String CLOGOUT = ">>>LOGOUT<<<";
 	public final static String ERROR = "ERROR";
 	public final static String TOP = "TOP";
+
 	public final static String GWON = "GAMEWON";
 	public final static String GLOST = "GAMELOST";
 	public final static String ACCEPTED = "ACCEPTED";
 	public final static String DECLINED = "DECLINED";
 	public final static String SENDLOGIN = "SENDLOGIN:";
     public final static String SENDREGISTER = "SENDREGISTER:";
+
 	public final static String GETPLAYERLIST = "GETPLAYERLIST";
 	public final static String DISCONNECT = "DISCONNECT:";
 	

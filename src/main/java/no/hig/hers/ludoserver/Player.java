@@ -36,13 +36,10 @@ public class Player {
 
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
-	
 		this.IPaddress = connection.getRemoteSocketAddress().toString();
-		System.out.println("Hva er Inet adress: " + IPaddress);
+		
 		int h = IPaddress.indexOf(":");
 		IPaddress = IPaddress.substring(1, h);
-		
-		System.out.println("Hva er Inet adress: " + IPaddress);
 		
 		
 		input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -122,7 +119,6 @@ public class Player {
 			if (code.equals(Constants.SENDLOGIN)) {
 				int ID = DatabaseHandler.userLogin(tempName, tempPass);
 
-				
 				if (ID == 0) {
 					sendText(Integer.toString(ID));
 					return false;
@@ -130,7 +126,6 @@ public class Player {
 				this.name = tempName;
 				this.playerID = ID;
 				this.serverPort = serverPort;
-				
 				
 				sendText(Integer.toString(this.playerID));				// Sends the Player ID
 				sendText(Integer.toString(this.serverPort));	// Sends the given serverport
@@ -151,6 +146,7 @@ public class Player {
 		return false;
 	}
 	
+
 	private void sendChatList() {
 		Iterator<Chat> i = GlobalServerMain.application.groupChatList.iterator();
 		i.next(); 		// Skip Global chat
@@ -176,6 +172,7 @@ public class Player {
 				}
 			}
 		}	
+		
 	}
 	public void sendTopTenLists() {
 		try {
@@ -204,4 +201,38 @@ public class Player {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Exception", e);
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	Iterator<Player> i = GlobalServerMain.application.player.iterator();
+	while (i.hasNext()) {
+		Player t = i.next();
+		try {
+			sendText(Constants.GLOBALCHAT + t.returnName());
+			t.sendText(Constants.GLOBALCHAT + returnName());
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+	
+	
+	Iterator<Player> i = player.iterator();
+    while (i.hasNext()) {		// Send message to all clients that a new person has joined
+    	Player t = i.next();
+    	p.sendText(Constants.JOIN + t.returnName());
+    	t.sendText(Constants.JOIN + p.returnName());
+    } 
+	*/
+	
+	
 }
