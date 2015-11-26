@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import no.hig.hers.ludoclient.LudoBoardFX.Pawned;
@@ -31,7 +32,8 @@ public class GameTest {
 	final ArrayList<Pawned> redPawnsInGoal = new ArrayList<Pawned>();
 	final ArrayList<Pawned> bluePawnsInGoal = new ArrayList<Pawned>();
 	
-	GameTest() {
+	@Before
+	public void someTest() {
 	
 		//Makes all the valid coordinates the pawns can move on
 		makeGreenCoordinates();
@@ -559,44 +561,14 @@ public class GameTest {
 				if(!inHome) {	
 					t = testForTowers(pawnToMove, n);
 					if(t == 0) {
-						switch(color) {
-						case 1:	//Green
-							for(int i = 0; i < greenPawns.size(); i++) {
-								l = greenPawns.get(i).returnLocation();
-								if ( temp == l && greenPawns.get(i).getVisible()) {	//Same color on same position
-									makeGreenTower(i, pawnToMove);
-								}		
-							}
-							break;
-						case 2:	//Yellow
-							for(int i = 0; i < yellowPawns.size(); i++) {
-								l = yellowPawns.get(i).returnLocation();
-								if ( temp == l && yellowPawns.get(i).getVisible()) {	//Same color on same position
-									makeYellowTower(i, pawnToMove);
-								}
-							}
-							break;
-						case 3:	//Red
-							for(int i = 0; i < redPawns.size(); i++) {
-								l = redPawns.get(i).returnLocation();
-								if ( temp == l && redPawns.get(i).getVisible()) {	//Same color on same position
-									makeRedTower(i, pawnToMove);
-								}
-							}
-							break;
-						case 4:	//Blue
-							for(int i = 0; i < bluePawns.size(); i++) {
-								l = bluePawns.get(i).returnLocation();
-								if ( temp == l && bluePawns.get(i).getVisible()) {	//Same color on same position
-									makeBlueTower(i, pawnToMove);
-								}
-							}
-							break;
-						}
+						makeTowers(temp, pawnToMove);
 						knockOutOtherColors(pawnToMove, temp);
 						location += n;;
 						tryAddToGoal();
-					} else bounceFromTower(t, n);
+					} else {
+						bounceFromTower(t, n);
+						knockOutOtherColors(pawnToMove, location);
+					}
 				}
 				else {
 					if(n == 6) {
@@ -606,6 +578,46 @@ public class GameTest {
 					} else System.out.println("Need to get a 6 to move the pawn from the homefield");
 				}
 			}
+		}
+		
+		public void makeTowers(int temp, int pawnToMove) {
+			int l;
+			switch(color) {
+			case 1:	//Green
+				for(int i = 0; i < greenPawns.size(); i++) {
+					l = greenPawns.get(i).returnLocation();
+					if ( temp == l && greenPawns.get(i).getVisible()) {	//Same color on same position
+						makeGreenTower(i, pawnToMove);
+					}		
+				}
+				break;
+			case 2:	//Yellow
+				for(int i = 0; i < yellowPawns.size(); i++) {
+					l = yellowPawns.get(i).returnLocation();
+					if ( temp == l && yellowPawns.get(i).getVisible()) {	//Same color on same position
+						makeYellowTower(i, pawnToMove);
+					}
+				}
+				break;
+			case 3:	//Red
+				for(int i = 0; i < redPawns.size(); i++) {
+					l = redPawns.get(i).returnLocation();
+					if ( temp == l && redPawns.get(i).getVisible()) {	//Same color on same position
+						makeRedTower(i, pawnToMove);
+					}
+				}
+				break;
+			case 4:	//Blue
+				for(int i = 0; i < bluePawns.size(); i++) {
+					l = bluePawns.get(i).returnLocation();
+					if ( temp == l && bluePawns.get(i).getVisible()) {	//Same color on same position
+						makeBlueTower(i, pawnToMove);
+					}
+				}
+				break;
+			default:
+				break;
+			}	
 		}
 		
 		public void tryAddToGoal() {
@@ -1026,7 +1038,42 @@ public class GameTest {
 	} //END OF PAWN CLASS
 	
 	@Test
-	public void test() {
+	public void testTower() {
+		Pawned pawn1 = new Pawned(44, 1);
+		Pawned pawn2 = new Pawned(42, 1);
 		
-	}	
+		greenPawns.add(pawn1);
+		greenPawns.add(pawn2);
+		
+		pawn2.makeTowers(44, 2);
+		
+		assertTrue(pawn1.getTower());
+	}
+	
+	@Test
+	public void testKnockout() {
+		Pawned greenPawn = new Pawned(44, 1);
+		Pawned yellowPawn = new Pawned(42, 2);
+		
+		greenPawns.add(greenPawn);
+		yellowPawns.add(yellowPawn);
+		
+		greenPawns.get(4).changeLocation(2, 1, 5);
+		
+		yellowPawns.get(4).changeLocation(4, 2, 5);
+		
+		assertTrue(greenPawns.get(4).returnInHome());
+	}
+	
+	@Test
+	public void testGoal() {
+		Pawned pawn = new Pawned(62, 1);
+		
+		greenPawns.add(pawn);
+		greenPawns.get(4).tryAddToGoal();
+		
+		if (!(greenPawnsInGoal.size() > 0)) {
+			fail("No pawns in goal");
+		}
+	}
 }
