@@ -27,7 +27,7 @@ public class HostGameLobbyController {
 	
 	private String hostName;
 	/**
-	 * Initialize label text and sets the button to start game not disabled. 
+	 * Initialize label text and sets the button to start game as not disabled. 
 	 */
 	public void initialize() {
 		startGameButton.setDisable(false);
@@ -38,8 +38,8 @@ public class HostGameLobbyController {
 		playerFour.setText("");
 	}
 	/**
-	 * Sets the host player
-	 * @param hostName
+	 * Sets the host player on playerOne label and join game chat.
+	 * @param hostName the name of the game host
 	 */
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
@@ -47,7 +47,10 @@ public class HostGameLobbyController {
 		String tmp = Constants.GAMECHAT + hostName.substring(4, hostName.length());
 		Main.cHandler.addNewChat(tmp);
 	}
-	
+	/**
+	 * Sets names to the correct player label.
+	 * @param name the name of a player that is joining
+	 */
 	public void joinedPlayer(String name) {
 		if (playerTwo.getText() == "")
 			playerTwo.setText(name);
@@ -56,13 +59,18 @@ public class HostGameLobbyController {
 		else if (playerFour.getText() == "")
 			playerFour.setText(name);
 	}
-	
+	/**
+	 * Internationalization of the playerLabel, hostLabel and starGameButton.
+	 */
 	public void setLabelText() {
 		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
 		hostLabel.setText(Main.messages.getString("HOST"));
 		startGameButton.setText(Main.messages.getString("STARTGAME"));
 	}
-	
+	/**
+	 * Starts the game for all players when the start game button is pressed. 
+	 * @throws IOException Throws any I/O exceptions.
+	 */
 	@FXML private void startGameButtonPressed() throws IOException {	
 		try {
 			sendText(Constants.GAMESTART);
@@ -70,7 +78,10 @@ public class HostGameLobbyController {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
 	}
-
+	/**
+	 * Sets the correct output so that the host can communicate with the game server.
+	 * @param write the bufferedWriter of the gameserver. Connection to the server.
+	 */
 	public void setConnetion(BufferedWriter write) {
 		output = write;
 	}
