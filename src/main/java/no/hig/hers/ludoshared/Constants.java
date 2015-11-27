@@ -23,22 +23,24 @@ public class Constants {
 	public static final String LEAVECHAT = "LEAVE:";			// Player leaves the chat
 	
 	// Game-related type messages:
-	public static final String CREATEGAME = "CREATEGAME:";		// Creates a new game
-	public static final String IDGK = "IDGK";					// Unique name, every host gets the IDGK keyword
-	public static final String INVITE = "INVITE:";				// Invites friends to a game
-	public static final String HOST = "HOST:";					// The host for the match
-	public static final String QUEUE = "QUEUE";					// Joining queue
-	public static final String HOTJOIN = "HOTJOIN:";			// The players in queue that does not become host
-	public static final String GAMESTART = "GAMESTART:";		// The game starts
-	public static final String GAMENAME = "GAMENAME:";			// The name of the game
-	public static final String DICEVALUE = "DICEVALUE:";		// Tells which player, pawn, and how far it moved
-	public static final String GAMEOVER = "GAMEOVER";			// The game is over
-	public static final String GAMEWON = "GAMEWON";				// Only the winner sends winning message
-	public static final String GAMELOST = "GAMELOST";			// Everybody that is not the winner send loosing message
-	public static final String DISCONNECT = "DISCONNECT:";		// A player leaves the game tab
-	public static final String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
-	public static final String QUEOPEN = "QUEOPEN";				// Reopen the que button if noone could host a game
-	public static final String GAMECHAT = "Gamechat-";
+	public final static String CREATEGAME = "CREATEGAME:";		// Creates a new game
+	public final static String IDGK = "IDGK";					// Unique name, every host gets the IDGK keyword
+	public final static String INVITE = "INVITE:";				// Invites friends to a game
+	public final static String HOST = "HOST:";					// The host for the match
+	public final static String QUEUE = "QUEUE";					// Joining queue
+	public final static String HOTJOIN = "HOTJOIN:";			// The players in queue that does not become host
+	public final static String GAMESTART = "GAMESTART:";		// The game starts
+	public final static String GAMENAME = "GAMENAME:";			// The name of the game
+	public final static String DICEVALUE = "DICEVALUE:";		// Tells which player, pawn, and how far it moved
+	public final static String GAMEOVER = "GAMEOVER";			// The game is over
+	public final static String GAMEWON = "GAMEWON";				// Only the winner sends winning message
+	public final static String GAMELOST = "GAMELOST";			// Everybody that is not the winner send loosing message
+	public final static String DISCONNECT = "DISCONNECT:";		// A player leaves the game tab
+	public final static String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
+	public final static String QUEOPEN = "QUEOPEN";				// Reopen the que button if noone could host a game
+	public final static String GAMECHAT = "Gamechat-";
+	public final static String LEAVEGAME = "LEAVEGAME:";		// Sends message that a player has closed their game tab
+	public final static String QUITGAME = "QUITGAME";			// Sends a message that the host has quit the game
 	
 	// Login/Register-related type messages:
 	public static final String ACCEPTED = "ACCEPTED";			// Registration accepted

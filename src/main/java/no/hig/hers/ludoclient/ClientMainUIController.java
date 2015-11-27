@@ -106,8 +106,17 @@ public class ClientMainUIController {
 	 */
     @FXML
     void newGameButtonPressed() {
-    	Main.sendText(Constants.CREATEGAME);
-		newGameButton.setDisable(true);
+    	int count = 0;
+    	for (int i=0; i<Main.gameHandler.size(); i++) {
+    		if (Main.gameHandler.get(i).getHostName().equals(Constants.IDGK + Main.userName))
+    			++count;
+    	}
+    	if(count == 0 && Main.gameServer.isEmpty()) {
+	    	Main.sendText(Constants.CREATEGAME);
+			newGameButton.setDisable(true);
+    	}
+    	else
+    		Main.showAlert(Main.messages.getString("BUTTONDECLINE"), Main.messages.getString("BUTTONDECLINE"));
     }
     
     /**
