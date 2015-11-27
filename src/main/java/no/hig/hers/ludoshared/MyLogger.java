@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 /**
  * Class of the logger functionality. 
+ * 
+ * @author Daniel on 25.11.2015
  */
 public class MyLogger {
 	private static SimpleFormatter formatterTxt;

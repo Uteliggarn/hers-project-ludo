@@ -561,14 +561,18 @@ public class GameTest {
 		/**
 		 * Method that returns the inHome boolean.
 		 * It keeps track of whether the pawn is in it's colors homefield or not.
-		 * @return
+		 * 
+		 * @return Returns true if the pawn is in home
 		 */
 		public boolean returnInHome() {
 			return inHome;
 		}
 		/**
 		 * Method that changes a pawns location
+		 * 
 		 * @param n holds the location that the pawns should change with. The diceValue.
+		 * @param turnOwner The player whose turn it is
+		 * @param pawnToMove The pawn that should be moved
 		 */
 		public void changeLocation(int n, int turnOwner, int pawnToMove) {
 			int l;

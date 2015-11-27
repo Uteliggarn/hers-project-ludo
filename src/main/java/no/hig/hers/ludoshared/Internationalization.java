@@ -9,6 +9,8 @@ import no.hig.hers.ludoclient.Main;
 /**
  * Class for finding the computer language and country so the correct
  * language will be displayed to the user.
+ * 
+ * @author Henrik on 26.11.2015
  */
 public class Internationalization {
 	
