@@ -810,7 +810,8 @@ public class GameTest {
 		/**
 		 * Sets if the pawn can be moved or not. 
 		 * @param diceValue The dicevalue rolled by a player
-		 * @return
+		 * 
+		 * @return Returns true if the player has a valid move, else false
 		 */
 		public boolean validMove(int diceValue){
 			if(inHome && diceValue == 6) {
