@@ -132,8 +132,6 @@ public class Main extends Application {
 			chatTabs = (TabPane) ((AnchorPane) ((BorderPane)
 					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(1);
 			
-			chatTabs.getTabs();
-					
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
 					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(0);
 			
