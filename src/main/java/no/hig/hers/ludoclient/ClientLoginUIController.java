@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
  * Handles the controls for the login GUI
  * Where the username and passord is sent to the server
  * And the Stage is changed too ClientMain
+ * 
+ * @author Daniel on 03.11.2015
  */
 public class ClientLoginUIController {
     @FXML

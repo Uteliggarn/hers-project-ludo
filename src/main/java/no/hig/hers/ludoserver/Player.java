@@ -109,6 +109,7 @@ public class Player {
 	 * accept the info. A message go ahead or you can't message will be sent back to
 	 * the one trying to log in. 
 	 *
+	 * @param serverPort The port that the new player uses
 	 * @return true or false
 	 */
 	public boolean loginChecker(int serverPort) {

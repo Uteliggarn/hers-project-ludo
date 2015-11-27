@@ -7,10 +7,12 @@ import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * @author on 27.11.2015 
+ * 
  * Handles alle GUI for thge playerGameLobby
  * Setting the invited player labels and the host label
  * and removing those who leave or adding those who join th lobby
+ * 
+ * @author Petter on 27.11.2015 
  */
 public class PlayerGameLobbyController {
 
@@ -68,6 +70,8 @@ public class PlayerGameLobbyController {
 	 * Sets the empty labels of the players that got invited
 	 * too the game. And removes the startgame lock when
 	 * there are two players or more
+	 * 
+	 * @param name The name of the player that got invited
 	 */
 	public void setPlayer(String name) {
 		if (playerTwo.getText() == "") 

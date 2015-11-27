@@ -32,9 +32,9 @@ public class Internationalization {
 	}
 	
     /**
-     * Returns the internationalized messages of the default language.
-     * @param message tells what string to return
-     * @return string with correct language or default set to Locale "us"
+     * Method to get the internationalized messages of the default language.
+     * 
+     * @return The ResourceBundle with the messages
      */
     public static ResourceBundle getMessages() {   
     	try {
