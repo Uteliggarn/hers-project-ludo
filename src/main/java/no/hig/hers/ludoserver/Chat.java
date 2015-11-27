@@ -16,7 +16,7 @@ public class Chat {
 		return name;
 	}
 
-	public List<> getPlayerList() {
+	public List<String> getPlayerList() {
 		return playerList;
 	}
 	

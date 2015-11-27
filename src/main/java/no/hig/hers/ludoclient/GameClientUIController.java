@@ -60,10 +60,6 @@ public class GameClientUIController {
 	@FXML
 	private BorderPane gameClientPane;
 	@FXML
-	private TextArea chatArea;
-	@FXML
-	private TextField typeArea;
-	@FXML
 	private Label redPlayer; 
 	@FXML
 	private Label bluePlayer;
@@ -102,10 +98,6 @@ public class GameClientUIController {
 			Main.LOGGER.log(Level.WARNING, "Error while trying to add gameboard", e);
 		}
 		setUpGUI();
-		/*
-		String tmp = (Constants.GAMECHAT + Main.userName);
-		Main.cHandler.addNewChat(tmp);
-		*/
 	}
 	/**
 	 * Sets up most of the GAMEGUI
@@ -135,7 +127,7 @@ public class GameClientUIController {
 		pawn1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 0;
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				sendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText(Main.messages.getString("ROLLDICE"));
@@ -146,7 +138,7 @@ public class GameClientUIController {
 		pawn2.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 1;
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				sendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText(Main.messages.getString("ROLLDICE"));
@@ -157,7 +149,7 @@ public class GameClientUIController {
 		pawn3.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 2;
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				sendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText(Main.messages.getString("ROLLDICE"));
@@ -168,7 +160,7 @@ public class GameClientUIController {
 		pawn4.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				pawnToMove = 3;
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				sendDiceValue(diceValue, turnOwner, pawnToMove);
 				diceValue = 0;
 				diceRolls = 0;
 				dieTextLabel.setText(Main.messages.getString("ROLLDICE"));
@@ -182,7 +174,7 @@ public class GameClientUIController {
 				diceRolls = 0;
 				setPawnMovesFalse();
 				setNotValid();
-				SendDiceValue(diceValue, turnOwner, pawnToMove);
+				sendDiceValue(diceValue, turnOwner, pawnToMove);
 			}
 		});
 		
@@ -196,7 +188,7 @@ public class GameClientUIController {
 	 * @param even Button pressed
 	 */
 	@FXML
-	private void rollDice(ActionEvent even) {
+	private void rollDice() {
 		rollDiceActionListener();
 	}
 	/**
@@ -275,6 +267,9 @@ public class GameClientUIController {
 						}
 					}
 				}
+				break;
+			default : 
+				break;
 			}
 		setDiceImage(diceValue);
 		}
@@ -301,7 +296,7 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-				CheckForPlayersGreen();
+				checkforPlayersGreen();
 			}
 			setNotValid();
 			board.makePawns();
@@ -319,7 +314,7 @@ public class GameClientUIController {
 				Main.LOGGER.log(Level.WARNING, "Goalerror", e);
 			}
 			if(diceValue !=6) {
-				CheckForPlayersRed();
+				checkforPlayersRed();
 			}
 			setNotValid();
 			board.makePawns();
@@ -332,7 +327,7 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-				CheckForPlayersYellow();
+				checkforPlayersYellow();
 			}
 			setNotValid();
 			board.makePawns();
@@ -345,15 +340,14 @@ public class GameClientUIController {
 				gameOver = true;
 			}
 			if(diceValue !=6) {
-				CheckForPlayersBlue();
+				checkforPlayersBlue();
 			}
 			setNotValid();
 			board.makePawns();
 		}
 		
-		if(diceValue == 0) {
+		if(diceValue == 0)
 			passChangeTurnOwner();
-		};
 		
 		diceValue = 0;
 		diceRolls = 0;
@@ -412,6 +406,8 @@ public class GameClientUIController {
 		case 3:
 			pawn4.setDisable(false);
 			break;
+		default :
+			break;
 		}
 	}
 	/**
@@ -438,6 +434,8 @@ public class GameClientUIController {
 			for (int i = 0; i < board.bluePawns.size(); i++) {
 				board.bluePawns.get(i).setNotValid();
 			}
+			break;
+		default:
 			break;
 		}
 	}
@@ -559,7 +557,7 @@ public class GameClientUIController {
 	 * @param playernr turn owner
 	 * @param pawn Pawned that is moved. 0 if passed
 	 */
-	public void SendDiceValue(int diceVal, int playernr, int pawn) {
+	public void sendDiceValue(int diceVal, int playernr, int pawn) {
 		String tmp;
 		tmp = (Constants.DICEVALUE + diceVal + playernr + pawn);
 		try {
@@ -590,16 +588,16 @@ public class GameClientUIController {
 		
 		switch(turnOwner) {
 		case 1:	//Green
-			CheckForPlayersGreen();
+			checkforPlayersGreen();
 			break; 
 		case 2:	//Red
-			CheckForPlayersRed();
+			checkforPlayersRed();
 			break;
 		case 3: //Yellow
-			CheckForPlayersYellow();
+			checkforPlayersYellow();
 			break;
 		case 4: //Blue
-			CheckForPlayersBlue();
+			checkforPlayersBlue();
 			break;
 		default: break;
 		}
@@ -614,7 +612,7 @@ public class GameClientUIController {
 	 * Sets the correct labels for the green player.
 	 * If this player is the last man standing, the game is over and that player won.
 	 */
-	public void CheckForPlayersGreen() {
+	public void checkforPlayersGreen() {
 		greenPlayer.setText(Main.messages.getString("GREEN") + " " + playerName1);
 		if(player2) {
 			turnOwner ++;
@@ -639,7 +637,7 @@ public class GameClientUIController {
 	 * Sets the correct labels for the red player and changes turn owner.
 	 * If this player is the last man standing, the game is over and that player won. 
 	 */
-	public void CheckForPlayersRed() {
+	public void checkforPlayersRed() {
 		redPlayer.setText(Main.messages.getString("RED") + " " + playerName2);
 		if(player3) {
 			turnOwner ++;
@@ -665,7 +663,7 @@ public class GameClientUIController {
 	 * Sets the correct labels for the yellow player.
 	 * If this player is the last man standing, the game is over and that player won.
 	 */
-	public void CheckForPlayersYellow() {
+	public void checkforPlayersYellow() {
 		yellowPlayer.setText(Main.messages.getString("YELLOW") + " " + playerName3);
 		if(player4) {
 			turnOwner ++;
@@ -691,7 +689,7 @@ public class GameClientUIController {
 	 * Sets the correct labels for the blue player. 
 	 * If this player is the last man standing, the game is over and that player won.
 	 */
-	public void CheckForPlayersBlue() {
+	public void checkforPlayersBlue() {
 		bluePlayer.setText(Main.messages.getString("BLUE") + " " + playerName4);
 		if(player1) {
 			turnOwner = 1;

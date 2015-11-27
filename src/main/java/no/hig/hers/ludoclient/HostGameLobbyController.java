@@ -3,8 +3,6 @@ package no.hig.hers.ludoclient;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
