@@ -11,10 +11,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
- * @author on 27.11.2015 
  * Handles the controls of the register GUI
  * Where the new username and passord is sent
  * and the stage change back to login GUI
+ * 
+ * @author Daniel on 03.11.2015 
  */
 public class ClientRegisterUIController {
     @FXML

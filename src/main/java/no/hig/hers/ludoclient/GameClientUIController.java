@@ -22,7 +22,7 @@ import no.hig.hers.ludoshared.Constants;
  * It controls all the movement on the board through the LudoBoardFX class and communicate with the gameserver.
  * It also controls all the GUI of the game scene.
  *   
- * @author Hauken
+ * @author Hauken on 17.11.2015
  *
  */
 public class GameClientUIController {

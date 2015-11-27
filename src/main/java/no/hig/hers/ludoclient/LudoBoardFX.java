@@ -16,8 +16,9 @@ import javafx.scene.text.Font;
 /**
  * Class that keeps track of the Ludogame. 
  * It holds all the game logic and stores information about every pawn. 
- * It also draws the game board and the pawns onto the board. 
- * @author Hauken
+ * It also draws the game board and the pawns onto the board.
+ *  
+ * @author Hauken on 19.11.2015
  *
  */
 public class LudoBoardFX extends Pane {
@@ -690,7 +691,8 @@ public class LudoBoardFX extends Pane {
 		/**
 		 * Method that returns the inHome boolean.
 		 * It keeps track of whether the pawn is in it's colors homefield or not.
-		 * @return
+		 * 
+		 * @return Returns true if the pawn is in home.
 		 */
 		public boolean returnInHome() {
 			return inHome;
@@ -930,7 +932,8 @@ public class LudoBoardFX extends Pane {
 		/**
 		 * Sets if the pawn can be moved or not. 
 		 * @param diceValue The dicevalue rolled by a player
-		 * @return
+		 * 
+		 * @return Returns true if the player has a valid move, else false
 		 */
 		public boolean validMove(int diceValue){
 			if(inHome && diceValue == 6) {

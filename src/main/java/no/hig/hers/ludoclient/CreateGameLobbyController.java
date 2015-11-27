@@ -11,11 +11,12 @@ import javafx.scene.control.ListView;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * @author on 27.11.2015 
  * Handles the createGameLobby GUI elements 
  * Where the start game button is set to disable until 1 more player
  * has joined the lobby other than the host.
  * updates the playerList in order to invite players
+ * 
+ * @author Petter on 27.11.2015 
  */
 public class CreateGameLobbyController {
 	
@@ -108,6 +109,8 @@ public class CreateGameLobbyController {
 	 * Sets the empty labels of the players that got invited
 	 * too the game. And removes the startgame lock when
 	 * there are two players or more
+	 * 
+	 * @param name The name of the player.
 	 */
 	public void setPlayer(String name) {
 		if (playerTwo.getText() == "") 

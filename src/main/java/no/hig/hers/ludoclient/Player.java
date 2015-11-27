@@ -8,10 +8,11 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 /**
- * @author on 27.11.2015
  * Player object is created when a new connection to server is accepted.
  * player Object handles all the personal data of the player and
  * the connection too the player on the client side.
+ * 
+ * @author Petter on 27.11.2015
  */
 public class Player {
 	

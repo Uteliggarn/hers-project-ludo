@@ -16,10 +16,11 @@ import javafx.scene.layout.GridPane;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * @author on 27.11.2015 
  * Main controller for handling all of the main GUI features.
- * That includes the buttons in the "Main" tab aswell as the list of group chats
+ * That includes the buttons in the "Main" tab as well as the list of group chats
  * and the button for creating new group chats
+ * 
+ * @author Daniel on 05.11.2015 
  */
 public class ClientMainUIController {
     @FXML
@@ -210,8 +211,8 @@ public class ClientMainUIController {
     }
     
     /**
-     * Sets the Top ten played list text
-     * @param played The String 2D array with the new played list
+     * Sets the Top ten won list text
+     * @param won The String 2D array with the new won list
      */
     public void setTopTenWon(String[][] won) {
     	Platform.runLater(() -> {

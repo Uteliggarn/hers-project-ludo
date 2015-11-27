@@ -36,6 +36,8 @@ import javafx.fxml.FXMLLoader;
 /**
  * The main method of the client. 
  * This is where the client is started. 
+ * 
+ * @author Daniel on 03.11.2015
  */
 public class Main extends Application {
 	private static Stage currentStage;
@@ -88,7 +90,7 @@ public class Main extends Application {
 		connect();
 	}
 	/**
-	 * Function that is called when main starts.
+	 * Method that is called when main starts.
 	 * @param args the command line arguments passed to the application.
 	 */
 	public static void main(String[] args) {

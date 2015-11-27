@@ -22,6 +22,12 @@ import no.hig.hers.ludoshared.MyLogger;
 import javax.swing.JFrame;
 import no.hig.hers.ludoserver.Player;
 
+/**
+ * Global server handles all the communication form the clients
+ * and messages back to the clients.
+ * 
+ * @author Petter on 03.11.2015 
+ */
 public class GlobalServer extends JFrame{
 	private static boolean shutdown = false;
 	private static int serverPorts = 10000;
@@ -45,6 +51,11 @@ public class GlobalServer extends JFrame{
 
     final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
+    /**
+     * Method that is called when main starts. Server socket is set and
+     * the thread pool is made aswell as all the infinite threads are launched.
+	 * @param args the command line arguments passed to the application.
+     */
     public static void main( String[] args ) {
     	GUI = new GlobalServerGUIHandler();
 		

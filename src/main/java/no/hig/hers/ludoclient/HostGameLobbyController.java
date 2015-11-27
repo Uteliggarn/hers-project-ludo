@@ -10,11 +10,12 @@ import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
 
 /**
- * @author on 27.11.2015 
  * Class that is made by the host player when the queue game option is chosen.
  * The other players than the host makes a PlayerGameLobbyController instead.
  * The player of that is host can start the game. 
  * The player also joins the game chat.
+ * 
+ * @author Petter on 27.11.2015 
  */
 public class HostGameLobbyController {
 	
@@ -66,6 +67,8 @@ public class HostGameLobbyController {
 	 * Sets the empty labels of the players that got invited
 	 * too the game. And removes the startgame lock when
 	 * there are two players or more
+	 * 
+	 * @param name The name of the player that got invited.
 	 */
 	public void setPlayer(String name) {
 		if (playerTwo.getText() == "") 

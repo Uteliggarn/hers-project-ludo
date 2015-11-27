@@ -12,7 +12,8 @@ import java.util.logging.Level;
 /**
  * Class for handling the Database,
  * including connecting and retrieving data.
- * @author daniel on 03.11.2015
+ * 
+ * @author Daniel on 03.11.2015
  */
 public class DatabaseHandler {
 

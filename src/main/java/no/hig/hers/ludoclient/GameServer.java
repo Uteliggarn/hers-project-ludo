@@ -15,9 +15,10 @@ import java.util.logging.Level;
 import no.hig.hers.ludoshared.Constants;
 
 /**
- * @author on 27.11.2015 
  * Each players gameserver that handles the connection between players
  * when a Ludo game is in a session
+ * 
+ * @author Petter on 27.11.2015 
  */
 public class GameServer {
 	
@@ -35,7 +36,7 @@ public class GameServer {
 	/**
 	 * Constructor for GameServer where the the server socket is set
 	 * and all the threads are started.
-	 * @param socket
+	 * @param socket The socket to set
 	 */
 	public GameServer(int socket) {
 		

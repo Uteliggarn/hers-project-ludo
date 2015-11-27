@@ -10,8 +10,8 @@ import javax.swing.SwingUtilities;
 
 /**
  * Class for handling the GUI for the GlobalServer.
+ * 
  * @author daniel on 26.11.2015
- *
  */
 public class GlobalServerGUIHandler extends JFrame {
 	private static final long serialVersionUID = 1L;

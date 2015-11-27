@@ -11,7 +11,7 @@ import no.hig.hers.ludoshared.Constants;
 
 /**
  * Class for handling the Chat Overlays.
- * @author daniel on 07.11.2015
+ * @author Daniel on 07.11.2015
  */
 public class ClientChatOverlayController {
 
