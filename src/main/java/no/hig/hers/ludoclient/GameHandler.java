@@ -26,7 +26,7 @@ import no.hig.hers.ludoshared.Constants;
  * The connection too gameserver is also set aswell as the connection loop
  * for proccessing messages from the gameserver
  * 
- * @author on 27.11.2015 
+ * @author Petter on 27.11.2015 
  */
 public class GameHandler {
 	

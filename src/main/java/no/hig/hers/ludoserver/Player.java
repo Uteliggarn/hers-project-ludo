@@ -17,7 +17,8 @@ import no.hig.hers.ludoshared.Constants;
  * is accpeted. Also handles the check if the one trying to connect
  * with a username and passord exits in the database or wants too 
  * create a new user in the database
- * Author on 27.11.2015 
+ * 
+ * Author Petter on 03.11.2015 
  */
 public class Player {
 	

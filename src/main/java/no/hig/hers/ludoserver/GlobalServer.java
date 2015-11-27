@@ -23,9 +23,10 @@ import javax.swing.JFrame;
 import no.hig.hers.ludoserver.Player;
 
 /**
- * @author on 27.11.2015 
  * Global server handles all the communication form the clients
  * and messages back to the clients.
+ * 
+ * @author Petter on 03.11.2015 
  */
 public class GlobalServer extends JFrame{
 	private static boolean shutdown = false;

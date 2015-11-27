@@ -7,7 +7,7 @@ import no.hig.hers.ludoshared.Constants;
 
 /**
  * Class for handling chat messages, serverside.
- * @author daniel on 26.11.2015
+ * @author Daniel on 26.11.2015
  */
 
 public class ChatHandler {

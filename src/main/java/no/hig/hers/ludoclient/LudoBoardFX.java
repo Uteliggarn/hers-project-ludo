@@ -18,7 +18,7 @@ import javafx.scene.text.Font;
  * It holds all the game logic and stores information about every pawn. 
  * It also draws the game board and the pawns onto the board.
  *  
- * @author Hauken
+ * @author Hauken on 19.11.2015
  *
  */
 public class LudoBoardFX extends Pane {

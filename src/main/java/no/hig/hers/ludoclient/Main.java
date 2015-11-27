@@ -36,6 +36,8 @@ import javafx.fxml.FXMLLoader;
 /**
  * The main method of the client. 
  * This is where the client is started. 
+ * 
+ * @author Daniel on 03.11.2015
  */
 public class Main extends Application {
 	private static Stage currentStage;

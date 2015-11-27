@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author on 27.11.2015 
+ * 
  * Chat class for handling adding and removing players 
  * in the playerList for one chat
+ * 
+ * @author Daniel on 25.11.2015 
  */
 public class Chat {
 	private String name;

@@ -15,7 +15,7 @@ import javafx.scene.control.Button;
  * The player of that is host can start the game. 
  * The player also joins the game chat.
  * 
- * @author on 27.11.2015 
+ * @author Petter on 27.11.2015 
  */
 public class HostGameLobbyController {
 	
