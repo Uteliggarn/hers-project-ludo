@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import no.hig.hers.ludoshared.Constants;
 
 /**
+ * @author on 27.11.2015 
  * Handles the createGameLobby GUI elements 
  * Where the start game button is set to disable until 1 more player
  * has joined the lobby other than the host.
@@ -94,6 +95,9 @@ public class CreateGameLobbyController {
 		
 	}
 	
+	/**
+	 * Sets the invited player label to empty
+	 */
 	private void clearJoinedPlayers() {
 		playerTwo.setText("");
 		playerThree.setText("");

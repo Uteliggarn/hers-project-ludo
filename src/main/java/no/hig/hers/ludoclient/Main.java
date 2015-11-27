@@ -33,7 +33,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.fxml.FXMLLoader;
 
-
+/**
+ * The main method of the client. 
+ * This is where the client is started. 
+ */
 public class Main extends Application {
 	private static Stage currentStage;
 	static Scene loginScene;
@@ -64,7 +67,10 @@ public class Main extends Application {
 	
 	static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	static ResourceBundle messages;
-	
+	/**
+	 * Start method of the main class. Initialize logger and internationalization. 
+	 * It sets up scenes and connect to the server.
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		messages = Internationalization.getMessages();
@@ -81,7 +87,10 @@ public class Main extends Application {
 		
 		connect();
 	}
-	
+	/**
+	 * Function that is called when main starts.
+	 * @param args the command line arguments passed to the application.
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -129,11 +138,11 @@ public class Main extends Application {
 
 			mainController = (ClientMainUIController) loader.getController();
 			
-			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
-					
+			chatTabs = (TabPane) ((AnchorPane) ((BorderPane)
+					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(1);
+			
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(0);
 			
 			gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
 				if (newTab.getId().equals("main")) {
@@ -172,7 +181,9 @@ public class Main extends Application {
 	public static void requestTopTen() {
 		sendText(Constants.PLAYERMESSAGE + Constants.TOP);
 	}
-	
+	/**
+	 * Method for requesting the player scores.
+	 */
 	public static void requestPlayerScores() {
 		sendText(Constants.PLAYERMESSAGE + Constants.PLAYERSCORES);
 	}
@@ -360,7 +371,12 @@ public class Main extends Application {
 			}
 		});
 	}
-	
+	/**
+	 * Is called when a player get invited to join a game. 
+	 * If the player accepts the invite the player joins that game lobby.
+	 * @param port the port of the host player
+	 * @param ip the ip of the host player
+	 */
 	private static void inviteAccept(int port, String ip) {
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);

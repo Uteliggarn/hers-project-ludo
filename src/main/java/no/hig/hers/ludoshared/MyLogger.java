@@ -9,11 +9,16 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
+/**
+ * Class of the logger functionality. 
+ */
 public class MyLogger {
 	private static SimpleFormatter formatterTxt;
 	private static FileHandler fileHandler;
-	
+	/**
+	 * Method that set up the logger. 
+	 * @throws IOException Throws any I/O exception. 
+	 */
 	public static void setupLogger() throws IOException {	
 		Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 		LOGGER.setLevel(Level.WARNING);
@@ -33,6 +38,10 @@ public class MyLogger {
 	    LOGGER.addHandler(fileHandler);
 	}
 	
+	/**
+	 * Return the data timestamp.
+	 * @return the timestamp.
+	 */
 	private static String timeStamp() {
 		String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
 		return timeStamp;

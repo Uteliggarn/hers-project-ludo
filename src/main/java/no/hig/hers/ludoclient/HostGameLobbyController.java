@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
+
 /**
+ * @author on 27.11.2015 
  * Class that is made by the host player when the queue game option is chosen.
  * The other players than the host makes a PlayerGameLobbyController instead.
  * The player of that is host can start the game. 
@@ -29,10 +31,8 @@ public class HostGameLobbyController {
 	private ArrayList<String> playerJoinList = new ArrayList<>();
 	
 	private String hostName;
-	
-	private String hostName;
 	/**
-	 * Initialize label text and sets the button to start game not disabled. 
+	 * Initialize label text and sets the button to start game as not disabled. 
 	 */
 	public void initialize() {
 		startGameButton.setDisable(false);
@@ -43,8 +43,8 @@ public class HostGameLobbyController {
 		playerFour.setText("");
 	}
 	/**
-	 * Sets the host player
-	 * @param hostName
+	 * Sets the host player on playerOne label and join game chat.
+	 * @param hostName the name of the game host
 	 */
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
@@ -52,7 +52,10 @@ public class HostGameLobbyController {
 		String tmp = Constants.GAMECHAT + hostName.substring(4, hostName.length());
 		Main.cHandler.addNewChat(tmp);
 	}
-	
+		
+	/**
+	 * sets the invited player labels to empty
+	 */
 	private void clearJoinedPlayers() {
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -72,7 +75,7 @@ public class HostGameLobbyController {
 		else if (playerFour.getText() == "") 
 			playerFour.setText(name);
 	}
-	
+
 	/**
 	 * Sets all labels to empty "", and checks if the playerJoinList containts the name
 	 * if so the name is added and the startGameButton is opened
@@ -114,12 +117,18 @@ public class HostGameLobbyController {
 			playerTwo.setText("");
 	}
 	
+	/**
+	 * Internationalization of the playerLabel, hostLabel and starGameButton.
+	 */
 	public void setLabelText() {
 		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
 		hostLabel.setText(Main.messages.getString("HOST"));
 		startGameButton.setText(Main.messages.getString("STARTGAME"));
 	}
-	
+	/**
+	 * Starts the game for all players when the start game button is pressed. 
+	 * @throws IOException Throws any I/O exceptions.
+	 */
 	@FXML private void startGameButtonPressed() throws IOException {	
 		try {
 			sendText(Constants.GAMESTART);
@@ -127,7 +136,10 @@ public class HostGameLobbyController {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
 	}
-
+	/**
+	 * Sets the correct output so that the host can communicate with the game server.
+	 * @param write the bufferedWriter of the gameserver. Connection to the server.
+	 */
 	public void setConnetion(BufferedWriter write) {
 		output = write;
 	}
