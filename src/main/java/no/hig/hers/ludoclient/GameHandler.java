@@ -125,7 +125,6 @@ public class GameHandler {
 			while (true) {
 				try {
 	                String msg = input.readLine();
-	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if (msg != null) {
 		                if(msg.startsWith(Constants.GAMESTART)) {					// Makes the gameClientUIController if the message
@@ -134,7 +133,6 @@ public class GameHandler {
 	                															
 	                			FXMLLoader loader = new FXMLLoader();
 	                			try {
-	                				System.out.print("Starter spill for " + n);
 		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
 		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
 		                					Main.gameTabs.getTabs().get(i).setContent(
@@ -142,9 +140,7 @@ public class GameHandler {
 		                					gameClientUIController = loader.getController();
 			                				gameClientUIController.setConnetion(output, input);
 			                				gameClientUIController.setPlayer(n);
-			                				System.out.println("inne");
 		                				}
-		                				System.out.println("ute");
 		                			}
 	                			} catch (IOException e) {
 	                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
@@ -154,7 +150,6 @@ public class GameHandler {
 		                else if(msg.startsWith(Constants.GAMENAME)) {
 							Platform.runLater(() -> {
 								int n = Integer.parseInt(msg.substring(9, 10));
-	                			System.out.println("playernamenr " + n);
 	                			String tmpNavn = msg.substring(10, msg.length());
 	                			gameClientUIController.setPlayerName(n, tmpNavn);    		
 							});
@@ -164,7 +159,6 @@ public class GameHandler {
 								int diceVal = Integer.parseInt(msg.substring(10,11));
 	                			int player = Integer.parseInt(msg.substring(11,12));
 			                	int pawn = Integer.parseInt(msg.substring(12,13));
-			                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 		                	});
 		                }
@@ -220,17 +214,13 @@ public class GameHandler {
 				                }
 		                	}
 		                }
+		                Thread.sleep(250);
 	                }   
 	            } catch (IOException ioe) {
 	            	Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", ioe);
-	            }
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
-				} catch (Exception e) {
+	            } catch (Exception e) {
 					Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 				}
-	            
 			}
 		});
 	}

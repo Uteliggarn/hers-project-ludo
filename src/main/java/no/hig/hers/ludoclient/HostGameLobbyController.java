@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
@@ -18,13 +16,11 @@ public class HostGameLobbyController {
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
 	@FXML private Label playerLabel;
-	@FXML private Label hostLabel;
-	
+	@FXML private Label hostLabel;	
 	@FXML private Button startGameButton;
-	
-	private int serverPort;
+
 	private static BufferedWriter output;
-	
+
 	private ArrayList<String> playerJoinList = new ArrayList<>();
 	
 	private String hostName;
@@ -40,9 +36,8 @@ public class HostGameLobbyController {
 	
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
-		this.hostName = hostName;
 		
-		String tmp = (Constants.GAMECHAT + hostName.substring(4, hostName.length()));
+		String tmp = Constants.GAMECHAT + hostName.substring(4, hostName.length());
 		Main.cHandler.addNewChat(tmp);
 	}
 	
@@ -112,16 +107,13 @@ public class HostGameLobbyController {
 		hostLabel.setText(Main.messages.getString("HOST"));
 		startGameButton.setText(Main.messages.getString("STARTGAME"));
 	}
-	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
+	
+	@FXML private void startGameButtonPressed() throws IOException {	
 		try {
 			sendText(Constants.GAMESTART);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
-	}
-	
-	public void getServerPort(int serverPort) {
-		this.serverPort = serverPort;
 	}
 
 	public void setConnetion(BufferedWriter write) {

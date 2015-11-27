@@ -20,8 +20,8 @@ import no.hig.hers.ludoshared.Constants;
  */
 
 public class ChatHandler {
-	private List<Tab> chats;
 	private TabPane chatTabs;
+	private List<Tab> chats;
 	private List<ClientChatOverlayController> controllers;
 	
 	/**
@@ -45,7 +45,8 @@ public class ChatHandler {
 	public void addNewChat(String name) {
 		boolean exists = false;
 		for (int i = 0; i < chats.size(); i++) {
-			if (chats.get(i).getId().equals(name)) exists = true; 
+			if (chats.get(i).getId().equals(name)) 
+				exists = true; 
 		}
 		
 		if (!exists) {
@@ -58,7 +59,7 @@ public class ChatHandler {
 				newTab.setOnClosed(new EventHandler<Event>() {
 					@Override
 					public void handle(Event e) {
-						Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + newTab.getId());
+						leaveChat(name);
 					}
 				});
 			} catch (IOException e) {
@@ -126,7 +127,7 @@ public class ChatHandler {
 	}
 
 	/**
-	 * Function for leaving the gamechat,
+	 * Method for leaving the gamechat,
 	 * closing the tab and removing it from the list
 	 * @param hostName The gamechat to leave.
 	 */
@@ -139,6 +140,20 @@ public class ChatHandler {
 			if (chatTabs.getTabs().get(i).getId().equals(chatName)) {
 				chatTabs.getTabs().remove(i);
 				Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + chatName);
+			}
+		}
+	}
+	
+	/**
+	 * Method for leaving chats, removing it from the list,
+	 * and sending the server a message that the player has left the chat
+	 * @param name The chat to leave.
+	 */
+	public void leaveChat(String name) {
+		for (int i = 0; i < chats.size(); i++) {
+			if (chats.get(i).getId().equals(name)) {
+				Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + name);
+				chats.remove(i);
 			}
 		}
 	}

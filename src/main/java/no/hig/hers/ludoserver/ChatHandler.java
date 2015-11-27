@@ -11,6 +11,12 @@ import no.hig.hers.ludoshared.Constants;
  */
 
 public class ChatHandler {
+	
+	/**
+	 * Private constructor to hide the implicit public one
+	 */
+	private ChatHandler() {
+	}
 
 	/**
 	 * Method handles a player joining a chat,
@@ -34,7 +40,7 @@ public class ChatHandler {
 									Constants.CHATMESSAGE + Constants.JOIN + msg + ":" + p.getName());
 					}
 				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
+					GlobalServer.LOGGER.log(Level.INFO, "Could not send chat message to players", e);
 				}
 				
 				//Writes to file
@@ -55,19 +61,20 @@ public class ChatHandler {
 		for (int i = 0; i < GlobalServer.groupChatList.size(); i++) {
 			if (msg.startsWith(GlobalServer.groupChatList.get(i).getName() + ":")) {
 				GlobalServer.GUI.displayMessage(msg + "\n");
-				msg = msg.substring(GlobalServer.groupChatList.get(i).getName().length() + 1);
+				String message = msg.substring(GlobalServer.groupChatList.get(i).getName().length() + 1);
 				
 				try {
 					for (int j = 0; j < GlobalServer.players.size(); j++) {
-					if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
-						GlobalServer.players.get(j).sendText(Constants.CHATMESSAGE + GlobalServer.groupChatList.get(i).getName() + ":" + p.getName() + " > " + msg);
+						if (GlobalServer.groupChatList.get(i).playerExists(GlobalServer.players.get(j).getName()))
+							GlobalServer.players.get(j).sendText(Constants.CHATMESSAGE + 
+									GlobalServer.groupChatList.get(i).getName() + ":" + p.getName() + " > " + message);
 					}
 				} catch (Exception e) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Thread interrupted", e);
 				}
 			//Writes to file
 			GlobalServer.fileName = GlobalServer.groupChatList.get(i).getName() + "_" + GlobalServer.fileNameEnd;
-			GlobalServer.writeToFile(GlobalServer.fileName, GlobalServer.groupChatList.get(i).getName() + ":" + msg);
+			GlobalServer.writeToFile(GlobalServer.fileName, GlobalServer.groupChatList.get(i).getName() + ":" + p.getName() + " > " + message);
 			}	
 		}
 	}
@@ -82,15 +89,23 @@ public class ChatHandler {
 	 * @param msg Constants.NEWCHAT followed by the new chatname.
 	 */
 	static void createNewChat(Player p, String msg) {
-		Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
-		if(GlobalServer.groupChatList.contains(newChat) 
-				&& GlobalServer.groupChatList.contains(new Chat(Constants.IDGK + p.getName())))
+		boolean exists = false;
+		int i = 0;
+		
+		while (!exists && i < GlobalServer.groupChatList.size()) {
+			if(GlobalServer.groupChatList.get(i).getName().equals(msg.substring(Constants.NEWCHAT.length())))
+				exists = true;
+			i++;
+		}
+		
+		if (exists)
 			try {
 				p.sendText(Constants.ERRORCHAT);
 			} catch (IOException ioe) {
 				GlobalServer.LOGGER.log(Level.INFO, "Couldn't send message to player", ioe);
 			}
 		else {
+			Chat newChat = new Chat(msg.substring(Constants.NEWCHAT.length()));
 			GlobalServer.groupChatList.add(newChat);
 			try {
 				GlobalServer.messages.put(Constants.CHATMESSAGE + msg);
