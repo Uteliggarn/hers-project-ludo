@@ -129,11 +129,13 @@ public class Main extends Application {
 
 			mainController = (ClientMainUIController) loader.getController();
 			
-			chatTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(1);
+			chatTabs = (TabPane) ((AnchorPane) ((BorderPane)
+					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(1);
+			
+			chatTabs.getTabs();
 					
 			gameTabs = (TabPane) ((AnchorPane) ((BorderPane) 
-					mainRoot.getChildren().get(0)).getChildren().get(0)).getChildren().get(0);
+					mainRoot.getChildren().get(1)).getChildren().get(0)).getChildren().get(0);
 			
 			gameTabs.getSelectionModel().selectedItemProperty().addListener((ov, oldTab, newTab) -> {
 				if (newTab.getId().equals("main")) {
