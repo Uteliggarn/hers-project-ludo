@@ -10,11 +10,6 @@
 
 <StackPane prefHeight="800.0" prefWidth="1700.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.ClientMainUIController">
    <children>
-      <ImageView fitHeight="1080.0" fitWidth="1920.0" opacity="0.4" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="images/mainWallpaper.jpg" />
-         </image>
-      </ImageView>
       <BorderPane>
          <center>
             <AnchorPane prefHeight="800.0" prefWidth="1700.0">
