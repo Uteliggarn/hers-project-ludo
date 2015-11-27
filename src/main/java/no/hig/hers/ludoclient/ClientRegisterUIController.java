@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -75,8 +76,8 @@ public class ClientRegisterUIController {
     	if (password.length() >= 6 && password.length() <= 10) {
 			if (password.equals(confirm)) {
 				try {
-					Main.sendLogin("SENDREGISTER:", username, password);
-					if("ACCEPTED".equals(Main.input.readLine())) {
+					Main.sendLogin(Constants.SENDREGISTER, username, password);
+					if(Main.input.readLine().equals(Constants.ACCEPTED)) {
 						Main.showAlert("User successfully created", "Congratulations, you have successfully created a new user.");
 						Main.changeScene(Main.loginScene);
 						Main.connect();

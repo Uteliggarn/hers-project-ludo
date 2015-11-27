@@ -2,6 +2,7 @@ package no.hig.hers.ludoclient;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 
@@ -25,7 +26,8 @@ public class LudoBoardFX extends Pane {
 	Canvas gamePieces;
 	Image board;
 	private int drawn;
-	private Color color[] = {Color.BLACK, Color.LAWNGREEN, Color.YELLOW, Color.RED, Color.BLUE, Color.WHITE, Color.ORANGE, Color.GRAY};
+	private Color color[] = {Color.BLACK, Color.LAWNGREEN, Color.YELLOW, 
+			Color.RED, Color.BLUE, Color.WHITE, Color.ORANGE, Color.GRAY};
 	
 	//Vectors that keep track of each colors coordinates (valid coordinates for the pawns to move to) 
 	private Vector<Point> coordinatesGreen= new Vector<>();
@@ -39,7 +41,7 @@ public class LudoBoardFX extends Pane {
 	final ArrayList<Pawned> redPawns = new ArrayList<Pawned>();
 	final ArrayList<Pawned> bluePawns = new ArrayList<Pawned>();
 	
-	//Arralist that keeps track of how many pawns of each color is in the goal
+	//Arraylist that keeps track of how many pawns of each color is in the goal
 	//If all pawns of a color is in their respectively arrayslists, that player wins.
 	final ArrayList<Pawned> greenPawnsInGoal = new ArrayList<Pawned>();
 	final ArrayList<Pawned> yellowPawnsInGoal = new ArrayList<Pawned>();

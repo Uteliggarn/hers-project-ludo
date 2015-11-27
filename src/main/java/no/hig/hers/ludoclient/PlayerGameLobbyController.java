@@ -13,7 +13,6 @@ public class PlayerGameLobbyController {
 	@FXML private Label playerLabel;
 	@FXML private Label hostLabel;
 	
-	
 	String host;
 	
 	public void initialize() {

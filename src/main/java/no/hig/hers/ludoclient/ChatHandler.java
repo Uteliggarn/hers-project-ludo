@@ -45,7 +45,8 @@ public class ChatHandler {
 	public void addNewChat(String name) {
 		boolean exists = false;
 		for (int i = 0; i < chats.size(); i++) {
-			if (chats.get(i).getId().equals(name)) exists = true; 
+			if (chats.get(i).getId().equals(name)) 
+				exists = true; 
 		}
 		
 		if (!exists) {
