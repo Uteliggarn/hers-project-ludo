@@ -88,7 +88,7 @@ public class Main extends Application {
 		connect();
 	}
 	/**
-	 * Function that is called when main starts.
+	 * Method that is called when main starts.
 	 * @param args the command line arguments passed to the application.
 	 */
 	public static void main(String[] args) {
