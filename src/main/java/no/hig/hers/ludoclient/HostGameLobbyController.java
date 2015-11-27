@@ -17,14 +17,10 @@ public class HostGameLobbyController {
 	@FXML private Label playerThree;
 	@FXML private Label playerFour;
 	@FXML private Label playerLabel;
-	@FXML private Label hostLabel;
-	
+	@FXML private Label hostLabel;	
 	@FXML private Button startGameButton;
-	
-	private int serverPort;
+
 	private static BufferedWriter output;
-	
-	private String hostName;
 	
 	public void initialize() {
 		startGameButton.setDisable(false);
@@ -37,9 +33,8 @@ public class HostGameLobbyController {
 	
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
-		this.hostName = hostName;
 		
-		String tmp = (Constants.GAMECHAT + hostName.substring(4, hostName.length()));
+		String tmp = Constants.GAMECHAT + hostName.substring(4, hostName.length());
 		Main.cHandler.addNewChat(tmp);
 	}
 	
@@ -57,16 +52,13 @@ public class HostGameLobbyController {
 		hostLabel.setText(Main.messages.getString("HOST"));
 		startGameButton.setText(Main.messages.getString("STARTGAME"));
 	}
-	@FXML private void startGameButtonPressed(ActionEvent e) throws IOException {	
+	
+	@FXML private void startGameButtonPressed() throws IOException {	
 		try {
 			sendText(Constants.GAMESTART);
 		} catch (Exception ioe) {
 			Main.LOGGER.log(Level.WARNING, "Unable to send message to server", ioe);
 		}
-	}
-	
-	public void getServerPort(int serverPort) {
-		this.serverPort = serverPort;
 	}
 
 	public void setConnetion(BufferedWriter write) {

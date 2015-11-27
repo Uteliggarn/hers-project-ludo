@@ -1,21 +1,22 @@
 package no.hig.hers.ludoserver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chat {
 	private String name;
-	private ArrayList<String> playerList;
+	private List<String> playerList;
 	
 	public Chat(String name) {
 		this.name = name;
-		playerList = new ArrayList<String>();
+		playerList = new ArrayList<>();
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public ArrayList<String> getPlayerList() {
+	public List<> getPlayerList() {
 		return playerList;
 	}
 	

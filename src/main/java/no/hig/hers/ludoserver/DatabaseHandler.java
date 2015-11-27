@@ -20,14 +20,12 @@ public class DatabaseHandler {
 	private static final String USERNAME = "s130443";
 	private static final String PASSWORD = "IR5ouFpy";
 	
-	private static final String CONNECTION_FAILED = "Failed to connect to database";
-	
 	public static final String MATCHESWON = "matcheswon";
 	public static final String MATCHESPLAYED = "matchesplayed";
 
 	private static Connection connection = null;
 	
-	public DatabaseHandler() {
+	private DatabaseHandler() {
 	}
 	/**
 	 * Method for connecting to an external database.
@@ -94,7 +92,8 @@ public class DatabaseHandler {
 	 */
 	public static void updatePlayersMatches(int userID, boolean won) {
 		String query;
-		if (won) query = "UPDATE users SET matchesplayed = matchesplayed + 1, matcheswon = matcheswon + 1 WHERE _ID=\'" + userID + "\'";
+		if (won) 
+			query = "UPDATE users SET matchesplayed = matchesplayed + 1, matcheswon = matcheswon + 1 WHERE _ID=\'" + userID + "\'";
 		else query = "UPDATE users SET matchesplayed = matchesplayed + 1 WHERE _ID=\'" + userID + "\'";
 		
 		Statement stmt;
@@ -188,7 +187,8 @@ public class DatabaseHandler {
 
 	        for (int i = 0; i < hash.length; i++) {
 	            String hex = Integer.toHexString(0xff & hash[i]);
-	            if(hex.length() == 1) hexString.append('0');
+	            if(hex.length() == 1) 
+	            	hexString.append('0');
 	            hexString.append(hex);
 	        }
 
