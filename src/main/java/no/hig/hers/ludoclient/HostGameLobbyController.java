@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
+
 /**
+ * @author on 27.11.2015 
  * Class that is made by the host player when the queue game option is chosen.
  * The other players than the host makes a PlayerGameLobbyController instead.
  * The player of that is host can start the game. 
@@ -29,7 +31,7 @@ public class HostGameLobbyController {
 	private ArrayList<String> playerJoinList = new ArrayList<>();
 	
 	private String hostName;
-	
+
 	/**
 	 * Initialize label text and sets the button to start game as not disabled. 
 	 */
@@ -52,6 +54,9 @@ public class HostGameLobbyController {
 		Main.cHandler.addNewChat(tmp);
 	}
 		
+	/**
+	 * sets the invited player labels to empty
+	 */
 	private void clearJoinedPlayers() {
 		playerTwo.setText("");
 		playerThree.setText("");

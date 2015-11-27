@@ -6,6 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * @author on 27.11.2015 
+ * Handles alle GUI for thge playerGameLobby
+ * Setting the invited player labels and the host label
+ * and removing those who leave or adding those who join th lobby
+ */
 public class PlayerGameLobbyController {
 
 	@FXML private Label playerOne;
@@ -19,6 +25,10 @@ public class PlayerGameLobbyController {
 	
 	private ArrayList<String> playerJoinList = new ArrayList<>();
 	
+	/**
+	 * Sets the internationilization of labels
+	 * and sets all the labels to emtpy
+	 */
 	public void initialize() {
 		setLabelText();
 		playerOne.setText("");
@@ -27,17 +37,27 @@ public class PlayerGameLobbyController {
 		playerFour.setText("");
 	}
 	
+	/**
+	 * Set the label for the host to the name of the game host
+	 * @param hostName is the name of the one hosting the game
+	 */
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
 		host = hostName;
 		joinGameChat();
 	}
 	
+	/**
+	 * sets the internationilazation of the labels
+	 */
 	public void setLabelText() {
 		playerLabel.setText(Main.messages.getString("INVITEDPLAYERS"));
 		hostLabel.setText(Main.messages.getString("HOST"));
 	}
 	
+	/**
+	 * sets the invited player labels to empty
+	 */
 	private void clearJoinedPlayers() {
 		playerTwo.setText("");
 		playerThree.setText("");
@@ -99,6 +119,9 @@ public class PlayerGameLobbyController {
 			playerTwo.setText("");
 	}
 	
+	/**
+	 * joines the gameChat of the given host
+	 */
 	public void joinGameChat() {
 		String tmp;
 		tmp = (Constants.GAMECHAT + host.substring(4, host.length()));

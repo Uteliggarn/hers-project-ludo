@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import no.hig.hers.ludoshared.Constants;
 
 /**
+ * @author on 27.11.2015 
  * Main controller for handling all of the main GUI features.
  * That includes the buttons in the "Main" tab aswell as the list of group chats
  * and the button for creating new group chats
