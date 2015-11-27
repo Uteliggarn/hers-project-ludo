@@ -94,6 +94,9 @@ public class CreateGameLobbyController {
 		
 	}
 	
+	/**
+	 * Sets the invited player label to empty
+	 */
 	private void clearJoinedPlayers() {
 		playerTwo.setText("");
 		playerThree.setText("");
