@@ -360,7 +360,7 @@ public class Main extends Application {
 	            	try {
 						Thread.sleep(10);
 					} catch (Exception e1) {
-						LOGGER.log(Level.SEVERE, "Unable to wake from sleep after server down", e);
+						LOGGER.log(Level.SEVERE, "Unable to wake from sleep after server down", e1);
 					}
 	            }
 			}

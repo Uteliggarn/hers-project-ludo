@@ -205,7 +205,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private static void handleLogout(Player p) {
 		executorService.execute(() -> {
-			que.remove(p.getName());
+			que.remove(p);
 			gameList.remove(Constants.IDGK + p.getName());
 			
 			for (int i = 0; i < groupChatList.size(); i++)
