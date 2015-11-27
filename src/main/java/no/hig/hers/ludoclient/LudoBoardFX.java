@@ -2,7 +2,6 @@ package no.hig.hers.ludoclient;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 

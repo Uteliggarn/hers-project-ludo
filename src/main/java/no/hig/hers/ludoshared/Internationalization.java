@@ -4,8 +4,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import no.hig.hers.ludoclient.Main;
-
 /**
  * Class for finding the computer language and country so the correct
  * language will be displayed to the user.

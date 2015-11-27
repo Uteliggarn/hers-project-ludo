@@ -9,8 +9,6 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
-import no.hig.hers.ludoclient.LudoBoardFX.Pawned;
-
 /**
  * The code is from GameBoardFX. The tests checks if it is possible to knock out another players pawn, 
  * enter goal, and make a tower.
