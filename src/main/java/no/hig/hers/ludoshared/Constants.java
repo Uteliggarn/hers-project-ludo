@@ -52,6 +52,8 @@ public class Constants {
 	public static final String GETPLAYERLIST = "GETPLAYERLIST";	// Client asks for the list
     public static final String TOPPLAYED = "TOPLISTPLAYED:";	// Returns top played from server
 	public static final String TOPWON = "TOPLISTWON:";			// Returns top won from server
-	
+	/**
+	 * Constructor of the Constant class
+	 */
 	private Constants() {}
 }
