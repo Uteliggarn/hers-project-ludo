@@ -67,6 +67,15 @@ public class Player {
 		output.flush();
 	}
 	
+	/**
+     * Non blocking read from the client, if no data is available then null 
+     * will be returned. Checks to see if a line can be read from the client
+     * and if so reads and returns that line (message). If no message is 
+     * available null is returned.
+     * 
+     * @return a String with message if available, otherwise null
+     * @throws IOException if an error occurs during reading
+     */
 	public String read() throws IOException {
 		if (input.ready())
 			return input.readLine();

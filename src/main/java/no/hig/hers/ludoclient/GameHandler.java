@@ -18,6 +18,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * GameHandler creates all the different lobbyController objects and game object and controller
+ * createGameLobby, hostGameLobby and playerGameLobby
+ * gameClientUI
+ * The connection too gameserver is also set aswell as the connection loop
+ * for proccessing messages from the gameserver
+ */
 public class GameHandler {
 	
 	private int serverPort;
@@ -37,25 +44,40 @@ public class GameHandler {
 	private int caseNr = 0;
 	private String ip;
 	
+	/**
+	 * Makes the thread for proccessConnection
+	 * And sets the connection information and who is hosting
+	 * and the type iof lobby to be created
+	 * @param serverPort Of the game host.
+	 * @param ip Of the game host.
+	 * @param caseNr Witch lobby type to be created.
+	 * @param hostName Name of the hosting player.
+	 */
 	public GameHandler(int serverPort, String ip, int caseNr, String hostName) {
 		this.serverPort = serverPort;
 		this.hostName = hostName;
 		this.caseNr = caseNr;
 		this.ip = ip;
 		
-		System.out.println("\nHva er ipen min: " + ip);
-		
-		executorService = Executors.newCachedThreadPool(); // Lager et pool av threads for bruk
+		executorService = Executors.newFixedThreadPool(1); // Lager et pool av threads for bruk
 		
 		connect();
 		createNewLobby();
 	}
 
+	/**
+	 * Gives the hostName of the user that is hosting the game
+	 * @return hostName
+	 */
 	public String getHostName() {
 		return hostName;
 	}
 
-	
+	/**
+	 * Connects to the gameserver with the given ip and serverPort set in the
+	 * constructor and sends if the user is the host and the userName from when
+	 * you login
+	 */
 	public void connect() {
 		try {
 			connection = new Socket(ip, serverPort); // 128.39.83.87 // 127.0.0.1
@@ -65,7 +87,7 @@ public class GameHandler {
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
 			
-			if (Main.userName.equals(hostName))
+			if (hostName.equals(Constants.IDGK + Main.userName))
 				sendText("1" + Main.userName);
 			else
 				sendText("2" + Main.userName);
@@ -95,21 +117,22 @@ public class GameHandler {
         }
     }
     
+    /**
+     * Starts an infinite loop to proccess all messages from the gameserver
+     */
 	public void processConnection() {
 		executorService.execute(() -> {
 			while (true) {
 				try {
 	                String msg = input.readLine();
-	                System.out.println("\nHva er msg handler: " + msg);
 	                
 	                if (msg != null) {
-		                if(msg.startsWith(Constants.GAMESTART)) {
-		                	Platform.runLater(() -> {
-		                		int n = Integer.parseInt(msg.substring(10, 11));
-	                			
+		                if(msg.startsWith(Constants.GAMESTART)) {					// Makes the gameClientUIController if the message
+		                	Platform.runLater(() -> {								// "gamestart" is recived from the gameserver.
+		                		int n = Integer.parseInt(msg.substring(10, 11));	// and sets the connection to the game controller
+	                															
 	                			FXMLLoader loader = new FXMLLoader();
 	                			try {
-	                				System.out.print("Starter spill for " + n);
 		                			for (int i=0; i<Main.gameTabs.getTabs().size(); i++) {
 		                				if (Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
 		                					Main.gameTabs.getTabs().get(i).setContent(
@@ -117,9 +140,7 @@ public class GameHandler {
 		                					gameClientUIController = loader.getController();
 			                				gameClientUIController.setConnetion(output, input);
 			                				gameClientUIController.setPlayer(n);
-			                				System.out.println("inne");
 		                				}
-		                				System.out.println("ute");
 		                			}
 	                			} catch (IOException e) {
 	                				Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", e);
@@ -129,7 +150,6 @@ public class GameHandler {
 		                else if(msg.startsWith(Constants.GAMENAME)) {
 							Platform.runLater(() -> {
 								int n = Integer.parseInt(msg.substring(9, 10));
-	                			System.out.println("playernamenr " + n);
 	                			String tmpNavn = msg.substring(10, msg.length());
 	                			gameClientUIController.setPlayerName(n, tmpNavn);    		
 							});
@@ -139,7 +159,6 @@ public class GameHandler {
 								int diceVal = Integer.parseInt(msg.substring(10,11));
 	                			int player = Integer.parseInt(msg.substring(11,12));
 			                	int pawn = Integer.parseInt(msg.substring(12,13));
-			                	System.out.println("diceval: " + diceVal + " player " + player + " pawn " + pawn);
 			                	gameClientUIController.getDiceValue(diceVal, player, pawn);
 		                	});
 		                }
@@ -159,35 +178,59 @@ public class GameHandler {
 		                		Platform.runLater(() -> {
 				                	switch (caseNr) {
 				                	case 1:      					
-				                		createGameLobbyController.joinedPlayer(msg.substring(5));
+				                		createGameLobbyController.cleanUp(msg.substring(5));	// Adds the player name to the lobby
 				                		break;
 				                	case 2: 
-										hostGameLobbyController.joinedPlayer(msg.substring(5));
+										hostGameLobbyController.cleanUp(msg.substring(5));
 				                		break;
 				                	case 3: 
-										playerGameLobbyController.joinedPlayer(msg.substring(5));	
+										playerGameLobbyController.cleanUp(msg.substring(5));	
 				                		break;
 				                	default: break;
 				                	}
 		                		});
 		                	}
 		                }
+		                else if (msg.startsWith(Constants.LEAVEGAME)) {
+		                	Platform.runLater(() -> {
+			                	switch (caseNr) {
+			                	case 1:      					
+			                		createGameLobbyController.cleanRemove(msg.substring(10));	//removes the player from lobby
+			                		break;
+			                	case 2: 
+									hostGameLobbyController.cleanRemove(msg.substring(10));
+			                		break;
+			                	case 3: 
+									playerGameLobbyController.cleanRemove(msg.substring(10));	
+			                		break;
+			                	default: break;
+			                	}
+	                		});
+		                }
+		                else if (msg.equals(Constants.QUITGAME)) {
+		                	for (int i=0; i<Main.gameHandler.size(); i++) {
+		                		if (Main.gameHandler.get(i).getHostName().equals(hostName)) {
+		                			Main.gameHandler.get(i).closeTab();
+				                }
+		                	}
+		                }
+		                Thread.sleep(250);
 	                }   
 	            } catch (IOException ioe) {
 	            	Main.LOGGER.log(Level.WARNING, "Unable to receive message from server", ioe);
-	            }
-				//The thread goes to sleep to save the CPU energy
-				try {
-					Thread.sleep(250);
-				} catch (Exception e) {
+	            } catch (Exception e) {
 					Main.LOGGER.log(Level.WARNING, "Unable to sleep", e);
 				}
-	            
 			}
 		});
 	}
 	
-
+	/**
+	 * Makes an new tab to be added to the gameTabs in Main
+	 * and setOnClosed on the tab to remove every object that is 
+	 * in the tab, and sends gamelost to globalserver
+	 * and disconnet to gameserver
+	 */
 	public void createNewLobby() {
 		Platform.runLater(() -> {
 		Tab tab = new Tab("Ludo");
@@ -196,19 +239,20 @@ public class GameHandler {
 		tab.setOnClosed(new EventHandler<Event>() {
 			@Override
 			public void handle(Event e) {
-				String dcPlayer;
+				//String dcPlayer;
 				int p, turnowner;
 				if (gameClientUIController != null) {
 					p = gameClientUIController.getPlayer();
 					turnowner = gameClientUIController.getTurnOwner();
-					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
+					//dcPlayer = Integer.toString(gameClientUIController.getPlayer());
 					if(p == turnowner) { //Check if player disconnected on his/her own turn
 						sendText(Constants.DICEVALUE + 0 + p + 0);
 					}
-					sendText(Constants.DISCONNECT + dcPlayer);	//Disconnect the player and remove the player from the server
+					//sendText(Constants.DISCONNECT + dcPlayer);	//Disconnect the player and remove the player from the server
 					Main.sendText(Constants.GAMELOST); 
 						
 				}
+				sendText(Constants.DISCONNECT);
 				
 				Main.cHandler.leaveGameChat(hostName);
 				String tmp = Constants.IDGK + Main.userName;
@@ -216,6 +260,8 @@ public class GameHandler {
 					Main.sendText(Constants.REMOVEHOST + hostName);
 					Main.mainController.openNewGameButton();
 				}
+				
+				close();
 				
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
@@ -269,6 +315,10 @@ public class GameHandler {
 		});
 	}
 	
+	/**
+	 * Shuts down the threads and closes the connection to the gameserver
+	 * and the output and input
+	 */
 	public void close() {
 		try {
 			executorService.shutdownNow();
@@ -280,14 +330,45 @@ public class GameHandler {
 		} 
 	}
 	
+	/**
+	 * closes the connection too gameserver and removes the gameTab object
+	 * from list and the gameHandler object from list aswell
+	 */
+	public void closeTab() {
+		close();
+		
+		for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
+			if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+				Main.gameTabs.getTabs().remove(i);
+			}
+		}
+		for (int i=0; i<Main.gameHandler.size(); i++) {
+			if(hostName.equals(Main.gameHandler.get(i).getHostName())) {
+				Main.gameHandler.remove(i);
+			}
+		}
+	}
+	
+	/**
+	 * Get the lobby type of the GameHandler object
+	 * @return caseNr if GameHandler is createGameLobby
+	 */
 	public boolean getCaseNr() {
 		return caseNr == 1? true : false;
 	}
 	
+	/**
+	 * Removes the player from the playerList in createGameLobby
+	 * @param name of the player to be removed
+	 */
 	public void removePlayer(String name) {
 		createGameLobbyController.removePlayerFromList(name);
 	}
 	
+	/**
+	 * Adds the player too the playerList in createGameLobby
+	 * @param name of the player to be added
+	 */
 	public void addPlayer(String name) {
 		createGameLobbyController.addPlayerToList(name);
 	}

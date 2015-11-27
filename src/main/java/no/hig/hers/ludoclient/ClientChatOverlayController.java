@@ -73,6 +73,7 @@ public class ClientChatOverlayController {
 			}
     	});
 	}
+	
 	/**
 	 * Method for setting ID
 	 * @param id the ID to set.

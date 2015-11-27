@@ -4,8 +4,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.awt.BorderLayout;
-import java.awt.Font;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,9 +20,6 @@ import no.hig.hers.ludoshared.Constants;
 import no.hig.hers.ludoshared.MyLogger;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import no.hig.hers.ludoserver.Player;
 
 public class GlobalServer extends JFrame{
@@ -34,27 +30,23 @@ public class GlobalServer extends JFrame{
 	private static ServerSocket server;
 	private static ExecutorService executorService;
 	
-	static ArrayList<Player> players = new ArrayList<Player>();
-	static ArrayList<Chat> groupChatList = new ArrayList<Chat>();
-	static private ArrayList<String> gameList = new ArrayList<String>();
-	static private ArrayList<Player> que = new ArrayList<Player>();
+	static List<Player> players = new ArrayList<>();
+	static List<Chat> groupChatList = new ArrayList<>();
+	private static List<String> gameList = new ArrayList<>();
+	private static List<Player> que = new ArrayList<>();
 	static ArrayBlockingQueue<String> messages = new ArrayBlockingQueue<String>(50);
 	
 	private static String tmpName;
 	private static int tmpPort;
 	private static String tmpIP;
 	
-    final static String fileNameEnd = "ChatLog.log"; //The end of the filename
     static String fileName; //The whole filename
+    static final String fileNameEnd = "ChatLog.log"; //The end of the filename
 
-    static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
     public static void main( String[] args ) {
-        start();
-    }
-    
-	private static void start(){
-		GUI = new GlobalServerGUIHandler();
+    	GUI = new GlobalServerGUIHandler();
 		
 		Chat globalChat = new Chat("Global");
 		groupChatList.add(globalChat);
@@ -76,15 +68,11 @@ public class GlobalServer extends JFrame{
 			startLoginMonitor();
 			startMessageSender();
 			startMessageListener();
-			
-			//executorService.shutdown();
-			
 		} catch (IOException ioe) {
 			GlobalServer.LOGGER.log(Level.SEVERE, "Cannot set the socket", ioe);
 			System.exit(1);
 		}
 	}
-	
 
 	/**
 	 * Managing when players are logging on and off.
@@ -102,7 +90,6 @@ public class GlobalServer extends JFrame{
 							GUI.displayMessage("PLAYER CONNECTED: " + p.getName() + "\n");
 						}
 					}
-					//Thread.sleep(250);
 				} catch (IOException ioe) {
 					GUI.displayMessage("CONNECTION ERROR: " + ioe + "\n");
 					GlobalServer.LOGGER.log(Level.SEVERE, "Connection Error", ioe);
@@ -131,8 +118,6 @@ public class GlobalServer extends JFrame{
 										i.remove();
 										handleLogout(p);
 									}
-									else if (msg.startsWith(Constants.GAMEMESSAGE)) // game-related
-										handleGameMessages(msg.substring(Constants.GAMEMESSAGE.length()), p);
 									else if (msg.startsWith(Constants.CHATMESSAGE)) // chat-related
 										handleChatMessages(msg.substring(Constants.CHATMESSAGE.length()), p);
 									else if (msg.startsWith(Constants.PLAYERMESSAGE)) // player-related (only to one)
@@ -155,22 +140,10 @@ public class GlobalServer extends JFrame{
 				} catch (InterruptedException ie) {
 					GlobalServer.LOGGER.log(Level.SEVERE, "Problem with thread", ie);
 				}
-				
-				//The thread goes to sleep to save the CPU energy
-				try {
-					//Thread.sleep(250);
-				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
-				}
 			}
 		});
 	}
-
-	private static void handleGameMessages(String msg, Player p) {
-		executorService.execute(() -> {
-			
-		});
-	}
+	
 	/**	
 	 * Method for handling chat-related messages.
 	 * Creates a new thread that handles the message.
@@ -179,17 +152,13 @@ public class GlobalServer extends JFrame{
 	 */
 	private static void handleChatMessages(String msg, Player p) {
 		executorService.execute(() -> {
-			GUI.displayMessage("handleChatMessages: " + msg + " \n");
 			if (msg.startsWith(Constants.JOIN))
 				ChatHandler.playerJoinChat(p, msg.substring(Constants.JOIN.length()));
 			else if (msg.startsWith(Constants.NEWCHAT))
 				ChatHandler.createNewChat(p, msg);
 			else if (msg.startsWith(Constants.LEAVECHAT))
 				ChatHandler.playerLeaveChat(p, msg.substring(Constants.LEAVECHAT.length()));
-				
-
 			else ChatHandler.sendChatMessage(p, msg);
-			//handleGroupChatKeywords(p, msg);
 		});
 	}
 
@@ -203,7 +172,7 @@ public class GlobalServer extends JFrame{
 	 */
 	private static void handleLogout(Player p) {
 		executorService.execute(() -> {
-			que.remove(p.getName());
+			que.remove(p);
 			gameList.remove(Constants.IDGK + p.getName());
 			
 			for (int i = 0; i < groupChatList.size(); i++)
@@ -260,12 +229,12 @@ public class GlobalServer extends JFrame{
 							i = 0;
 
 						}
-						else if (hostFound == true && que.get(i).getName() != tmpName){
+						else if (hostFound && que.get(i).getName() != tmpName){
 							que.get(i).sendText(Constants.HOTJOIN + tmpName);
 							que.get(i).sendText(Integer.toString(tmpPort) + tmpIP);
 						}
 					}
-					if (hostFound == false)
+					if (hostFound)
 						for (int i=0; i<que.size(); i++)
 							que.get(i).sendText(Constants.QUEOPEN);
 					que.clear();
@@ -307,7 +276,6 @@ public class GlobalServer extends JFrame{
 			while (!shutdown) {
 				try {
 					String message = messages.take();
-					//GUI.displayMessage("Sending \"" + message + "\" to " + player.size() + " players\n");
 					synchronized (players) {
 						Iterator<Player> i = players.iterator();
 						while (i.hasNext()) {
@@ -322,14 +290,9 @@ public class GlobalServer extends JFrame{
 							}
 						}
 					}
-				//	Thread.sleep(250);
-					//Thread.sleep(250);
 				} catch (InterruptedException ie) {
-					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", ie);
-				} catch (Exception e) {
-					GlobalServer.LOGGER.log(Level.WARNING, "Sleep interrupted", e);
+					GlobalServer.LOGGER.log(Level.WARNING, "Could not take take message", ie);
 				}
-
 			}
 		});
 	}
@@ -364,7 +327,7 @@ public class GlobalServer extends JFrame{
 	 * @return The timestamp
 	 */
 	private static String timeStamp() {
-		String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		return timeStamp;
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		 
 	}
 }

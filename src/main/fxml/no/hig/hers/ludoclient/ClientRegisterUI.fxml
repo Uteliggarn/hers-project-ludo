@@ -23,9 +23,9 @@
       <PasswordField fx:id="confirmTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Button fx:id="registerButton" mnemonicParsing="false" onAction="#registerUser" text="Register" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
       <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelRegistration" text="Cancel" GridPane.rowIndex="3" />
-      <Label text="Username:" />
-      <Label text="Password:" GridPane.rowIndex="1" />
-      <Label text="Confirm:" GridPane.rowIndex="2" />
+      <Label fx:id="usernameLabel" text="Username:" />
+      <Label fx:id="passwordLabel" text="Password:" GridPane.rowIndex="1" />
+      <Label fx:id="confirmLabel" text="Confirm:" GridPane.rowIndex="2" />
    </children>
    <opaqueInsets>
       <Insets />

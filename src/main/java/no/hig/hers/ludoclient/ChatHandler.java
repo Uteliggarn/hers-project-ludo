@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import no.hig.hers.ludoshared.Constants;
+
 /**
  * Class for handling chats, clientside
  * This handles the chat tabs, and the chat-related messages.
@@ -19,8 +20,8 @@ import no.hig.hers.ludoshared.Constants;
  */
 
 public class ChatHandler {
-	private List<Tab> chats;
 	private TabPane chatTabs;
+	private List<Tab> chats;
 	private List<ClientChatOverlayController> controllers;
 	
 	/**
@@ -44,7 +45,8 @@ public class ChatHandler {
 	public void addNewChat(String name) {
 		boolean exists = false;
 		for (int i = 0; i < chats.size(); i++) {
-			if (chats.get(i).getId().equals(name)) exists = true; 
+			if (chats.get(i).getId().equals(name)) 
+				exists = true; 
 		}
 		
 		if (!exists) {
@@ -57,7 +59,7 @@ public class ChatHandler {
 				newTab.setOnClosed(new EventHandler<Event>() {
 					@Override
 					public void handle(Event e) {
-						Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + newTab.getId());
+						leaveChat(name);
 					}
 				});
 			} catch (IOException e) {
@@ -93,9 +95,9 @@ public class ChatHandler {
             	String username = message.substring(Constants.JOIN.length() + tab.getId().length() + 1);
             	Main.playerList.add(username);
             	if (tab.getId().equals("Global"))
-            		for (int y=0; y<Main.gameHandler.size(); y++) {
-                		if (Main.gameHandler.get(y).getCaseNr())
-                			Main.gameHandler.get(y).addPlayer(username);
+            		for (int y=0; y<Main.gameHandler.size(); y++) {		//Finds the gameHandler object that
+                		if (Main.gameHandler.get(y).getCaseNr())		//is a createGameLobby
+                			Main.gameHandler.get(y).addPlayer(username);	//and removes the the player from the invite list
                 	}
             	c.addUserToList(username);
             	});
@@ -109,9 +111,9 @@ public class ChatHandler {
             else if (message.startsWith(Constants.LOGOUT)) { // Mottar melding om at noen har logget ut
             	Platform.runLater(() -> {
 	            	String username = message.substring(Constants.LOGOUT.length());
-	            	for (int y=0; y<Main.gameHandler.size(); y++) {
-	            		if (Main.gameHandler.get(y).getCaseNr())
-	            			Main.gameHandler.get(y).removePlayer(username);
+	            	for (int y=0; y<Main.gameHandler.size(); y++) { //Finds the gameHandler object that
+	            		if (Main.gameHandler.get(y).getCaseNr())	//is a createGameLobby
+	            			Main.gameHandler.get(y).removePlayer(username);	//and removes the the player from the invite list
 	            	}
 	            	Main.playerList.remove(username);
 	            	c.removeUserFromList(username);
@@ -125,7 +127,7 @@ public class ChatHandler {
 	}
 
 	/**
-	 * Function for leaving the gamechat,
+	 * Method for leaving the gamechat,
 	 * closing the tab and removing it from the list
 	 * @param hostName The gamechat to leave.
 	 */
@@ -138,6 +140,20 @@ public class ChatHandler {
 			if (chatTabs.getTabs().get(i).getId().equals(chatName)) {
 				chatTabs.getTabs().remove(i);
 				Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + chatName);
+			}
+		}
+	}
+	
+	/**
+	 * Method for leaving chats, removing it from the list,
+	 * and sending the server a message that the player has left the chat
+	 * @param name The chat to leave.
+	 */
+	public void leaveChat(String name) {
+		for (int i = 0; i < chats.size(); i++) {
+			if (chats.get(i).getId().equals(name)) {
+				Main.sendText(Constants.CHATMESSAGE + Constants.LEAVECHAT + name);
+				chats.remove(i);
 			}
 		}
 	}

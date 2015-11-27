@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
@@ -41,9 +42,9 @@ public class Main extends Application {
 	static Scene mainScene;
 
 	static ChatHandler cHandler; 
-	static ArrayList<String> playerList = new ArrayList<>();
-	private static GameServer gameServer;
-	static ArrayList<GameHandler> gameHandler = new ArrayList<>();
+	static List<String> playerList = new ArrayList<>();
+	static GameServer gameServer;
+	static List<GameHandler> gameHandler = new ArrayList<>();
 	
 	static String LudoClientHost;
 	static Socket connection;
@@ -79,12 +80,6 @@ public class Main extends Application {
 		currentStage = primaryStage;
 		
 		connect();
-	}
-	
-	public static void getPlayers() {
-		for(int i = 0; i < playerList.size(); i++) {
-			System.out.println(playerList.get(i));
-		}
 	}
 	
 	public static void main(String[] args) {
@@ -246,7 +241,6 @@ public class Main extends Application {
      */
     public static void sendText(String textToSend) {
         try {
-        	System.out.println("SENT " + textToSend);
             output.write(textToSend);
             output.newLine();
             output.flush();
@@ -291,7 +285,7 @@ public class Main extends Application {
 		                }
 		                else if (message.startsWith(Constants.HOTJOIN)) {
 		                	String tmp = Main.input.readLine();
-		                	int port = Integer.valueOf(tmp.substring(0, 5));
+		                	int port = Integer.parseInt(tmp.substring(0, 5));
 		                	String ip = tmp.substring(5);
 		                	GameHandler gh = new GameHandler(port, ip, 3, Constants.IDGK + message.substring(8));
 		                	gameHandler.add(gh);
@@ -302,7 +296,7 @@ public class Main extends Application {
 		                }
 		                else if (message.startsWith(Constants.JOIN)) {
 		                	String tmp = Main.input.readLine();
-		                	int port = Integer.valueOf(tmp.substring(0, 5));
+		                	int port = Integer.parseInt(tmp.substring(0, 5));
 		                	String ip = tmp.substring(5);
 		                	Platform.runLater(() -> {
 		                		inviteAccept(port, ip);
@@ -357,12 +351,11 @@ public class Main extends Application {
 	                }
 	            } catch (Exception e) {
 	            	LOGGER.log(Level.SEVERE, "Unable to receive message, server down?", e);
-	            	serverOnline = false;
-	            	Platform.runLater(() -> {
-	            		showAlert(messages.getString("COULDNOTCONNECTSERVERTITLE"), messages.getString("COULDNOTCONNECTSERVERCONTENT"));
-	            		System.exit(1);
-	            	});
-	            	
+	            	try {
+						Thread.sleep(10);
+					} catch (Exception e1) {
+						LOGGER.log(Level.SEVERE, "Unable to wake from sleep after server down", e1);
+					}
 	            }
 			}
 		});

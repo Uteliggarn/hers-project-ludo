@@ -1,47 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.PlayerGameLobbyController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="no.hig.hers.ludoclient.PlayerGameLobbyController">
    <children>
-      <VBox layoutX="14.0" layoutY="94.0" prefHeight="200.0" prefWidth="225.0" spacing="8.0">
+      <StackPane>
          <children>
-            <Label fx:id="hostLabel" text="Host">
-               <font>
-                  <Font name="System Bold" size="21.0" />
-               </font>
-            </Label>
-            <Label fx:id="playerOne">
-               <VBox.margin>
-                  <Insets left="50.0" />
-               </VBox.margin>
-            </Label>
-            <Label fx:id="playerLabel" text="Players">
-               <font>
-                  <Font name="System Bold" size="21.0" />
-               </font>
-            </Label>
-            <Label fx:id="playerTwo">
-               <VBox.margin>
-                  <Insets left="50.0" />
-               </VBox.margin>
-            </Label>
-            <Label fx:id="playerThree">
-               <VBox.margin>
-                  <Insets left="50.0" />
-               </VBox.margin>
-            </Label>
-            <Label fx:id="playerFour">
-               <VBox.margin>
-                  <Insets left="50.0" />
-               </VBox.margin>
-            </Label>
+            <ImageView fitHeight="1080.0" fitWidth="1920.0" opacity="0.41" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="images/Ludowallpaper.jpg" />
+               </image>
+            </ImageView>
+            <VBox prefHeight="200.0" prefWidth="225.0" spacing="8.0">
+               <children>
+                  <Label fx:id="hostLabel" text="Host">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="playerOne">
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="playerLabel" text="Players">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="playerTwo">
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="playerThree">
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="playerFour">
+                     <VBox.margin>
+                        <Insets left="50.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </StackPane>
    </children>
 </AnchorPane>

@@ -2,6 +2,7 @@ package no.hig.hers.ludoclient;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 
@@ -25,7 +26,8 @@ public class LudoBoardFX extends Pane {
 	Canvas gamePieces;
 	Image board;
 	private int drawn;
-	private Color color[] = {Color.BLACK, Color.LAWNGREEN, Color.YELLOW, Color.RED, Color.BLUE, Color.WHITE, Color.ORANGE, Color.GRAY};
+	private Color color[] = {Color.BLACK, Color.LAWNGREEN, Color.YELLOW, 
+			Color.RED, Color.BLUE, Color.WHITE, Color.ORANGE, Color.GRAY};
 	
 	//Vectors that keep track of each colors coordinates (valid coordinates for the pawns to move to) 
 	private Vector<Point> coordinatesGreen= new Vector<>();
@@ -39,7 +41,7 @@ public class LudoBoardFX extends Pane {
 	final ArrayList<Pawned> redPawns = new ArrayList<Pawned>();
 	final ArrayList<Pawned> bluePawns = new ArrayList<Pawned>();
 	
-	//Arralist that keeps track of how many pawns of each color is in the goal
+	//Arraylist that keeps track of how many pawns of each color is in the goal
 	//If all pawns of a color is in their respectively arrayslists, that player wins.
 	final ArrayList<Pawned> greenPawnsInGoal = new ArrayList<Pawned>();
 	final ArrayList<Pawned> yellowPawnsInGoal = new ArrayList<Pawned>();
@@ -516,16 +518,16 @@ public class LudoBoardFX extends Pane {
 	}
 	/**
 	 * Returns the point at the element @param i in the Vector of the red color.
-	 * @param i Holds wehat point is to be returned.
+	 * @param i Holds what point is to be returned.
 	 * @return Returns the point that is requested.
 	 */
 	public Point getRedCoordinates(int i) {
 		return coordinatesRed.elementAt(i);
 	}
 	/**
-	 * 
-	 * @param i
-	 * @return
+	 * Returns the point at the element @param i in the Vector of the red color.
+	 * @param i Holds what point is to be returned
+	 * @return Returns the point that is requested
 	 */
 	public Point getBlueCoordinates(int i) {
 		return coordinatesBlue.elementAt(i);
@@ -533,6 +535,10 @@ public class LudoBoardFX extends Pane {
 	
 	//Is called istead of repaint() from swing project.
 	//
+	/**
+	 * Method that repaints the pawns onto the gameboard.
+	 * If a pawn is a tower it will make a tower pawn instead.
+	 */
 	void makePawns() {
 		
 		//Used to clear the canvas
@@ -628,8 +634,21 @@ public class LudoBoardFX extends Pane {
 		} catch (IndexOutOfBoundsException e) {
 			Main.LOGGER.log(Level.SEVERE, "Error while trying to paint pawn", e);
 		}	
-}
-	
+	}
+	/**
+	 * Class that holds information about every pawn and the gamelogic.
+	 * It checks where the pawns homelocation is, where is it located on the board,
+	 * what color is it, is it a tower, should it be drawn onto the gameboard and if it can be moved.
+	 * Each pawn got methods to create towers, knock out pawns of other colors if it
+	 * lands on it, adding themself to goal if it is reached (landed on), and check for towers 
+	 * that other colors has created so that that it will bounce away from it if it are trying to pass
+	 * them.
+	 * Towers should not be able to move, therefore should a pawn that is a tower, make itself not a tower
+	 * before it moves.
+	 * 
+	 * @author Hauken
+	 *
+	 */
 	public class Pawned {
 		private int location; //location 0-3 is homelocation.
 		private int homelocation;	//Used so that each pawn knows where it should be places if knocked out
@@ -677,10 +696,13 @@ public class LudoBoardFX extends Pane {
 			return inHome;
 		}
 		/**
-		 * Method that changes a pawns location
-		 * @param n holds the location that the pawns should change with. The diceValue.
+		 * Method that changes a location of a pawn. This is where most of the gamelogic happens. 
+		 * This methods call other methods that create tower, leave towers, knock out other pawns, and
+		 * tests for towers of other colors that cannot be passed. It also tries to add the pawn to goal.
+		 * @param n The dicevalue that the player has got 
+		 * @param pawnToMove what pawn that is being moving
 		 */
-		public void changeLocation(int n, int turnOwner, int pawnToMove) {
+		public void changeLocation(int n, int pawnToMove) {
 			int l;
 			int t;
 			int loc = location;
@@ -703,23 +725,28 @@ public class LudoBoardFX extends Pane {
 					if(t == 0) {
 						makeTowers(temp, pawnToMove);
 						knockOutOtherColors(pawnToMove, temp);
-						location += n;;
+						location += n;
 						tryAddToGoal();
 					} else {
 						bounceFromTower(t, n);
-						knockOutOtherColors(pawnToMove, location);
+						//makeTowers(location, pawnToMove);
+						//knockOutOtherColors(pawnToMove, location);
 					}
 				}
 				else {
 					if(n == 6) {
 						location = 4;
-						knockOutOtherColors(pawnToMove, location);
 						inHome = false;
 					} else System.out.println("Need to get a 6 to move the pawn from the homefield");
 				}
 			}
 		}
 		
+		/**
+		 * Method that make towers of all colors. This method is called if a 
+		 * @param temp location of other pawns
+		 * @param pawnToMove the pawn currently being moved
+		 */
 		public void makeTowers(int temp, int pawnToMove) {
 			int l;
 			switch(color) {
@@ -759,7 +786,10 @@ public class LudoBoardFX extends Pane {
 				break;
 			}	
 		}
-		
+		/**
+		 * Tries to add a pawn to goal. If the pawn is in the goal location, add it to the goal array and
+		 * remove it from the array that is used to draw them on the board and in gamelogic.
+		 */
 		public void tryAddToGoal() {
 			int n;
 			switch (color){
@@ -817,52 +847,91 @@ public class LudoBoardFX extends Pane {
 				break;
 			}
 		}
-		
+		/**
+		 * Make a green tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeGreenTower(int i, int pawnToMove) {
 			greenPawns.get(i).setNotVisible();
 			greenPawns.get(i).setTower();
 			greenPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a yellow tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeYellowTower(int i, int pawnToMove) {
 			yellowPawns.get(i).setNotVisible();
 			yellowPawns.get(i).setTower();
 			yellowPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a red tower out of two pawned that is on the same location.
+		 * @param i the pawn already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeRedTower(int i, int pawnToMove) {
 			redPawns.get(i).setNotVisible();
 			redPawns.get(i).setTower();
 			redPawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Make a blue tower out of two pawned that is on the same location.
+		 * @param i the pawn that already on the location
+		 * @param pawnToMove the pawn that is being moved
+		 */
 		public void makeBlueTower(int i, int pawnToMove) {
 			bluePawns.get(i).setNotVisible();
 			bluePawns.get(i).setTower();
 			bluePawns.get(pawnToMove).setTower();	
 		}
-		
+		/**
+		 * Set a pawn to be a tower
+		 */
 		public void setTower() {
 			isTower = true;
 		}
-		
+		/**
+		 * Return if a pawn is a tower or not.
+		 * @return return the tower value
+		 */
 		public boolean getTower() {
 			return isTower;
 		}
+		/**
+		 * Set the pawn to no longer be a tower
+		 */
 		public void setNotTower() {
 			isTower = false;
 		}
-		
+		/**
+		 * Sets the pawn to be not visible so that it wont be drawn on the gameboard.
+		 * This is used so that towers will only draw one pawn instead of two. 
+		 */
 		public void setNotVisible() {
 			visible = false;
 		}
+		/**
+		 * Sets the pawn to be visible. This is used when a pawn is 
+		 * moving from a tower. 
+		 */
 		public void setVisible() {
 			visible = true;
 		}
-		
+		/**
+		 *  Returns if the pawn should be drawn or not.
+		 * @return if the pawn is visible or not. 
+		 */
 		public boolean getVisible() {
 			return visible;
 		}
+		/**
+		 * Sets if the pawn can be moved or not. 
+		 * @param diceValue The dicevalue rolled by a player
+		 * @return
+		 */
 		public boolean validMove(int diceValue){
 			if(inHome && diceValue == 6) {
 				canBeMoved = true;
@@ -875,14 +944,25 @@ public class LudoBoardFX extends Pane {
 			canBeMoved = false; 
 			return false;	
 		}
+		/**
+		 * Returns if the pawn can be moved.
+		 * Used so a player can only move pawns that is valid. 
+		 * @return if the pawn can be moved or not. 
+		 */
 		public boolean isValid() {
 			return canBeMoved;
 		}
-		
+		/**
+		 * Sets the pawn to be not able to move. 
+		 */
 		public void setNotValid() {
 			canBeMoved = false;
 		}
-		
+		/**
+		 * Method that sets the a pawn to be visible again and no longer a tower if
+		 * it is not visible or a tower, if it is on the same location as this pawn
+		 * @param pawn the pawn that is being moved
+		 */
 		public void moveFromTower(int pawn) {
 			int l;
 			setNotTower();
@@ -953,10 +1033,19 @@ public class LudoBoardFX extends Pane {
 				break;
 			}
 		}
+		/**
+		 * Methods that knocks a pawn back to its homelocation.
+		 */
 		public void KnockedOut() {
 			location = homelocation;
 			inHome = true;
 		}
+		/**
+		 * Checks every other color than itself if it is on the same location that this pawn is
+		 * moving to. If it is, and not a tower, knock it back to homelocation.
+		 * @param p pawn that is being moved
+		 * @param tmp the new location of the pawn that is being moved
+		 */
 		public void knockOutOtherColors(int p, int tmp) {
 			int l;
 			switch(color) {
@@ -1046,7 +1135,13 @@ public class LudoBoardFX extends Pane {
 				break;
 			}
 		}
-		
+		/**
+		 * Methods that checks if there is a tower of another color within the range of the dicevalue. 
+		 * If it is, the method will return by how far.
+		 * @param pawn pawn that is being moved
+		 * @param diceval the dicevalue
+		 * @return return how far a the pawn is from a tower if it is within the range of the dicevalue.
+		 */
 		public int testForTowers(int pawn, int diceval) {
 			int n = 0;
 			int l;
@@ -1167,7 +1262,13 @@ public class LudoBoardFX extends Pane {
 			
 			return n;
 		}
-		
+		/**
+		 * Method that is called when a pawn is trying to move on or through a tower. 
+		 * It will then bounce away from the tower, and the length of the bounce
+		 * is based on the dicevalue.
+		 * @param t How far the pawn is from a tower of another color.
+		 * @param diceVal The dicevalue
+		 */
 		public void bounceFromTower(int t, int diceVal) {
 			int loc = location;
 			loc += t; 

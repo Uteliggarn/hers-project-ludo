@@ -15,6 +15,11 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * Main controller for handling all of the main GUI features.
+ * That includes the buttons in the "Main" tab aswell as the list of group chats
+ * and the button for creating new group chats
+ */
 public class ClientMainUIController {
     @FXML
     private TabPane gameTabs;
@@ -68,6 +73,11 @@ public class ClientMainUIController {
 	private final Label[][] topTenWonLabels = new Label[10][2];
 	private final Label[][] topTenPlayedLabels = new Label[10][2];
 	
+	/**
+	 * Creates the labels for where the top ten lists are shown
+	 * Internationalization of all the buttons and labels aswell
+	 * when the controller is made
+	 */
 	@FXML
 	public void initialize() {
 		createLabels();
@@ -75,7 +85,7 @@ public class ClientMainUIController {
 		setLabelText();
 	}
 	/**
-	 * Function for setting the internationalized texts. 
+	 * Method for setting the internationalized texts. 
 	 */
 	private void setLabelText() {
 	    queueButton.setText(Main.messages.getString("BUTTONQUEUETEXT"));
@@ -89,12 +99,29 @@ public class ClientMainUIController {
 	    checkBoxHideChat.setText(Main.messages.getString("HIDECHATTEXT"));
 	}
     
+	/**
+	 * When button is pressed a "creategame" message is sent to
+	 * server. And the button is disabled because you can only be the
+	 * host of one game
+	 */
     @FXML
     void newGameButtonPressed() {
-    	Main.sendText(Constants.CREATEGAME);
-		newGameButton.setDisable(true);
+    	int count = 0;
+    	for (int i=0; i<Main.gameHandler.size(); i++) {
+    		if (Main.gameHandler.get(i).getHostName().equals(Constants.IDGK + Main.userName))
+    			++count;
+    	}
+    	if(count == 0 && Main.gameServer.isEmpty()) {
+	    	Main.sendText(Constants.CREATEGAME);
+			newGameButton.setDisable(true);
+    	}
+    	else
+    		Main.showAlert(Main.messages.getString("BUTTONDECLINE"), Main.messages.getString("BUTTONDECLINE"));
     }
     
+    /**
+     * Removes the disable set when making a new game
+     */
     public void openNewGameButton() {
     	newGameButton.setDisable(false);
     }
@@ -115,24 +142,34 @@ public class ClientMainUIController {
     	result.ifPresent(name -> Main.cHandler.addNewChat(name));
     }
     
+    /**
+     * Sends a "queue" message to the server and disables the button
+     */
     @FXML
     void queueButtonPressed() {
     	Main.sendText(Constants.QUEUE);
     	queueButton.setDisable(true);
     }
     
+    /**
+     * Joins the selected chat in the groupChatList
+     */
     @FXML
     void joinChat() {
     	String chatName = chatListView.getSelectionModel().getSelectedItem();
     	Main.cHandler.addNewChat(chatName);
     }
     
+    /**
+     * Hides the chatOverlay 
+     */
     @FXML
     void hideChat() {
     	if (checkBoxHideChat.isSelected()) {
     		chatTabPane.setVisible(false);
     	} else chatTabPane.setVisible(true);
     }
+    
     /**
      * Setting up the Labels,
      * first by creating new Labels, 
@@ -157,6 +194,7 @@ public class ClientMainUIController {
     				topTenPlayedLabels[i][0], topTenPlayedLabels[i][1]);
     	}
     }
+    
     /**
      * Sets the Top ten played list text
      * @param played The String 2D array with the new played list
@@ -169,6 +207,7 @@ public class ClientMainUIController {
         	}
     	});
     }
+    
     /**
      * Sets the Top ten played list text
      * @param played The String 2D array with the new played list
@@ -181,6 +220,7 @@ public class ClientMainUIController {
 	    	}
     	});
     }
+    
     /**
      * Method for adding a chat to the list
      * @param name The chatname to add
@@ -190,6 +230,7 @@ public class ClientMainUIController {
     			chatListView.getItems().add(name);	
     	});
     }
+    
     /**
      * Method for setting the labelUserName.
      * This is run on login
@@ -199,15 +240,25 @@ public class ClientMainUIController {
 		labelUserName.setText(username);
 	}
 	
+	/**
+	 * Removes the disable on the queue button
+	 */
 	public void openQueue() {
 		queueButton.setDisable(false);
 	}
+	
+	/**
+	 * Sets the score of the player in the "Main" tab
+	 * @param won games by the user
+	 * @param played games by the user
+	 */
 	public void setScores(String won, String played) {
 		Platform.runLater(() -> {
 		    labelPlayerWonScore.setText(won);
 		    labelPlayerPlayedScore.setText(played);
 		});
 	}
+	
 	/**
 	 * Method for removing a chat from the list.
  	 * @param name The chatname to remove.
