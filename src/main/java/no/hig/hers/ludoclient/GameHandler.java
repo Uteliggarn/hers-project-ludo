@@ -19,6 +19,7 @@ import javafx.scene.control.Tab;
 import no.hig.hers.ludoshared.Constants;
 
 /**
+ * @author on 27.11.2015 
  * GameHandler creates all the different lobbyController objects and game object and controller
  * createGameLobby, hostGameLobby and playerGameLobby
  * gameClientUI

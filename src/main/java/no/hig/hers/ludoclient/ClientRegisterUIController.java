@@ -2,8 +2,6 @@ package no.hig.hers.ludoclient;
 
 import java.util.logging.Level;
 
-import com.mysql.jdbc.Messages;
-
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
 import javafx.scene.control.Button;
@@ -13,6 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
+ * @author on 27.11.2015 
  * Handles the controls of the register GUI
  * Where the new username and passord is sent
  * and the stage change back to login GUI

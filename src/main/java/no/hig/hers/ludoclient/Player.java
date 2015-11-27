@@ -7,6 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+/**
+ * @author on 27.11.2015
+ * Player object is created when a new connection to server is accepted.
+ * player Object handles all the personal data of the player and
+ * the connection too the player on the client side.
+ */
 public class Player {
 	
 	private Socket connection;
@@ -18,6 +24,13 @@ public class Player {
 	private boolean host;
 	private int playerNr;
 
+	/**
+	 * Constructor that sets the socket connection and input and output
+	 * for the player. And sets the player to be host or not
+	 * @param connection of the socket
+	 * @param nr of the player in the game
+	 * @throws IOException if constructor can't be ran.
+	 */
 	public Player(Socket connection, int nr) throws IOException {
 		this.connection = connection;
 		playerNr = nr;
