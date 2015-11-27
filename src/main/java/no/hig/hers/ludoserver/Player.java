@@ -12,6 +12,13 @@ import java.util.logging.Level;
 
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * Player objects that are created when a new server connection
+ * is accpeted. Also handles the check if the one trying to connect
+ * with a username and passord exits in the database or wants too 
+ * create a new user in the database
+ * Author on 27.11.2015 
+ */
 public class Player {
 	
 	private Socket connection;
@@ -26,6 +33,11 @@ public class Player {
 	private String IPaddress;
 
 
+	/**
+	 * Sets the connection and input and output from the server socket
+	 * @param connection socket
+	 * @throws IOException if connection didn't work
+	 */
 	public Player(Socket connection) throws IOException {
 		this.connection = connection;
 		this.IPaddress = connection.getRemoteSocketAddress().toString();
@@ -60,6 +72,11 @@ public class Player {
 		output.flush();
 	}
 	
+	/**
+	 * Sends the port number of the given player
+	 * @param port server port
+	 * @throws IOException if output failed to send
+	 */
 	public void sendPort(int port) throws IOException {
 		output.flush();
 		output.write(port);
@@ -90,14 +107,26 @@ public class Player {
 		return name;
 	}
 	
+	/**
+	 * returns the server port of the player
+	 * @return serverPort of the player
+	 */
 	public int getServerPort() {
 		return serverPort;
 	}
 	
+	/**
+	 * returns the player id
+	 * @return playerID of the player
+	 */
 	public int getPlayerID() {
 		return playerID;
 	}
 	
+	/**
+	 * return the IP address of the player
+	 * @return IPaddress of the player
+	 */
 	public String getIPaddress() {
 		return IPaddress;
 	}
