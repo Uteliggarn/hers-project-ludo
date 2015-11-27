@@ -2,8 +2,12 @@ package no.hig.hers.ludoclient;
 
 import java.util.logging.Level;
 
+import com.mysql.jdbc.Messages;
+
 import javafx.fxml.FXML;
 import no.hig.hers.ludoclient.Main;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -23,6 +27,32 @@ public class ClientRegisterUIController {
     @FXML
     private TextField usernameTextField;
 
+    @FXML
+    private Button registerButton;
+    
+    @FXML
+    private Button cancelButton;
+    
+    @FXML
+    private Label usernameLabel;
+    
+    @FXML
+    private Label passwordLabel;
+    
+    @FXML
+    private Label confirmLabel;
+    
+    /**
+     * Method that initialize the text for the buttons and labels for Registration. 
+     */
+    @FXML
+	public void initialize() {
+    	registerButton.setText(Main.messages.getString("REGISTERBUTTON"));
+    	cancelButton.setText(Main.messages.getString("CANCEL"));
+    	usernameLabel.setText(Main.messages.getString("USER"));
+    	passwordLabel.setText(Main.messages.getString("PASSWORD"));
+    	confirmLabel.setText(Main.messages.getString("CONFIRM"));
+    }
     /**
      * Sends the user back to the login stage GUI
      */

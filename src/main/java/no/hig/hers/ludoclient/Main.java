@@ -41,9 +41,9 @@ public class Main extends Application {
 	static Scene tempScene;
 	static Scene mainScene;
 
-	static ChatHandler cHandler;
-	private static GameServer gameServer;
+	static ChatHandler cHandler; 
 	static List<String> playerList = new ArrayList<>();
+	static GameServer gameServer;
 	static List<GameHandler> gameHandler = new ArrayList<>();
 	
 	static String LudoClientHost;
