@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import no.hig.hers.ludoshared.Constants;
 
 /**
+ * @author on 27.11.2015 
  * Each players gameserver that handles the connection between players
  * when a Ludo game is in a session
  */

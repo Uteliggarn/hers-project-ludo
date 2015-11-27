@@ -8,7 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
+
 /**
+ * @author on 27.11.2015 
  * Class that is made by the host player when the queue game option is chosen.
  * The other players than the host makes a PlayerGameLobbyController instead.
  * The player of that is host can start the game. 
@@ -27,8 +29,6 @@ public class HostGameLobbyController {
 	private static BufferedWriter output;
 
 	private ArrayList<String> playerJoinList = new ArrayList<>();
-	
-	private String hostName;
 	
 	private String hostName;
 	/**
