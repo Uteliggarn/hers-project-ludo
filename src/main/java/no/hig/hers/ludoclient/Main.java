@@ -42,7 +42,7 @@ public class Main extends Application {
 
 	static ChatHandler cHandler; 
 	static ArrayList<String> playerList = new ArrayList<>();
-	private static GameServer gameServer;
+	static GameServer gameServer;
 	static ArrayList<GameHandler> gameHandler = new ArrayList<>();
 	
 	static String LudoClientHost;

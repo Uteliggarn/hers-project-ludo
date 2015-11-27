@@ -13,6 +13,10 @@ import java.util.logging.Level;
 
 import no.hig.hers.ludoshared.Constants;
 
+/**
+ * Each players gameserver that handles the connection between players
+ * when a Ludo game is in a session
+ */
 public class GameServer {
 	
 	private ServerSocket server;
@@ -24,8 +28,13 @@ public class GameServer {
 	
 	private boolean shutdown = false;
 	
-	private int playerNr = 1; 
+	private int playerNr = 1;
 	
+	/**
+	 * Constructor for GameServer where the the server socket is set
+	 * and all the threads are started.
+	 * @param socket
+	 */
 	public GameServer(int socket) {
 		
 		try {
@@ -49,6 +58,18 @@ public class GameServer {
 		Main.sendText(Constants.CHATMESSAGE + Constants.NEWCHAT + tmp);
 	}
 	
+	/**
+	 * Checks if the player list in the server is empty for players
+	 * @return true if the player list in empty otherwise false
+	 */
+	public boolean isEmpty() {
+		return player.isEmpty();
+	}
+	
+	/**
+	 * Thread taht handles all the input communication to the gameserver
+	 * and synchronized the use of the thread on switch player object that is in use
+	 */
 	 private void startMessageListener() {
 	        executorService.execute(() -> {
 	            while (!shutdown) {
@@ -81,12 +102,18 @@ public class GameServer {
 				                        	messages.put(msg);
 				                        }
 				                        if(msg.startsWith(Constants.GAMEOVER)) {
-				                        	i.remove();
 				                        	messages.put(msg);
+				                        	i.remove();
 				                        }
-				                        if(msg.startsWith(Constants.DISCONNECT)) {
+				                        if(msg.equals(Constants.DISCONNECT)) {
+				                        	messages.put(msg + Integer.toString(p.getPlayerNr()));
+				                        	if (p.getHost()) {
+				                        		messages.put(Constants.QUITGAME);
+				                        	}
+				                        	else
+				                        		messages.put(Constants.LEAVEGAME + p.getName());
 				                        	i.remove();
-				                        	messages.put(msg);
+				                        	
 				                        }
 			                        }
 		                        } catch (IOException ioe) {	// Unable to communicate with the client, remove it
@@ -110,7 +137,11 @@ public class GameServer {
 	        });
 	    }
 
-	    private void startMessageSender() {
+	 /**
+	  * Sends all the messages from the ArrayBlockingQue to the players
+	  * synchronized on player object aswell
+	  */
+	 private void startMessageSender() {
 	        executorService.execute(() -> {
 	            while (!shutdown) {
 	                try {
@@ -141,9 +172,14 @@ public class GameServer {
 					}
 	            }
 	        });
-	    }
-
-	    private void startLoginMonitor() {
+	 }
+	 
+	 /**
+	  * Thread for handling every connection to the gameserver
+	  * and sets the connection to a player object
+	  * Only for four connection can be done before new ones get blocked
+	  */
+	 private void startLoginMonitor() {
 	        executorService.execute(() -> {
 	            while (!shutdown) {
 	                try {
@@ -163,12 +199,13 @@ public class GameServer {
 			                    	++count;
 			                    	Player t = i.next();
 			                    	try {
-			                    		if(!t.getHost()) {
+			                    		//if(!t.getHost()) {
 			                    			p.sendText(Constants.JOIN + t.getName());
+			                    			//if (!t.getName().equals(p.getName()) && !p.getHost()) {
 			                    			if (!t.getName().equals(p.getName()) && !p.getHost()) {
 			                    				t.sendText(Constants.JOIN + p.getName());
 			                    			}
-			                    		}
+			                    		//}
 			                    		if (count == 4) {
 			                    			for (int y=0; y<player.size(); y++) {
 			                    				if (player.get(y).getHost())
@@ -194,8 +231,12 @@ public class GameServer {
 	            }
 	        });
 	    }
-	    
-	    public void close() {
+	 
+	 /**
+	  * shutdowns the active threads in use. And stop new thread
+	  * task from creating.
+	  */
+	 public void close() {
 	    	executorService.shutdown();
 	    }
 }

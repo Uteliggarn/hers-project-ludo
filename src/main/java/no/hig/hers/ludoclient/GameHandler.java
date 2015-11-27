@@ -87,7 +87,7 @@ public class GameHandler {
 			input = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
 			
-			if (Main.userName.equals(hostName))
+			if (hostName.equals(Constants.IDGK + Main.userName))
 				sendText("1" + Main.userName);
 			else
 				sendText("2" + Main.userName);
@@ -184,17 +184,40 @@ public class GameHandler {
 		                		Platform.runLater(() -> {
 				                	switch (caseNr) {
 				                	case 1:      					
-				                		createGameLobbyController.joinedPlayer(msg.substring(5));
+				                		createGameLobbyController.cleanUp(msg.substring(5));	// Adds the player name to the lobby
 				                		break;
 				                	case 2: 
-										hostGameLobbyController.joinedPlayer(msg.substring(5));
+										hostGameLobbyController.cleanUp(msg.substring(5));
 				                		break;
 				                	case 3: 
-										playerGameLobbyController.joinedPlayer(msg.substring(5));	
+										playerGameLobbyController.cleanUp(msg.substring(5));	
 				                		break;
 				                	default: break;
 				                	}
 		                		});
+		                	}
+		                }
+		                else if (msg.startsWith(Constants.LEAVEGAME)) {
+		                	Platform.runLater(() -> {
+			                	switch (caseNr) {
+			                	case 1:      					
+			                		createGameLobbyController.cleanRemove(msg.substring(10));	//removes the player from lobby
+			                		break;
+			                	case 2: 
+									hostGameLobbyController.cleanRemove(msg.substring(10));
+			                		break;
+			                	case 3: 
+									playerGameLobbyController.cleanRemove(msg.substring(10));	
+			                		break;
+			                	default: break;
+			                	}
+	                		});
+		                }
+		                else if (msg.equals(Constants.QUITGAME)) {
+		                	for (int i=0; i<Main.gameHandler.size(); i++) {
+		                		if (Main.gameHandler.get(i).getHostName().equals(hostName)) {
+		                			Main.gameHandler.get(i).closeTab();
+				                }
 		                	}
 		                }
 	                }   
@@ -226,19 +249,20 @@ public class GameHandler {
 		tab.setOnClosed(new EventHandler<Event>() {
 			@Override
 			public void handle(Event e) {
-				String dcPlayer;
+				//String dcPlayer;
 				int p, turnowner;
 				if (gameClientUIController != null) {
 					p = gameClientUIController.getPlayer();
 					turnowner = gameClientUIController.getTurnOwner();
-					dcPlayer = Integer.toString(gameClientUIController.getPlayer());
+					//dcPlayer = Integer.toString(gameClientUIController.getPlayer());
 					if(p == turnowner) { //Check if player disconnected on his/her own turn
 						sendText(Constants.DICEVALUE + 0 + p + 0);
 					}
-					sendText(Constants.DISCONNECT + dcPlayer);	//Disconnect the player and remove the player from the server
+					//sendText(Constants.DISCONNECT + dcPlayer);	//Disconnect the player and remove the player from the server
 					Main.sendText(Constants.GAMELOST); 
 						
 				}
+				sendText(Constants.DISCONNECT);
 				
 				Main.cHandler.leaveGameChat(hostName);
 				String tmp = Constants.IDGK + Main.userName;
@@ -246,6 +270,8 @@ public class GameHandler {
 					Main.sendText(Constants.REMOVEHOST + hostName);
 					Main.mainController.openNewGameButton();
 				}
+				
+				close();
 				
 				for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
 					if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
@@ -299,6 +325,10 @@ public class GameHandler {
 		});
 	}
 	
+	/**
+	 * Shuts down the threads and closes the connection to the gameserver
+	 * and the output and input
+	 */
 	public void close() {
 		try {
 			executorService.shutdownNow();
@@ -310,14 +340,45 @@ public class GameHandler {
 		} 
 	}
 	
+	/**
+	 * closes the connection too gameserver and removes the gameTab object
+	 * from list and the gameHandler object from list aswell
+	 */
+	public void closeTab() {
+		close();
+		
+		for(int i = 0; i < Main.gameTabs.getTabs().size(); i++) {
+			if(Main.gameTabs.getTabs().get(i).getId().equals(hostName)) {
+				Main.gameTabs.getTabs().remove(i);
+			}
+		}
+		for (int i=0; i<Main.gameHandler.size(); i++) {
+			if(hostName.equals(Main.gameHandler.get(i).getHostName())) {
+				Main.gameHandler.remove(i);
+			}
+		}
+	}
+	
+	/**
+	 * Get the lobby type of the GameHandler object
+	 * @return caseNr if GameHandler is createGameLobby
+	 */
 	public boolean getCaseNr() {
 		return caseNr == 1? true : false;
 	}
 	
+	/**
+	 * Removes the player from the playerList in createGameLobby
+	 * @param name of the player to be removed
+	 */
 	public void removePlayer(String name) {
 		createGameLobbyController.removePlayerFromList(name);
 	}
 	
+	/**
+	 * Adds the player too the playerList in createGameLobby
+	 * @param name of the player to be added
+	 */
 	public void addPlayer(String name) {
 		createGameLobbyController.addPlayerToList(name);
 	}

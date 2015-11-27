@@ -36,6 +36,8 @@ public class Constants {
 	public final static String REMOVEHOST = "REMOVEHOST:";		// Removes the host from gamelist
 	public final static String QUEOPEN = "QUEOPEN";				// Reopen the que button if noone could host a game
 	public final static String GAMECHAT = "Gamechat-";
+	public final static String LEAVEGAME = "LEAVEGAME:";		// Sends message that a player has closed their game tab
+	public final static String QUITGAME = "QUITGAME";			// Sends a message that the host has quit the game
 	
 	// Login/Register-related type messages:
 	public final static String ACCEPTED = "ACCEPTED";			// Registration accepted
