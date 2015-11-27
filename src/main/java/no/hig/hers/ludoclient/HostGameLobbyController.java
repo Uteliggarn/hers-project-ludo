@@ -29,8 +29,7 @@ public class HostGameLobbyController {
 	private ArrayList<String> playerJoinList = new ArrayList<>();
 	
 	private String hostName;
-	
-	private String hostName;
+
 	/**
 	 * Initialize label text and sets the button to start game not disabled. 
 	 */
