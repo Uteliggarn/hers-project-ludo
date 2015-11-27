@@ -11,6 +11,13 @@ import org.junit.Test;
 
 import no.hig.hers.ludoclient.LudoBoardFX.Pawned;
 
+/**
+ * The code is from GameBoardFX. The tests checks if it is possible to knock out another players pawn, 
+ * enter goal, and make a tower.
+ * @author Bjørn
+ * @author Hauken
+ *
+ */
 public class GameTest {
 	
 	//Vectors that keep track of each colors coordinates (valid coordinates for the pawns to move to) 
@@ -1037,6 +1044,10 @@ public class GameTest {
 		
 	} //END OF PAWN CLASS
 	
+	/**
+	 * Checks if it is possible to make a tower. Adds two pawns of the same colour and places one
+	 * on top of the other. If they become a tower the test is ok.
+	 */
 	@Test
 	public void testTower() {
 		Pawned pawn1 = new Pawned(44, 1);
@@ -1050,6 +1061,11 @@ public class GameTest {
 		assertTrue(pawn1.getTower());
 	}
 	
+	/**
+	 * Tests if it is possible to knock out another players pawn. Adds two pawns of different
+	 * colours. Places one of them on top of the other. If the bottom pawn gets placed in home, 
+	 * the test is ok.
+	 */
 	@Test
 	public void testKnockout() {
 		Pawned greenPawn = new Pawned(44, 1);
@@ -1065,6 +1081,10 @@ public class GameTest {
 		assertTrue(greenPawns.get(4).returnInHome());
 	}
 	
+	/**
+	 * Checks if the pawn can enter goal. Place a pawn on goal, if it is placed in goal, 
+	 * the test is ok.
+	 */
 	@Test
 	public void testGoal() {
 		Pawned pawn = new Pawned(62, 1);

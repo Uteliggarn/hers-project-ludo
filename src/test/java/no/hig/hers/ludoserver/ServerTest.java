@@ -51,7 +51,7 @@ public class ServerTest {
 		}
 		
 		/**
-		 * Continues to loop until the message is noticed
+		 * Server continues to loop until the message is noticed.
 		 */
 		public void run() {
 			noMatch = true;
@@ -104,6 +104,10 @@ public class ServerTest {
 		}
 	}
 
+	/**
+	 * The server gets added to a new thread. The client tries to send a message to the server.
+	 * If the server gets the message the test is ok.
+	 */
 	@Test
 	public void test() {
 		//Server server = new Server();
