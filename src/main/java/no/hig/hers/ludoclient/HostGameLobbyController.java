@@ -9,7 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import no.hig.hers.ludoshared.Constants;
 import javafx.scene.control.Button;
-
+/**
+ * Class that is made by the host player when the queue game option is chosen.
+ * The other players than the host makes a PlayerGameLobbyController instead.
+ * The player of that is host can start the game. 
+ * The player also joins the game chat.
+ */
 public class HostGameLobbyController {
 	
 	@FXML private Label playerOne;
@@ -25,7 +30,9 @@ public class HostGameLobbyController {
 	private static BufferedWriter output;
 	
 	private String hostName;
-	
+	/**
+	 * Initialize label text and sets the button to start game not disabled. 
+	 */
 	public void initialize() {
 		startGameButton.setDisable(false);
 		setLabelText();
@@ -34,7 +41,10 @@ public class HostGameLobbyController {
 		playerThree.setText("");
 		playerFour.setText("");
 	}
-	
+	/**
+	 * Sets the host player
+	 * @param hostName
+	 */
 	public void setHostPlayer(String hostName) {
 		playerOne.setText(hostName.substring(4));
 		this.hostName = hostName;
